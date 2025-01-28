@@ -1,8 +1,21 @@
 {
   "expo": {
+    "extra": {
+      "GOOGLE_API_KEY": "AIzaSyA7TtagaCz61SLn1M1HhNKabA_qj93V7QM",
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "538e9695-1d25-43ab-a2d6-7d11bffdb395"
+      }
+    },
     "name": "climatetwinapp",
     "slug": "climatetwinapp",
     "version": "1.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "myapp",
@@ -15,7 +28,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.badrainbowz.climatetwinapp"
     },
     "web": {
       "bundler": "metro",
