@@ -41,7 +41,7 @@ export const UserProvider = ({ children }) => {
         if (token) {
            // const userData = null;
            const userData = await getCurrentUser();
-           const userSettingsData = await getUserSettings();
+           
             if (userData) {
                 setUser(prev => ({
                     ...prev,
@@ -53,6 +53,8 @@ export const UserProvider = ({ children }) => {
                 // Handle case where user data is null
                 setUser(prev => ({ ...prev, authenticated: false, loading: false }));
             }
+
+            const userSettingsData = await getUserSettings();
 
             if (userSettingsData) {
                 setAppSettings(userSettingsData || {});

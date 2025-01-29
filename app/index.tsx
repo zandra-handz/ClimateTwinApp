@@ -37,7 +37,7 @@ const ScreenAuth = () => {
   const createNewAccount = false;
 
   const { showAppMessage } = useAppMessage();
-  const { themeStyles, gradientColors, manualGradientColors } =
+  const { themeStyles, appFontStyles, appContainerStyles, gradientColors, manualGradientColors } =
     useGlobalStyles();
   const [showSignIn, setShowSignIn] = useState(true);
   const [username, setUsername] = useState("");
@@ -346,7 +346,7 @@ const ScreenAuth = () => {
                       shapePosition="left"
                       shapePositionValue={-48}
                       shapePositionVerticalValue={-23}
-                      fontColor={themeStyles.genericText.color}
+                      fontColor={themeStyles.primaryText.color}
                       accessible={true}
                       accessibilityLabel={
                         isSignInScreen
@@ -364,7 +364,7 @@ const ScreenAuth = () => {
                     <SimpleBottomButton
                       onPress={handleAuthentication}
                       title={isSignInScreen ? "Sign in" : "Create account"} 
-                      fontColor={themeStyles.genericText.color}
+                      fontColor={themeStyles.primaryText.color}
                       accessible={true}
                       accessibilityLabel={
                         isSignInScreen

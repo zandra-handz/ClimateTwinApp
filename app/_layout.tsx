@@ -16,7 +16,29 @@ export default function Layout() {
         <UserProvider>
           <GlobalStylesProvider>
             <AppMessageContextProvider> 
-              <Stack />
+              <Stack>
+              <Stack.Screen
+              name='index'
+              options={{
+                headerShown: false,
+                headerTitle: 'Sign in',
+                headerStyle: {
+                  backgroundColor: 'teal',
+                }
+              }}
+              /> 
+              <Stack.Screen
+              name='home'
+              options={{
+                headerShown: false,
+                headerTitle: 'Home',
+                headerStyle: {
+                  backgroundColor: 'teal',
+                }
+              }}
+              />
+              </Stack>
+
             </AppMessageContextProvider>
           </GlobalStylesProvider>
         </UserProvider>

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { useGlobalStyles } from '@/app/context/GlobalStylesContext';
 import { useUser } from '../app/context/UserContext';
 
 interface WebSocketProps {
@@ -72,8 +73,8 @@ const useWebSocket = ({
   };
 };
 
-const WebSocketComponent: React.FC<{ userToken: string }> = ({ userToken }) => {
-    
+const WebSocketSearchingLocations: React.FC<{ userToken: string }> = ({ userToken }) => {
+    const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const [update, setUpdate] = useState<string | null>(null); // State to store the current update
   const [temperature, setTemperature] = useState<{ value: string | null; countryName: string | null }>({
     value: null,
@@ -104,33 +105,26 @@ const WebSocketComponent: React.FC<{ userToken: string }> = ({ userToken }) => {
   });
 
   return (
-    <View style={styles.container}> 
-      <ScrollView contentContainerStyle={styles.updatesContainer}>
+    <View style={appContainerStyles.defaultElementRow}>
+      <View style={styles.updatesContainer}>
         {temperature ? (
-          <View style={{flexDirection: 'column', flex: 1, width: '100%', height: 100, justifyContent: 'space-between', alignItems: 'center', textAlign: 'center'}}>
+          <View style={{flexDirection: 'column', width: '100%', height: 90, justifyContent: 'space-between', alignItems: 'center', textAlign: 'center'}}>
              
-            <Text style={styles.updateText}>{temperature.value}</Text> 
-            <Text style={styles.updateText}>{temperature.countryName}</Text> 
+            <Text style={[styles.updateText, themeStyles.primaryText]}>{temperature.value}</Text> 
+            <Text style={[styles.updateText, themeStyles.primaryText]}>{temperature.countryName}</Text> 
           
           
           </View>
         ) : (
           <Text style={styles.updateText}></Text>
         )}
-      </ScrollView>
+      </View>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20, 
-    flexDirection: 'row',
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-  }, 
+ 
   updatesContainer: {
     flex: 1, 
   },
@@ -148,4 +142,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WebSocketComponent;
+export default WebSocketSearchingLocations;

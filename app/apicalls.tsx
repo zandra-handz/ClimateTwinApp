@@ -326,6 +326,20 @@ export const refreshAccessToken = async (refToken) => {
         return { error: true, msg: e.response.data.msg };
     }
 };
+
+
+export const updateUserSettings = async (userId, updatedSettings) => {
+    try {
+        const response = await axios.patch(`/users/change-settings/${userId}/`, updatedSettings);
+        console.log('API PATCH CALL updateUserSettings', response.data);
+        //console.log('API response:', response.data); // Log the response data
+        return response.data; // Ensure this returns the expected structure
+    } catch (error) {
+        console.error('Error updating user settings:', error);
+        throw error;
+    }
+  };
+
  
 
  
