@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
-import { useGlobalStyles } from "@/app/context/GlobalStylesContext";
-import { useUser } from "../app/context/UserContext";
+import { useGlobalStyles } from "../context/GlobalStylesContext";
+import { useUser } from "../context/UserContext";
 
 interface WebSocketProps {
   userToken: string; // Token used for WebSocket authentication

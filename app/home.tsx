@@ -6,8 +6,8 @@ import { useGeolocationWatcher } from './hooks/useCurrentLocationWatcher';
 import  useHomeLocation from './hooks/useHomeLocation';
 import { useGlobalStyles } from './context/GlobalStylesContext';
 import { useUser } from './context/UserContext';
-import WebSocketSearchingLocations from '../components/WebSocketSearchingLocations';
-import WebSocketCurrentLocation from '../components/WebSocketCurrentLocation';
+import WebSocketSearchingLocations from './components/WebSocketSearchingLocations';
+import WebSocketCurrentLocation from './components/WebSocketCurrentLocation';
 import { useRouter, Link } from "expo-router";
 
 import { go } from './apicalls';

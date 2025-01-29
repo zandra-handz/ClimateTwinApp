@@ -1,7 +1,7 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useGlobalStyles } from '../app/context/GlobalStylesContext'; // Import the global style context
+import { useGlobalStyles } from '../context/GlobalStylesContext'; // Import the global style context
 
 const SimpleBottomButton = ({
   onPress,

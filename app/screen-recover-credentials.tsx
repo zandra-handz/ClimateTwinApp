@@ -22,7 +22,7 @@ import { useRouter } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
  
 import { StatusBar } from 'react-native';
-import SimpleBottomButton from "../components/SimpleBottomButton";
+import SimpleBottomButton from "./components/SimpleBottomButton";
 
 //a frienddate assistant for overwhelmed adults, and for people who just have a lot to talk about
 
@@ -70,9 +70,9 @@ const ScreenRecoverCredentials = () => {
     useState(false);
 
   const [fontsLoaded] = useFonts({
-    "Poppins-Regular": require("../assets/fonts/Poppins-Regular.ttf"),
-    "Poppins-Bold": require("../assets/fonts/Poppins-Bold.ttf"),
-    "Roboto-Regular": require("../assets/fonts/Roboto-Regular.ttf"),
+    "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
+    "Poppins-Bold": require("./assets/fonts/Poppins-Bold.ttf"),
+    "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
   });
 
   useLayoutEffect(() => {
