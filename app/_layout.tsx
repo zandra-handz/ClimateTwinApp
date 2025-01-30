@@ -26,6 +26,16 @@ export default function Layout() {
                   backgroundColor: 'teal',
                 }
               }}
+              />  
+              <Stack.Screen
+              name='signin'
+              options={{
+                headerShown: false,
+                headerTitle: 'Sign in',
+                headerStyle: {
+                  backgroundColor: 'teal',
+                }
+              }}
               /> 
               <Stack.Screen
               name='home'

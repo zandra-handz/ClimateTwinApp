@@ -91,10 +91,10 @@ const WebSocketCurrentLocation: React.FC<{ userToken: string }> = ({
       setUpdate(newUpdate.name); // Replace the previous update with the new one
     },
     onError: (error) => {
-      console.error("WebSocket encountered an error:", error);
+      console.error("Current Location WebSocket encountered an error:", error);
     },
     onClose: () => {
-      console.log("WebSocket connection closed");
+      console.log("Current Location WebSocket connection closed");
     },
   });
 

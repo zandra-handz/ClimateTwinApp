@@ -97,10 +97,10 @@ const WebSocketSearchingLocations: React.FC<{ userToken: string }> = ({ userToke
     },
     
     onError: (error) => {
-      console.error('WebSocket encountered an error:', error);
+      //console.error('WebSocket encountered an error:', error);
     },
     onClose: () => {
-      console.log('WebSocket connection closed');
+    //  console.log('Searching Locations WebSocket connection closed');
     },
   });
 
