@@ -39,23 +39,36 @@ const home = () => {
     fetchToken();
   }, []);
 
-useEffect(() => {
-  if (!user.authenticated) {
+
+  const handleSignOut = () => {
+    onSignOut();
     navigateToSignInScreen();
 
-  }
+  };
 
-}, [user]);
+// useEffect(() => {
+//   if (!user.authenticated) {
+//     navigateToSignInScreen();
+
+//   }
+
+// }, [user]);
 
 
 const navigateToSignInScreen = () => {
-  router.push('/'); // Navigate to the /recover-credentials screen
+  router.push('/signin'); // Navigate to the /recover-credentials screen
 };
 
   const handleFindNewLocation = (startingAddress) => {
     go(startingAddress);
 
   };
+
+
+  useEffect(() => {
+    console.log('home screen rerendered');
+
+  }, []);
 
   //for testing, hardcoded DRF auth token: `31abe86cc4359d469102c68fae094590c3683221`
 
@@ -85,7 +98,7 @@ const navigateToSignInScreen = () => {
               </View>
               
             </View> 
-      {token && (
+      {token && user && user.authenticated && (
         <View style={[appContainerStyles.defaultScreenElementContainer, {  marginVertical: '1%'}]}>
         <WebSocketCurrentLocation userToken={token} />
         
@@ -101,14 +114,14 @@ const navigateToSignInScreen = () => {
        </TouchableOpacity>
         
     
-      {token && (
-        <View style={[appContainerStyles.defaultScreenElementContainer, { borderColor: themeStyles.primaryText.color, height: 120, marginVertical: '1%'}]}>
+       {token && user && user.authenticated && (
+        <View style={[appContainerStyles.defaultScreenElementContainer, { borderColor: themeStyles.primaryText.color, height: 140, marginVertical: '1%'}]}>
         <WebSocketSearchingLocations userToken={token} />
         </View>
      )}  
   </View> 
   <View style={{width: '103%', alignItems: 'center', paddingHorizontal: '4%', flexDirection: 'row', justifyContent: 'space-between', height: 40}}>
-     <Text onPress={() => onSignOut()} style={[themeStyles.primaryText, appFontStyles.footerText]}>
+     <Text onPress={() => handleSignOut()} style={[themeStyles.primaryText, appFontStyles.footerText]}>
       Log out
      </Text>
   </View>

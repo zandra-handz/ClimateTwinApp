@@ -20,6 +20,7 @@ const WelcomeScreen = () => {
   const { themeStyles, manualGradientColors } = useGlobalStyles();
   const [showSignIn, setShowSignIn] = useState(true);
   const { reInitialize } = useUser();
+  const { showAppMessage } = useAppMessage();
 
   const router = useRouter();
   const usernameInputRef = useRef(null);
@@ -34,19 +35,21 @@ const WelcomeScreen = () => {
     "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
   });
 
-  useEffect(() => {
-    if (usernameInputRef.current) {
-      setUsernameInputVisible(true);
+  // useEffect(() => {
+  //   if (usernameInputRef.current) {
+  //     setUsernameInputVisible(true);
 
-      usernameInputRef.current.focus();
-    }
-  }, []);
+  //     usernameInputRef.current.focus();
+  //   }
+  // }, []);
 
   // const handleNavigateToAuthScreen = (userHitCreateAccount) => {
   //   navigation.navigate("Auth", { createNewAccount: !!userHitCreateAccount });
   // };
 
-  const handleNavigateToSignIn = (addThisCheckLater) => {
+
+  //implement here: pass in prop to tell signin if creating new account
+  const handleNavigateToSignIn = () => {
     router.push("/signin");
   };
 
@@ -62,7 +65,7 @@ const WelcomeScreen = () => {
       const token = await SecureStore.getItemAsync(TOKEN_KEY);
       if (token) {
         console.log(token);
-        // showMessage(true, null, "Reinitializing...");
+        showAppMessage(true, null, "Reinitializing...");
         reInitialize();
         handleNavigateToHome();
       } else {
@@ -136,7 +139,7 @@ const WelcomeScreen = () => {
                   }}
                 >
                   <SignInButton
-                    onPress={handleNavigateToSignIn}
+                    onPress={() => handleNavigateToSignIn()}
                     title={"Sign in"}
                     // shapeSource={require("../assets/shapes/coffeecupdarkheart.png")}
                     shapeWidth={190}

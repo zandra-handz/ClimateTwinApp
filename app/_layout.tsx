@@ -5,11 +5,13 @@ import { UserProvider } from "./context/UserContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
+import Animated from 'react-native-reanimated';
 
 
 
 export default function Layout() {
   const queryClient = new QueryClient();
+  
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <QueryClientProvider client={queryClient}>
@@ -21,7 +23,7 @@ export default function Layout() {
               name='index'
               options={{
                 headerShown: false,
-                headerTitle: 'Sign in',
+                headerTitle: 'Welcome',
                 headerStyle: {
                   backgroundColor: 'teal',
                 }

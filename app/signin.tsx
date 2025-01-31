@@ -157,25 +157,25 @@ const router = useRouter();
 //     }
 //   }, [signinMutation]);
 
-  const checkIfSignedIn = async () => {
-    try {
-      const token = await SecureStore.getItemAsync(TOKEN_KEY);
-      if (token) {
-        console.log(token);
-        //showAppMessage(true, null, "Reinitializing...");
-        reInitialize();
-        // Optionally, handle any other logic needed after re-initialization
-      } else {
-        // No token found, show sign in
-        setShowSignIn(true);
-        setConfirmedUserNotSignedIn(true);
-       // showAppMessage(true, null, "Signed out");
-      }
-    } catch (error) {
-      console.error("Error checking sign-in status", error);
-      // Handle errors as necessary
-    }
-  };
+  // const checkIfSignedIn = async () => {
+  //   try {
+  //     const token = await SecureStore.getItemAsync(TOKEN_KEY);
+  //     if (token) {
+  //       console.log(token);
+  //       //showAppMessage(true, null, "Reinitializing...");
+  //       reInitialize();
+  //       // Optionally, handle any other logic needed after re-initialization
+  //     } else {
+  //       // No token found, show sign in
+  //       setShowSignIn(true);
+  //       setConfirmedUserNotSignedIn(true);
+  //      // showAppMessage(true, null, "Signed out");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error checking sign-in status", error);
+  //     // Handle errors as necessary
+  //   }
+  // };
 
   useEffect(() => {
     console.log('user useeffect in auth screen triggered');
@@ -471,7 +471,7 @@ const router = useRouter();
             <View style={{ flexDirection: "row", width: "100%" }}> 
                 <Text
                   style={styles.toggleButton}
-                  onPress={navigateToRecoverCredentials}
+                  onPress={() => navigateToRecoverCredentials()}
                   accessible={true}
                   accessibilityLabel="Toggle button"
                   accessibilityHint="Press to toggle between sign in and create account"
