@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { SafeAreaView, View, Text, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect, useRef } from 'react';
+import { SafeAreaView, View, Text, TouchableOpacity, AppState } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import { useGeolocationWatcher } from './hooks/useCurrentLocationWatcher';
 
@@ -9,6 +9,10 @@ import { useUser } from './context/UserContext';
 import WebSocketSearchingLocations from './components/WebSocketSearchingLocations';
 import WebSocketCurrentLocation from './components/WebSocketCurrentLocation';
 import { useRouter, Link } from "expo-router";
+
+import { useAppMessage } from './context/AppMessageContext';
+
+import SignoutSvg from './assets/svgs/signout.svg';
 
 import { StatusBar } from 'expo-status-bar';
 
@@ -21,10 +25,43 @@ const home = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const [token, setToken] = useState<string | null>(null);
   const { homeLocation, homeRegion } = useHomeLocation();
+  const { showAppMessage } = useAppMessage();
+
+  const [refreshKey, setRefreshKey] = useState(0); // State to trigger a refresh
+
 
   const TOKEN_KEY = 'my-jwt';
 
   const router = useRouter();
+
+
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+
+  useEffect(() => {
+    const subscription = AppState.addEventListener('change', nextAppState => {
+      if (
+        appState.current.match(/inactive|background/) &&
+        nextAppState === 'active'
+      ) {
+        showAppMessage(true, null, `App has come to the foreground!`);
+        handleRefresh();
+      }
+
+      appState.current = nextAppState;
+      setAppStateVisible(appState.current);
+      console.log('AppState', appState.current);
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, []);
+
+  const handleRefresh = () => {
+    setRefreshKey(prevKey => prevKey + 1); // Increment the key to force re-render
+    showAppMessage(true, null, 'Page Refreshed!');
+  };
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -42,7 +79,7 @@ const home = () => {
 
   const handleSignOut = () => {
     onSignOut();
-    navigateToSignInScreen();
+   // navigateToSignInScreen();
 
   };
 
@@ -61,12 +98,15 @@ const navigateToSignInScreen = () => {
 
   const handleFindNewLocation = (startingAddress) => {
     go(startingAddress);
+    //showAppMessage(true, null, `Searching for a portal!!`);
+    handleRefresh();
 
   };
 
 
   useEffect(() => {
     console.log('home screen rerendered');
+    showAppMessage(true, null, 'hihihihihi!');
 
   }, []);
 
@@ -115,15 +155,14 @@ const navigateToSignInScreen = () => {
         
     
        {token && user && user.authenticated && (
-        <View style={[appContainerStyles.defaultScreenElementContainer, { borderColor: themeStyles.primaryText.color, height: 140, marginVertical: '1%'}]}>
+        <View style={[appContainerStyles.defaultScreenElementContainer, { borderColor: themeStyles.primaryText.color, height: 300, marginVertical: '1%'}]}>
         <WebSocketSearchingLocations userToken={token} />
         </View>
      )}  
   </View> 
-  <View style={{width: '103%', alignItems: 'center', paddingHorizontal: '4%', flexDirection: 'row', justifyContent: 'space-between', height: 40}}>
-     <Text onPress={() => handleSignOut()} style={[themeStyles.primaryText, appFontStyles.footerText]}>
-      Log out
-     </Text>
+  <View style={{width: '100%', alignItems: 'center', paddingHorizontal: '4%', flexDirection: 'row', justifyContent: 'space-between', height: 40}}>
+     <SignoutSvg onPress={() => handleSignOut()} width={30} height={30} color={themeStyles.primaryText.color}/>
+   
   </View>
     </View>
     </>

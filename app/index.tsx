@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "react-native";
 
+
 //a frienddate assistant for overwhelmed adults, and for people who just have a lot to talk about
 
 const TOKEN_KEY = "my-jwt";
@@ -56,6 +57,7 @@ const WelcomeScreen = () => {
   const handleNavigateToHome = () => {
     router.push("/home");
   };
+  
 
   //i think i should do a condiitional check for user.authenticated at a higher level to ensure
   // app screens can't be viewed at all if user logged out

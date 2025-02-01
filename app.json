@@ -8,7 +8,7 @@
       "eas": {
         "projectId": "538e9695-1d25-43ab-a2d6-7d11bffdb395"
       }
-    },
+    }, 
     "name": "climatetwinapp",
     "slug": "climatetwinapp",
     "version": "1.0.0",
@@ -38,6 +38,8 @@
     },
     "plugins": [
       "expo-router",
+      "expo-secure-store",
+      "expo-font",
       [
         "expo-splash-screen",
         {

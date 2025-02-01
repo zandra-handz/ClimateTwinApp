@@ -25,11 +25,12 @@ const AppMessage = ({
   const translateY = useRef(new Animated.Value(-100)).current; // Start off-screen, above the view
 
   useEffect(() => {
+    console.log('starting animation for app message');
     let timeout;
     let resultsTimeout;
 
     timeout = setTimeout(() => { 
-      if (messageData.result) { 
+      if (appMessageData.result) { 
         setShowResultsMessage(true); 
         
         setTimeout(() => {
@@ -56,7 +57,7 @@ const AppMessage = ({
       clearTimeout(timeout);
       clearTimeout(resultsTimeout);
     };
-  }, [messageDelay, delay, messageData, resultsDisplayDuration, translateY]);
+  }, [messageDelay, delay, appMessageData, resultsDisplayDuration, translateY]);
 
   const endAnimation = () => {
     setShowResultsMessage(false);
@@ -66,11 +67,11 @@ const AppMessage = ({
   if (!showResultsMessage) return null;
 
   return (
-    <View style={styles.container}> 
+    <View style={[styles.container]}> 
       {showResultsMessage && (
         <Animated.View
           style={[ 
-            styles.textContainer, themeStyles.secondaryBackground,
+            styles.textContainer, themeStyles.darkerBackground,
             {  
               // (sliding)
               transform: [{ translateY: translateY }], 
@@ -96,7 +97,7 @@ const styles = StyleSheet.create({
     width: '100%', // Adjust width as needed
     padding: 10,
     height: 'auto',
-    minHeight: 80,
+    minHeight: 100,
     maxHeight: '50%',
     justifyContent: 'center',
     alignItems: 'center',
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
   }, 
   loadingTextBold: {
     fontSize: 16,
-    fontFamily: 'Poppins-Regular',
+    //fontFamily: 'Poppins-Regular',
     textAlign: 'center',
     paddingBottom: 0,
   },

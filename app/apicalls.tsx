@@ -3,7 +3,9 @@ import * as SecureStore from 'expo-secure-store';
 //export const API_URL = 'https://ac67e9fa-7838-487d-a3bc-e7a176f4bfbf-dev.e1-us-cdp-2.choreoapis.dev/hellofriend/hellofriend/rest-api-be2/v1.0/';
 
 //export const API_URL = 'http://167.99.233.148:8000/';
-export const API_URL = 'https://climatetwin-lzyyd.ondigitalocean.app/';
+// export const API_URL = 'https://climatetwin-lzyyd.ondigitalocean.app/';
+
+export const API_URL = 'https://climatetwin.com/';
 
 
 axios.defaults.baseURL = API_URL;

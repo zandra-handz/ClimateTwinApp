@@ -185,6 +185,13 @@ import React, {
       justifyContent: "space-between",
       flexDirection: "column",
       paddingVertical: "3%",
+      zIndex: 1,
+    },
+    mapContainer: {
+      borderRadius: 20,
+      width: "100%", // Makes it fill the container's width
+      aspectRatio: 1280 / 640, // This keeps the original aspect ratio (1280x640)
+      zIndex: 0, // Adjust z-index if needed
     },
     innerFlexStartContainer: {
       width: "100%",
