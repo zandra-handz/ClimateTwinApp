@@ -344,6 +344,63 @@ export const updateUserSettings = async (userId, updatedSettings) => {
 
  
 
+  export const getTwinLocation = async () => {
+    try {
+        console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.get('/climatevisitor/currently-visiting/');
+        console.log('API GET Call getCurrentUser', response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /climatevisitor/currently-visiting/:', error.response.data);
+        } else if (error.request) {
+            console.error('Error request for /climatevisitor/currently-visiting/, , add console logging in api file for more details');
+        } else {
+            console.error('Error message for /climatevisitor/currently-visiting/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
+
+export const getExploreLocation = async () => {
+    try {
+        console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.get('/climatevisitor/currently-exploring/');
+        console.log('API GET Call getCurrentUser', response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /climatevisitor/currently-exploring/:', error.response.data);
+        } else if (error.request) {
+            console.error('Error request for /climatevisitor/currently-exploring/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /climatevisitor/currently-exploring/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
+
+export const getNearbyLocations = async () => {
+    try {
+        console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.get('/climatevisitor/currently-nearby/');
+        console.log('API GET Call getCurrentUser', response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /climatevisitor/currently-nearby/:', error.response.data);
+        } else if (error.request) {
+            console.error('Error request for /climatevisitor/currently-nearby/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /climatevisitor/currently-nearby/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
+
  
 
  

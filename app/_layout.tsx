@@ -1,6 +1,7 @@
 import { AppMessageContextProvider } from "./context/AppMessageContext";
 import { GlobalStylesProvider } from "./context/GlobalStylesContext";
 import { UserProvider } from "./context/UserContext";
+import { CurrentSurroundingsProvider } from "./context/CurrentSurroundingsContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router"; // Expo Router's Stack component
@@ -18,7 +19,10 @@ export default function Layout() {
             <AppMessageContextProvider>
               {/* Wrap Stack in TopLevelRouter to handle authentication checks */}
               <TopLevelRouter>
+                
               < AppMessage />
+              <CurrentSurroundingsProvider>
+                
                 <Stack>
                   <Stack.Screen
                     name="index"
@@ -51,6 +55,8 @@ export default function Layout() {
                     }}
                   />
                 </Stack>
+                
+              </CurrentSurroundingsProvider>
               </TopLevelRouter>
             </AppMessageContextProvider>
           </GlobalStylesProvider>

@@ -8,6 +8,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useGlobalStyles } from '../context/GlobalStylesContext';
 import { useUser } from '../context/UserContext';
+import { useAppMessage } from '../context/AppMessageContext';
  
 import WorldMapSvg from '../assets/svgs/worldmap.svg';
 
@@ -36,15 +37,23 @@ interface WebSocketProps {
 
 const useWebSocket = ({
   userToken,
-  coords,
+  reconnectSocket,
+  latitude,
+  longitude,
+  prevLatitude,
+  prevLongitude,
+  prevPrevLatitude,
+  prevPrevLongitude,
   temperatureSharedValue,
   countrySharedValue,
   temperatureDifference,
+  setIsSocketOpen,
   onMessage,
   onError,
   onClose,
 }: WebSocketProps) => {
   const socketRef = useRef<WebSocket | null>(null);
+    const { showAppMessage } = useAppMessage();
 
 
   
@@ -57,25 +66,40 @@ const useWebSocket = ({
       return;
     }
 
+    showAppMessage(true, null, `App back in foreground, reconnecting search location web socket!`);
+
     const socketUrl = `wss://climatetwin.com/ws/climate-twin/?user_token=${userToken}`;
     const socket = new WebSocket(socketUrl);
     socketRef.current = socket;
 
     socket.onopen = () => {
      console.log('Location search WebSocket connection opened');
+     setIsSocketOpen(true);
     };
 
     socket.onmessage = (event) => {
       try {
         const update = JSON.parse(event.data);
+        prevPrevLatitude.value = prevLatitude.value;
+        prevPrevLongitude.value = prevLongitude.value;
+
+        prevLatitude.value = latitude.value;
+        prevLongitude.value = longitude.value;
       // console.log('WebSocket message received:', update); // Log the raw WebSocket message
         temperatureSharedValue.value = update.temperature || '';
         countrySharedValue.value = update.country_name || '';
         temperatureDifference.value = update.temp_difference || '';
-        coords.value = {
-          latitude: update.latitude || 0,
-          longitude: update.longitude || 0
-        };
+        
+        // prevCoords.value = {
+        //   latitude: coords.value.latitude,
+        //   longitude: coords.value.longitude
+        // };
+        latitude.value = update.latitude || 0;
+        longitude.value = update.longitude || 0;
+        // coords.value = {
+        //   latitude: update.latitude || 0,
+        //   longitude: update.longitude || 0
+        // };
        // console.log(temperatureSharedValue);
       } catch (error) {
         console.error("Error parsing WebSocket message:", error);
@@ -90,6 +114,7 @@ const useWebSocket = ({
     socket.onclose = () => {
       console.log("WebSocket connection closed");
       socketRef.current = null; // Reset the ref so it can reconnect if needed
+      setIsSocketOpen(false);
       if (onClose) onClose();
     };
 
@@ -101,7 +126,9 @@ const useWebSocket = ({
         socketRef.current.close();
       }
     };
-  }, [userToken]); // Reconnect if userToken changes
+  }, [userToken, reconnectSocket, onMessage,
+    onError,
+    onClose]); // Reconnect if userToken changes
 
 
   
@@ -117,9 +144,11 @@ const useWebSocket = ({
 
 
 
-const WebSocketSearchingLocations: React.FC<{ userToken: string }> = ({ userToken }) => {
+const WebSocketSearchingLocations: React.FC<{ userToken: string, reconnectSocket: boolean }> = ({ userToken, reconnectSocket }) => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { user } = useUser();
+  const { user, reinitialize } = useUser();
+  const [isSocketOpen, setIsSocketOpen] = useState(false); // Track WebSocket connection status
+
  
   const [mapDimensions, setMapDimensions] = useState({ width: 0, height: 0 });
 
@@ -133,6 +162,18 @@ const WebSocketSearchingLocations: React.FC<{ userToken: string }> = ({ userToke
   const countrySharedValue = useSharedValue('');
   const temperatureDifference = useSharedValue('');
  const coords = useSharedValue({ latitude: 0, longitude: 0 });
+
+ const latitude = useSharedValue(0);
+const longitude = useSharedValue(0);
+
+const prevLatitude = useSharedValue(0);
+const prevLongitude = useSharedValue(0);
+
+const prevPrevLatitude = useSharedValue(0);
+const prevPrevLongitude = useSharedValue(0);
+
+
+ const prevCoords = useSharedValue({ latitude: 0, longitude: 0 });
 
  const handleLayout = (event: any) => {
   const { width, height } = event.nativeEvent.layout;
@@ -166,35 +207,73 @@ const WebSocketSearchingLocations: React.FC<{ userToken: string }> = ({ userToke
     };
   });
 
-  
-  
-  const colorIndexRef = useRef(0);
-  const colors = ['red', 'blue', 'green', 'orange', 'purple', 'yellow', 'cyan', 'magenta'];
 
-  const screenWidth = 300; // Replace with your screen width
-  const screenHeight = 300; // Replace with your screen height
+  // const animatedCoords = useAnimatedProps(() => ({
+  //   latitude: latitude.value, // Directly using the shared value
+  //   longitude: longitude.value
+  // }));
+
   
-  // const animatedCoords = useAnimatedProps(() => { 
-  //   return {
-  //     coords: coords.value
-  //   };
-  // });
+   
 
 
   const animatedStyle = useAnimatedStyle(() => {
+    // prevLatitude.value = latitude.value;
+    // prevLongitude.value = longitude.value;
     // Normalize coordinates based on the mapContainer's dimensions
-    const normalizedLeft = (coords.value.longitude + 180) * (mapDimensions.width / 360);
-    const normalizedTop = (90 - coords.value.latitude) * (mapDimensions.height / 180); // Invert the vertical axis
+    const normalizedLeft = (longitude.value + 180) * (mapDimensions.width / 360);
+    const normalizedTop = (90 - latitude.value) * (mapDimensions.height / 180); // Invert the vertical axis
     
     return {
       position: 'absolute',
       left: normalizedLeft,
       top: normalizedTop,
       zIndex: 2000,
+      opacity: 1,
       backgroundColor: themeStyles.primaryText.color, // Use the color cycle here
       width: 6, // Size of the dot
       height: 6, // Size of the dot
       borderRadius: 3, // To make it round
+      fadeOutDuration: 100,
+    };
+  });
+
+  const animatedStylePrev = useAnimatedStyle(() => {
+    // Normalize coordinates based on the mapContainer's dimensions
+    const normalizedLeft = (prevLongitude.value + 180) * (mapDimensions.width / 360);
+    const normalizedTop = (90 - prevLatitude.value) * (mapDimensions.height / 180); // Invert the vertical axis
+    
+    return {
+      position: 'absolute',
+      left: normalizedLeft,
+      top: normalizedTop,
+      zIndex: 2000, 
+      opacity: .6,
+      backgroundColor: themeStyles.primaryText.color, // Use the color cycle here
+      width: 6, // Size of the dot
+      height: 6, // Size of the dot
+      borderRadius: 3, // To make it round
+      fadeOutDuration: 200,
+    };
+  });
+   
+
+  const animatedStylePrevPrev = useAnimatedStyle(() => {
+    // Normalize coordinates based on the mapContainer's dimensions
+    const normalizedLeft = (prevPrevLongitude.value + 180) * (mapDimensions.width / 360);
+    const normalizedTop = (90 - prevPrevLatitude.value) * (mapDimensions.height / 180); // Invert the vertical axis
+    
+    return {
+      position: 'absolute',
+      left: normalizedLeft,
+      top: normalizedTop,
+      zIndex: 2000, 
+      opacity: .3,
+      backgroundColor: themeStyles.primaryText.color, // Use the color cycle here
+      width: 4, // Size of the dot
+      height: 4, // Size of the dot
+      borderRadius: 3, // To make it round
+      fadeOutDuration: 200,
     };
   });
    
@@ -224,10 +303,17 @@ const animatedTemp = useAnimatedProps(() => {
   // WebSocket hook
   useWebSocket({
     userToken,
-    coords,
+    reconnectSocket,
+    latitude,
+    longitude,
+    prevLatitude,
+    prevLongitude,
+    prevPrevLatitude,
+    prevPrevLongitude,
     temperatureSharedValue,
     countrySharedValue, 
     temperatureDifference,
+    setIsSocketOpen,
     onMessage: (newUpdate) => { 
      // console.log("Received update:", newUpdate); 
     },
@@ -259,8 +345,15 @@ const animatedTemp = useAnimatedProps(() => {
       
     <WorldMapSvg width={'100%'} color={'blue'}  />
             {/* Only show the Dot if the map has dimensions */}
-            {mapDimensions.width > 0 && mapDimensions.height > 0 && (
+            {mapDimensions.width > 0 && mapDimensions.height > 0 && latitude !== undefined && longitude !== undefined && isSocketOpen && ( <>
+
          <AnimatedDot style={animatedStyle} />
+       
+         <AnimatedDot style={animatedStylePrev} />
+
+         <AnimatedDot style={animatedStylePrevPrev} />
+         
+         </>
         )}
 
     </View> 

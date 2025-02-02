@@ -12,6 +12,7 @@ interface WebSocketProps {
 
 const useWebSocket = ({
   userToken,
+  reconnectSocket,
   onMessage,
   onError,
   onClose,
@@ -25,8 +26,9 @@ const useWebSocket = ({
     if (socketRef.current) {
       // console.log("WebSocket already initialized, skipping new connection.");
        return;
-    }
-
+     }
+  
+ 
     //const socketUrl = `wss://climatetwin-lzyyd.ondigitalocean.app/ws/climate-twin/current/?user_token=${userToken}`;
     const socketUrl = `wss://climatetwin.com/ws/climate-twin/current/?user_token=${userToken}`;
 
@@ -64,7 +66,7 @@ const useWebSocket = ({
         socketRef.current.close();
       }
     };
-  }, [userToken, onMessage, onError, onClose]);
+  }, [userToken, reconnectSocket, onMessage, onError, onClose]);
 
   return {
     sendMessage: (message: any) => {
@@ -81,8 +83,8 @@ const useWebSocket = ({
   };
 };
 
-const WebSocketCurrentLocation: React.FC<{ userToken: string }> = ({
-  userToken,
+const WebSocketCurrentLocation: React.FC<{ userToken: string, reconnectSocket: boolean }> = ({
+  userToken, reconnectSocket
 }) => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const { user } = useUser();
@@ -91,6 +93,7 @@ const WebSocketCurrentLocation: React.FC<{ userToken: string }> = ({
   // WebSocket hook
   const { sendMessage } = useWebSocket({
     userToken,
+    reconnectSocket,
     onMessage: (newUpdate) => {
       console.log("Received update:", newUpdate);
       setUpdate(newUpdate.name); // Replace the previous update with the new one

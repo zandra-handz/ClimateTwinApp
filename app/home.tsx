@@ -6,6 +6,7 @@ import { useGeolocationWatcher } from './hooks/useCurrentLocationWatcher';
 import  useHomeLocation from './hooks/useHomeLocation';
 import { useGlobalStyles } from './context/GlobalStylesContext';
 import { useUser } from './context/UserContext';
+import { useSurroundings } from './context/CurrentSurroundingsContext';
 import WebSocketSearchingLocations from './components/WebSocketSearchingLocations';
 import WebSocketCurrentLocation from './components/WebSocketCurrentLocation';
 import { useRouter, Link } from "expo-router";
@@ -22,6 +23,7 @@ const home = () => {
 
   useGeolocationWatcher();
   const { user, onSignOut } = useUser();
+  const { matchedLocation } = useSurroundings();
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const [token, setToken] = useState<string | null>(null);
   const { homeLocation, homeRegion } = useHomeLocation();
@@ -34,10 +36,17 @@ const home = () => {
 
   const router = useRouter();
 
+  useEffect(() => {
+    if (matchedLocation) {
+      console.log(`matched location!`, matchedLocation);
+    }
+
+  }, [matchedLocation]);
+
 
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
-
+  const [ openSocketForGoPress, setOpenSocketForGoPress ] = useState(false);
   useEffect(() => {
     const subscription = AppState.addEventListener('change', nextAppState => {
       if (
@@ -45,7 +54,7 @@ const home = () => {
         nextAppState === 'active'
       ) {
         showAppMessage(true, null, `App has come to the foreground!`);
-        handleRefresh();
+       // handleRefresh();
       }
 
       appState.current = nextAppState;
@@ -97,9 +106,10 @@ const navigateToSignInScreen = () => {
 };
 
   const handleFindNewLocation = (startingAddress) => {
+    setOpenSocketForGoPress(prev => !prev);
     go(startingAddress);
     //showAppMessage(true, null, `Searching for a portal!!`);
-    handleRefresh();
+    //handleRefresh();
 
   };
 
@@ -140,7 +150,7 @@ const navigateToSignInScreen = () => {
             </View> 
       {token && user && user.authenticated && (
         <View style={[appContainerStyles.defaultScreenElementContainer, {  marginVertical: '1%'}]}>
-        <WebSocketCurrentLocation userToken={token} />
+        <WebSocketCurrentLocation userToken={token} reconnectSocket={appStateVisible || openSocketForGoPress} />
         
           
         </View>
@@ -156,7 +166,7 @@ const navigateToSignInScreen = () => {
     
        {token && user && user.authenticated && (
         <View style={[appContainerStyles.defaultScreenElementContainer, { borderColor: themeStyles.primaryText.color, height: 300, marginVertical: '1%'}]}>
-        <WebSocketSearchingLocations userToken={token} />
+        <WebSocketSearchingLocations userToken={token} reconnectSocket={appStateVisible || openSocketForGoPress}/>
         </View>
      )}  
   </View> 
