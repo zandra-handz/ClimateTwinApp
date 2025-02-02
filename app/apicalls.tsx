@@ -10,6 +10,9 @@ export const API_URL = 'https://climatetwin.com/';
 
 axios.defaults.baseURL = API_URL;
 
+import { Alert } from 'react-native';
+
+
 
 
 
@@ -301,12 +304,16 @@ export const getCurrentUser = async () => {
 export const go = async (startingAddress) => {
     const address = {address : startingAddress}
     try {
-        console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        //console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.post('/climatevisitor/go/', address); 
+        console.log(response.status);
         return response.data[0];
+        
     } catch (error) {
+        Alert.alert('DEBUG MODE: Request Failed', 'The request could not be sent. Please try again.');
+        
         if (error.response) {
-            console.error('Error response for /auth/users/:', error.response.data);
+            console.error('Error response for /auth/users/:', error);
         } else if (error.request) {
             console.error('Error request for /auth/users/:');
         } else {
