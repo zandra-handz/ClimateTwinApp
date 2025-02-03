@@ -103,10 +103,10 @@ const useSurroundingsWebSocket = ({
         errorMessage = JSON.stringify(event); // Fallback: Convert entire event to string
       }
     
-      Alert.alert(
-        'DEBUG MODE: Request Failed',
-        `The request could not be sent. Please try again.\n\nError: ${errorMessage}`
-      );
+      // Alert.alert(
+      //   'DEBUG MODE: Request Failed',
+      //   `The request could not be sent. Please try again.\n\nError: ${errorMessage}`
+      // );
     
       if (onError) {
         onError(event);
