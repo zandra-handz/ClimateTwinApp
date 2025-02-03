@@ -6,8 +6,8 @@ import useSurroundingsWebSocket from '../hooks/useSurroundingsWebSocket';
  
  
 
-const WebSocketCurrentLocation: React.FC<{ userToken: string, reconnectSocket: boolean }> = ({
-  userToken, reconnectSocket
+const WebSocketCurrentLocation: React.FC<{ reconnectSocket: boolean }> = ({
+  reconnectSocket
 }) => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const { user } = useUser();
@@ -15,7 +15,7 @@ const WebSocketCurrentLocation: React.FC<{ userToken: string, reconnectSocket: b
 
   // WebSocket hook
   const { sendMessage } = useSurroundingsWebSocket({
-    userToken,
+    
     reconnectSocket,
     onMessage: (newUpdate) => {
       console.log("Received update:", newUpdate);

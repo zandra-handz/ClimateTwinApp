@@ -1,23 +1,23 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, AppState } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
-import { useGeolocationWatcher } from './hooks/useCurrentLocationWatcher';
+import { useGeolocationWatcher } from '../hooks/useCurrentLocationWatcher';
 
-import  useHomeLocation from './hooks/useHomeLocation';
-import { useGlobalStyles } from './context/GlobalStylesContext';
-import { useUser } from './context/UserContext';
-import { useSurroundings } from './context/CurrentSurroundingsContext';
-import WebSocketSearchingLocations from './components/WebSocketSearchingLocations';
-import WebSocketCurrentLocation from './components/WebSocketCurrentLocation';
+import  useHomeLocation from '../hooks/useHomeLocation';
+import { useGlobalStyles } from '../context/GlobalStylesContext';
+import { useUser } from '../context/UserContext';
+import { useSurroundings } from '../context/CurrentSurroundingsContext';
+import WebSocketSearchingLocations from '../components/WebSocketSearchingLocations';
+import WebSocketCurrentLocation from '../components/WebSocketCurrentLocation';
 import { useRouter, Link } from "expo-router";
 
-import { useAppMessage } from './context/AppMessageContext';
+import { useAppMessage } from '../context/AppMessageContext';
 
-import SignoutSvg from './assets/svgs/signout.svg';
+import SignoutSvg from '../assets/svgs/signout.svg';
 
 import { StatusBar } from 'expo-status-bar';
 
-import { go } from './apicalls';
+import { go } from '../apicalls';
 
 const home = () => {
 
@@ -150,7 +150,7 @@ const navigateToSignInScreen = () => {
             </View> 
       {token && user && user.authenticated && (
         <View style={[appContainerStyles.defaultScreenElementContainer, {  marginVertical: '1%'}]}>
-        <WebSocketCurrentLocation userToken={token} reconnectSocket={appStateVisible || openSocketForGoPress} />
+        <WebSocketCurrentLocation reconnectSocket={appStateVisible || openSocketForGoPress} />
         
           
         </View>
@@ -166,7 +166,7 @@ const navigateToSignInScreen = () => {
     
        {token && user && user.authenticated && (
         <View style={[appContainerStyles.defaultScreenElementContainer, { borderColor: themeStyles.primaryText.color, height: 300, marginVertical: '1%'}]}>
-        <WebSocketSearchingLocations userToken={token} reconnectSocket={appStateVisible || openSocketForGoPress}/>
+        <WebSocketSearchingLocations reconnectSocket={appStateVisible || openSocketForGoPress}/>
         </View>
      )}  
   </View> 

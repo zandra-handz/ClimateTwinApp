@@ -45,13 +45,13 @@ export default function Layout() {
                     }}
                   />
                   <Stack.Screen
-                    name="home"
+                    name="(tabs)"
                     options={{
-                      headerShown: false,
-                      headerTitle: "Home",
+                      headerShown: false, 
                       headerStyle: {
                         backgroundColor: "teal",
                       },
+                     
                     }}
                   />
                 </Stack>

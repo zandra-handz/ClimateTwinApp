@@ -14,6 +14,8 @@ import WorldMapSvg from '../assets/svgs/worldmap.svg';
 
 import MapDots from '../animations/MapDots'; 
 import Dot from '../animations/Dot';
+ 
+import * as SecureStore from 'expo-secure-store';
 
 // Create an animated TextInput component
 
@@ -28,15 +30,13 @@ const AnimatedDot = Animated.createAnimatedComponent(Dot);
 
 
 
-interface WebSocketProps {
-  userToken: string; // Token used for WebSocket authentication
+interface WebSocketProps { 
   onMessage: (update: any) => void; // Callback for handling WebSocket messages
   onError?: (error: Event) => void; // Optional callback for WebSocket errors
   onClose?: () => void; // Optional callback when the WebSocket connection is closed
 }
 
-const useWebSocket = ({
-  userToken,
+const useWebSocket = ({ 
   reconnectSocket,
   latitude,
   longitude,
@@ -56,8 +56,46 @@ const useWebSocket = ({
     const { showAppMessage } = useAppMessage();
 
 
-  
+    const TOKEN_KEY = 'my-jwt';
 
+
+
+    const { user } = useUser();
+    const [token, setToken] = useState<string | null>(null);
+
+
+  
+    useEffect(() => {
+      const fetchToken = async () => {
+        try {
+          const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
+          setToken(storedToken);
+        } catch (error) {
+          console.error('Failed to retrieve token:', error);
+        }
+      };
+  
+      fetchToken();
+    }, []);
+
+
+    useEffect(() => {
+      if (user && user.authenticated) {
+        
+      const fetchToken = async () => {
+        try {
+          const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
+          setToken(storedToken);
+          //console.log(storedToken);
+        } catch (error) {
+          console.error('Failed to retrieve token:', error);
+        }
+      };
+
+  
+      fetchToken();
+    }
+    }, [user]);
 
 
   useEffect(() => {
@@ -66,9 +104,11 @@ const useWebSocket = ({
       return;
     }
 
-    showAppMessage(true, null, `App back in foreground, reconnecting search location web socket!`);
 
-    const socketUrl = `wss://climatetwin.com/ws/climate-twin/?user_token=${userToken}`;
+    if (token) {
+ 
+
+    const socketUrl = `wss://climatetwin.com/ws/climate-twin/?user_token=${token}`;
     const socket = new WebSocket(socketUrl);
     socketRef.current = socket;
 
@@ -126,9 +166,9 @@ const useWebSocket = ({
         socketRef.current.close();
       }
     };
-  }, [userToken, reconnectSocket, onMessage,
-    onError,
-    onClose]); // Reconnect if userToken changes
+  }
+  }, [token, reconnectSocket,
+  ]); // Reconnect if userToken changes
 
 
   
@@ -144,7 +184,7 @@ const useWebSocket = ({
 
 
 
-const WebSocketSearchingLocations: React.FC<{ userToken: string, reconnectSocket: boolean }> = ({ userToken, reconnectSocket }) => {
+const WebSocketSearchingLocations: React.FC<{ reconnectSocket: boolean }> = ({ reconnectSocket }) => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { user, reinitialize } = useUser();
   const [isSocketOpen, setIsSocketOpen] = useState(false); // Track WebSocket connection status
@@ -301,8 +341,7 @@ const animatedTemp = useAnimatedProps(() => {
 });
 
   // WebSocket hook
-  useWebSocket({
-    userToken,
+  useWebSocket({ 
     reconnectSocket,
     latitude,
     longitude,

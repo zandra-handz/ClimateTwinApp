@@ -1,16 +1,20 @@
-import React, { useEffect, useRef, useState } from "react"; 
+import React, { useEffect, useRef, useState } from "react";
+import { View, Text, ScrollView, StyleSheet } from "react-native";
+import { useGlobalStyles } from "../context/GlobalStylesContext";
 import { useUser } from "../context/UserContext";
 import * as SecureStore from 'expo-secure-store';
- 
 
-interface SurroundingsWebSocketProps {
+import { Alert } from 'react-native';
+
+interface SearchWebSocketProps {
   userToken: string; // Token used for WebSocket authentication
   onMessage: (update: any) => void; // Callback for handling WebSocket messages
   onError?: (error: Event) => void; // Optional callback for WebSocket errors
   onClose?: () => void; // Optional callback when the WebSocket connection is closed
 }
 
-const useSurroundingsWebSocket = ({ 
+const useSearchForLocationWebSocket = ({
+  userToken,
   reconnectSocket,
   onMessage,
   onError,
@@ -21,7 +25,7 @@ const useSurroundingsWebSocket = ({
 
   const socketRef = useRef<WebSocket | null>(null);
 
-  const { user } = useUser();
+  const { user, reInitialize } = useUser();
    const [token, setToken] = useState<string | null>(null);
 
 
@@ -70,7 +74,7 @@ const useSurroundingsWebSocket = ({
      
  
     //const socketUrl = `wss://climatetwin-lzyyd.ondigitalocean.app/ws/climate-twin/current/?user_token=${userToken}`;
-    const socketUrl = `wss://climatetwin.com/ws/climate-twin/current/?user_token=${token}`;
+    const socketUrl = `wss://climatetwin.com/ws/climate-twin/current/?user_token=${userToken}`;
 
     console.log("WebSocket connection URL:", socketUrl); // Log the WebSocket URL and token
 
@@ -124,7 +128,7 @@ const useSurroundingsWebSocket = ({
         socketRef.current.close();
       }
     };
-  }, [token, reconnectSocket, onClose]);
+  }, [token, reconnectSocket, onMessage, onError, onClose]);
 
   return {
     sendMessage: (message: any) => {
@@ -143,4 +147,4 @@ const useSurroundingsWebSocket = ({
 
 
 
-export default useSurroundingsWebSocket;
+export default useSearchForLocationWebSocket;
