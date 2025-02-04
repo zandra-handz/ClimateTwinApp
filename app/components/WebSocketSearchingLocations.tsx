@@ -47,7 +47,7 @@ const useWebSocket = ({
   const socketRef = useRef<WebSocket | null>(null);
   const { showAppMessage } = useAppMessage();
 
-  const TOKEN_KEY = "my-jwt";
+  const TOKEN_KEY = "accessToken";
 
   const { user } = useUser();
   const [token, setToken] = useState<string | null>(null);

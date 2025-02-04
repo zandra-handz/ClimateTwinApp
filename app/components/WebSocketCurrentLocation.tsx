@@ -32,7 +32,7 @@ const WebSocketCurrentLocation: React.FC<{ reconnectSocket: boolean }> = ({
       } 
     },
     onError: (error) => {
-      console.error("Current Location WebSocket encountered an error:", error);
+      console.error("Received error:", error);
     },
     onClose: () => {
       console.log("Current Location WebSocket connection closed");

@@ -17,9 +17,7 @@ import SignoutSvg from '../../../assets/svgs/signout.svg';
 
 import { StatusBar } from 'expo-status-bar';
 
-import { useActiveSearch } from '../../../context/ActiveSearchContext';
-
-import { go } from '../../../apicalls';
+import { useActiveSearch } from '../../../context/ActiveSearchContext'; 
 
 const home = () => {
 

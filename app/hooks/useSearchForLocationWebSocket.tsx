@@ -21,7 +21,7 @@ const useSearchForLocationWebSocket = ({
   onClose,
 }: SurroundingsWebSocketProps) => {
 
-  const TOKEN_KEY = 'my-jwt';
+  const TOKEN_KEY = 'accessToken';
 
   const socketRef = useRef<WebSocket | null>(null);
 

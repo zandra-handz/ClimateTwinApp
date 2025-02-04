@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useFocusEffect } from "expo-router";
 import { useUser } from "../context/UserContext";
 import * as SecureStore from 'expo-secure-store';
- 
+import { useAppMessage } from '../context/AppMessageContext';
 
 interface SurroundingsWebSocketProps {
   userToken: string; // Token used for WebSocket authentication
@@ -19,9 +19,11 @@ const useSurroundingsWebSocket = ({
   onClose,
 }: SurroundingsWebSocketProps) => {
 
-  const TOKEN_KEY = 'my-jwt';
+  const TOKEN_KEY = 'accessToken';
 
   const socketRef = useRef<WebSocket | null>(null);
+   const { showAppMessage } = useAppMessage();
+
 
   const { user } = useUser();
    const [token, setToken] = useState<string | null>(null);
@@ -96,7 +98,11 @@ const useSurroundingsWebSocket = ({
   useEffect(() => {
     console.log('use effect for socket!');
 
-    if (!token) return; 
+    if (!token) {
+      console.log('no token in socket!');
+      showAppMessage(true, null, 'no token when surroundings websocket use effect triggered');
+    return
+    }; 
 
     if (!triggerReconnectAfterFetch) return;
 
@@ -109,7 +115,9 @@ const useSurroundingsWebSocket = ({
   
  
      
- 
+     console.log(`token in surroundings web socket: ${token}`);
+
+     
     //const socketUrl = `wss://climatetwin-lzyyd.ondigitalocean.app/ws/climate-twin/current/?user_token=${userToken}`;
     const socketUrl = `wss://climatetwin.com/ws/climate-twin/current/?user_token=${token}`;
 
@@ -134,6 +142,8 @@ const useSurroundingsWebSocket = ({
       
       if ('message' in event) {
         errorMessage = (event as any).message; // TypeScript workaround if message exists
+      } else if ('error' in event) {
+          errorMessage = (event as any).error; 
       } else if ('reason' in event) {
         errorMessage = (event as any).reason;
       } else {

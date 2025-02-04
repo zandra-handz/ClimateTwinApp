@@ -51,7 +51,9 @@ const refreshTokenFunct = async () => {
         const response = await axios.post('/users/token/refresh/', { refresh: storedRefreshToken });
         const newAccessToken = response.data.access;
 
+        await setToken(newAccessToken);
         await SecureStore.setItemAsync('accessToken', newAccessToken);
+       
         return newAccessToken;
     } catch (error) {
         console.error('Error refreshing token api file:', error);
