@@ -4,10 +4,32 @@ import { useQuery } from '@tanstack/react-query';
 import { go, getTwinLocation } from '../apicalls';
 
 interface MatchedLocation {
-  // Define the structure of the `matchedLocation` object
-  id: string;
+  cloudiness: number;
+  created_on: string;
+  description: string;
+  details: string;
+  experience: string;
+  explore_type: string;
+  home_location: number;
+  humidity: number;
+  humidity_interaction: string;
+  id: number;
+  last_accessed: string;
+  latitude: number;
+  longitude: number;
   name: string;
-  // Add other fields here as needed
+  pressure: number;
+  pressure_interaction: string;
+  special_harmony: boolean;
+  stronger_wind_interaction: string;
+  sunrise_timestamp: number;
+  sunset_timestamp: number;
+  temperature: number;
+  user: number;
+  wind_direction: number;
+  wind_friends: string;
+  wind_speed: number;
+  wind_speed_interaction: string;
 }
 
 interface CurrentSurroundingsContextType {
@@ -31,52 +53,22 @@ interface CurrentSurroundingsProviderProps {
 
 export const CurrentSurroundingsProvider: React.FC<CurrentSurroundingsProviderProps> = ({ children }) => {
   const { user } = useUser();
-  const [triggerFetch, setTriggerFetch] = useState<boolean>(false);
-  const [isSearchingForTwin, setIsSearchingForTwin] = useState<boolean>(false);
-
-
-  
-
+  const [triggerFetch, setTriggerFetch] = useState<boolean>(false); 
 
   const { data: matchedLocation, isLoading, isError, isSuccess } = useQuery<MatchedLocation | null>({
     queryKey: ['matchedLocation'],
     queryFn: getTwinLocation,
-    enabled: !!user && !!user.authenticated,  
+    enabled: !!user && !!user.authenticated,
     onError: (err) => {
       console.error('Error fetching location data:', err);
     },
     onSuccess: (data) => {
-      console.log('getTwinLocation query success:', data);
+      if (data) {
+        console.log('getTwinLocation query success:', data);
+        // Data is already in the correct structure, no mapping needed here
+      }
     },
   });
-
-  // (NOBRIDGE) LOG  matched location! {
-  // "cloudiness": 0, 
-  // "created_on": "2025-02-03T21:23:33.204266Z", 
-  // "description": "clear sky", 
-  // "details": "Perpendicular winds may enhance conditions for severe weather, such as thunderstorms or tornadoes.", 
-  // "experience": "Wind is from the left, which may result in variable weather patterns.", 
-  // "explore_type": "twin_location", 
-  // "home_location": 1348, 
-  // "humidity": 66, 
-  // "humidity_interaction": "Moderate humidity levels, 79 and 66 may contribute to comfortable weather conditions.", 
-  // "id": 1384, 
-  // "last_accessed": "2025-02-03T21:23:33.204320Z", 
-  // "latitude": 39.74579350286426, 
-  // "longitude": 33.77866798336945, 
-  // "name": "Olunlu/Keskin/Kırıkkale, Türkiye", 
-  // "pressure": 1018, 
-  // "pressure_interaction": "1013 and 1018 represent opposite atmospheric pressure conditions.", 
-  // "special_harmony": false, 
-  // "stronger_wind_interaction": "Second Wind", 
-  // "sunrise_timestamp": 1738644605, 
-  // "sunset_timestamp": 1738681650, 
-  // "temperature": 38.39, 
-  // "user": 1, 
-  // "wind_direction": 240, 
-  // "wind_friends": "Perpendicular", 
-  // "wind_speed": float, 
-  // "wind_speed_interaction": str}
 
   return (
     <CurrentSurroundingsContext.Provider value={{ matchedLocation, setTriggerFetch }}>

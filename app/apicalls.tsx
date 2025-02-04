@@ -355,7 +355,7 @@ export const updateUserSettings = async (userId, updatedSettings) => {
     try {
         console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/climatevisitor/currently-visiting/');
-        console.log('API GET Call getCurrentUser', response.data);
+        console.log('API GET Call matchedLocation', response.data);
         return response.data;
     } catch (error) {
         if (error.response) {

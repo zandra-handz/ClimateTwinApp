@@ -24,7 +24,7 @@ const WebSocketCurrentLocation: React.FC<{ reconnectSocket: boolean }> = ({
     onMessage: (newUpdate) => {
       console.log("Received update:", newUpdate);
       console.log(activeSearch);
-      if ((newUpdate.name !== update) && activeSearch) { //} && activeSearch.timestamp) {
+      if ((newUpdate.name !== update)) { //} && activeSearch.timestamp) {
         setUpdate(newUpdate.name);  // Only update the state if the value has changed
         closeSearchExternally();
       } else {

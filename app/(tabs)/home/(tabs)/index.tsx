@@ -1,25 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, AppState } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
-import { useGeolocationWatcher } from '../hooks/useCurrentLocationWatcher';
+import { useGeolocationWatcher } from '../../../hooks/useCurrentLocationWatcher';
 
-import  useHomeLocation from '../hooks/useHomeLocation';
-import { useGlobalStyles } from '../context/GlobalStylesContext';
-import { useUser } from '../context/UserContext';
-import { useSurroundings } from '../context/CurrentSurroundingsContext';
-import WebSocketSearchingLocations from '../components/WebSocketSearchingLocations';
-import WebSocketCurrentLocation from '../components/WebSocketCurrentLocation';
+import  useHomeLocation from '../../../hooks/useHomeLocation';
+import { useGlobalStyles } from '../../../context/GlobalStylesContext';
+import { useUser } from '../../../context/UserContext';
+import { useSurroundings } from '../../../context/CurrentSurroundingsContext';
+import WebSocketSearchingLocations from '../../../components/WebSocketSearchingLocations';
+import WebSocketCurrentLocation from '../../../components/WebSocketCurrentLocation';
 import { useRouter, Link } from "expo-router";
 
-import { useAppMessage } from '../context/AppMessageContext';
+import { useAppMessage } from '../../../context/AppMessageContext';
 
-import SignoutSvg from '../assets/svgs/signout.svg';
+import SignoutSvg from '../../../assets/svgs/signout.svg';
 
 import { StatusBar } from 'expo-status-bar';
 
-import { useActiveSearch } from '../context/ActiveSearchContext';
+import { useActiveSearch } from '../../../context/ActiveSearchContext';
 
-import { go } from '../apicalls';
+import { go } from '../../../apicalls';
 
 const home = () => {
 
@@ -41,7 +41,7 @@ const home = () => {
 
   useEffect(() => {
     if (matchedLocation) {
-      console.log(`matched location!`, matchedLocation);
+      console.log(`matched location!`, matchedLocation.name);
     }
 
   }, [matchedLocation]);
@@ -166,6 +166,7 @@ const navigateToSignInScreen = () => {
 
         </Text>
        </TouchableOpacity>
+       
         
     
        {token && user && user.authenticated && searchIsActive && (

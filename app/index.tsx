@@ -55,7 +55,7 @@ const WelcomeScreen = () => {
   };
 
   const handleNavigateToHome = () => {
-    router.push("/home");
+    router.push("/home/(tabs)");
   };
   
 
