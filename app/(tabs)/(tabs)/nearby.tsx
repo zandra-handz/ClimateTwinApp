@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useCallback, useEffect, useRef } from "react";
 import {
   SafeAreaView,
   View,
@@ -16,6 +16,7 @@ import { useNearbyLocations } from "../../context/NearbyLocationsContext";
 import { StatusBar } from "expo-status-bar";
 
 import DataList from "../../components/DataList";
+import { useFocusEffect } from "expo-router";
 
 
 import { exploreLocation } from "@/app/apicalls";
@@ -23,8 +24,18 @@ import { exploreLocation } from "@/app/apicalls";
 const nearby = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const { showAppMessage } = useAppMessage();
-  const { nearbyLocations, nearbyLocationsCount } = useNearbyLocations();
-
+  const { triggerRefetch, nearbyLocations, nearbyLocationsCount } = useNearbyLocations();
+ 
+  useFocusEffect(
+    useCallback(() => {
+      console.log("Nearby location screen is focused");
+      triggerRefetch();
+      return () => {
+        console.log("nearby location screen is unfocused"); 
+      };
+    }, [])
+  );
+  
   useEffect(() => {
     if (nearbyLocations) {
       console.log(`nearby locations! `, nearbyLocations);
@@ -67,14 +78,7 @@ const nearby = () => {
         ]}
       >
         <View style={appContainerStyles.innerFlexStartContainer}>
-          <View
-            style={[
-              appContainerStyles.inScreenHeaderContainer,
-              { height: "2%" },
-            ]}
-          >
-            
-        </View> 
+        
             {nearbyLocations && <DataList listData={nearbyLocations} onCardButtonPress={handleExploreLocation} />}
           </View>
       </View>

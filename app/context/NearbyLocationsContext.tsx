@@ -53,15 +53,12 @@ export const NearbyLocationsProvider: React.FC<NearbyLocationsProviderProps> = (
 
   // Ensure data is always an array
   const nearbyLocations = data ?? [];
-  
-  const nearbyLocationsCount = Array.isArray(nearbyLocations) ? nearbyLocations.length : 0;
-  
- 
-  
 
-  // Sort locations into categories
-  const twinLocations = nearbyLocations.filter((loc) => loc.explore_type === 'twin_location');
-  const discoveryLocations = nearbyLocations.filter((loc) => loc.explore_type === 'discovery_location');
+  const nearbyLocationsCount = Array.isArray(nearbyLocations) ? nearbyLocations.length : 0;
+
+  // Check if nearbyLocations has been loaded before filtering
+  const twinLocations = nearbyLocations?.length ? nearbyLocations.filter((loc) => loc.explore_type === 'twin_location') : [];
+  const discoveryLocations = nearbyLocations?.length ? nearbyLocations.filter((loc) => loc.explore_type === 'discovery_location') : [];
 
   // Function to trigger a manual refetch
   const triggerRefetch = () => {
