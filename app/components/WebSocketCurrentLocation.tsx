@@ -3,8 +3,8 @@ import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { useGlobalStyles } from "../context/GlobalStylesContext";
 import { useUser } from "../context/UserContext";
 import useSurroundingsWebSocket from '../hooks/useSurroundingsWebSocket';
-import { useFocusEffect } from "expo-router";
-import { useSurroundings } from '../context/CurrentSurroundingsContext';
+import { useFocusEffect } from "expo-router"; 
+import { useMatchedLocation } from '../context/MatchedLocationContext';
 import { useActiveSearch } from '../context/ActiveSearchContext';
  
 
@@ -15,7 +15,7 @@ const WebSocketCurrentLocation: React.FC<{ reconnectSocket: boolean }> = ({
   const { user } = useUser();
   const [update, setUpdate] = useState<string | null>(null); // State to store the current update
   const { activeSearch, closeSearchExternally } = useActiveSearch();
-  const { matchedLocation } = useSurroundings();
+  const { matchedLocation } = useMatchedLocation();
 
   // WebSocket hook
   const { sendMessage } = useSurroundingsWebSocket({

@@ -351,6 +351,27 @@ export const updateUserSettings = async (userId, updatedSettings) => {
     }
   };
 
+
+
+  export const getLaunchPadData = async () => {
+    try {
+        console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.get('/climatevisitor/launchpad-data/');
+        console.log('API GET Call launchPadData', response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /climatevisitor/launchpad-data/:', error.response.data);
+        } else if (error.request) {
+            console.error('Error request for /climatevisitor/launchpad-data/ , add console logging in api file for more details');
+        } else {
+            console.error('Error message for /climatevisitor/launchpad-data/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
+
  
 
   export const getTwinLocation = async () => {
@@ -376,7 +397,7 @@ export const getExploreLocation = async () => {
     try {
         console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/climatevisitor/currently-exploring/');
-        console.log('API GET Call getCurrentUser', response.data);
+        console.log('API GET Call getExploreLocation', response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
@@ -395,7 +416,7 @@ export const getNearbyLocations = async () => {
     try {
         console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/climatevisitor/currently-nearby/');
-        console.log('API GET Call getCurrentUser', response.data);
+        console.log('API GET Call getNearyLocations', response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
@@ -410,6 +431,22 @@ export const getNearbyLocations = async () => {
 };
 
 
- 
-
+export const exploreLocation = async (locationId) => {
+    console.log(locationId);
+    try {
+        console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.post('/climatevisitor/explore/', locationId);
+        console.log('API GET Call getNearyLocations', response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /climatevisitor/explore/:', error.response.data);
+        } else if (error.request) {
+            console.error('Error request for /climatevisitor/explore/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /climatevisitor/explore/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
  

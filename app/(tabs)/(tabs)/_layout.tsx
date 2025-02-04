@@ -1,9 +1,15 @@
 import { Tabs } from "expo-router";
+import ExploreTabBar from '../../components/ExploreTabBar';
 
 export default () => {
   return (
-    <Tabs>
-            <Tabs.Screen name="index" options={{ header: () => null }}>
+    <Tabs
+    tabBar={props=> <ExploreTabBar {...props} />}
+    >
+
+            <Tabs.Screen name="home" options={{ header: () => null }}/>
+            <Tabs.Screen name="index" options={{ header: () => null }}/>
+            <Tabs.Screen name="nearby" options={{ header: () => null }}>
         {/* Nested tabs inside home */}
         {/* {() => (
           // <Tabs>

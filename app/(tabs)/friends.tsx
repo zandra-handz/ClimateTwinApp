@@ -5,8 +5,7 @@ import { useGeolocationWatcher } from '../hooks/useCurrentLocationWatcher';
 
 import  useHomeLocation from '../hooks/useHomeLocation';
 import { useGlobalStyles } from '../context/GlobalStylesContext';
-import { useUser } from '../context/UserContext';
-import { useSurroundings } from '../context/CurrentSurroundingsContext'; 
+import { useUser } from '../context/UserContext'; 
 
 import { useAppMessage } from '../context/AppMessageContext'; 
 

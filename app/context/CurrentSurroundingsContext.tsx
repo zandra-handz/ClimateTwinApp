@@ -1,39 +1,41 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 import { useUser } from './UserContext';
 import { useQuery } from '@tanstack/react-query';
-import { go, getTwinLocation } from '../apicalls';
+import { getExploreLocation } from '../apicalls';
 
-interface MatchedLocation {
-  cloudiness: number;
+interface ExploreLocation { //commented out is the data we get from the original matched location
+  //cloudiness: number;
   created_on: string;
-  description: string;
-  details: string;
-  experience: string;
-  explore_type: string;
-  home_location: number;
-  humidity: number;
-  humidity_interaction: string;
+  // description: string;
+  // details: string;
+  // experience: string;
+  // explore_type: string;
+  // home_location: number;
+  // humidity: number;
+  // humidity_interaction: string;
   id: number;
+  explore_location: number;
   last_accessed: string;
-  latitude: number;
-  longitude: number;
-  name: string;
-  pressure: number;
-  pressure_interaction: string;
-  special_harmony: boolean;
-  stronger_wind_interaction: string;
-  sunrise_timestamp: number;
-  sunset_timestamp: number;
-  temperature: number;
+  twin_location: number;
+  // latitude: number;
+  // longitude: number;
+  // name: string;
+  // pressure: number;
+  // pressure_interaction: string;
+  // special_harmony: boolean;
+  // stronger_wind_interaction: string;
+  // sunrise_timestamp: number;
+  // sunset_timestamp: number;
+  // temperature: number;
   user: number;
-  wind_direction: number;
-  wind_friends: string;
-  wind_speed: number;
-  wind_speed_interaction: string;
+  // wind_direction: number;
+  // wind_friends: string;
+  // wind_speed: number;
+  // wind_speed_interaction: string;
 }
 
 interface CurrentSurroundingsContextType {
-  matchedLocation: MatchedLocation | null;
+  exploreLocation: ExploreLocation | null;
   setTriggerFetch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -55,9 +57,9 @@ export const CurrentSurroundingsProvider: React.FC<CurrentSurroundingsProviderPr
   const { user } = useUser();
   const [triggerFetch, setTriggerFetch] = useState<boolean>(false); 
 
-  const { data: matchedLocation, isLoading, isError, isSuccess } = useQuery<MatchedLocation | null>({
-    queryKey: ['matchedLocation'],
-    queryFn: getTwinLocation,
+  const { data: exploreLocation, isLoading, isError, isSuccess } = useQuery<ExploreLocation | null>({
+    queryKey: ['exploreLocation'],
+    queryFn: getExploreLocation,
     enabled: !!user && !!user.authenticated,
     onError: (err) => {
       console.error('Error fetching location data:', err);
@@ -71,7 +73,7 @@ export const CurrentSurroundingsProvider: React.FC<CurrentSurroundingsProviderPr
   });
 
   return (
-    <CurrentSurroundingsContext.Provider value={{ matchedLocation, setTriggerFetch }}>
+    <CurrentSurroundingsContext.Provider value={{ exploreLocation, setTriggerFetch }}>
       {children}
     </CurrentSurroundingsContext.Provider>
   );

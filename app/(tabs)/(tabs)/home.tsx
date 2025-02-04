@@ -1,17 +1,13 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { SafeAreaView, View, Text, TouchableOpacity, AppState } from 'react-native';
-import * as SecureStore from 'expo-secure-store';
-import { useGeolocationWatcher } from '../hooks/useCurrentLocationWatcher';
+import * as SecureStore from 'expo-secure-store'; 
+import { useGlobalStyles } from '../../context/GlobalStylesContext'; 
 
-import  useHomeLocation from '../hooks/useHomeLocation';
-import { useGlobalStyles } from '../context/GlobalStylesContext';
-import { useUser } from '../context/UserContext'; 
-
-import { useAppMessage } from '../context/AppMessageContext'; 
+import { useAppMessage } from '../../context/AppMessageContext'; 
 
 import { StatusBar } from 'expo-status-bar'; 
 
-const treasures = () => { 
+const home = () => { 
     const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles(); 
     const { showAppMessage } = useAppMessage();
   
@@ -49,4 +45,4 @@ const treasures = () => {
 };
 
 
-export default treasures;
+export default home;

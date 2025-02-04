@@ -187,6 +187,68 @@ import React, {
       paddingVertical: "3%",
       zIndex: 1,
     },
+    headerContainer: {
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      height: 70,
+      alignItems: 'center',
+      paddingHorizontal: 20,
+
+    },
+    tabBarContainer: {
+      position: 'absolute',
+      bottom: 0, 
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+     // borderTopWidth: StyleSheet.hairlineWidth,
+      marginHorizontal: 10,
+      paddingVertical: 15,
+      //width: '90%',
+      borderRadius: 25, 
+      borderCurve: 'continuous',
+      //shadowColor set in themeStyles
+      shadowOffset: { width: 0, height: 10},
+      shadowRadius: 10,
+      shadowOpacity: 0.1,
+
+    },
+    
+    tabBarButton: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',  
+      gap: 4,
+
+
+    },
+    exploreTabBarContainer: {
+      position: 'absolute',
+      bottom: 80, 
+      flexDirection: 'row',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+     // borderTopWidth: StyleSheet.hairlineWidth,
+      marginHorizontal: 10,
+      paddingVertical: 15,
+      //width: '90%',
+      borderRadius: 25, 
+      borderCurve: 'continuous',
+      //shadowColor set in themeStyles
+      shadowOffset: { width: 0, height: 10},
+      shadowRadius: 10,
+      shadowOpacity: 0.1,
+
+    },
+    
+    exploreTabBarButton: {
+      flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',  
+      gap: 4,
+
+
+    },
     mapContainer: {
       borderRadius: 20,
       width: "100%", // Makes it fill the container's width
@@ -226,9 +288,29 @@ import React, {
       flexWrap: "wrap",
       flex: 1,
     },
+    dataListContainer: {
+      width: '100%', 
+      flexDirection: 'column',
+      flex: 1,
+
+    },
+    dataCardContainer: {
+      height: 'auto',
+      padding: 30,
+      borderRadius: 20,
+      width: '100%',
+      flexDirection: 'column',
+      flex: 1, 
+      borderWidth: StyleSheet.hairlineWidth,
+
+    },
   });
   
   const fontStyles = StyleSheet.create({
+    headerText: {
+      fontSize: 28, 
+
+    },
     solitaryHeaderMessageText: {
       fontSize: 20,
     },
@@ -239,9 +321,23 @@ import React, {
       fontSize: 16,
       fontWeight: "bold",
     },
-    footerText: {
-      fontSize: 15,
+    tabBarText: {
+      fontSize: 11,
       fontWeight: "bold",
+    },
+    tabBarIcon: {
+      height: 22,
+      width: 22,
+
+    },
+    exploreTabBarText: {
+      fontSize: 11,
+      fontWeight: "bold",
+    },
+    exploreTabBarIcon: {
+      height: 22,
+      width: 22,
+
     },
   });
   
@@ -264,15 +360,35 @@ import React, {
       justifyContent: "space-between",
       flexDirection: "column",
       padding: "3%",
-    },
+    }, 
     primaryBackground: {
       backgroundColor: "#ffffff",
     },
     darkerBackground: {
       backgroundColor: "#ccc",
     },
+    primaryBorder: {
+      color: "#121212",
+
+    },
     primaryText: {
       color: "#121212",
+    },
+    tabBarText: {
+      color: "#121212",
+
+    },
+    tabBarHighlightedText: {
+      color: 'teal',
+
+    },
+    exploreTabBarText: {
+      color: "#121212",
+
+    },
+    exploreTabBarHighlightedText: {
+      color: 'teal',
+
     },
     headerTextSize: {
       fontSize: 18,
@@ -409,8 +525,28 @@ import React, {
     darkestBackground: {
       backgroundColor: "#242424",
     },
+    primaryBorder: {
+      color: "#d3d3d3", 
+
+    },
     primaryText: {
       color: "#d3d3d3",
+    },
+    tabBarText: {
+      color: "#d3d3d3",
+
+    },
+    tabBarHighlightedText: {
+      color: 'teal',
+
+    },
+    exploreTabBarText: {
+      color: "#d3d3d3",
+
+    },
+    exploreTabBarHighlightedText: {
+      color: 'teal',
+
     },
     headerTextSize: {
       fontSize: 18,
