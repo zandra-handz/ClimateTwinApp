@@ -1,9 +1,11 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useCallback, useState } from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { useGlobalStyles } from "../context/GlobalStylesContext";
 import { useUser } from "../context/UserContext";
 import useSurroundingsWebSocket from '../hooks/useSurroundingsWebSocket';
- 
+import { useFocusEffect } from "expo-router";
+import { useSurroundings } from '../context/CurrentSurroundingsContext';
+import { useActiveSearch } from '../context/ActiveSearchContext';
  
 
 const WebSocketCurrentLocation: React.FC<{ reconnectSocket: boolean }> = ({
@@ -12,6 +14,8 @@ const WebSocketCurrentLocation: React.FC<{ reconnectSocket: boolean }> = ({
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const { user } = useUser();
   const [update, setUpdate] = useState<string | null>(null); // State to store the current update
+  const { activeSearch, closeSearchExternally } = useActiveSearch();
+  const { matchedLocation } = useSurroundings();
 
   // WebSocket hook
   const { sendMessage } = useSurroundingsWebSocket({
@@ -19,7 +23,13 @@ const WebSocketCurrentLocation: React.FC<{ reconnectSocket: boolean }> = ({
     reconnectSocket,
     onMessage: (newUpdate) => {
       console.log("Received update:", newUpdate);
-      setUpdate(newUpdate.name); // Replace the previous update with the new one
+      console.log(activeSearch);
+      if ((newUpdate.name !== update) && activeSearch) { //} && activeSearch.timestamp) {
+        setUpdate(newUpdate.name);  // Only update the state if the value has changed
+        closeSearchExternally();
+      } else {
+        setUpdate(newUpdate.name);  
+      } 
     },
     onError: (error) => {
       console.error("Current Location WebSocket encountered an error:", error);
@@ -28,6 +38,7 @@ const WebSocketCurrentLocation: React.FC<{ reconnectSocket: boolean }> = ({
       console.log("Current Location WebSocket connection closed");
     },
   });
+ 
 
   return (
     <View style={appContainerStyles.defaultElementRow}>

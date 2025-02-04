@@ -17,6 +17,8 @@ import SignoutSvg from '../assets/svgs/signout.svg';
 
 import { StatusBar } from 'expo-status-bar';
 
+import { useActiveSearch } from '../context/ActiveSearchContext';
+
 import { go } from '../apicalls';
 
 const home = () => {
@@ -28,6 +30,7 @@ const home = () => {
   const [token, setToken] = useState<string | null>(null);
   const { homeLocation, homeRegion } = useHomeLocation();
   const { showAppMessage } = useAppMessage();
+  const { handleGo, searchIsActive } = useActiveSearch();
 
   const [refreshKey, setRefreshKey] = useState(0); // State to trigger a refresh
 
@@ -106,10 +109,11 @@ const navigateToSignInScreen = () => {
 };
 
   const handleFindNewLocation = (startingAddress) => {
-    setOpenSocketForGoPress(prev => !prev);
-    go(startingAddress);
+    setOpenSocketForGoPress(true);
+    handleGo(startingAddress);
     //showAppMessage(true, null, `Searching for a portal!!`);
     //handleRefresh();
+    setOpenSocketForGoPress(false);
 
   };
 
@@ -150,7 +154,7 @@ const navigateToSignInScreen = () => {
             </View> 
       {token && user && user.authenticated && (
         <View style={[appContainerStyles.defaultScreenElementContainer, {  marginVertical: '1%'}]}>
-        <WebSocketCurrentLocation reconnectSocket={appStateVisible || openSocketForGoPress} />
+        <WebSocketCurrentLocation reconnectSocket={appStateVisible} reconnectOnUserButtonPress={ openSocketForGoPress} />
         
           
         </View>
@@ -164,9 +168,9 @@ const navigateToSignInScreen = () => {
        </TouchableOpacity>
         
     
-       {token && user && user.authenticated && (
+       {token && user && user.authenticated && searchIsActive && (
         <View style={[appContainerStyles.defaultScreenElementContainer, { borderColor: themeStyles.primaryText.color, height: 300, marginVertical: '1%'}]}>
-        <WebSocketSearchingLocations reconnectSocket={appStateVisible || openSocketForGoPress}/>
+        <WebSocketSearchingLocations reconnectSocket={appStateVisible}  reconnectOnUserButtonPress={ openSocketForGoPress} />
         </View>
      )}  
   </View> 

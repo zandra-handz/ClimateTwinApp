@@ -1,4 +1,5 @@
-import React, { useEffect, useRef, useState } from "react"; 
+import React, { useCallback, useEffect, useRef, useState } from "react"; 
+import { useFocusEffect } from "expo-router";
 import { useUser } from "../context/UserContext";
 import * as SecureStore from 'expo-secure-store';
  
@@ -11,7 +12,8 @@ interface SurroundingsWebSocketProps {
 }
 
 const useSurroundingsWebSocket = ({ 
-  reconnectSocket,
+  reconnectSocket, //appstate
+  reconnectOnUserButtonPress,
   onMessage,
   onError,
   onClose,
@@ -23,50 +25,89 @@ const useSurroundingsWebSocket = ({
 
   const { user } = useUser();
    const [token, setToken] = useState<string | null>(null);
+   const [triggerReconnectAfterFetch, setTriggerReconnectAfterFetch] = useState(false);
 
 
-    useEffect(() => {
-      const fetchToken = async () => {
-        try {
-          const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
-          setToken(storedToken);
-        } catch (error) {
-          console.error('Failed to retrieve token:', error);
+     useFocusEffect(
+       useCallback(() => {
+         console.log("Current location socket is focused");
+         if (reconnectSocket && user && user.authenticated) { //if app is in foreground, might be an unnecessary check but I'm not sure
+          
+         fetchToken();
+         setTriggerReconnectAfterFetch(true);
+         
         }
-      };
-  
-      fetchToken();
-    }, []);
+   
+         return () => {
+           console.log("Screen location socket is unfocused");
+           setTriggerReconnectAfterFetch(false);
+         };
+       }, [])
+     );
+
+     useEffect(() => {
+      if (!reconnectOnUserButtonPress || !user || !user?.authenticated) {
+        return
+      } 
+         fetchToken();
+         setTriggerReconnectAfterFetch(false);
+         setTriggerReconnectAfterFetch(true);
+
+     }, [reconnectOnUserButtonPress]);
+   
+
+    const fetchToken = async () => {
+      console.log('fetching user tokem in current location socket');
+      try {
+        const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
+        console.log(storedToken);
+        setToken(storedToken);
+      } catch (error) {
+        console.error('Failed to retrieve token:', error);
+      }
+    };
 
 
-    useEffect(() => {
-      if (user && user.authenticated) {
+    // useEffect(() => { 
+    //   fetchToken();
+    // }, []);
+
+
+    // useEffect(() => {
+    //   if (user && user.authenticated) {
         
-      const fetchToken = async () => {
-        try {
-          const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
-          setToken(storedToken);
-          //console.log(storedToken);
-        } catch (error) {
-          console.error('Failed to retrieve token:', error);
-        }
-      };
+    //   const fetchToken = async () => {
+    //     try {
+    //       const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
+    //       setToken(storedToken);
+    //       //console.log(storedToken);
+    //     } catch (error) {
+    //       console.error('Failed to retrieve token:', error);
+    //     }
+    //   };
 
   
-      fetchToken();
-    }
-    }, [user]);
+    //   fetchToken();
+    // }
+    // }, [user]);
 
   
 
   useEffect(() => {
+    console.log('use effect for socket!');
+
+    if (!token) return; 
+
+    if (!triggerReconnectAfterFetch) return;
 
     if (socketRef && socketRef.current) {
-      // console.log("WebSocket already initialized, skipping new connection.");
+      console.log("Current location WebSocket already initialized, skipping new connection.");
        return;
      }
+
+
   
-    if (token) {
+ 
      
  
     //const socketUrl = `wss://climatetwin-lzyyd.ondigitalocean.app/ws/climate-twin/current/?user_token=${userToken}`;
@@ -111,20 +152,20 @@ const useSurroundingsWebSocket = ({
     
     socket.onclose = () => {
       console.log("WebSocket connection closed");
-      if (onClose) {
-        onClose();
-      }
+      socketRef.current = null; 
+      // if (onClose) {
+      //   onClose();
+      // }
     };
-     
-  }
+      
 
-    // Cleanup function to close WebSocket when component unmounts
+    // Cleanup when component unmounts
     return () => {
       if (socketRef.current) {
         socketRef.current.close();
       }
     };
-  }, [token, reconnectSocket, onClose]);
+  }, [token, triggerReconnectAfterFetch]);
 
   return {
     sendMessage: (message: any) => {
