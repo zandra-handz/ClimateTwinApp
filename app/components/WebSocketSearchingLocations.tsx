@@ -311,8 +311,8 @@ const WebSocketSearchingLocations: React.FC<{
     }
 
     return {
-      text: `${temperatureSharedValue.value}`,
-      defaultValue: `${temperatureSharedValue.value}`,
+      text: `${temperatureSharedValue.value}°`,
+      defaultValue: `${temperatureSharedValue.value}°`,
       color: color,
     };
   });
@@ -381,9 +381,9 @@ const WebSocketSearchingLocations: React.FC<{
                 {
                   borderWidth: StyleSheet.hairlineWidth,
                   borderColor: themeStyles.primaryText.color,
-                  width: 48,
-                  height: 48,
-                  borderRadius: 48 / 2,
+                  width: 52,
+                  height: 52,
+                  borderRadius: 52 / 2,
                   textAlign: "center",
                   alignItems: "center",
                   justifyContent: "center",
