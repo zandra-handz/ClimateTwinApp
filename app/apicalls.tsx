@@ -20,6 +20,7 @@ import { Alert } from 'react-native';
 export const setAuthHeader = (token) => {
     if (token) {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        
     } else {
         delete axios.defaults.headers.common['Authorization'];
     }
@@ -143,6 +144,7 @@ axios.interceptors.response.use(
                     // Update the Authorization header for all queued requests
                     onRefreshed(newAccessToken);
                     setAuthHeader(newAccessToken);
+                    await setToken(newAccessToken);
                     originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
                     return axios(originalRequest);
                 } catch (err) {
@@ -173,6 +175,8 @@ export const signinWithoutRefresh = async ({ username, password }) => {
         if (result.data && result.data.access) {
             console.log("Access token received:", result.data.access);
             setAuthHeader(result.data.access); // Store the token for later use
+           
+            await setToken(result.data.access);
             return result; // Successful response
         } else {
             throw new Error("Unexpected response format");
@@ -244,6 +248,7 @@ export const signin = async ({ username, password }) => {
         if (result.data && result.data.access) {
             //console.log("Access token:", result.data.access);
             setAuthHeader(result.data.access); // Assuming setAuthHeader is defined elsewhere
+            await setToken(result.data.access);
             return result; // Successful response
         } else {
             throw new Error("Unexpected response format");
@@ -324,20 +329,7 @@ export const go = async (startingAddress) => {
         throw error;
     }
 };
-
-
-
-export const refreshAccessToken = async (refToken) => {
-    try {
-        const response = await axios.post('/users/token/refresh/', { refresh: refToken });
-        const newAccessToken = response.data.access;
-        setAuthHeader(newAccessToken);
-        return response;
-    } catch (e) {
-        return { error: true, msg: e.response.data.msg };
-    }
-};
-
+ 
 
 export const updateUserSettings = async (userId, updatedSettings) => {
     try {
