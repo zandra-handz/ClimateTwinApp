@@ -26,8 +26,7 @@ import { StatusBar } from 'react-native';
 import SimpleBottomButton from "./components/SimpleBottomButton";
 
 //a frienddate assistant for overwhelmed adults, and for people who just have a lot to talk about
-
-const TOKEN_KEY = "my-jwt";
+ 
 
 const SignInScreen = () => {
 

@@ -36,13 +36,13 @@ const useSurroundingsWebSocket = ({
         //  if (reconnectSocket && user && user.authenticated) { //if app is in foreground, might be an unnecessary check but I'm not sure
           
          fetchToken();
-         setTriggerReconnectAfterFetch(true);
+        // setTriggerReconnectAfterFetch(true);
          
         // }
    
          return () => {
            console.log("Screen location socket is unfocused");
-           setTriggerReconnectAfterFetch(false);
+         //  setTriggerReconnectAfterFetch(false);
          };
        }, [])
      );
@@ -52,8 +52,8 @@ const useSurroundingsWebSocket = ({
         return
       } 
          fetchToken();
-         setTriggerReconnectAfterFetch(false);
-         setTriggerReconnectAfterFetch(true);
+         //setTriggerReconnectAfterFetch(false);
+        // setTriggerReconnectAfterFetch(true);
 
      }, [reconnectOnUserButtonPress]);
    
@@ -86,7 +86,7 @@ const useSurroundingsWebSocket = ({
         return;
       }
     
-      if (!triggerReconnectAfterFetch) return;
+     // if (!triggerReconnectAfterFetch) return;
     
       if (socketRef && socketRef.current) {
         console.log(
@@ -138,11 +138,11 @@ const useSurroundingsWebSocket = ({
     };
     
     // Remove token dependency in useEffect
-    useEffect(() => {
-      if (triggerReconnectAfterFetch) {
-        fetchToken();
-      }
-    }, [triggerReconnectAfterFetch]);
+    // useEffect(() => {
+    //   if (triggerReconnectAfterFetch) {
+    //     fetchToken();
+    //   }
+    // }, [triggerReconnectAfterFetch]);
     
 
   return {
