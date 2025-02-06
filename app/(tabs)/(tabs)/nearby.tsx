@@ -18,11 +18,14 @@ import { StatusBar } from "expo-status-bar";
 import DataList from "../../components/DataList";
 import { useFocusEffect } from "expo-router";
 
+import { useActiveSearch } from "@/app/context/ActiveSearchContext";
+
 
 import { exploreLocation } from "@/app/apicalls";
 
 const nearby = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
+  const { refreshSurroundingsManually } = useActiveSearch();
   const { showAppMessage } = useAppMessage();
   const { triggerRefetch, nearbyLocations, nearbyLocationsCount } = useNearbyLocations();
  
@@ -36,12 +39,12 @@ const nearby = () => {
     }, [])
   );
   
-  useEffect(() => {
-    if (nearbyLocations) {
-      console.log(`nearby locations! `, nearbyLocations);
-      console.log(nearbyLocationsCount);
-    }
-  }, [nearbyLocations]);
+  // useEffect(() => {
+  //   if (nearbyLocations) {
+  //     console.log(`nearby locations! `, nearbyLocations);
+  //     console.log(nearbyLocationsCount);
+  //   }
+  // }, [nearbyLocations]);
 
 
 
@@ -60,6 +63,7 @@ const nearby = () => {
       const locationType = data.explore_type === 'discovery_location' ? 'explore_location' : 'twin_location';
   
       exploreLocation({ [locationType]: data.id }); 
+      refreshSurroundingsManually();
     }
   };
   

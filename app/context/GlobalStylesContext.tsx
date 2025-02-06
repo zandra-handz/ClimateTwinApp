@@ -188,11 +188,17 @@ import React, {
       zIndex: 1,
     },
     headerContainer: {
-      flexDirection: 'row',
-      justifyContent: 'space-between',
+      flexDirection: 'column',
+      //justifyContent: 'space-between',
       height: 70,
       alignItems: 'center',
       paddingHorizontal: 20,
+
+    },
+    headerRow: {
+      flexDirection: 'row',
+      width: '100%',
+      justifyContent: 'space-between',  
 
     },
     tabBarContainer: {

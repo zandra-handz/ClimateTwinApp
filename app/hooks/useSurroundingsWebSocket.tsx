@@ -3,72 +3,62 @@ import { useFocusEffect } from "expo-router";
 import { useUser } from "../context/UserContext";
 import * as SecureStore from 'expo-secure-store';
 import { useAppMessage } from '../context/AppMessageContext';
+import { useActiveSearch } from "../context/ActiveSearchContext";
 
-interface SurroundingsWebSocketProps {
-  userToken: string; // Token used for WebSocket authentication
+interface SurroundingsWebSocketProps { 
+  reconnectSocket: boolean;
   onMessage: (update: any) => void; // Callback for handling WebSocket messages
   onError?: (error: Event) => void; // Optional callback for WebSocket errors
   onClose?: () => void; // Optional callback when the WebSocket connection is closed
 }
 
 const useSurroundingsWebSocket = ({ 
+  //token,
   reconnectSocket, //appstate
-  reconnectOnUserButtonPress,
+ reconnectOnUserButtonPress,
   onMessage,
   onError,
   onClose,
 }: SurroundingsWebSocketProps) => {
 
-  useEffect(() => {
-    const checkStoredToken = async () => {
-      const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
-      console.log("Stored Token in SecureStore:", storedToken);
-    };
-  
-    checkStoredToken();
-  }, []);
+ 
 
   const TOKEN_KEY = 'accessToken';
 
   const socketRef = useRef<WebSocket | null>(null);
    const { showAppMessage } = useAppMessage();
-
+const {manualSurroundingsRefresh,  resetRefreshSurroundingsManually  } = useActiveSearch();
 
   const { user } = useUser();
    const [token, setToken] = useState<string | null>(null);
-   const [triggerReconnectAfterFetch, setTriggerReconnectAfterFetch] = useState(false);
+  //  const [triggerReconnectAfterFetch, setTriggerReconnectAfterFetch] = useState(false);
 
 
      useFocusEffect(
        useCallback(() => {
-         console.log("Current location socket is focused");
-         if (reconnectSocket && user && user.authenticated) { //if app is in foreground, might be an unnecessary check but I'm not sure
+         console.log("useFocusEffect in useSurroundingWebsockets focused");
+         if (user && user.authenticated) { //if app is in foreground, might be an unnecessary check but I'm not sure
           
+         setToken(null);
          fetchToken();
-         setTriggerReconnectAfterFetch(true);
+        //  setTriggerReconnectAfterFetch(true);
          
         }
    
          return () => {
-           console.log("Screen location socket is unfocused");
-           setTriggerReconnectAfterFetch(false);
+           console.log("useFocusEffect in useSurroundingWebsockets unfocused");
+          
+          // socketRef.current = null;
+          
+           setToken(null);
+          //  setTriggerReconnectAfterFetch(false);
          };
        }, [])
      );
 
-     useEffect(() => {
-      if (!reconnectOnUserButtonPress || !user || !user?.authenticated) {
-        return
-      } 
-         fetchToken();
-         setTriggerReconnectAfterFetch(false);
-         setTriggerReconnectAfterFetch(true);
 
-     }, [reconnectOnUserButtonPress]);
-   
-
-    const fetchToken = async () => {
-      console.log('fetching user tokem in current location socket');
+     const fetchToken = async () => {
+      //console.log('fetching user token in current location socket');
       try {
         const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
         console.log(storedToken);
@@ -78,6 +68,33 @@ const useSurroundingsWebSocket = ({
       }
     };
 
+
+     useEffect(() => {
+
+      if (manualSurroundingsRefresh) {
+        
+      console.log('REFRESHING MANUALLY');
+      // if (!user || !user?.authenticated) {
+      //   return
+      // } 
+
+      if (socketRef && socketRef.current) {
+        socketRef.current.close();
+      }
+
+      setToken(null);
+       
+         fetchToken();
+         resetRefreshSurroundingsManually();
+        //  setTriggerReconnectAfterFetch(false);
+        //  setTriggerReconnectAfterFetch(true);
+        
+      }
+
+     }, [manualSurroundingsRefresh]);
+   
+
+
  
   
 
@@ -86,11 +103,11 @@ const useSurroundingsWebSocket = ({
 
     if (!token) {
       console.log('no token in socket!');
-      showAppMessage(true, null, 'no token when surroundings websocket use effect triggered');
+     // showAppMessage(true, null, 'no token when surroundings websocket use effect triggered');
     return
     }; 
 
-    if (!triggerReconnectAfterFetch) return;
+    //if (!triggerReconnectAfterFetch) return;
 
     if (socketRef && socketRef.current) {
       console.log("Current location WebSocket already initialized, skipping new connection.");
@@ -104,7 +121,7 @@ const useSurroundingsWebSocket = ({
      console.log(`token in surroundings web socket: ${token}`);
 
      
-    //const socketUrl = `wss://climatetwin-lzyyd.ondigitalocean.app/ws/climate-twin/current/?user_token=${userToken}`;
+    //const socketUrl = `wss://climatetwin-lzyyd.ondigitalocean.app/ws/climate-twin/current/?user_token=${token}`;
     const socketUrl = `wss://climatetwin.com/ws/climate-twin/current/?user_token=${token}`;
 
     console.log("WebSocket connection URL:", socketUrl); // Log the WebSocket URL and token
@@ -113,7 +130,7 @@ const useSurroundingsWebSocket = ({
     socketRef.current = socket;
  
     socket.onopen = () => {
-      console.log("WebSocket connection opened");
+      console.log("Surroundings websocket connection opened");
     };
  
     socket.onmessage = (event: WebSocketMessageEvent) => {
@@ -147,11 +164,11 @@ const useSurroundingsWebSocket = ({
     };
     
     socket.onclose = () => {
-      console.log("WebSocket connection closed");
+      console.log("Surroundings websocket connection closed");
       socketRef.current = null; 
-      // if (onClose) {
-      //   onClose();
-      // }
+      if (onClose) {
+        onClose();
+      }
     };
       
 
@@ -161,7 +178,7 @@ const useSurroundingsWebSocket = ({
         socketRef.current.close();
       }
     };
-  }, [token, triggerReconnectAfterFetch]);
+  }, [token]);
 
   return {
     sendMessage: (message: any) => {

@@ -34,6 +34,7 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({ chil
   const queryClient = useQueryClient();
   const [activeSearch, setActiveSearch] = useState<ActiveSearch | null>(null);
   const [searchIsActive, setSearchIsActive] = useState<boolean>(false);
+  const [manualSurroundingsRefresh, setManualSurroundingsRefresh ] = useState<boolean>(false);
 
 
   const handleGo = (address) => {
@@ -77,8 +78,20 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({ chil
 
   };
 
+  const refreshSurroundingsManually = () => {
+    setManualSurroundingsRefresh(true);
+   
+
+  };
+
+  const resetRefreshSurroundingsManually = () => {
+    setManualSurroundingsRefresh(false);
+   
+
+  };
+
   return (
-    <ActiveSearchContext.Provider value={{ activeSearch, searchIsActive, handleGo, closeSearchExternally }}>
+    <ActiveSearchContext.Provider value={{ activeSearch, searchIsActive, handleGo, closeSearchExternally, refreshSurroundingsManually,  resetRefreshSurroundingsManually, manualSurroundingsRefresh }}>
       {children}
     </ActiveSearchContext.Provider>
   );

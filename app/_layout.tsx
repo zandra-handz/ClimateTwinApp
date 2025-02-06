@@ -1,11 +1,13 @@
 import { AppMessageContextProvider } from "./context/AppMessageContext";
 import { GlobalStylesProvider } from "./context/GlobalStylesContext";
 import { UserProvider } from "./context/UserContext";
-
+import { useEffect, useRef, useState } from 'react';
+import { AppState } from 'react-native';
 import { CurrentSurroundingsProvider } from "./context/CurrentSurroundingsContext";
 import { MatchedLocationProvider } from "./context/MatchedLocationContext";
 import { NearbyLocationsProvider } from "./context/NearbyLocationsContext";
 import { ActiveSearchProvider } from "./context/ActiveSearchContext";
+import { InteractiveElementsProvider } from "./context/InteractiveElementsContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router"; // Expo Router's Stack component
@@ -16,6 +18,26 @@ import Header from "./components/Header";
 
 export default function Layout() {
   const queryClient = new QueryClient();
+
+    const appState = useRef(AppState.currentState);
+    const [appStateVisible, setAppStateVisible] = useState(appState.current);
+
+      useEffect(() => {
+        const subscription = AppState.addEventListener("change", (nextAppState) => {
+          if (
+            appState.current.match(/inactive|background/) &&
+            nextAppState === "active"
+          ) 
+    
+          appState.current = nextAppState;
+          setAppStateVisible(appState.current);
+          console.log("AppState", appState.current);
+        });
+    
+        return () => {
+          subscription.remove();
+        };
+      }, []);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -29,6 +51,7 @@ export default function Layout() {
                 <MatchedLocationProvider>
                   <CurrentSurroundingsProvider>
                     <NearbyLocationsProvider>
+                      <InteractiveElementsProvider>
                       <ActiveSearchProvider>
                         <Stack>
                           <Stack.Screen
@@ -54,11 +77,14 @@ export default function Layout() {
                           <Stack.Screen
                             name="(tabs)"
                             options={{
-                              header: () => <Header />
+                              header: () => <Header appIsInForeground={appStateVisible} />
                              }}
                           />
                         </Stack>
                       </ActiveSearchProvider>
+                      
+                        
+                      </InteractiveElementsProvider>
                     </NearbyLocationsProvider>
                   </CurrentSurroundingsProvider>
                 </MatchedLocationProvider>

@@ -403,12 +403,30 @@ export const getExploreLocation = async () => {
     }
 };
 
+export const getItemChoices = async () => {
+    try {
+        console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.get('/climatevisitor/item-choices/');
+        console.log('API GET Call getItemChoices'); //, response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /climatevisitor/item-choices/:', error.response.data);
+        } else if (error.request) {
+            console.error('Error request for /climatevisitor/item-choices/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /climatevisitor/item-choices/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
 
 export const getNearbyLocations = async () => {
     try {
         console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/climatevisitor/currently-nearby/');
-        console.log('API GET Call getNearyLocations', response.data);
+        console.log('API GET Call getNearyLocations'); //, response.data);
         return response.data;
     } catch (error) {
         if (error.response) {

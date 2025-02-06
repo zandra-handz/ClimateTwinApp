@@ -3,9 +3,18 @@ import React from "react";
 import { useGlobalStyles } from "../context/GlobalStylesContext";
 import { useUser } from "../context/UserContext";
 import { SafeAreaView } from "react-native-safe-area-context";
-const Header = () => {
+import WebSocketCurrentLocation from "../components/WebSocketCurrentLocation"; 
+
+import SignoutSvg from "../assets/svgs/signout.svg";
+
+
+const Header = ({appIsInForeground}) => {
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
-  const { user } = useUser();
+  const { user, onSignOut } = useUser(); 
+
+  const handleSignOut = () => {
+    onSignOut(); 
+  };
 
   return (
     <SafeAreaView style={[themeStyles.primaryBackground, {flex: 1}]}>
@@ -15,6 +24,9 @@ const Header = () => {
           themeStyles.primaryBackground,
         ]}
       >
+              <View
+        style={appContainerStyles.headerRow}
+      > 
         <View>
           {user && user.user && user.user.username && (
             <Text
@@ -24,10 +36,20 @@ const Header = () => {
               ]}
             >{`Welcome back, ${user.user.username}!`}</Text>
           )}
-        </View>
-        <View>
-          <Text style={themeStyles.primaryText}>' '</Text>
-        </View>
+        </View> 
+          <SignoutSvg
+            onPress={() => handleSignOut()}
+            width={30}
+            height={30}
+            color={themeStyles.primaryText.color}
+          /> 
+        </View> 
+
+        <WebSocketCurrentLocation 
+            //  token={token}
+                reconnectSocket={appIsInForeground} 
+              />
+               
       </View>
     </SafeAreaView>
   );

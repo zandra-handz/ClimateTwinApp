@@ -2,14 +2,13 @@ import React, { useEffect, useRef, useCallback, useState } from "react";
 import { View, Text, ScrollView, StyleSheet } from "react-native";
 import { useGlobalStyles } from "../context/GlobalStylesContext";
 import { useUser } from "../context/UserContext";
-import useSurroundingsWebSocket from '../hooks/useSurroundingsWebSocket';
-import { useFocusEffect } from "expo-router"; 
+import useSurroundingsWebSocket from '../hooks/useSurroundingsWebSocket'; 
 import { useMatchedLocation } from '../context/MatchedLocationContext';
 import { useActiveSearch } from '../context/ActiveSearchContext';
  
 
 const WebSocketCurrentLocation: React.FC<{ reconnectSocket: boolean }> = ({
-  reconnectSocket
+    reconnectSocket
 }) => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const { user } = useUser();
@@ -19,10 +18,12 @@ const WebSocketCurrentLocation: React.FC<{ reconnectSocket: boolean }> = ({
 
   // WebSocket hook
   const { sendMessage } = useSurroundingsWebSocket({
+     
     
     reconnectSocket,
     onMessage: (newUpdate) => {
       console.log("Received update:", newUpdate);
+    
       console.log(activeSearch);
       if ((newUpdate.name !== update)) { //} && activeSearch.timestamp) {
         setUpdate(newUpdate.name);  // Only update the state if the value has changed

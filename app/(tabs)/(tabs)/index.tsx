@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   SafeAreaView,
   View,
@@ -8,15 +8,18 @@ import {
 } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import { useGeolocationWatcher } from "../../hooks/useCurrentLocationWatcher";
-
+import { useFocusEffect } from "expo-router";
 import useHomeLocation from "../../hooks/useHomeLocation";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import { useUser } from "../../context/UserContext";
 import { useSurroundings } from "../../context/CurrentSurroundingsContext";
 import { useMatchedLocation } from "../../context/MatchedLocationContext";
+import { useInteractiveElements } from "@/app/context/InteractiveElementsContext";
 import WebSocketSearchingLocations from "../../components/WebSocketSearchingLocations";
 import WebSocketCurrentLocation from "../../components/WebSocketCurrentLocation";
 import { useRouter, Link } from "expo-router";
+
+import DataList from "../../components/DataList";
 
 import { useAppMessage } from "../../context/AppMessageContext";
 
@@ -29,6 +32,7 @@ import { useActiveSearch } from "../../context/ActiveSearchContext";
 const home = () => {
   useGeolocationWatcher();
   const { user, onSignOut } = useUser();
+  const { itemChoices, triggerItemChoicesRefetch } = useInteractiveElements();
   const { matchedLocation } = useMatchedLocation();
   const { exploreLocation } = useSurroundings();
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
@@ -36,12 +40,48 @@ const home = () => {
   const { homeLocation, homeRegion } = useHomeLocation();
   const { showAppMessage } = useAppMessage();
   const { handleGo, searchIsActive } = useActiveSearch();
+ 
 
-  const [refreshKey, setRefreshKey] = useState(0); // State to trigger a refresh
-
-  const TOKEN_KEY = "my-jwt";
+  const TOKEN_KEY = "accessToken";
 
   const router = useRouter();
+
+
+
+    useFocusEffect(
+      useCallback(() => { 
+        triggerItemChoicesRefetch();
+        return () => {
+          console.log("item choices is unfocused"); 
+        };
+      }, [])
+    );
+
+
+  useEffect(() => {
+    if (itemChoices) {
+      console.log('ITEM CHOICES! ', itemChoices);
+    }
+
+  }, [itemChoices]);
+
+
+      //  useFocusEffect(
+      //    useCallback(() => {
+      //      if ( user && user.authenticated) { //if app is in foreground, might be an unnecessary check but I'm not sure
+            
+      //      setToken(null);
+      //      fetchToken();
+      //     //  setTriggerReconnectAfterFetch(true);
+           
+      //     }
+     
+      //      return () => { 
+      //        setToken(null);
+      //       //  setTriggerReconnectAfterFetch(false);
+      //      };
+      //    }, [])
+      //  );
 
   // useEffect(() => {
   //   if (matchedLocation) {
@@ -79,23 +119,35 @@ const home = () => {
     };
   }, []);
 
-  const handleRefresh = () => {
-    setRefreshKey((prevKey) => prevKey + 1); // Increment the key to force re-render
-    showAppMessage(true, null, "Page Refreshed!");
-  };
+  // const handleRefresh = () => {
+  //   setRefreshKey((prevKey) => prevKey + 1); // Increment the key to force re-render
+  //   showAppMessage(true, null, "Page Refreshed!");
+  // };
 
-  useEffect(() => {
-    const fetchToken = async () => {
-      try {
-        const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
-        setToken(storedToken);
-      } catch (error) {
-        console.error("Failed to retrieve token:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchToken = async () => {
+  //     try {
+  //       const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
+  //       setToken(storedToken);
+  //     } catch (error) {
+  //       console.error("Failed to retrieve token:", error);
+  //     }
+  //   };
 
-    fetchToken();
-  }, []);
+  //   fetchToken();
+  // }, []);
+
+
+       const fetchToken = async () => {
+        console.log('fetching user token in current main screen');
+        try {
+          const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
+          console.log(storedToken);
+          setToken(storedToken);
+        } catch (error) {
+          console.error('Failed to retrieve token:', error);
+        }
+      };
 
   const handleSignOut = () => {
     onSignOut();
@@ -122,10 +174,10 @@ const home = () => {
     setOpenSocketForGoPress(false);
   };
 
-  useEffect(() => {
-    console.log("home screen rerendered");
-    showAppMessage(true, null, "hihihihihi!");
-  }, []);
+  // useEffect(() => {
+  //   console.log("home screen rerendered");
+  //   showAppMessage(true, null, "hihihihihi!");
+  // }, []);
 
   //for testing, hardcoded DRF auth token: `31abe86cc4359d469102c68fae094590c3683221`
 
@@ -144,41 +196,7 @@ const home = () => {
         ]}
       >
         <View style={appContainerStyles.innerFlexStartContainer}>
-          {/* <View
-            style={[
-              appContainerStyles.inScreenHeaderContainer,
-              { height: "10%" },
-            ]}
-          >
-            <View style={{ flexDirection: "column" }}>
-              {user && user.user && user.user.username && (
-                <Text
-                  style={[
-                    appFontStyles.solitaryHeaderMessageText,
-                    themeStyles.primaryText,
-                  ]}
-                >{`Welcome back, ${user.user.username}`}</Text>
-              )}
-              {homeLocation && (
-                <Text style={themeStyles.primaryText}>
-                  {homeLocation.address}
-                </Text>
-              )}
-            </View>
-          </View> */}
-          {token && user && user.authenticated && (
-            <View
-              style={[
-                appContainerStyles.defaultScreenElementContainer,
-                { marginVertical: "1%" },
-              ]}
-            >
-              <WebSocketCurrentLocation
-                reconnectSocket={appStateVisible}
-                reconnectOnUserButtonPress={openSocketForGoPress}
-              />
-            </View>
-          )}
+       
           <TouchableOpacity
             onPress={() =>
               handleFindNewLocation(homeLocation?.address || "Manchester, NH")
@@ -193,7 +211,14 @@ const home = () => {
             <Text style={[themeStyles.primaryText, { fontSize: 50 }]}>GO</Text>
           </TouchableOpacity>
 
-          {token && user && user.authenticated && searchIsActive && (
+          {itemChoices && !searchIsActive && (
+          <View style={appContainerStyles.innerFlexStartContainer}>
+        
+        <DataList listData={itemChoices} onCardButtonPress={() => {}} />
+      </View>
+)}
+
+          {user && user.authenticated && searchIsActive && (
             <View
               style={[
                 appContainerStyles.defaultScreenElementContainer,
@@ -209,8 +234,10 @@ const home = () => {
                 reconnectOnUserButtonPress={openSocketForGoPress}
               />
             </View>
+
           )}
         </View>
+
         <View
           style={{
             width: "100%",
