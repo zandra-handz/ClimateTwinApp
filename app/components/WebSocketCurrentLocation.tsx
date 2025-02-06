@@ -7,8 +7,8 @@ import { useMatchedLocation } from '../context/MatchedLocationContext';
 import { useActiveSearch } from '../context/ActiveSearchContext';
  
 
-const WebSocketCurrentLocation: React.FC<{ reconnectSocket: boolean }> = ({
-    reconnectSocket
+const WebSocketCurrentLocation: React.FC<{  }> = ({
+   
 }) => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const { user } = useUser();
@@ -19,8 +19,7 @@ const WebSocketCurrentLocation: React.FC<{ reconnectSocket: boolean }> = ({
   // WebSocket hook
   const { sendMessage } = useSurroundingsWebSocket({
      
-    
-    reconnectSocket,
+     
     onMessage: (newUpdate) => {
       console.log("Received update:", newUpdate);
     

@@ -61,7 +61,7 @@ const nearby = () => {
   
     if (data && data.explore_type) {
       const locationType = data.explore_type === 'discovery_location' ? 'explore_location' : 'twin_location';
-  
+  //MOVE TO HOOK AND USE A MUTATION TO TRIGGER THE REFRESH
       exploreLocation({ [locationType]: data.id }); 
       refreshSurroundingsManually();
     }
