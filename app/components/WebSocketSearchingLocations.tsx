@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useFocusEffect } from "expo-router";
-import { View, StyleSheet, TextInput, AppState } from "react-native";
+import { View, StyleSheet, TextInput } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -10,6 +10,7 @@ import Animated, {
 import { useGlobalStyles } from "../context/GlobalStylesContext";
 import { useUser } from "../context/UserContext";
 import { useAppMessage } from "../context/AppMessageContext";
+import { useAppState } from "../context/AppStateContext"; 
 
 import WorldMapSvg from "../assets/svgs/worldmap.svg";
 
@@ -28,8 +29,7 @@ interface WebSocketProps {
   onClose?: () => void;
 }
 
-const useWebSocket = ({
-  reconnectSocket,
+const useWebSocket = ({ 
   reconnectOnUserButtonPress,
   latitude,
   longitude,
@@ -46,6 +46,7 @@ const useWebSocket = ({
 }: WebSocketProps) => {
   const socketRef = useRef<WebSocket | null>(null);
   const { showAppMessage } = useAppMessage();
+  const { appStateVisible } = useAppState();
 
   const TOKEN_KEY = "accessToken";
 
@@ -57,7 +58,7 @@ const useWebSocket = ({
   useFocusEffect(
     useCallback(() => {
       console.log("Current location socket is focused");
-      if (reconnectSocket && user && user.authenticated) {
+      if (appStateVisible && user && user.authenticated) {
         //if app is in foreground, might be an unnecessary check but I'm not sure
 
         fetchToken();
@@ -171,10 +172,9 @@ const useWebSocket = ({
   };
 };
 
-const WebSocketSearchingLocations: React.FC<{
-  reconnectSocket: boolean;
+const WebSocketSearchingLocations: React.FC<{ 
   reconnectOnUserButtonPress: boolean;
-}> = ({ reconnectSocket, reconnectOnUserButtonPress }) => {
+}> = ({ reconnectOnUserButtonPress }) => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { user, reinitialize } = useUser();
 
@@ -318,8 +318,7 @@ const WebSocketSearchingLocations: React.FC<{
   });
 
   // WebSocket hook
-  useWebSocket({
-    reconnectSocket,
+  useWebSocket({ 
     reconnectOnUserButtonPress,
     latitude,
     longitude,

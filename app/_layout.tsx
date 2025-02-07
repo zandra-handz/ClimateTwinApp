@@ -1,8 +1,9 @@
 import { AppMessageContextProvider } from "./context/AppMessageContext";
 import { GlobalStylesProvider } from "./context/GlobalStylesContext";
-import { UserProvider } from "./context/UserContext"; 
-import { useEffect, useRef, useState } from 'react';
-import { AppState } from 'react-native';
+import { UserProvider } from "./context/UserContext";
+import { useEffect, useRef, useState } from "react";
+import { AppState } from "react-native";
+import { AppStateProvider } from "./context/AppStateContext";
 import { CurrentSurroundingsProvider } from "./context/CurrentSurroundingsContext";
 import { MatchedLocationProvider } from "./context/MatchedLocationContext";
 import { NearbyLocationsProvider } from "./context/NearbyLocationsContext";
@@ -15,86 +16,82 @@ import TopLevelRouter from "./toprouter/TopLevelRouter"; // Import TopLevelRoute
 import AppMessage from "./components/AppMessage";
 import Header from "./components/Header";
 
-
-
-export default function Layout() { 
+export default function Layout() {
   const queryClient = new QueryClient();
 
-    const appState = useRef(AppState.currentState);
-    const [appStateVisible, setAppStateVisible] = useState(appState.current);
+  // const appState = useRef(AppState.currentState);
+  // const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
-      useEffect(() => {
-        const subscription = AppState.addEventListener("change", (nextAppState) => {
-          if (
-            appState.current.match(/inactive|background/) &&
-            nextAppState === "active"
-          ) 
-    
-          appState.current = nextAppState;
-          setAppStateVisible(appState.current);
-          console.log("AppState", appState.current);
-        });
-    
-        return () => {
-          subscription.remove();
-        };
-      }, []);
+  //   useEffect(() => {
+  //     const subscription = AppState.addEventListener("change", (nextAppState) => {
+  //       if (
+  //         appState.current.match(/inactive|background/) &&
+  //         nextAppState === "active"
+  //       )
+
+  //       appState.current = nextAppState;
+  //       setAppStateVisible(appState.current);
+  //       console.log("AppState", appState.current);
+  //     });
+
+  //     return () => {
+  //       subscription.remove();
+  //     };
+  //   }, []);
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <QueryClientProvider client={queryClient}>
         <UserProvider>
-          <GlobalStylesProvider>
-            <AppMessageContextProvider>
-              {/* Wrap Stack in TopLevelRouter to handle authentication checks */}
-              <TopLevelRouter>
-                <AppMessage />
-                <MatchedLocationProvider>
-                  <CurrentSurroundingsProvider>
-                    <NearbyLocationsProvider>
-                      <InteractiveElementsProvider>
-                      <ActiveSearchProvider>
-                        <Stack> 
-                          <Stack.Screen
-                            name="index"
-                            options={{
-                              headerShown: false,
-                              headerTitle: "Welcome",
-                              headerStyle: {
-                                backgroundColor: "teal",
-                              },
-                            }}
-                          />
-                          <Stack.Screen
-                            name="signin"
-                            options={{
-                              headerShown: false,
-                              headerTitle: "Sign in",
-                              headerStyle: {
-                                backgroundColor: "teal",
-                              },
-                            }}
-                          />
-                            
-                            
-                          <Stack.Screen
-                            name="(tabs)"
-                            options={{
-                              header: () => <Header />
-                             }}
-                          />
-                           
-                        </Stack>
-                      </ActiveSearchProvider>
-                      
-                        
-                      </InteractiveElementsProvider>
-                    </NearbyLocationsProvider>
-                  </CurrentSurroundingsProvider>
-                </MatchedLocationProvider>
-              </TopLevelRouter>
-            </AppMessageContextProvider>
-          </GlobalStylesProvider>
+          <AppStateProvider>
+            <GlobalStylesProvider>
+              <AppMessageContextProvider>
+                {/* Wrap Stack in TopLevelRouter to handle authentication checks */}
+                <TopLevelRouter>
+                  <AppMessage />
+                  <MatchedLocationProvider>
+                    <CurrentSurroundingsProvider>
+                      <NearbyLocationsProvider>
+                        <InteractiveElementsProvider>
+                          <ActiveSearchProvider>
+                            <Stack>
+                              <Stack.Screen
+                                name="index"
+                                options={{
+                                  headerShown: false,
+                                  headerTitle: "Welcome",
+                                  headerStyle: {
+                                    backgroundColor: "teal",
+                                  },
+                                }}
+                              />
+                              <Stack.Screen
+                                name="signin"
+                                options={{
+                                  headerShown: false,
+                                  headerTitle: "Sign in",
+                                  headerStyle: {
+                                    backgroundColor: "teal",
+                                  },
+                                }}
+                              />
+
+                              <Stack.Screen
+                                name="(tabs)"
+                                options={{
+                                  header: () => <Header />,
+                                }}
+                              />
+                            </Stack>
+                          </ActiveSearchProvider>
+                        </InteractiveElementsProvider>
+                      </NearbyLocationsProvider>
+                    </CurrentSurroundingsProvider>
+                  </MatchedLocationProvider>
+                </TopLevelRouter>
+              </AppMessageContextProvider>
+            </GlobalStylesProvider>
+          </AppStateProvider>
         </UserProvider>
       </QueryClientProvider>
     </GestureHandlerRootView>

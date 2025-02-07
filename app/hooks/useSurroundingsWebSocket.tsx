@@ -1,9 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { AppState } from "react-native"; 
+
 import { useUser } from "../context/UserContext";
 import * as SecureStore from "expo-secure-store";
 import { useAppMessage } from "../context/AppMessageContext";
 import { useActiveSearch } from "../context/ActiveSearchContext";
+import { useAppState } from "../context/AppStateContext"; 
 
 interface SurroundingsWebSocketProps {  
   onMessage: (update: any) => void;
@@ -17,26 +18,30 @@ const useSurroundingsWebSocket = ({
   onClose,
 }: SurroundingsWebSocketProps) => {
   const TOKEN_KEY = "accessToken";
-  const socketRef = useRef<WebSocket | null>(null);
-  const appState = useRef(AppState.currentState);
-  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+  const socketRef = useRef<WebSocket | null>(null); 
+  const { appStateVisible } = useAppState();
 
   const { showAppMessage } = useAppMessage();
   const { manualSurroundingsRefresh, resetRefreshSurroundingsManually } = useActiveSearch();
-  const { user } = useUser();
+  const { user, reInitialize } = useUser();
   const [token, setToken] = useState<string | null>(null);
 
-  useEffect(() => {
-    const subscription = AppState.addEventListener("change", (nextAppState) => {
-      if (appState.current.match(/inactive|background/) && nextAppState === "active") {
-        appState.current = nextAppState;
-        setAppStateVisible(appState.current);
-        console.log("AppState changed to:", appState.current);
-      }
-    });
-
-    return () => subscription.remove();
-  }, []);
+  // useEffect(() => {
+  //   const subscription = AppState.addEventListener("change", (nextAppState) => {
+  //     console.log("AppState changed:", nextAppState);
+  //     console.log("Previous AppState:", appState.current);
+  
+  //     if (appState.current.match(/inactive|background/) && nextAppState === "active") {
+  //       appState.current = nextAppState;
+  //       setAppStateVisible(appState.current);
+  //       console.log("Updated appStateVisible to:", appState.current);
+  //     }
+  //   });
+  
+  //   return () => subscription.remove();
+  // }, []);
+  
+  
 
   const fetchToken = async () => {
     try {
@@ -85,12 +90,20 @@ const useSurroundingsWebSocket = ({
 
   // Reconnect WebSocket when app comes to foreground
   useEffect(() => {
-    if (appStateVisible) {
+    if (appStateVisible === "active") {
       console.log("App came to foreground - refreshing WebSocket");
+    //  testReInit();
       closeSocket();
-      fetchTokenForceRerender();
+      setToken(null);
+      fetchTokenForceRerender(); //doesn't seem to force if token is same hence setting token to null for now
     }
   }, [appStateVisible]);
+
+  const testReInit = async () => {
+    console.log('TESTING REINITIALIZE');
+    await reInitialize();
+
+  };
  
 
   // Manual refresh handling

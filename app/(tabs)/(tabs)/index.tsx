@@ -3,8 +3,7 @@ import {
   SafeAreaView,
   View,
   Text,
-  TouchableOpacity,
-  AppState,
+  TouchableOpacity, 
 } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import { useGeolocationWatcher } from "../../hooks/useCurrentLocationWatcher";
@@ -96,28 +95,28 @@ const home = () => {
     }
   }, [exploreLocation]);
 
-  const appState = useRef(AppState.currentState);
-  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+  // const appState = useRef(AppState.currentState);
+  // const [appStateVisible, setAppStateVisible] = useState(appState.current);
   const [openSocketForGoPress, setOpenSocketForGoPress] = useState(false);
-  useEffect(() => {
-    const subscription = AppState.addEventListener("change", (nextAppState) => {
-      if (
-        appState.current.match(/inactive|background/) &&
-        nextAppState === "active"
-      ) {
-        showAppMessage(true, null, `App has come to the foreground!`);
-        // handleRefresh();
-      }
+  // useEffect(() => {
+  //   const subscription = AppState.addEventListener("change", (nextAppState) => {
+  //     if (
+  //       appState.current.match(/inactive|background/) &&
+  //       nextAppState === "active"
+  //     ) {
+  //       showAppMessage(true, null, `App has come to the foreground!`);
+  //       // handleRefresh();
+  //     }
 
-      appState.current = nextAppState;
-      setAppStateVisible(appState.current);
-      console.log("AppState", appState.current);
-    });
+  //     appState.current = nextAppState;
+  //     setAppStateVisible(appState.current);
+  //     console.log("AppState", appState.current);
+  //   });
 
-    return () => {
-      subscription.remove();
-    };
-  }, []);
+  //   return () => {
+  //     subscription.remove();
+  //   };
+  // }, []);
 
   // const handleRefresh = () => {
   //   setRefreshKey((prevKey) => prevKey + 1); // Increment the key to force re-render
@@ -229,8 +228,7 @@ const home = () => {
                 },
               ]}
             >
-              <WebSocketSearchingLocations
-                reconnectSocket={appStateVisible}
+              <WebSocketSearchingLocations 
                 reconnectOnUserButtonPress={openSocketForGoPress}
               />
             </View>
