@@ -14,7 +14,7 @@ const UserContext = createContext({});
 
 export const useUser = () => useContext(UserContext);
 
-const TOKEN_KEY = 'my-jwt';
+const TOKEN_KEY = 'accessToken';
 
 export const UserProvider = ({ children }) => {
     const [user, setUser] = useState({

@@ -1,6 +1,6 @@
 import { AppMessageContextProvider } from "./context/AppMessageContext";
 import { GlobalStylesProvider } from "./context/GlobalStylesContext";
-import { UserProvider } from "./context/UserContext";
+import { UserProvider } from "./context/UserContext"; 
 import { useEffect, useRef, useState } from 'react';
 import { AppState } from 'react-native';
 import { CurrentSurroundingsProvider } from "./context/CurrentSurroundingsContext";
@@ -16,7 +16,8 @@ import AppMessage from "./components/AppMessage";
 import Header from "./components/Header";
 
 
-export default function Layout() {
+
+export default function Layout() { 
   const queryClient = new QueryClient();
 
     const appState = useRef(AppState.currentState);
@@ -53,7 +54,7 @@ export default function Layout() {
                     <NearbyLocationsProvider>
                       <InteractiveElementsProvider>
                       <ActiveSearchProvider>
-                        <Stack>
+                        <Stack> 
                           <Stack.Screen
                             name="index"
                             options={{
@@ -74,12 +75,15 @@ export default function Layout() {
                               },
                             }}
                           />
+                            
+                            
                           <Stack.Screen
                             name="(tabs)"
                             options={{
-                              header: () => <Header appIsInForeground={appStateVisible} />
+                              header: () => <Header />
                              }}
                           />
+                           
                         </Stack>
                       </ActiveSearchProvider>
                       

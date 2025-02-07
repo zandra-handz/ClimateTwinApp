@@ -8,7 +8,7 @@ import WebSocketCurrentLocation from "../components/WebSocketCurrentLocation";
 import SignoutSvg from "../assets/svgs/signout.svg";
 
 
-const Header = ({appIsInForeground}) => {
+const Header = () => {
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
   const { user, onSignOut } = useUser(); 
 
@@ -45,9 +45,7 @@ const Header = ({appIsInForeground}) => {
           /> 
         </View> 
 
-        <WebSocketCurrentLocation 
-            //  token={token}
-                reconnectSocket={appIsInForeground} 
+        <WebSocketCurrentLocation  
               />
                
       </View>

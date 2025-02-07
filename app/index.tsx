@@ -16,7 +16,7 @@ import { StatusBar } from "react-native";
 
 const TOKEN_KEY = "accessToken";
 
-const WelcomeScreen = () => {
+const Index = () => {
   //const { showMessage } = useMessage();
   const { themeStyles, manualGradientColors } = useGlobalStyles();
   const [showSignIn, setShowSignIn] = useState(true);
@@ -115,8 +115,7 @@ const WelcomeScreen = () => {
             justifyContent: "center",
           }}
         >
-          <>
-            {confirmedUserNotSignedIn && (
+          <> 
               <>
                 <View
                   style={{
@@ -169,8 +168,7 @@ const WelcomeScreen = () => {
 
                     </View> */}
                 </View>
-              </>
-            )}
+              </> 
           </>
         </View>
       </LinearGradient>
@@ -252,4 +250,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default WelcomeScreen;
+export default Index;

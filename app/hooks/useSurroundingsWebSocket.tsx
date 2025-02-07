@@ -42,30 +42,53 @@ const useSurroundingsWebSocket = ({
     try {
       const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
       console.log("Fetched token:", storedToken);
+      //this shouldn't trgger a rerender if token is the same
+      //if want to force a rerender every time, use setToken((prev) => storedToken);
       setToken(storedToken);
     } catch (error) {
       console.error("Failed to retrieve token:", error);
     }
   };
 
+
+  const fetchTokenForceRerender = async () => {
+    try {
+      const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
+      console.log("Fetched token:", storedToken); 
+      // can only use closeSocket before setToken if forcing rerender every time
+      // otherwise it may close the socket but the token amy be the same and not trigger it to reopen
+      //closeSocket();
+      setToken((prev) => storedToken);
+    } catch (error) {
+      console.error("Failed to retrieve token:", error);
+    }
+  };
+
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      if (socketRef.current?.readyState === WebSocket.OPEN) {
-        console.log("Sending keep-alive ping");
-        socketRef.current.send(JSON.stringify({ type: "ping" }));
-      }
-    }, 30000);
+    if (user) {
+      console.log('fetch token in location update websocket triggered by user');
+      fetchToken();
+    }
+  }, [user]);
+
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     if (socketRef.current?.readyState === WebSocket.OPEN) {
+  //       console.log("Sending keep-alive ping");
+  //       socketRef.current.send(JSON.stringify({ type: "ping" }));
+  //     }
+  //   }, 30000);
   
-    return () => clearInterval(interval);
-  }, []);
+  //   return () => clearInterval(interval);
+  // }, []);
 
   // Reconnect WebSocket when app comes to foreground
   useEffect(() => {
     if (appStateVisible) {
       console.log("App came to foreground - refreshing WebSocket");
       closeSocket();
-      setToken(null);
-      fetchToken();
+      fetchTokenForceRerender();
     }
   }, [appStateVisible]);
  
@@ -100,7 +123,7 @@ const useSurroundingsWebSocket = ({
     socketRef.current = socket;
 
     socket.onopen = () => {
-      console.log("WebSocket connection opened");
+      console.log("Location Update WebSocket connection opened");
     };
 
     socket.onmessage = (event: WebSocketMessageEvent) => {
@@ -108,13 +131,16 @@ const useSurroundingsWebSocket = ({
       onMessage(update);
     };
 
+    
     socket.onerror = (event: Event) => {
       console.error("WebSocket error:", event);
+      //might cause infinite loop if keeps erroring !!!
+      //fetchTokenForceRerender();
       if (onError) onError(event);
     };
 
     socket.onclose = () => {
-      console.log("WebSocket connection closed");
+      console.log("Location update WebSocket connection closed");
       socketRef.current = null;
       if (onClose) onClose();
     };
