@@ -5,6 +5,7 @@ import { useUser } from "../context/UserContext";
 import useSurroundingsWebSocket from '../hooks/useSurroundingsWebSocket'; 
 import { useMatchedLocation } from '../context/MatchedLocationContext';
 import { useActiveSearch } from '../context/ActiveSearchContext';
+import { useFocusEffect } from "expo-router";
  
 
 const WebSocketCurrentLocation: React.FC<{  }> = ({
@@ -15,6 +16,23 @@ const WebSocketCurrentLocation: React.FC<{  }> = ({
   const [update, setUpdate] = useState<string | null>(null); // State to store the current update
   const { activeSearch, closeSearchExternally } = useActiveSearch();
   const { matchedLocation } = useMatchedLocation();
+  const [ renderSocket, setRenderSocket ] = useState(false);
+
+
+  useFocusEffect(
+    useCallback(() => {
+      console.log("location update socket is focused");
+      if (user && user.authenticated) {
+        //if app is in foreground, might be an unnecessary check but I'm not sure
+        setRenderSocket(true); 
+      }
+
+      return () => {
+        setRenderSocket(false);
+        console.log("location update socket is unfocused"); 
+      };
+    }, [])
+  );
 
   // WebSocket hook
   const { sendMessage } = useSurroundingsWebSocket({
@@ -42,7 +60,7 @@ const WebSocketCurrentLocation: React.FC<{  }> = ({
 
   return (
     <View style={appContainerStyles.defaultElementRow}>
-      {update && (
+      {update && renderSocket && (
         <>
           <Text
             style={[

@@ -4,7 +4,10 @@ import { useUser } from "../context/UserContext";
 import * as SecureStore from "expo-secure-store";
 import { useAppMessage } from "../context/AppMessageContext";
 import { useActiveSearch } from "../context/ActiveSearchContext";
-import { useAppState } from "../context/AppStateContext"; 
+import { useAppState } from "../context/AppStateContext";  
+
+
+import { Alert } from 'react-native'; 
  
 interface SurroundingsWebSocketProps {  
   onMessage: (update: any) => void;
@@ -24,7 +27,7 @@ const useSurroundingsWebSocket = ({
   const { showAppMessage } = useAppMessage();
   const { manualSurroundingsRefresh, resetRefreshSurroundingsManually } = useActiveSearch();
   const { user, reInitialize, tokenVersion } = useUser(); //reInitialize will trigger new tokenVersion if needs to be refreshed
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(null); 
 
   // useEffect(() => {
   //   const subscription = AppState.addEventListener("change", (nextAppState) => {
@@ -70,12 +73,15 @@ const useSurroundingsWebSocket = ({
   };
 
 
-  useEffect(() => {
-    if (user) {
-      console.log('fetch token in location update websocket triggered by user');
-      fetchToken();
-    }
-  }, [user]);
+
+  // useEffect(() => {
+  //   if (user) {
+  //     console.log('fetch token in location update websocket triggered by user');
+  //     fetchToken();
+  //   }
+  // }, [user]);
+
+
 
   // useEffect(() => {
   //   const interval = setInterval(() => {
@@ -93,9 +99,9 @@ const useSurroundingsWebSocket = ({
     if (appStateVisible === "active") {
       console.log("App came to foreground - refreshing WebSocket");
       checkFor401HTTP(); //this will call getCurrentUser and trigger the 401 refresh if needed
-      // closeSocket();
-      // setToken(null);
-      // fetchTokenForceRerender(); //doesn't seem to force if token is same hence setting token to null for now
+      closeSocket();
+      setToken(null);
+      fetchTokenForceRerender(); //doesn't seem to force if token is same hence setting token to null for now
    
     }
   }, [appStateVisible]);
@@ -104,7 +110,8 @@ const useSurroundingsWebSocket = ({
 
   useEffect(() => {
     if (tokenVersion) {
-     // closeSocket(); 
+      console.log('tokenversion triggered');
+      closeSocket(); 
       fetchToken();
 
     }
@@ -139,6 +146,8 @@ const useSurroundingsWebSocket = ({
       return;
     }
 
+    //closeSocket();
+
     if (socketRef.current) {
       console.log("WebSocket already initialized, skipping new connection.");
       return;
@@ -162,9 +171,11 @@ const useSurroundingsWebSocket = ({
     
     socket.onerror = (event: Event) => {
       console.error("WebSocket error:", event);
+      Alert.alert('WEBSOCKET CONNECT ERROR', 'Websocket error on trying to connect.');
+       
       //might cause infinite loop if keeps erroring !!!
       //fetchTokenForceRerender();
-      checkFor401HTTP();
+    
       if (onError) onError(event);
     };
 

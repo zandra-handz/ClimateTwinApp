@@ -57,12 +57,12 @@ const home = () => {
     );
 
 
-  useEffect(() => {
-    if (itemChoices) {
-      console.log('ITEM CHOICES! ', itemChoices);
-    }
+  // useEffect(() => {
+  //   if (itemChoices) {
+  //     console.log('ITEM CHOICES! ', itemChoices);
+  //   }
 
-  }, [itemChoices]);
+  // }, [itemChoices]);
 
 
       //  useFocusEffect(
