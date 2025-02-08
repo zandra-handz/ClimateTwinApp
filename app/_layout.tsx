@@ -51,47 +51,45 @@ export default function Layout() {
                 <TopLevelRouter>
                   <AppMessage />
                   <MatchedLocationProvider>
-                    <CurrentSurroundingsProvider>
-                      <NearbyLocationsProvider>
-                        <InteractiveElementsProvider>
-                          <ActiveSearchProvider>
-<SurroundingsWSProvider>
-                            <Stack>
-                              <Stack.Screen
-                                name="index"
-                                options={{
-                                  headerShown: false,
-                                  headerTitle: "Welcome",
-                                  headerStyle: {
-                                    backgroundColor: "teal",
-                                  },
-                                }}
-                              />
-                              <Stack.Screen
-                                name="signin"
-                                options={{
-                                  headerShown: false,
-                                  headerTitle: "Sign in",
-                                  headerStyle: {
-                                    backgroundColor: "teal",
-                                  },
-                                }}
-                              />
+                    <ActiveSearchProvider>
+                      <CurrentSurroundingsProvider>
+                        <NearbyLocationsProvider>
+                          <InteractiveElementsProvider>
+                            <SurroundingsWSProvider>
+                              <Stack>
+                                <Stack.Screen
+                                  name="index"
+                                  options={{
+                                    headerShown: false,
+                                    headerTitle: "Welcome",
+                                    headerStyle: {
+                                      backgroundColor: "teal",
+                                    },
+                                  }}
+                                />
+                                <Stack.Screen
+                                  name="signin"
+                                  options={{
+                                    headerShown: false,
+                                    headerTitle: "Sign in",
+                                    headerStyle: {
+                                      backgroundColor: "teal",
+                                    },
+                                  }}
+                                />
 
-                              <Stack.Screen
-                                name="(tabs)"
-                                options={{
-                                  header: () => <Header />,
-                                }}
-                              />
-                            </Stack>
-                            
-  
-</SurroundingsWSProvider>
-                          </ActiveSearchProvider>
-                        </InteractiveElementsProvider>
-                      </NearbyLocationsProvider>
-                    </CurrentSurroundingsProvider>
+                                <Stack.Screen
+                                  name="(tabs)"
+                                  options={{
+                                    header: () => <Header />,
+                                  }}
+                                />
+                              </Stack>
+                            </SurroundingsWSProvider>
+                          </InteractiveElementsProvider>
+                        </NearbyLocationsProvider>
+                      </CurrentSurroundingsProvider>
+                    </ActiveSearchProvider>
                   </MatchedLocationProvider>
                 </TopLevelRouter>
               </AppMessageContextProvider>

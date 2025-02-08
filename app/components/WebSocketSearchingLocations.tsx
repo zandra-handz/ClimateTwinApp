@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState, useRef } from "react";
 import { useFocusEffect } from "expo-router";
 import { View, StyleSheet, TextInput } from "react-native";
+
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
@@ -10,7 +11,8 @@ import Animated, {
 import { useGlobalStyles } from "../context/GlobalStylesContext";
 import { useUser } from "../context/UserContext";
 import { useAppMessage } from "../context/AppMessageContext";
-import { useAppState } from "../context/AppStateContext"; 
+import { useAppState } from "../context/AppStateContext";  
+import { useActiveSearch } from "../context/ActiveSearchContext";
 
 import WorldMapSvg from "../assets/svgs/worldmap.svg";
 
@@ -46,7 +48,8 @@ const useWebSocket = ({
 }: WebSocketProps) => {
   const socketRef = useRef<WebSocket | null>(null);
   const { showAppMessage } = useAppMessage();
-  const { appStateVisible } = useAppState();
+  const { appStateVisible } = useAppState(); 
+  const { foundExploreLocations } = useActiveSearch();
 
   const TOKEN_KEY = "accessToken";
 
@@ -115,6 +118,12 @@ const useWebSocket = ({
     socket.onmessage = (event) => {
       try {
         const update = JSON.parse(event.data);
+     
+
+        if (update && update.message && update.message === "Explore locations are ready!") {
+          console.log('APP GOT EXPLORE LOCATIONS READY MESSAGE!');
+          foundExploreLocations();
+        }
         prevPrevLatitude.value = prevLatitude.value;
         prevPrevLongitude.value = prevLongitude.value;
 
@@ -177,6 +186,7 @@ const WebSocketSearchingLocations: React.FC<{
 }> = ({ reconnectOnUserButtonPress }) => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { user, reinitialize } = useUser();
+  const { searchIsActive } = useActiveSearch();
 
   const [mapDimensions, setMapDimensions] = useState({ width: 0, height: 0 });
 
@@ -341,7 +351,10 @@ const WebSocketSearchingLocations: React.FC<{
   });
 
   return (
+    <>
+    {searchIsActive && (
     <View style={{ flexDirection: "column" }}>
+      
       <View
         style={[appContainerStyles.mapContainer, { overflow: "hidden" }]}
         onLayout={handleLayout}
@@ -407,6 +420,10 @@ const WebSocketSearchingLocations: React.FC<{
         </View>
       </View>
     </View>
+    
+      
+  )}
+    </>
   );
 };
 

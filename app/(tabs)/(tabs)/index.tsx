@@ -17,7 +17,7 @@ import { useInteractiveElements } from "@/app/context/InteractiveElementsContext
 import WebSocketSearchingLocations from "../../components/WebSocketSearchingLocations";
 import WebSocketCurrentLocation from "../../components/WebSocketCurrentLocation";
 import { useRouter, Link } from "expo-router";
-
+import { useNearbyLocations } from "@/app/context/NearbyLocationsContext";
 import DataList from "../../components/DataList";
 
 import { useAppMessage } from "../../context/AppMessageContext";
@@ -30,7 +30,7 @@ import { useActiveSearch } from "../../context/ActiveSearchContext";
 
 const home = () => {
   useGeolocationWatcher();
-  const { user, onSignOut } = useUser();
+  const { user, onSignOut } = useUser(); 
   const { itemChoices, triggerItemChoicesRefetch } = useInteractiveElements();
   const { matchedLocation } = useMatchedLocation();
   const { exploreLocation } = useSurroundings();
@@ -38,7 +38,7 @@ const home = () => {
   const [token, setToken] = useState<string | null>(null);
   const { homeLocation, homeRegion } = useHomeLocation();
   const { showAppMessage } = useAppMessage();
-  const { handleGo, searchIsActive } = useActiveSearch();
+  const { handleGo, searchIsActive, gettingExploreLocations, exploreLocationsAreReady } = useActiveSearch();
  
 
   const TOKEN_KEY = "accessToken";
@@ -168,6 +168,7 @@ const home = () => {
   const handleFindNewLocation = (startingAddress) => {
     setOpenSocketForGoPress(true);
     handleGo(startingAddress);
+    gettingExploreLocations();
     //showAppMessage(true, null, `Searching for a portal!!`);
     //handleRefresh();
     setOpenSocketForGoPress(false);
@@ -210,14 +211,14 @@ const home = () => {
             <Text style={[themeStyles.primaryText, { fontSize: 50 }]}>GO</Text>
           </TouchableOpacity>
 
-          {itemChoices && !searchIsActive && (
+          {itemChoices && !searchIsActive && exploreLocationsAreReady && (
           <View style={appContainerStyles.innerFlexStartContainer}>
         
         <DataList listData={itemChoices} onCardButtonPress={() => {}} />
       </View>
 )}
 
-          {user && user.authenticated && searchIsActive && (
+          {user && user.authenticated && !exploreLocationsAreReady && (
             <View
               style={[
                 appContainerStyles.defaultScreenElementContainer,

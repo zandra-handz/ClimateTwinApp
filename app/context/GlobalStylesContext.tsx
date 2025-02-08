@@ -298,6 +298,7 @@ import React, {
       width: '100%', 
       flexDirection: 'column',
       flex: 1,
+      zIndex: 2000,
 
     },
     dataCardContainer: {

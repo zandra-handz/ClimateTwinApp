@@ -1,7 +1,8 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useUser } from './UserContext';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getNearbyLocations } from '../apicalls';
+import { useActiveSearch } from './ActiveSearchContext';
 
 interface NearbyLocation {
   id: number;
@@ -22,6 +23,8 @@ interface NearbyLocationsContextType {
   twinLocations: NearbyLocation[];
   discoveryLocations: NearbyLocation[];
   triggerRefetch: () => void;
+  clearData: () => void;
+  refetchNearbyLocations: () => void; // Expose refetch function
 }
 
 const NearbyLocationsContext = createContext<NearbyLocationsContextType | undefined>(undefined);
@@ -41,6 +44,7 @@ interface NearbyLocationsProviderProps {
 export const NearbyLocationsProvider: React.FC<NearbyLocationsProviderProps> = ({ children }) => {
   const { user } = useUser();
   const queryClient = useQueryClient();
+  const { exploreLocationsAreReady } = useActiveSearch();
 
   const { data, refetch } = useQuery<NearbyLocation[]>({
     queryKey: ['nearbyLocations'],
@@ -51,22 +55,48 @@ export const NearbyLocationsProvider: React.FC<NearbyLocationsProviderProps> = (
     },
   });
 
-  // Ensure data is always an array
-  const nearbyLocations = data ?? [];
-
-  const nearbyLocationsCount = Array.isArray(nearbyLocations) ? nearbyLocations.length : 0;
-
-  // Check if nearbyLocations has been loaded before filtering
+  const [nearbyLocations, setNearbyLocations] = useState<NearbyLocation[]>(data ?? []);
   const twinLocations = nearbyLocations?.length ? nearbyLocations.filter((loc) => loc.explore_type === 'twin_location') : [];
   const discoveryLocations = nearbyLocations?.length ? nearbyLocations.filter((loc) => loc.explore_type === 'discovery_location') : [];
 
-  // Function to trigger a manual refetch
   const triggerRefetch = () => {
     queryClient.invalidateQueries({ queryKey: ['nearbyLocations'] });
   };
 
+  const clearData = () => {
+    setNearbyLocations([]); 
+    queryClient.removeQueries({ queryKey: ['nearbyLocations'] });
+  };
+
+  // Function to manually refetch the nearby locations, even if data is cleared
+  const refetchNearbyLocations = async () => {
+    // If query data has been removed from cache, manually trigger the fetch
+    if (!queryClient.getQueryData(['nearbyLocations'])) {
+      // This will directly call the query function to fetch the data
+      try {
+        const fetchedData = await getNearbyLocations(); // Manually call the function to fetch data
+        setNearbyLocations(fetchedData); // Set the fetched data to state
+      } catch (error) {
+        console.error('Error fetching nearby locations:', error);
+      }
+    } else {
+      refetch(); // If the data is still in the cache, use the refetch method
+    }
+  };
+
+
+  useEffect(() => {
+    console.log('explorelocations', exploreLocationsAreReady);
+    if (exploreLocationsAreReady) {
+      refetchNearbyLocations();
+    } else {
+      clearData();
+    }
+
+  }, [exploreLocationsAreReady]);
+
   return (
-    <NearbyLocationsContext.Provider value={{ nearbyLocations, nearbyLocationsCount, twinLocations, discoveryLocations, triggerRefetch }}>
+    <NearbyLocationsContext.Provider value={{ nearbyLocations, twinLocations, discoveryLocations, triggerRefetch, clearData, refetchNearbyLocations }}>
       {children}
     </NearbyLocationsContext.Provider>
   );

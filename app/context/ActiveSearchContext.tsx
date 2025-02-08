@@ -34,6 +34,7 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({ chil
   const queryClient = useQueryClient();
   const [activeSearch, setActiveSearch] = useState<ActiveSearch | null>(null);
   const [searchIsActive, setSearchIsActive] = useState<boolean>(false);
+  const [exploreLocationsAreReady, setExploreLocationsAreReady] = useState<boolean>(true);
   const [manualSurroundingsRefresh, setManualSurroundingsRefresh ] = useState<boolean>(false);
 
 
@@ -70,6 +71,19 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({ chil
       console.error('Error fetching go data:', err);
     }
   });
+
+
+  const gettingExploreLocations = () => {
+    setExploreLocationsAreReady(false);
+
+  };
+
+
+  
+  const foundExploreLocations = () => {
+    setExploreLocationsAreReady(true);
+
+  };
   
 
   // search status is updated by current location websocket (component WebSocketCurrentLocation)
@@ -91,7 +105,7 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({ chil
   };
 
   return (
-    <ActiveSearchContext.Provider value={{ activeSearch, searchIsActive, handleGo, closeSearchExternally, refreshSurroundingsManually,  resetRefreshSurroundingsManually, manualSurroundingsRefresh }}>
+    <ActiveSearchContext.Provider value={{ activeSearch, searchIsActive, exploreLocationsAreReady, gettingExploreLocations, foundExploreLocations, handleGo, closeSearchExternally, refreshSurroundingsManually,  resetRefreshSurroundingsManually, manualSurroundingsRefresh }}>
       {children}
     </ActiveSearchContext.Provider>
   );

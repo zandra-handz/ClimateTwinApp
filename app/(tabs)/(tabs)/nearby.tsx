@@ -25,14 +25,14 @@ import { exploreLocation } from "@/app/apicalls";
 
 const nearby = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
-  const { refreshSurroundingsManually } = useActiveSearch();
+  const { searchIsActive, refreshSurroundingsManually } = useActiveSearch();
   const { showAppMessage } = useAppMessage();
-  const { triggerRefetch, nearbyLocations, nearbyLocationsCount } = useNearbyLocations();
+  const { triggerRefetch, nearbyLocations, nearbyLocationsCount, refetchNearbyLocations } = useNearbyLocations();
  
   useFocusEffect(
     useCallback(() => {
       console.log("Nearby location screen is focused");
-      triggerRefetch();
+      refetchNearbyLocations();
       return () => {
         console.log("nearby location screen is unfocused"); 
       };
@@ -63,7 +63,7 @@ const nearby = () => {
       const locationType = data.explore_type === 'discovery_location' ? 'explore_location' : 'twin_location';
   //MOVE TO HOOK AND USE A MUTATION TO TRIGGER THE REFRESH
       exploreLocation({ [locationType]: data.id }); 
-      refreshSurroundingsManually();
+      //refreshSurroundingsManually();
     }
   };
   
@@ -83,7 +83,7 @@ const nearby = () => {
       >
         <View style={appContainerStyles.innerFlexStartContainer}>
         
-            {nearbyLocations && <DataList listData={nearbyLocations} onCardButtonPress={handleExploreLocation} />}
+            {nearbyLocations && !searchIsActive && <DataList listData={nearbyLocations} onCardButtonPress={handleExploreLocation} />}
           </View>
       </View>
     </>
