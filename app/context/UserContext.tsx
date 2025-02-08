@@ -35,39 +35,74 @@ export const UserProvider = ({ children }) => {
     }, [appSettings]);
 
     
-    // Reinitialize user data function
-    const reInitialize = async () => {
-        const token = await SecureStore.getItemAsync(TOKEN_KEY);
-        if (token) {
-           // const userData = null;
-           const userData = await getCurrentUser();
-           
-            if (userData) {
-                setUser(prev => ({
-                    ...prev,
-                    user: userData,
-                    authenticated: true,
-                    loading: false, 
-                })); 
-            } else {
-                // Handle case where user data is null
-                setUser(prev => ({ ...prev, authenticated: false, loading: false }));
-            }
+    const [tokenVersion, setTokenVersion] = useState(0); // Tracks token changes
 
-            const userSettingsData = await getUserSettings();
-
-            if (userSettingsData) {
-                setAppSettings(userSettingsData || {});
-                
-                
-                setUserNotificationSettings({
-                    receive_notifications: userSettingsData?.receive_notifications || false
-                }); 
-            }
+const reInitialize = async () => {
+    const token = await SecureStore.getItemAsync(TOKEN_KEY);
+    if (token) {
+        const userData = await getCurrentUser(); //THIS is when interceptor would catch 401 and fetch/store new token to SecureStore, then the reInitialize function would continue
+       
+        if (userData) {
+            setUser(prev => ({
+                ...prev,
+                user: userData,
+                authenticated: true,
+                loading: false, 
+            })); 
         } else {
-            setUser({ user: null, authenticated: false, loading: false });
+            setUser(prev => ({ ...prev, authenticated: false, loading: false }));
         }
-    }; 
+
+        const userSettingsData = await getUserSettings();
+
+        if (userSettingsData) {
+            setAppSettings(userSettingsData || {});
+
+            setUserNotificationSettings({
+                receive_notifications: userSettingsData?.receive_notifications || false
+            }); 
+        }
+
+        // 🚀 Token refresh detected! Increment tokenVersion
+        setTokenVersion(prev => prev + 1);
+    } else {
+        setUser({ user: null, authenticated: false, loading: false });
+    }
+};
+
+    // Reinitialize user data function
+    // const reInitialize = async () => {
+    //     const token = await SecureStore.getItemAsync(TOKEN_KEY);
+    //     if (token) {
+    //        // const userData = null;
+    //        const userData = await getCurrentUser();
+           
+    //         if (userData) {
+    //             setUser(prev => ({
+    //                 ...prev,
+    //                 user: userData,
+    //                 authenticated: true,
+    //                 loading: false, 
+    //             })); 
+    //         } else {
+    //             // Handle case where user data is null
+    //             setUser(prev => ({ ...prev, authenticated: false, loading: false }));
+    //         }
+
+    //         const userSettingsData = await getUserSettings();
+
+    //         if (userSettingsData) {
+    //             setAppSettings(userSettingsData || {});
+                
+                
+    //             setUserNotificationSettings({
+    //                 receive_notifications: userSettingsData?.receive_notifications || false
+    //             }); 
+    //         }
+    //     } else {
+    //         setUser({ user: null, authenticated: false, loading: false });
+    //     }
+    // }; 
  
     const { data: currentUserData } = useQuery({
         queryKey: ['fetchUser'],
@@ -293,6 +328,7 @@ const onSignUp = async (username, email, password) => {
             reInitialize, // Added to the context
             updateUserSettings: setAppSettings,
             updateUserNotificationSettings: setUserNotificationSettings, 
+            tokenVersion, //to refresh token
         }}>
             {children}
         </UserContext.Provider>

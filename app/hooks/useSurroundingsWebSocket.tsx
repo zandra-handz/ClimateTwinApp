@@ -6,6 +6,9 @@ import { useAppMessage } from "../context/AppMessageContext";
 import { useActiveSearch } from "../context/ActiveSearchContext";
 import { useAppState } from "../context/AppStateContext"; 
 
+
+import { websocketToken } from '../apicalls';
+
 interface SurroundingsWebSocketProps {  
   onMessage: (update: any) => void;
   onError?: (error: Event) => void;
@@ -23,7 +26,7 @@ const useSurroundingsWebSocket = ({
 
   const { showAppMessage } = useAppMessage();
   const { manualSurroundingsRefresh, resetRefreshSurroundingsManually } = useActiveSearch();
-  const { user, reInitialize } = useUser();
+  const { user, reInitialize, tokenVersion } = useUser(); //reInitialize will trigger new tokenVersion if needs to be refreshed
   const [token, setToken] = useState<string | null>(null);
 
   // useEffect(() => {
@@ -92,14 +95,29 @@ const useSurroundingsWebSocket = ({
   useEffect(() => {
     if (appStateVisible === "active") {
       console.log("App came to foreground - refreshing WebSocket");
-    //  testReInit();
-      closeSocket();
-      setToken(null);
-      fetchTokenForceRerender(); //doesn't seem to force if token is same hence setting token to null for now
+      checkFor401HTTP(); //this will call getCurrentUser and trigger the 401 refresh if needed
+      // closeSocket();
+      // setToken(null);
+      // fetchTokenForceRerender(); //doesn't seem to force if token is same hence setting token to null for now
+   
     }
   }, [appStateVisible]);
 
-  const testReInit = async () => {
+
+
+  useEffect(() => {
+    if (tokenVersion) {
+      closeSocket(); 
+      fetchToken();
+
+    }
+
+  }, [tokenVersion]);
+
+
+  
+
+  const checkFor401HTTP = async () => {
     console.log('TESTING REINITIALIZE');
     await reInitialize();
 
@@ -149,6 +167,7 @@ const useSurroundingsWebSocket = ({
       console.error("WebSocket error:", event);
       //might cause infinite loop if keeps erroring !!!
       //fetchTokenForceRerender();
+      checkFor401HTTP();
       if (onError) onError(event);
     };
 
