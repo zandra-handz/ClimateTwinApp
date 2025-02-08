@@ -345,7 +345,7 @@ export const updateUserSettings = async (userId, updatedSettings) => {
 
 
 
-  export const getLaunchPadData = async () => {
+  export const getLaunchpadData = async () => {
     try {
         console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/climatevisitor/launchpad-data/');
@@ -421,6 +421,63 @@ export const getItemChoices = async () => {
     }
 };
 
+
+export const getTreasures = async () => {
+    try {
+        console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.get('/users/treasures/');
+        console.log('API GET Call getTreaures'); //, response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/treasures/:', error.response.data);
+        } else if (error.request) {
+            console.error('Error request for /users/treasures/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /users/treasures/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
+
+export const getInboxItems = async () => {
+    try {
+        console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.get('/users/inbox/items/');
+        console.log('API GET Call getInboxItems'); //, response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/inbox/items/:', error.response.data);
+        } else if (error.request) {
+            console.error('Error request for /users/inbox/items/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /users/inbox/items/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
+
+
+export const getFriends = async () => {
+    try {
+        console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.get('/users/friends/');
+        console.log('API GET Call getFriends'); //, response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/friends/:', error.response.data);
+        } else if (error.request) {
+            console.error('Error request for /users/friends/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /users/friends/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
 
 export const getNearbyLocations = async () => {
     try {

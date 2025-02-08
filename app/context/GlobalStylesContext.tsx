@@ -192,10 +192,10 @@ import React, {
       //justifyContent: 'space-between',
       height: 70,
       alignItems: 'center',
-      paddingHorizontal: 20,
+      paddingHorizontal: 20, 
 
     },
-    headerRow: {
+    headerRow: { 
       flexDirection: 'row',
       width: '100%',
       justifyContent: 'space-between',  

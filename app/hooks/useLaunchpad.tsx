@@ -3,10 +3,10 @@ import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 
 
 import { useUser } from '../context/UserContext';
-import { getTreasures } from '../apicalls';
+import { getLaunchpadData } from '../apicalls';
 
 
-const useTreasures = () => { 
+const useLaunchpad = () => { 
     const { user } = useUser();
     
     const queryClient = useQueryClient();
@@ -14,9 +14,9 @@ const useTreasures = () => {
     const timeoutRef = useRef(null);
 
 
-    const { data: treasures, isLoading, isFetching, isSuccess, isError } = useQuery({
-        queryKey: ['treasures'],
-        queryFn: () => getTreasures(),
+    const { data: launchpad, isLoading, isFetching, isSuccess, isError } = useQuery({
+        queryKey: ['launchpad'],
+        queryFn: () => getLaunchpadData(),
         enabled: !!user && !!user.authenticated,
         onSuccess: (data) => { 
             
@@ -80,11 +80,11 @@ const useTreasures = () => {
   
 
     return { 
-        treasures, 
+        launchpad, 
 };
 
 };
 
 
 
-export default useTreasures;
+export default useLaunchpad;

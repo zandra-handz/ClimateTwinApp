@@ -1,29 +1,22 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import {
   SafeAreaView,
-  View,
-  Text,
-  TouchableOpacity,
-  AppState,
-} from "react-native";
-import * as SecureStore from "expo-secure-store";
+  View, 
+} from "react-native"; 
 import { useGlobalStyles } from "../context/GlobalStylesContext"; 
 
 import { useAppMessage } from "../context/AppMessageContext";
-import { useNearbyLocations } from "../context/NearbyLocationsContext";
+import useTreasures from "../hooks/useTreasures";
 
 import { StatusBar } from "expo-status-bar";
 
 import DataList from "../components/DataList";
 import { useFocusEffect } from "expo-router";
- 
-
-import { useInteractiveElements } from "../context/InteractiveElementsContext";
-
+  
 const treasures = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles(); 
   const { showAppMessage } = useAppMessage();
-  const {  itemChoices } = useInteractiveElements();
+  const { treasures } = useTreasures();
  
   // useFocusEffect(
   //   useCallback(() => {
@@ -36,26 +29,12 @@ const treasures = () => {
   // );
  
 
+const handleGiveTreasure = () => {
+  console.log('handleGiveTreasure pressed!');
 
-
-  //wtf
-
-  // backend is so confused on this lol, you need to submit {'explore_location' : [location id]} if data.explore_type is discovery_location
-  // else you need to submit {'twin_location' : [the same id]}
-  // WHY DID PAST ME DO THIS
-  // I believe it has to add more data to twin locations. 
-  // originally, twin location couldn't be an explore location (?)
-//this will move to the surroundings context so that i can control behaviors based on mutations
-  const handleFindTreasure = (data) => {
-    console.log('handlefind treasure pressed!', data);
-  
-    // if (data && data.explore_type) {
-    //   const locationType = data.explore_type === 'discovery_location' ? 'explore_location' : 'twin_location';
-  
-    //   exploreLocation({ [locationType]: data.id }); 
-    //   refreshSurroundingsManually();
-    // }
-  };
+};
+ 
+ 
   
   return (
     <>
@@ -73,7 +52,7 @@ const treasures = () => {
       >
         <View style={appContainerStyles.innerFlexStartContainer}>
         
-        {itemChoices && <DataList listData={itemChoices} onCardButtonPress={handleFindTreasure} />}
+        {treasures && <DataList listData={treasures} onCardButtonPress={handleGiveTreasure} />}
  
           </View>
       </View>

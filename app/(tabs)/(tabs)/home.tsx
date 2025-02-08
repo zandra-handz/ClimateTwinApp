@@ -1,48 +1,63 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { SafeAreaView, View, Text, TouchableOpacity, AppState } from 'react-native';
-import * as SecureStore from 'expo-secure-store'; 
-import { useGlobalStyles } from '../../context/GlobalStylesContext'; 
+import React, { useState, useCallback, useEffect, useRef } from "react";
+import {
+  SafeAreaView,
+  View, 
+} from "react-native"; 
+import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
 
-import { useAppMessage } from '../../context/AppMessageContext'; 
+import { useAppMessage } from "../../context/AppMessageContext";
+import useLaunchpad from "../../hooks/useLaunchpad";
 
-import { StatusBar } from 'expo-status-bar'; 
+import { StatusBar } from "expo-status-bar";
 
-const home = () => { 
-    const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles(); 
-    const { showAppMessage } = useAppMessage();
+import DataList from "../../components/DataList";
+import { useFocusEffect } from "expo-router";
   
+const home = () => {
+  const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles(); 
+  const { showAppMessage } = useAppMessage();
+  const { launchpad } = useLaunchpad();
+ 
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     console.log("Nearby location screen is focused");
+  //     triggerRefetch();
+  //     return () => {
+  //       console.log("nearby location screen is unfocused"); 
+  //     };r
+  //   }, [])
+  // );
  
 
+const handlePress = () => {
+  console.log('handlePress in launchpad pressed!');
+
+};
+ 
  
   
-
-  //for testing, hardcoded DRF auth token: `31abe86cc4359d469102c68fae094590c3683221`
-
   return (
-
     <>
-          <StatusBar
-          barStyle={themeStyles.primaryBackground.backgroundColor} 
-          translucent={true}
-          backgroundColor="transparent" 
-        /> 
-    <View style={[appContainerStyles.screenContainer, themeStyles.primaryBackground, {paddingTop: 90} ]}>
-
-      <View style={appContainerStyles.innerFlexStartContainer}>
+      <StatusBar
+        barStyle={themeStyles.primaryBackground.backgroundColor}
+        translucent={true}
+        backgroundColor="transparent"
+      />
+      <View
+        style={[
+          appContainerStyles.screenContainer,
+          themeStyles.primaryBackground,
+          { paddingTop: 90 },
+        ]}
+      >
+        <View style={appContainerStyles.innerFlexStartContainer}>
         
-            <View style={[appContainerStyles.inScreenHeaderContainer, {height: '10%'}]}>
-              <View style={{flexDirection: 'column'}}>
-               
-              
-              </View>
-              
-            </View>   
-         
-  </View>  
-    </View>
+        {launchpad && <DataList listData={launchpad} onCardButtonPress={handlePress} />}
+ 
+          </View>
+      </View>
     </>
   );
 };
-
 
 export default home;

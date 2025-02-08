@@ -3,10 +3,10 @@ import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';
 
 
 import { useUser } from '../context/UserContext';
-import { getTreasures } from '../apicalls';
+import { getFriends } from '../apicalls';
 
 
-const useTreasures = () => { 
+const useFriends = () => { 
     const { user } = useUser();
     
     const queryClient = useQueryClient();
@@ -14,9 +14,9 @@ const useTreasures = () => {
     const timeoutRef = useRef(null);
 
 
-    const { data: treasures, isLoading, isFetching, isSuccess, isError } = useQuery({
-        queryKey: ['treasures'],
-        queryFn: () => getTreasures(),
+    const { data: friends, isLoading, isFetching, isSuccess, isError } = useQuery({
+        queryKey: ['friends'],
+        queryFn: () => getFriends(),
         enabled: !!user && !!user.authenticated,
         onSuccess: (data) => { 
             
@@ -80,11 +80,11 @@ const useTreasures = () => {
   
 
     return { 
-        treasures, 
+        friends, 
 };
 
 };
 
 
 
-export default useTreasures;
+export default useFriends;
