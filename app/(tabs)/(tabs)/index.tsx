@@ -21,6 +21,7 @@ import { useNearbyLocations } from "@/app/context/NearbyLocationsContext";
 import DataList from "../../components/DataList";
 
 import { useAppMessage } from "../../context/AppMessageContext";
+import { DrawerToggleButton } from "@react-navigation/drawer";
 
 import SignoutSvg from "../../assets/svgs/signout.svg";
 
@@ -191,10 +192,18 @@ const home = () => {
       <View
         style={[
           appContainerStyles.screenContainer,
-          themeStyles.primaryBackground,
-          { paddingTop: 90 },
+          themeStyles.primaryBackground, 
         ]}
       >
+        {/* <View style={{   zIndex: 30000,  justifyContent: 'flex-end', flexDirection: 'row', paddingHorizontal: 20, alignItems: 'center', top: -30,  width: '100%'}}>
+
+          
+        <WebSocketCurrentLocation  
+              />
+         <DrawerToggleButton tintColor={themeStyles.primaryText.color}/>
+         
+        </View>  */}
+               
         <View style={appContainerStyles.innerFlexStartContainer}>
        
           <TouchableOpacity
@@ -202,8 +211,9 @@ const home = () => {
               handleFindNewLocation(homeLocation?.address || "Manchester, NH")
             }
             style={{
-              height: "18%",
+              height: "auto",
               width: "100%",
+              paddingVertical: '2%',
               alignItems: "center",
               justifyContent: "center",
             }}
@@ -237,23 +247,7 @@ const home = () => {
           )}
         </View>
 
-        <View
-          style={{
-            width: "100%",
-            alignItems: "center",
-            paddingHorizontal: "4%",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            height: 40,
-          }}
-        >
-          <SignoutSvg
-            onPress={() => handleSignOut()}
-            width={30}
-            height={30}
-            color={themeStyles.primaryText.color}
-          />
-        </View>
+   
       </View>
     </>
   );

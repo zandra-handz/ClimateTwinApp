@@ -33,6 +33,8 @@ const handlePress = () => {
   console.log('handlePress in launchpad pressed!');
 
 };
+
+
  
  
   
@@ -52,7 +54,7 @@ const handlePress = () => {
       >
         <View style={appContainerStyles.innerFlexStartContainer}>
         
-        {launchpad && <DataList listData={launchpad} onCardButtonPress={handlePress} />}
+        {launchpad && <DataList listData={[launchpad]} onCardButtonPress={handlePress} />}
  
           </View>
       </View>

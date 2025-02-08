@@ -1,14 +1,21 @@
 import { Tabs } from "expo-router";
 import { Text } from 'react-native';
 import { TabList, TabTrigger, TabSlot } from 'expo-router/ui';
+import { Drawer } from 'expo-router/drawer';
 import PrimaryTabBar from '../components/PrimaryTabBar';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import TabHeader from "../components/TabHeader";
+
 export default () => {
 
 // export default function Layout() {
   return (
-    <Tabs
-      tabBar={props=> <PrimaryTabBar {...props} />}
-      >
+    // <Tabs
+    //   tabBar={props=> <PrimaryTabBar {...props} />}
+    //   >
+<GestureHandlerRootView style={{ flex: 1 }}>
+  
+    <Drawer>
       {/* <TabSlot />
       <TabList style={{display: 'none'}}>
         <TabTrigger name="home" href="/(tabs)">
@@ -30,11 +37,20 @@ export default () => {
       </TabList> */}
 
 
-        <Tabs.Screen name="(tabs)" options={{ header: () => null }} />
+      {/* //   <Tabs.Screen name="(tabs)" options={{ header: () => null }} />
     
-      <Tabs.Screen name="friends" options={{ header: () => null }} />
-      <Tabs.Screen name="inbox" options={{ header: () => null }} />
-      <Tabs.Screen name="treasures" options={{ header: () => null }} />
-    </Tabs>
+      // <Tabs.Screen name="friends" options={{ header: () => null }} />
+      // <Tabs.Screen name="inbox" options={{ header: () => null }} />
+      // <Tabs.Screen name="treasures" options={{ header: () => null }} /> */}
+
+
+      <Drawer.Screen name="(tabs)" options={{ header: () => <TabHeader />, drawerLabel: 'Explore', title: 'home' }} />
+    
+      <Drawer.Screen name="friends" options={{ header: () => null,drawerLabel: 'Friends' }} />
+      <Drawer.Screen name="inbox" options={{ header: () => null, drawerLabel: 'Inbox' }} />
+      <Drawer.Screen name="treasures" options={{ header: () => null, drawerLabel: 'Treasures' }} />
+    </Drawer>
+    
+</GestureHandlerRootView>
   );
 };

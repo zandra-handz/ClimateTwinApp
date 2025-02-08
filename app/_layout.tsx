@@ -81,6 +81,7 @@ export default function Layout() {
                                 <Stack.Screen
                                   name="(tabs)"
                                   options={{
+                                    headerShown: false,
                                     header: () => <Header />,
                                   }}
                                 />
@@ -100,3 +101,101 @@ export default function Layout() {
     </GestureHandlerRootView>
   );
 }
+
+
+
+
+
+
+// import { AppMessageContextProvider } from "./context/AppMessageContext";
+// import { GlobalStylesProvider } from "./context/GlobalStylesContext";
+// import { UserProvider } from "./context/UserContext";
+// import { AppStateProvider } from "./context/AppStateContext";
+// import { CurrentSurroundingsProvider } from "./context/CurrentSurroundingsContext";
+// import { MatchedLocationProvider } from "./context/MatchedLocationContext";
+// import { NearbyLocationsProvider } from "./context/NearbyLocationsContext";
+// import { ActiveSearchProvider } from "./context/ActiveSearchContext";
+// import { InteractiveElementsProvider } from "./context/InteractiveElementsContext";
+// import { SurroundingsWSProvider } from "./context/SurroundingsWSContext";
+// import { GestureHandlerRootView } from "react-native-gesture-handler";
+// import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+// import { Drawer } from "expo-router/drawer"; // Import Drawer Navigation
+// import AppMessage from "./components/AppMessage";
+// import Header from "./components/Header";
+
+// export default function Layout() {
+//   const queryClient = new QueryClient();
+
+//   return (
+//     <GestureHandlerRootView style={{ flex: 1 }}>
+//       <QueryClientProvider client={queryClient}>
+//         <UserProvider>
+//           <AppStateProvider>
+//             <GlobalStylesProvider>
+//               <AppMessageContextProvider>
+//                 <MatchedLocationProvider>
+//                   <ActiveSearchProvider>
+//                     <CurrentSurroundingsProvider>
+//                       <NearbyLocationsProvider>
+//                         <InteractiveElementsProvider>
+//                           <SurroundingsWSProvider>
+//                             {/* Wrap Stack in a Drawer */}
+//                             <Drawer>
+//                               <Drawer.Screen
+//                                 name="index"
+//                                 options={{
+//                                   headerShown: false,
+//                                   drawerLabel: "Welcome",
+//                                 }}
+//                               />
+//                               <Drawer.Screen
+//                                 name="signin"
+//                                 options={{
+//                                   headerShown: false,
+//                                   drawerLabel: "Sign In",
+//                                 }}
+//                               />
+//                               <Drawer.Screen
+//                                 name="(tabs)"
+//                                 options={{
+//                                   header: () => <Header />,
+//                                   drawerLabel: "Home",
+//                                 }}
+//                               />
+//                               <Drawer.Screen
+//                                 name="friends"
+//                                 options={{
+//                                   headerShown: false,
+//                                   drawerLabel: "Friends",
+//                                 }}
+//                               />
+//                               <Drawer.Screen
+//                                 name="inbox"
+//                                 options={{
+//                                   headerShown: false,
+//                                   drawerLabel: "Inbox",
+//                                 }}
+//                               />
+//                               <Drawer.Screen
+//                                 name="treasures"
+//                                 options={{
+//                                   headerShown: false,
+//                                   drawerLabel: "Treasures",
+//                                 }}
+//                               />
+//                             </Drawer>
+//                           </SurroundingsWSProvider>
+//                         </InteractiveElementsProvider>
+//                       </NearbyLocationsProvider>
+//                     </CurrentSurroundingsProvider>
+//                   </ActiveSearchProvider>
+//                 </MatchedLocationProvider>
+//               </AppMessageContextProvider>
+//             </GlobalStylesProvider>
+//           </AppStateProvider>
+//         </UserProvider>
+//       </QueryClientProvider>
+//     </GestureHandlerRootView>
+//   );
+// }
+

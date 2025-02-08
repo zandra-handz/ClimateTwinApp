@@ -1,9 +1,8 @@
- 
 import React from "react";
 import { useGlobalStyles } from "../context/GlobalStylesContext";
 import { useUser } from "../context/UserContext";
 import { SafeAreaView } from "react-native-safe-area-context";
-import WebSocketCurrentLocation from "../components/WebSocketCurrentLocation"; 
+import WebSocketCurrentLocation from "../components/WebSocketCurrentLocation";
 
 import SignoutSvg from "../assets/svgs/signout.svg";
 
@@ -12,34 +11,28 @@ import { useNavigation } from "expo-router";
 
 import { DrawerToggleButton } from "@react-navigation/drawer";
 
-
-
-
-const Header = () => {
+const TabHeader = () => {
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
-  const { user, onSignOut } = useUser();  
+  const { user, onSignOut } = useUser();
 
   const handleSignOut = () => {
-    onSignOut(); 
+    onSignOut();
   };
 
   return (
-    <SafeAreaView style={[themeStyles.primaryBackground, {flex: 1}]}>
-
+    <SafeAreaView style={[themeStyles.primaryBackground, { flex: 1 }]}>
       <View
         style={[
           appContainerStyles.headerContainer,
           themeStyles.primaryBackground,
         ]}
       >
-                  {/* <View style={{position: 'absolute', top: 100}}>
+        {/* <View style={{position: 'absolute', top: 100}}>
       <Button title="Open Drawer" onPress={() => navigation.openDrawer()} />
     </View> */}
-   
-              <View
-        style={appContainerStyles.headerRow}
-      > 
-        <View>
+
+        <View style={appContainerStyles.headerRow}>
+          {/* <View>
           {user && user.user && user.user.username && (
             <Text
               style={[
@@ -48,21 +41,36 @@ const Header = () => {
               ]}
             >{`Welcome back, ${user.user.username}!`}</Text>
           )}
-        </View> 
+        </View>  */}
+
+        {/* </View> */}
+        {/* <View
+          style={{
+            zIndex: 30000,
+            justifyContent: "flex-end",
+            flexDirection: "row",
+            paddingHorizontal: 20,
+            alignItems: "center",
+            top: -30,
+            width: "100%",
+          }}
+        > */}
+          <WebSocketCurrentLocation />
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
           <SignoutSvg
             onPress={() => handleSignOut()}
-            width={30}
-            height={30}
+            width={22}
+            height={22}
             color={themeStyles.primaryText.color}
-          /> 
-        </View> 
-
-        <WebSocketCurrentLocation  
-              />
-               
+          />
+          <DrawerToggleButton tintColor={themeStyles.primaryText.color} />
+       
+       
+          </View>
+        </View>
       </View>
     </SafeAreaView>
   );
 };
 
-export default Header;
+export default TabHeader;
