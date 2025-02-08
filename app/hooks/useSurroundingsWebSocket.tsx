@@ -5,10 +5,7 @@ import * as SecureStore from "expo-secure-store";
 import { useAppMessage } from "../context/AppMessageContext";
 import { useActiveSearch } from "../context/ActiveSearchContext";
 import { useAppState } from "../context/AppStateContext"; 
-
-
-import { websocketToken } from '../apicalls';
-
+ 
 interface SurroundingsWebSocketProps {  
   onMessage: (update: any) => void;
   onError?: (error: Event) => void;
@@ -52,7 +49,7 @@ const useSurroundingsWebSocket = ({
       console.log("Fetched token:", storedToken);
       //this shouldn't trgger a rerender if token is the same
       //if want to force a rerender every time, use setToken((prev) => storedToken);
-      setToken(storedToken);
+      setToken((prev) => storedToken);
     } catch (error) {
       console.error("Failed to retrieve token:", error);
     }
@@ -107,7 +104,7 @@ const useSurroundingsWebSocket = ({
 
   useEffect(() => {
     if (tokenVersion) {
-      closeSocket(); 
+     // closeSocket(); 
       fetchToken();
 
     }

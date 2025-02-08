@@ -10,22 +10,20 @@ export const API_URL = 'https://climatetwin.com/';
 
 axios.defaults.baseURL = API_URL;
 
-import { Alert } from 'react-native';
-import React, { useState } from 'react';
+import { Alert } from 'react-native'; 
 
-
-const [ websocketToken, setWebSocketToken ] = useState(null);
+ 
 
 
 //websocket token needs to update when the headers do
 export const setAuthHeader = (token) => {
     if (token) {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-        setWebSocketToken(token);
+       
         
     } else {
         delete axios.defaults.headers.common['Authorization'];
-        setWebSocketToken(null);
+     
     }
 };
 
