@@ -9,6 +9,7 @@ import { MatchedLocationProvider } from "./context/MatchedLocationContext";
 import { NearbyLocationsProvider } from "./context/NearbyLocationsContext";
 import { ActiveSearchProvider } from "./context/ActiveSearchContext";
 import { InteractiveElementsProvider } from "./context/InteractiveElementsContext";
+import { SurroundingsWSProvider } from "./context/SurroundingsWSContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router"; // Expo Router's Stack component
@@ -54,6 +55,7 @@ export default function Layout() {
                       <NearbyLocationsProvider>
                         <InteractiveElementsProvider>
                           <ActiveSearchProvider>
+<SurroundingsWSProvider>
                             <Stack>
                               <Stack.Screen
                                 name="index"
@@ -83,6 +85,9 @@ export default function Layout() {
                                 }}
                               />
                             </Stack>
+                            
+  
+</SurroundingsWSProvider>
                           </ActiveSearchProvider>
                         </InteractiveElementsProvider>
                       </NearbyLocationsProvider>

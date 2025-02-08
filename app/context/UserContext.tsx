@@ -27,12 +27,12 @@ export const UserProvider = ({ children }) => {
     const queryClient = useQueryClient(); 
 
 
-    useEffect(() => {
-        if (appSettings) {
-            console.log('app settings useeffect in context: ', appSettings);
-        }
+    // useEffect(() => {
+    //     if (appSettings) {
+    //         console.log('app settings useeffect in context: ', appSettings);
+    //     }
 
-    }, [appSettings]);
+    // }, [appSettings]);
 
     
     const [tokenVersion, setTokenVersion] = useState(0); // Tracks token changes
@@ -196,7 +196,7 @@ const onSignUp = async (username, email, password) => {
         
         const credentials = { username, email, password };
 
-         console.log('Signing in with credentials:', credentials);
+       //  console.log('Signing in with credentials:', credentials);
         
  
         await signupMutation.mutateAsync( credentials );
@@ -266,12 +266,12 @@ const onSignUp = async (username, email, password) => {
     
  
     useEffect(() => {
-        console.log('usernotifs useEffect triggered in context');
+      //  console.log('usernotifs useEffect triggered in context');
         if (userNotificationSettings?.receive_notifications) {
-            console.log('registering for notifs');
+            // console.log('registering for notifs');
             registerForNotifications();
         } else {
-            console.log('removing notifs permissions');
+            // console.log('removing notifs permissions');
             removeNotificationPermissions();
         }
     }, [userNotificationSettings]);
@@ -300,7 +300,7 @@ const onSignUp = async (username, email, password) => {
                 const pushTokenString = (await Notifications.getExpoPushTokenAsync({ projectId })).data;
                 await SecureStore.setItemAsync('pushToken', pushTokenString);
                 //await updateUserAccessibilitySettings(user.user.id, { receive_notifications: true, expo_push_token: pushTokenString });
-                console.log(pushTokenString);
+                // console.log(pushTokenString);
             }
         }
     };

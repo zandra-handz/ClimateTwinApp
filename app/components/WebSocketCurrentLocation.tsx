@@ -1,74 +1,57 @@
-import React, { useEffect, useRef, useCallback, useState } from "react";
-import { View, Text, ScrollView, StyleSheet } from "react-native";
+import React, { useEffect, useCallback, useState } from "react";
+import { View, Text, StyleSheet } from "react-native";
 import { useGlobalStyles } from "../context/GlobalStylesContext";
 import { useUser } from "../context/UserContext";
-import useSurroundingsWebSocket from '../hooks/useSurroundingsWebSocket'; 
-import { useMatchedLocation } from '../context/MatchedLocationContext';
-import { useActiveSearch } from '../context/ActiveSearchContext';
+import { useMatchedLocation } from "../context/MatchedLocationContext";
+import { useActiveSearch } from "../context/ActiveSearchContext";
 import { useFocusEffect } from "expo-router";
- 
+import { useSurroundingsWS } from "../context/SurroundingsWSContext";
 
-const WebSocketCurrentLocation: React.FC<{  }> = ({
-   
-}) => {
+const WebSocketCurrentLocation: React.FC = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const { user } = useUser();
-  const [update, setUpdate] = useState<string | null>(null); // State to store the current update
+  const [update, setUpdate] = useState<string | null>(null); // Local state to display the update
   const { activeSearch, closeSearchExternally } = useActiveSearch();
   const { matchedLocation } = useMatchedLocation();
-  const [ renderSocket, setRenderSocket ] = useState(false);
+  const [renderSocket, setRenderSocket] = useState(true);
 
+  // Bring in the context values.
+  const { sendMessage, lastMessage } = useSurroundingsWS();
 
+  // Focus management
   useFocusEffect(
     useCallback(() => {
       console.log("location update socket is focused");
       if (user && user.authenticated) {
-        //if app is in foreground, might be an unnecessary check but I'm not sure
-        setRenderSocket(true); 
+        setRenderSocket(true);
       }
-
       return () => {
         setRenderSocket(false);
-        console.log("location update socket is unfocused"); 
+        console.log("location update socket is unfocused");
       };
-    }, [])
+    }, [user])
   );
 
-  // WebSocket hook
-  const { sendMessage } = useSurroundingsWebSocket({
-     
-     
-    onMessage: (newUpdate) => {
-      console.log("Received update:", newUpdate);
-    
-      console.log(activeSearch);
-      if ((newUpdate.name !== update)) { //} && activeSearch.timestamp) {
-        setUpdate(newUpdate.name);  // Only update the state if the value has changed
+  // Listen for incoming messages from the context.
+  useEffect(() => {
+    if (lastMessage) {
+      console.log("Received update from context:", lastMessage);
+      // Assuming your incoming update has a 'name' property.
+      if (lastMessage.name !== update) {
+        setUpdate(lastMessage.name);
         closeSearchExternally();
       } else {
-        setUpdate(newUpdate.name);  
-      } 
-    },
-    onError: (error) => {
-      console.error("Received error:", error);
-    },
-    onClose: () => {
-      console.log("Current Location WebSocket connection closed");
-    },
-  });
- 
+        setUpdate(lastMessage.name);
+      }
+    }
+  }, [lastMessage, update, closeSearchExternally]);
 
   return (
     <View style={appContainerStyles.defaultElementRow}>
       {update && renderSocket && (
         <>
-          <Text
-            style={[
-              appFontStyles.subHeaderMessageText,
-              themeStyles.primaryText,
-            ]}
-          >
-            {update != "You are home" ? `you are in: ` : ``}
+          <Text style={[appFontStyles.subHeaderMessageText, themeStyles.primaryText]}>
+            {update !== "You are home" ? `you are in: ` : ``}
           </Text>
           <Text style={[appFontStyles.emphasizedText, themeStyles.primaryText]}>
             {update}

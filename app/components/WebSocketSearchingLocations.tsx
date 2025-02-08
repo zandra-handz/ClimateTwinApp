@@ -57,7 +57,7 @@ const useWebSocket = ({
 
   useFocusEffect(
     useCallback(() => {
-      console.log("Current location socket is focused");
+      console.log("Location Searcher socket is focused");
       if (appStateVisible && user && user.authenticated) {
         //if app is in foreground, might be an unnecessary check but I'm not sure
 
@@ -82,7 +82,7 @@ const useWebSocket = ({
   }, [reconnectOnUserButtonPress]);
 
   const fetchToken = async () => {
-    console.log("fetching user tokem in current location socket");
+    console.log("fetching user token in location searcher socket");
     try {
       const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
       console.log(storedToken);
@@ -333,10 +333,10 @@ const WebSocketSearchingLocations: React.FC<{
       // console.log("Received update:", newUpdate);
     },
     onError: (error) => {
-      console.error("Current Location WebSocket encountered an error:", error);
+      console.error("Location Searcher WebSocket encountered an error:", error);
     },
     onClose: () => {
-      console.log("Current Location WebSocket connection closed");
+      console.log("Location Searcher WebSocket connection closed");
     },
   });
 
