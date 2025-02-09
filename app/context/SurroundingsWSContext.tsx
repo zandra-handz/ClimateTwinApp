@@ -75,13 +75,13 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       console.error("WebSocket error:", event);
       Alert.alert("WEBSOCKET CONNECT ERROR", "Websocket error on trying to connect.");
     
-      if (reinitializeAttempt < 3) {  // Prevent excessive reinitialization
+      if (reinitializeAttempt < 20) {  // Prevent excessive reinitialization
         console.log("Reinitializing token due to WebSocket error...");
         reInitialize();
         setReinitializeAttempt((prev) => prev + 1);
       } else {
         console.warn("Max reinitialization attempts reached. Please log back in to reset the connection.");
-        onSignOut();
+       // onSignOut();
       }
     };
     socket.onclose = () => {
