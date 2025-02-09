@@ -14,9 +14,10 @@ const SurroundingsWSContext = createContext<SurroundingsWSContextType | undefine
 export const SurroundingsWSProvider: React.FC = ({ children }) => {
   const TOKEN_KEY = "accessToken";
   const socketRef = useRef<WebSocket | null>(null);
-  const { tokenVersion, reInitialize, user } = useUser();
+  const { tokenVersion, reInitialize, user, onSignOut } = useUser();
   const { appStateVisible } = useAppState();
   const [token, setToken] = useState<string | null>(null);
+  const [reinitializeAttempt, setReinitializeAttempt] = useState(0);
   
   // State variable to hold the last message received.
   const [lastMessage, setLastMessage] = useState<any>(null);
@@ -73,8 +74,16 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     socket.onerror = (event: Event) => {
       console.error("WebSocket error:", event);
       Alert.alert("WEBSOCKET CONNECT ERROR", "Websocket error on trying to connect.");
+    
+      if (reinitializeAttempt < 3) {  // Prevent excessive reinitialization
+        console.log("Reinitializing token due to WebSocket error...");
+        reInitialize();
+        setReinitializeAttempt((prev) => prev + 1);
+      } else {
+        console.warn("Max reinitialization attempts reached. Please log back in to reset the connection.");
+        onSignOut();
+      }
     };
-
     socket.onclose = () => {
       console.log("Location update WebSocket connection closed");
       socketRef.current = null;
@@ -91,12 +100,12 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     return () => {
       closeSocket();
     };
-  }, [token, tokenVersion, appStateVisible, reconnectAttempt]);
+  }, [token, appStateVisible, reconnectAttempt]);
 
   // Fetch the token when the provider mounts or when the user changes.
   useEffect(() => {
     fetchToken();
-  }, [user]);
+  }, [user, tokenVersion]);
 
   const sendMessage = (message: any) => {
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {

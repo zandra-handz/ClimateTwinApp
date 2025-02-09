@@ -68,21 +68,21 @@ export const NearbyLocationsProvider: React.FC<NearbyLocationsProviderProps> = (
     queryClient.removeQueries({ queryKey: ['nearbyLocations'] });
   };
 
-  // Function to manually refetch the nearby locations, even if data is cleared
   const refetchNearbyLocations = async () => {
     // If query data has been removed from cache, manually trigger the fetch
     if (!queryClient.getQueryData(['nearbyLocations'])) {
-      // This will directly call the query function to fetch the data
       try {
-        const fetchedData = await getNearbyLocations(); // Manually call the function to fetch data
-        setNearbyLocations(fetchedData); // Set the fetched data to state
+        const fetchedData = await getNearbyLocations(); // Manually fetch the data
+        setNearbyLocations(fetchedData); // Set to local state
+        queryClient.setQueryData(['nearbyLocations'], fetchedData); // Update the cache
       } catch (error) {
         console.error('Error fetching nearby locations:', error);
       }
     } else {
-      refetch(); // If the data is still in the cache, use the refetch method
+      refetch(); // If data exists in cache, use the refetch method
     }
   };
+  
 
 
   useEffect(() => {
