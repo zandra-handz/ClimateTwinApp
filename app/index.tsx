@@ -69,7 +69,7 @@ const Index = () => {
         console.log(token);
         showAppMessage(true, null, "Reinitializing...");
         reInitialize();
-        handleNavigateToHome();
+        //handleNavigateToHome();
       } else {
         setShowSignIn(true);
         setConfirmedUserNotSignedIn(true);

@@ -1,10 +1,12 @@
 import React, { useEffect } from "react";
 import { useRouter } from "expo-router";
 import { useUser } from "../context/UserContext";
+import { useAppState } from "../context/AppStateContext";
 
 const TopLevelRouter = ({ children }) => {
   const router = useRouter();
-  const { user, onSignOut } = useUser();
+  const { appStateVisible } = useAppState();
+  const { user, onSignOut, reInitialize } = useUser();
 
 //expo router.push and router.replace resolve to the index of the current scope, not root
 //found this dismissAll solution here: https://stackoverflow.com/questions/78932668/i-cant-navigate-back-to-root-on-expo-router
@@ -12,6 +14,17 @@ const TopLevelRouter = ({ children }) => {
   const goToRoot = (): void => {
       router.dismissAll()
   };
+
+  const goToHome = () => {
+    router.push("(tabs)");
+  };
+
+  useEffect(() => {
+    if (appStateVisible === 'active') {
+      reInitialize();
+    }
+
+  }, [appStateVisible]);
 
   useEffect(() => {
     console.log('use effect in top router!');
@@ -24,6 +37,10 @@ const TopLevelRouter = ({ children }) => {
       goToRoot();
       //router.replace("/signin");
     }
+    if (user && user.authenticated) {
+      goToHome();
+    
+    };
   }, [user, router]);
 
   return <>{children}</>;

@@ -6,49 +6,53 @@ import { useMatchedLocation } from "../context/MatchedLocationContext";
 import { useActiveSearch } from "../context/ActiveSearchContext";
 import { useFocusEffect } from "expo-router";
 import { useSurroundingsWS } from "../context/SurroundingsWSContext";
+import { useAppMessage } from "../context/AppMessageContext";
+import { useNearbyLocations } from "../context/NearbyLocationsContext";
 
 const WebSocketCurrentLocation: React.FC = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const { user } = useUser();
-  const [update, setUpdate] = useState<string | null>(null); // Local state to display the update
-  const { activeSearch, closeSearchExternally } = useActiveSearch();
-  const { matchedLocation } = useMatchedLocation();
-  const [renderSocket, setRenderSocket] = useState(true);
-
-  // Bring in the context values.
+  const [update, setUpdate] = useState<string | null>(null);
+  const { closeSearchExternally, gettingExploreLocations, foundExploreLocations } = useActiveSearch();
+  const { showAppMessage} = useAppMessage();
+  const { triggerRefetch } = useNearbyLocations();
+  
   const { sendMessage, lastMessage } = useSurroundingsWS();
 
-  // Focus management
-  useFocusEffect(
-    useCallback(() => {
-      console.log("location update socket is focused");
-      if (user && user.authenticated) {
-        setRenderSocket(true);
-      }
-      return () => {
-        setRenderSocket(false);
-        console.log("location update socket is unfocused");
-      };
-    }, [user])
-  );
-
-  // Listen for incoming messages from the context.
+   
   useEffect(() => {
     if (lastMessage) {
-      console.log("Received update from context:", lastMessage);
-      // Assuming your incoming update has a 'name' property.
-      if (lastMessage.name !== update) {
-        setUpdate(lastMessage.name);
-        closeSearchExternally();
-      } else {
-        setUpdate(lastMessage.name);
+      if (lastMessage.message === 'Searching for ruins!') {
+        closeSearchExternally(); 
+        gettingExploreLocations();
+        showAppMessage(true, null, 'Searching for ruins!');
+      } else if (lastMessage.message === 'No ruins found') {
+        showAppMessage(true, null, 'No ruins found nearby');
+      } else if (lastMessage.message === 'Search complete!') {
+        foundExploreLocations();
+        triggerRefetch();
+        showAppMessage(true, null, 'Search complete!');
+      } else if (lastMessage.message === '') {
+        foundExploreLocations();
       }
     }
-  }, [lastMessage, update, closeSearchExternally]);
+  }, [lastMessage]);
+  
+  useEffect(() => {
+    console.log(lastMessage);
+    // if (lastMessage?.name && lastMessage.name !== update) {
+    //   setUpdate(lastMessage.name);
+    //   closeSearchExternally();
+    // } else 
+    if (lastMessage?.name) {
+      console.log('setting name');
+      setUpdate(lastMessage.name); // This happens only if the name has changed
+    }
+  }, [lastMessage, update]);  
 
   return (
     <View style={appContainerStyles.defaultElementRow}>
-      {update && renderSocket && (
+      {update && (
         <>
           <Text style={[appFontStyles.subHeaderMessageText, themeStyles.primaryText]}>
             {update !== "You are home" ? `you are in: ` : ``}

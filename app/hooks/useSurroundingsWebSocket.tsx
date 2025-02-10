@@ -3,8 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useUser } from "../context/UserContext";
 import * as SecureStore from "expo-secure-store";
 import { useAppMessage } from "../context/AppMessageContext";
-import { useActiveSearch } from "../context/ActiveSearchContext";
-import { useAppState } from "../context/AppStateContext";  
+import { useActiveSearch } from "../context/ActiveSearchContext"; 
 
 
 import { Alert } from 'react-native'; 
@@ -21,12 +20,11 @@ const useSurroundingsWebSocket = ({
   onClose,
 }: SurroundingsWebSocketProps) => {
   const TOKEN_KEY = "accessToken";
-  const socketRef = useRef<WebSocket | null>(null); 
-  const { appStateVisible } = useAppState();
+  const socketRef = useRef<WebSocket | null>(null);  
 
   const { showAppMessage } = useAppMessage();
   const { manualSurroundingsRefresh, resetRefreshSurroundingsManually } = useActiveSearch();
-  const { user, reInitialize, tokenVersion } = useUser(); //reInitialize will trigger new tokenVersion if needs to be refreshed
+  const { user, reInitialize } = useUser(); //reInitialize will trigger new tokenVersion if needs to be refreshed
   const [token, setToken] = useState<string | null>(null); 
 
   // useEffect(() => {
@@ -49,7 +47,7 @@ const useSurroundingsWebSocket = ({
   const fetchToken = async () => {
     try {
       const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
-      console.log("Fetched token:", storedToken);
+      console.log("Fetched token in Location Update socket:", storedToken);
       //this shouldn't trgger a rerender if token is the same
       //if want to force a rerender every time, use setToken((prev) => storedToken);
       setToken((prev) => storedToken);
@@ -58,20 +56,7 @@ const useSurroundingsWebSocket = ({
     }
   };
 
-
-  const fetchTokenForceRerender = async () => {
-    try {
-      const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
-      console.log("Fetched token:", storedToken); 
-      // can only use closeSocket before setToken if forcing rerender every time
-      // otherwise it may close the socket but the token amy be the same and not trigger it to reopen
-      //closeSocket();
-      setToken((prev) => storedToken);
-    } catch (error) {
-      console.error("Failed to retrieve token:", error);
-    }
-  };
-
+ 
 
 
   // useEffect(() => {
@@ -94,46 +79,43 @@ const useSurroundingsWebSocket = ({
   //   return () => clearInterval(interval);
   // }, []);
 
+
+  //managing app state refreshes in top router right now
   // Reconnect WebSocket when app comes to foreground
-  useEffect(() => {
-    if (appStateVisible === "active") {
-      console.log("App came to foreground - refreshing WebSocket");
-      checkFor401HTTP(); //this will call getCurrentUser and trigger the 401 refresh if needed
-      closeSocket();
-      setToken(null);
-      fetchTokenForceRerender(); //doesn't seem to force if token is same hence setting token to null for now
+  // useEffect(() => {
+  //   if (appStateVisible === "active") {
+  //     console.log("App came to foreground - refreshing WebSocket");
+  //     checkFor401HTTP(); //this will call getCurrentUser and trigger the 401 refresh if needed
+  //     closeSocket();
+  //     setToken(null);
+  //     fetchTokenForceRerender(); //doesn't seem to force if token is same hence setting token to null for now
    
-    }
-  }, [appStateVisible]);
+  //   }
+  // }, [appStateVisible]);
 
 
 
   useEffect(() => {
-    if (tokenVersion) {
-      console.log('tokenversion triggered');
-      closeSocket(); 
+    if (user && user.authenticated && !user.loading) { 
+      //closeSocket(); 
       fetchToken();
 
     }
 
-  }, [tokenVersion]);
+  }, [user]);
 
 
   
 
-  const checkFor401HTTP = async () => {
-    console.log('TESTING REINITIALIZE');
-    await reInitialize();
 
-  };
  
 
   // Manual refresh handling
   useEffect(() => {
     if (manualSurroundingsRefresh) {
       console.log("Manual refresh triggered");
-      closeSocket();
-      setToken(null);
+      // closeSocket();
+      // setToken(null);
       fetchToken();
       resetRefreshSurroundingsManually();
     }

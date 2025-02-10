@@ -168,9 +168,10 @@ const home = () => {
 
   const handleFindNewLocation = (startingAddress) => {
     setOpenSocketForGoPress(true);
+    console.log(startingAddress);
     handleGo(startingAddress);
-    gettingExploreLocations();
-    //showAppMessage(true, null, `Searching for a portal!!`);
+    // gettingExploreLocations();
+    showAppMessage(true, null, `Searching for a weather portal!!`);
     //handleRefresh();
     setOpenSocketForGoPress(false);
   };
@@ -221,14 +222,15 @@ const home = () => {
             <Text style={[themeStyles.primaryText, { fontSize: 50 }]}>GO</Text>
           </TouchableOpacity>
 
-          {itemChoices && !searchIsActive && exploreLocationsAreReady && (
+          {itemChoices && !searchIsActive && (
           <View style={appContainerStyles.innerFlexStartContainer}>
         
         <DataList listData={itemChoices} onCardButtonPress={() => {}} />
       </View>
 )}
+ 
 
-          {user && user.authenticated && !exploreLocationsAreReady && (
+          {user && user.authenticated && searchIsActive && (
             <View
               style={[
                 appContainerStyles.defaultScreenElementContainer,

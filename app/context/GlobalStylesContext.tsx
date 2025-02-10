@@ -233,10 +233,13 @@ const containerStyles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     // borderTopWidth: StyleSheet.hairlineWidth,
-    marginHorizontal: 10,
-    paddingVertical: 15,
+    marginHorizontal: 0,
+    paddingVertical: 12,
     //width: '90%',
-    borderRadius: 25,
+    // borderRadius: 25,
+    borderRadius: 0,
+    // borderTopLeftRadius: 0,
+    // borderTopRightRadius: 0,
     borderCurve: "continuous",
     //shadowColor set in themeStyles
     shadowOffset: { width: 0, height: 10 },
@@ -304,6 +307,19 @@ const containerStyles = StyleSheet.create({
     flex: 1,
     borderWidth: StyleSheet.hairlineWidth,
   },
+  signOutButtonContainer: {
+    overflow: 'hidden',
+    textAlign: 'center',
+    paddingVertical: 7,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    height: 'auto',
+    width: 'auto',
+
+
+  },
 });
 
 const fontStyles = StyleSheet.create({
@@ -335,6 +351,11 @@ const fontStyles = StyleSheet.create({
   exploreTabBarIcon: {
     height: 22,
     width: 22,
+  },
+  signOutText: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    
   },
 });
 
@@ -486,6 +507,7 @@ const lightThemeStyles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   headerTextColor: "#121212",
+ 
 });
 
 const darkThemeStyles = StyleSheet.create({

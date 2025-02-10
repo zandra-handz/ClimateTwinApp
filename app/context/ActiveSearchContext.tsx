@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import { useUser } from './UserContext';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { go } from '../apicalls';
@@ -37,6 +37,13 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({ chil
   const [exploreLocationsAreReady, setExploreLocationsAreReady] = useState<boolean>(true);
   const [manualSurroundingsRefresh, setManualSurroundingsRefresh ] = useState<boolean>(false);
 
+  useEffect(() => {
+    console.log("User changed. Resetting context...");
+    setActiveSearch(null);
+    setSearchIsActive(false);
+    setExploreLocationsAreReady(true);
+    setManualSurroundingsRefresh(false);
+  }, [user]);
 
   const handleGo = (address) => {
     // Make sure `user?.user?.address` is valid before calling the mutation
@@ -57,8 +64,7 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({ chil
       const dataWithTimestamp = {
         ...data,
         timestamp: new Date().toISOString(), // Add a timestamp when the data is fetched
-      };
-      
+      }; 
       // Cache the data with the timestamp
       // NOT USING YET, USING JUST THE EXISTENCE OF ACTIVESEARCH FOR RN
      // queryClient.setQueryData(['activeSearch', user?.user?.id], dataWithTimestamp);

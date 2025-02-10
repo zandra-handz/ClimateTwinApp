@@ -47,9 +47,7 @@ const useWebSocket = ({
   onClose,
 }: WebSocketProps) => {
   const socketRef = useRef<WebSocket | null>(null);
-  const { showAppMessage } = useAppMessage();
-  const { appStateVisible } = useAppState(); 
-  const { foundExploreLocations } = useActiveSearch();
+  const { showAppMessage } = useAppMessage(); 
 
   const TOKEN_KEY = "accessToken";
 
@@ -61,7 +59,7 @@ const useWebSocket = ({
   useFocusEffect(
     useCallback(() => {
       console.log("Location Searcher socket is focused");
-      if (appStateVisible && user && user.authenticated) {
+      if (user && user.authenticated) {
         //if app is in foreground, might be an unnecessary check but I'm not sure
 
         fetchToken();
@@ -85,10 +83,11 @@ const useWebSocket = ({
   }, [reconnectOnUserButtonPress]);
 
   const fetchToken = async () => {
-    console.log("fetching user token in location searcher socket");
+    
     try {
       const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
-      console.log(storedToken);
+      console.log("fetching user token in location searcher socket", storedToken);
+
       setToken(storedToken);
     } catch (error) {
       console.error("Failed to retrieve token:", error);
@@ -120,10 +119,7 @@ const useWebSocket = ({
         const update = JSON.parse(event.data);
      
 
-        if (update && update.message && update.message === "Explore locations are ready!") {
-          console.log('APP GOT EXPLORE LOCATIONS READY MESSAGE!');
-          foundExploreLocations();
-        }
+
         prevPrevLatitude.value = prevLatitude.value;
         prevPrevLongitude.value = prevLongitude.value;
 

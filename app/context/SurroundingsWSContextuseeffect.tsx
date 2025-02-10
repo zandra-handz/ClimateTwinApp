@@ -16,15 +16,16 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   const socketRef = useRef<WebSocket | null>(null);
   const { tokenVersion, reInitialize, user, onSignOut } = useUser();
   const { appStateVisible } = useAppState();
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(null); 
   const [isReconnecting, setIsReconnecting] = useState(false);
 
-  // Time delay for reconnection attempts (e.g., 10 seconds, 20 seconds, etc.)
-  const [reconnectionDelay, setReconnectionDelay] = useState(10000); // Start with 10 seconds
+// Time delay for reconnection attempts (e.g., 10 seconds, 20 seconds, etc.)
+const [reconnectionDelay, setReconnectionDelay] = useState(10000); // Start with 10 seconds
 
+  
   // State variable to hold the last message received.
   const [lastMessage, setLastMessage] = useState<any>(null);
-
+  
   // State variable to trigger reconnection attempts.
   const [reconnectAttempt, setReconnectAttempt] = useState(0);
 
@@ -48,69 +49,65 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     }
   };
 
-  // Manual WebSocket connection function
-  const connectWebSocket = async (token?: string) => {
-    // If no token is passed, attempt to fetch it from SecureStore
-    if (!token) {
-      try {
-        const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
-        if (!storedToken) {
-          console.log(`[${new Date().toISOString()}] No token available in SecureStore.`);
-          return;
-        }
-        token = storedToken; // Use the token fetched from SecureStore
-      } catch (error) {
-        console.error("Failed to retrieve token from SecureStore:", error);
-        return;
-      }
-    }
-  
-    // Proceed with WebSocket connection if a valid token is available
+ // Establish (or re-establish) the WebSocket connection.
+useEffect(() => {
+  if (!token) {
+    console.log(`[${new Date().toISOString()}] No token available for WebSocket`);
+    console.log(`[${new Date().toISOString()}] Authenticated user:`, user.authenticated);
+
+    return;
+  }
+  console.log(`[${new Date().toISOString()}] Authenticated user:`, user.authenticated);
+
+  // Check if the WebSocket is already open before attempting to create a new one
+  if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+    console.log("WebSocket is already open. No need to reconnect.");
+  } else {
+    // If no socket exists or it's not open, create a new WebSocket connection.
     const socketUrl = `wss://climatetwin.com/ws/climate-twin/current/?user_token=${token}`;
     console.log("Connecting to WebSocket:", socketUrl);
-  
-    // Close any existing socket if it's not open
-    if (socketRef.current && socketRef.current.readyState !== WebSocket.OPEN) {
+
+    // Close the existing socket if it's not in an open state
+    if (socketRef.current) {
       console.log("Closing existing Location Update WebSocket connection.");
       socketRef.current.close();
     }
-  
-    // Create a new WebSocket connection
+
+    // Now create a new socket connection
     const socket = new WebSocket(socketUrl);
     socketRef.current = socket;
-  
+
     socket.onopen = () => {
       console.log("Location Update WebSocket connection opened");
-  
+
       // Reset reconnection attempt state on successful connection
-      setIsReconnecting(false);
-      setReconnectionDelay(10000); // Reset delay to 10 seconds
+      // setIsReconnecting(false);
+      // setReconnectionDelay(10000); // Reset delay to 10 seconds
     };
-  
+
     socket.onmessage = (event: WebSocketMessageEvent) => {
       const update = JSON.parse(event.data);
       console.log("Received update from socket in WS context:", update);
       // Update state so that consumers can receive the update.
       setLastMessage(update);
     };
-  
+
     socket.onerror = (event: Event) => {
       console.error("WebSocket error:", event);
       Alert.alert("WEBSOCKET CONNECT ERROR", "Websocket error on trying to connect.");
-      reInitialize(); // This could reset the user state or handle certain errors
-      //attemptReconnect(); // Trigger reconnection attempt
+    
+      reInitialize();
     };
-  
+
     socket.onclose = (event) => {
       console.log("WebSocket closed", event.code, event.reason);
-  
+
       if (event.wasClean) {
         console.log("WebSocket closed cleanly by the server.");
       } else {
         console.warn("WebSocket closed unexpectedly (possibly a server issue).");
       }
-  
-      // Handle different closure codes if needed
+
       if (event.code === 1006) {
         console.error("Abnormal WebSocket closure (possibly lost connection).");
       } else if (event.code === 4001) {
@@ -118,50 +115,36 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       } else if (event.code === 4403) {
         console.error("Forbidden: Authentication token expired or invalid.");
       }
-  
-      // Attempt to reconnect
-      attemptReconnect();
+
+      // Prevent reconnection if one is already in progress
+      // if (!isReconnecting && appStateVisible === "active") {
+      //   console.log("Attempting to reconnect...");
+
+      //   setIsReconnecting(true);
+
+      //   // Use a timeout with increasing delay
+      //   setTimeout(() => {
+      //     console.log("Reconnecting to WebSocket...");
+      //     setReconnectAttempt((prev) => prev + 1); // Increment reconnect attempt
+      //     setReconnectionDelay((prev) => Math.min(prev * 2, 60000)); // Exponential backoff, max delay is 1 minute
+      //   }, reconnectionDelay);
+      // }
     };
+  } 
+  return () => {
+    closeSocket();
   };
-  
+}, [token, reconnectAttempt]);
 
-  // Function to attempt reconnection with exponential backoff
-  const attemptReconnect = () => {
-    if (!isReconnecting && appStateVisible === "active" && user && user.authenticated) {
-      console.log("Attempting to reconnect...");
-      setIsReconnecting(true);
 
-      // Use a timeout with increasing delay
-      setTimeout(() => {
-        console.log("Reconnecting to WebSocket...");
-        setReconnectAttempt((prev) => prev + 1); // Increment reconnect attempt
-        setReconnectionDelay((prev) => Math.min(prev * 2, 60000)); // Exponential backoff, max delay is 1 minute
-        connectWebSocket(); // Attempt to reconnect
-      }, reconnectionDelay);
-    }
-  };
-
-  // Manually fetch the token and initialize the WebSocket connection when the provider mounts
+  // Fetch the token when the provider mounts or when the user changes.
   useEffect(() => {
-    if (user && user.authenticated && !user.loading) {
-      fetchToken();
-    } else {
-      setToken(null); // Clear token when user logs out or is not authenticated
-      setLastMessage(null);
+    if (user && user.authenticated) {
+      
+    fetchToken();
+    
     }
-  }, [user]);
-
-  useEffect(() => {
-    if (token) {
-      console.log('token use effect triggered');
-      connectWebSocket(token); // Manually trigger WebSocket connection on token change
-    }
-
-    // Cleanup the socket on unmount or when token changes
-    return () => {
-      closeSocket();
-    };
-  }, [token]); // Runs when `token` changes
+  }, [user, tokenVersion]);
 
   const sendMessage = (message: any) => {
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {

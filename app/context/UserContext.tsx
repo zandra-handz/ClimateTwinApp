@@ -34,42 +34,49 @@ export const UserProvider = ({ children }) => {
 
     // }, [appSettings]);
 
+
+    useEffect(() => {
+        console.log('user triggered rerender!!!!!!!!!!!!!!!');
+
+    }, [user]);
+
+     
+
+    const reInitialize = async () => {
+        console.log('USER REINIT TRIGGERED!');
+        const token = await SecureStore.getItemAsync(TOKEN_KEY);
+        if (token) {
+            const userData = await getCurrentUser();
     
-    const [tokenVersion, setTokenVersion] = useState(0); // Tracks token changes
-
-const reInitialize = async () => {
-    const token = await SecureStore.getItemAsync(TOKEN_KEY);
-    if (token) {
-        const userData = await getCurrentUser(); //THIS is when interceptor would catch 401 and fetch/store new token to SecureStore, then the reInitialize function would continue
-       
-        if (userData) {
-            setUser(prev => ({
-                ...prev,
-                user: userData,
-                authenticated: true,
-                loading: false, 
-            })); 
+            const userSettingsData = await getUserSettings();
+    
+            if (userData) {
+                setUser(prev => ({
+                    ...prev,
+                    user: userData,
+                    authenticated: true,
+                    loading: false,
+                }));
+            } else {
+                setUser(prev => ({ ...prev, authenticated: false, loading: false }));
+            }
+    
+            if (userSettingsData) {
+                setAppSettings(prev => ({
+                    ...prev,
+                    ...userSettingsData
+                }));
+                
+                setUserNotificationSettings(prev => ({
+                    ...prev,
+                    receive_notifications: userSettingsData?.receive_notifications || false
+                }));
+            } 
         } else {
-            setUser(prev => ({ ...prev, authenticated: false, loading: false }));
+            setUser({ user: null, authenticated: false, loading: false });
         }
-
-        const userSettingsData = await getUserSettings();
-
-        if (userSettingsData) {
-            setAppSettings(userSettingsData || {});
-
-            setUserNotificationSettings({
-                receive_notifications: userSettingsData?.receive_notifications || false
-            }); 
-        }
-
-        // 🚀 Token refresh detected! Increment tokenVersion
-        setTokenVersion(prev => prev + 1);
-    } else {
-        setUser({ user: null, authenticated: false, loading: false });
-    }
-};
-
+    };
+    
     // Reinitialize user data function
     // const reInitialize = async () => {
     //     const token = await SecureStore.getItemAsync(TOKEN_KEY);
@@ -159,9 +166,9 @@ const reInitialize = async () => {
         },
         onSuccess: async (result) => { 
             if (result.data) {
-                const { access: token, refresh } = result.data;
-                await SecureStore.setItemAsync(TOKEN_KEY, token);
-                await SecureStore.setItemAsync('refreshToken', refresh);
+                const { access, refresh } = result.data;
+                await SecureStore.setItemAsync(TOKEN_KEY, access);  // Store the access token
+                await SecureStore.setItemAsync('refreshToken', refresh);  // Store the refresh token
                 await reInitialize();  
             }
         },
@@ -211,6 +218,7 @@ const onSignUp = async (username, email, password) => {
         mutationFn: signup,
         onSuccess: async (result) => {
             if (result.data) {
+                // WHAT IS THIS?
                 await SecureStore.setItemAsync(TOKEN_KEY, result.data.token);
                 await reInitialize(); // Refetch user data after sign-up
             }
@@ -244,19 +252,16 @@ const onSignUp = async (username, email, password) => {
     // });
 
     const onSignOut = async () => {
-        await signout(); // Call your signout API function
-        await SecureStore.deleteItemAsync(TOKEN_KEY); // Clear access token
-        await SecureStore.deleteItemAsync('refreshToken'); // Clear refresh token if applicable
-        await SecureStore.deleteItemAsync('pushToken'); // Clear push token if applicable
+        await signout();  
     
         // Reset user-related state
         setUser({
             user: null,
             authenticated: false,
             loading: false,
-            credentials: {
-                token: null,  
-            },
+            // credentials: {
+            //     token: null,  
+            // },
         });
      
         // setAppSettings(null); 
@@ -327,8 +332,7 @@ const onSignUp = async (username, email, password) => {
             onSignOut,
             reInitialize, // Added to the context
             updateUserSettings: setAppSettings,
-            updateUserNotificationSettings: setUserNotificationSettings, 
-            tokenVersion, //to refresh token
+            updateUserNotificationSettings: setUserNotificationSettings,  
         }}>
             {children}
         </UserContext.Provider>

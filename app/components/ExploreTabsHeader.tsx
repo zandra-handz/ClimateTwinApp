@@ -6,12 +6,12 @@ import WebSocketCurrentLocation from "../components/WebSocketCurrentLocation";
 
 import SignoutSvg from "../assets/svgs/signout.svg";
 
-import { View, Text, Button } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { useNavigation } from "expo-router";
 
 import { DrawerToggleButton } from "@react-navigation/drawer";
 
-const TabHeader = () => {
+const ExploreTabsHeader = () => {
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
   const { user, onSignOut } = useUser();
 
@@ -57,12 +57,14 @@ const TabHeader = () => {
         > */}
           <WebSocketCurrentLocation />
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-          <SignoutSvg
+            <TouchableOpacity onPress={() => handleSignOut()} style={[appContainerStyles.signOutButtonContainer, themeStyles.darkerBackground]}
+            ><Text style={[appFontStyles.signOutText, themeStyles.primaryText]}>Sign out</Text></TouchableOpacity>
+          {/* <SignoutSvg
             onPress={() => handleSignOut()}
             width={22}
             height={22}
             color={themeStyles.primaryText.color}
-          />
+          /> */}
           <DrawerToggleButton tintColor={themeStyles.primaryText.color} />
        
        
@@ -73,4 +75,4 @@ const TabHeader = () => {
   );
 };
 
-export default TabHeader;
+export default ExploreTabsHeader;

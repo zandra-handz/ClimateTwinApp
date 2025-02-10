@@ -19,12 +19,8 @@ interface NearbyLocation {
 }
 
 interface NearbyLocationsContextType {
-  nearbyLocations: NearbyLocation[];
-  twinLocations: NearbyLocation[];
-  discoveryLocations: NearbyLocation[];
-  triggerRefetch: () => void;
-  clearData: () => void;
-  refetchNearbyLocations: () => void; // Expose refetch function
+  nearbyLocations: NearbyLocation[]; 
+   setTriggerFetch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const NearbyLocationsContext = createContext<NearbyLocationsContextType | undefined>(undefined);
@@ -43,60 +39,38 @@ interface NearbyLocationsProviderProps {
 
 export const NearbyLocationsProvider: React.FC<NearbyLocationsProviderProps> = ({ children }) => {
   const { user } = useUser();
-  const queryClient = useQueryClient();
-  const { exploreLocationsAreReady } = useActiveSearch();
+  const queryClient = useQueryClient(); 
+    const [triggerFetch, setTriggerFetch] = useState<boolean>(false); 
 
-  const { data, refetch } = useQuery<NearbyLocation[]>({
+  const { data: nearbyLocations, isLoading, isError, isSuccess } = useQuery<NearbyLocation[]>({
     queryKey: ['nearbyLocations'],
     queryFn: getNearbyLocations,
     enabled: !!user && !!user.authenticated,
     onError: (err) => {
       console.error('Error fetching location data:', err);
     },
+    onSuccess: (data) => {
+      if (data) {
+        console.log('getTwinLocation query success:', data);
+        // Data is already in the correct structure, no mapping needed here
+      }
+    },
   });
 
-  const [nearbyLocations, setNearbyLocations] = useState<NearbyLocation[]>(data ?? []);
-  const twinLocations = nearbyLocations?.length ? nearbyLocations.filter((loc) => loc.explore_type === 'twin_location') : [];
-  const discoveryLocations = nearbyLocations?.length ? nearbyLocations.filter((loc) => loc.explore_type === 'discovery_location') : [];
-
+  
   const triggerRefetch = () => {
     queryClient.invalidateQueries({ queryKey: ['nearbyLocations'] });
   };
 
-  const clearData = () => {
-    setNearbyLocations([]); 
-    queryClient.removeQueries({ queryKey: ['nearbyLocations'] });
-  };
-
-  const refetchNearbyLocations = async () => {
-    // If query data has been removed from cache, manually trigger the fetch
-    if (!queryClient.getQueryData(['nearbyLocations'])) {
-      try {
-        const fetchedData = await getNearbyLocations(); // Manually fetch the data
-        setNearbyLocations(fetchedData); // Set to local state
-        queryClient.setQueryData(['nearbyLocations'], fetchedData); // Update the cache
-      } catch (error) {
-        console.error('Error fetching nearby locations:', error);
-      }
-    } else {
-      refetch(); // If data exists in cache, use the refetch method
-    }
-  };
-  
-
-
-  useEffect(() => {
-    console.log('explorelocations', exploreLocationsAreReady);
-    if (exploreLocationsAreReady) {
-      refetchNearbyLocations();
-    } else {
-      clearData();
-    }
-
-  }, [exploreLocationsAreReady]);
+  // const clearData = () => {
+  //   setNearbyLocations([]); 
+  //   queryClient.removeQueries({ queryKey: ['nearbyLocations'] });
+  // };
+ 
+   
 
   return (
-    <NearbyLocationsContext.Provider value={{ nearbyLocations, twinLocations, discoveryLocations, triggerRefetch, clearData, refetchNearbyLocations }}>
+    <NearbyLocationsContext.Provider value={{ nearbyLocations, triggerRefetch }}>
       {children}
     </NearbyLocationsContext.Provider>
   );

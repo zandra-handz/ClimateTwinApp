@@ -24,15 +24,13 @@ import { useActiveSearch } from "@/app/context/ActiveSearchContext";
 import { exploreLocation } from "@/app/apicalls";
 
 const nearby = () => {
-  const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
-  const { searchIsActive, refreshSurroundingsManually } = useActiveSearch();
-  const { showAppMessage } = useAppMessage();
-  const { triggerRefetch, nearbyLocations, nearbyLocationsCount, refetchNearbyLocations } = useNearbyLocations();
+  const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();  
+  const { triggerRefetch, nearbyLocations  } = useNearbyLocations();
  
   useFocusEffect(
     useCallback(() => {
-      console.log("Nearby location screen is focused");
-      refetchNearbyLocations();
+      console.log('triggering neary locations refetch');
+      triggerRefetch();
       return () => {
         console.log("nearby location screen is unfocused"); 
       };
@@ -40,11 +38,9 @@ const nearby = () => {
   );
   
   // useEffect(() => {
-  //   if (nearbyLocations) {
-  //     console.log(`nearby locations! `, nearbyLocations);
-  //     console.log(nearbyLocationsCount);
-  //   }
-  // }, [nearbyLocations]);
+  //   console.log('triggering neary locations refetch');
+  //   triggerRefetch();
+  // }, []);
 
 
 
@@ -83,7 +79,7 @@ const nearby = () => {
       >
         <View style={appContainerStyles.innerFlexStartContainer}>
         
-            {nearbyLocations && !searchIsActive && <DataList listData={nearbyLocations} onCardButtonPress={handleExploreLocation} />}
+            {nearbyLocations && <DataList listData={nearbyLocations} onCardButtonPress={handleExploreLocation} />}
           </View>
       </View>
     </>

@@ -4,7 +4,7 @@ import { TabList, TabTrigger, TabSlot } from 'expo-router/ui';
 import { Drawer } from 'expo-router/drawer';
 import PrimaryTabBar from '../components/PrimaryTabBar';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import TabHeader from "../components/TabHeader";
+import ExploreTabsHeader from "../components/ExploreTabsHeader";
 
 export default () => {
 
@@ -44,7 +44,7 @@ export default () => {
       // <Tabs.Screen name="treasures" options={{ header: () => null }} /> */}
 
 
-      <Drawer.Screen name="(tabs)" options={{ header: () => <TabHeader />, drawerLabel: 'Explore', title: 'home' }} />
+      <Drawer.Screen name="(tabs)" options={{ header: () => <ExploreTabsHeader />, drawerLabel: 'Explore', title: 'home' }} />
     
       <Drawer.Screen name="friends" options={{ header: () => null,drawerLabel: 'Friends' }} />
       <Drawer.Screen name="inbox" options={{ header: () => null, drawerLabel: 'Inbox' }} />

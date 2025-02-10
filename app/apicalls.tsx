@@ -1,4 +1,5 @@
 import axios from 'axios';  
+import { useState } from 'react';
 import * as SecureStore from 'expo-secure-store'; 
 //export const API_URL = 'https://ac67e9fa-7838-487d-a3bc-e7a176f4bfbf-dev.e1-us-cdp-2.choreoapis.dev/hellofriend/hellofriend/rest-api-be2/v1.0/';
 
@@ -29,36 +30,30 @@ export const setAuthHeader = (token) => {
 
 
 const TOKEN_KEY = 'accessToken';
-
-
-export const getToken = async () => await SecureStore.getItemAsync(TOKEN_KEY);
-
-export const setToken = async (token) => await SecureStore.setItemAsync(TOKEN_KEY, token);
-
+ 
 export const deleteTokens = async () => {
     await SecureStore.deleteItemAsync(TOKEN_KEY);
     await SecureStore.deleteItemAsync('refreshToken');
     await SecureStore.deleteItemAsync('pushToken');
 };
-//
+// 
 
 const refreshTokenFunct = async () => {
     const storedRefreshToken = await SecureStore.getItemAsync('refreshToken');
     if (!storedRefreshToken) {
         console.warn('No refresh token available');
-        return null;  // Return early if there's no refresh token
-    }
+        return null;
+    } 
 
     try {
         const response = await axios.post('/users/token/refresh/', { refresh: storedRefreshToken });
         const newAccessToken = response.data.access;
-
-        await setToken(newAccessToken);
-        await SecureStore.setItemAsync('accessToken', newAccessToken);
-       
+        await SecureStore.setItemAsync('accessToken',  response.data.access);
+        console.log('ACCESS TOKEN SAVED TO SECURE STORE:',  response.data.access);
+        await SecureStore.setItemAsync('refreshToken',  response.data.refresh);
         return newAccessToken;
     } catch (error) {
-        console.error('Error refreshing token api file:', error);
+        console.error('Error refreshing token:', error);
         throw error;
     }
 };
@@ -68,6 +63,7 @@ export const signout = async () => {
     try {
         await SecureStore.deleteItemAsync('accessToken');
         await SecureStore.deleteItemAsync('refreshToken');
+        await SecureStore.deleteItemAsync('pushToken');
         await SecureStore.deleteItemAsync('tokenExpiry');
         setAuthHeader(null); 
         console.log("API signout: Authorization header cleared");
@@ -142,8 +138,7 @@ axios.interceptors.response.use(
 
                     // Update the Authorization header for all queued requests
                     onRefreshed(newAccessToken);
-                    setAuthHeader(newAccessToken);
-                    await setToken(newAccessToken);
+                    setAuthHeader(newAccessToken); 
                     originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
                     return axios(originalRequest);
                 } catch (err) {
@@ -171,12 +166,15 @@ export const signinWithoutRefresh = async ({ username, password }) => {
         const result = await axios.post('/users/token/', { username, password });
         console.log(`API POST CALL signinWithoutRefresh`, result);
 
-        if (result.data && result.data.access) {
-            console.log("Access token received:", result.data.access);
-            setAuthHeader(result.data.access); // Store the token for later use
-           
-            await setToken(result.data.access);
-            return result; // Successful response
+        if (result.data && result.data.access) { 
+            console.log(result.data);
+            await SecureStore.setItemAsync('accessToken', result.data.access);
+            console.log('ACCESS TOKEN SAVED TO SECURE STORE:', result.data.access);
+            await SecureStore.setItemAsync('refreshToken', result.data.refresh);
+            
+            
+            setAuthHeader(result.data.access); 
+            return result; 
         } else {
             throw new Error("Unexpected response format");
         }
@@ -246,8 +244,11 @@ export const signin = async ({ username, password }) => {
 
         if (result.data && result.data.access) {
             //console.log("Access token:", result.data.access);
-            setAuthHeader(result.data.access); // Assuming setAuthHeader is defined elsewhere
-            await setToken(result.data.access);
+            await SecureStore.setItemAsync('accessToken', result.data.access);
+            console.log('ACCESS TOKEN SAVED TO SECURE STORE:', result.data.access);
+            setAuthHeader(result.data.access); 
+            await SecureStore.setItemAsync('refreshToken', result.data.refresh);
+            
             return result; // Successful response
         } else {
             throw new Error("Unexpected response format");
@@ -269,7 +270,7 @@ export const signin = async ({ username, password }) => {
 
 export const getUserSettings = async () => {
     try {
-        console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+       // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/users/settings/');
         console.log('API GET Call getUserSettings'); //, response.data);
         return response.data[0];
@@ -289,7 +290,7 @@ export const getUserSettings = async () => {
 
 export const getCurrentUser = async () => {
     try {
-        console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+       // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/users/get-current/');
         console.log('API GET Call getCurrentUser', response.data);
         return response.data;
@@ -310,7 +311,8 @@ export const getCurrentUser = async () => {
 export const go = async (startingAddress) => {
     const address = {address : startingAddress}
     try {
-        //console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        console.log(address);
+        console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.post('/climatevisitor/go/', address); 
         console.log(response.status);
         return response.data[0];
@@ -346,7 +348,7 @@ export const updateUserSettings = async (userId, updatedSettings) => {
 
   export const getLaunchpadData = async () => {
     try {
-        console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+      //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/climatevisitor/launchpad-data/');
         console.log('API GET Call launchPadData', response.data);
         return response.data;
@@ -367,7 +369,7 @@ export const updateUserSettings = async (userId, updatedSettings) => {
 
   export const getTwinLocation = async () => {
     try {
-        console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+       // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/climatevisitor/currently-visiting/');
         console.log('API GET Call matchedLocation', response.data);
         return response.data;
@@ -386,7 +388,7 @@ export const updateUserSettings = async (userId, updatedSettings) => {
 
 export const getExploreLocation = async () => {
     try {
-        console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+      //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/climatevisitor/currently-exploring/');
         console.log('API GET Call getExploreLocation', response.data);
         return response.data;
@@ -404,7 +406,7 @@ export const getExploreLocation = async () => {
 
 export const getItemChoices = async () => {
     try {
-        console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+       // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/climatevisitor/item-choices/');
         console.log('API GET Call getItemChoices'); //, response.data);
         return response.data;
@@ -423,7 +425,7 @@ export const getItemChoices = async () => {
 
 export const getTreasures = async () => {
     try {
-        console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+      //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/users/treasures/');
         console.log('API GET Call getTreaures'); //, response.data);
         return response.data;
@@ -442,7 +444,7 @@ export const getTreasures = async () => {
 
 export const getInboxItems = async () => {
     try {
-        console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+       // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/users/inbox/items/');
         console.log('API GET Call getInboxItems'); //, response.data);
         return response.data;
@@ -462,7 +464,7 @@ export const getInboxItems = async () => {
 
 export const getFriends = async () => {
     try {
-        console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+      //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/users/friends/');
         console.log('API GET Call getFriends'); //, response.data);
         return response.data;
@@ -480,7 +482,7 @@ export const getFriends = async () => {
 
 export const getNearbyLocations = async () => {
     try {
-        console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+       // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/climatevisitor/currently-nearby/');
         console.log('API GET Call getNearyLocations'); //, response.data);
         return response.data;
@@ -500,7 +502,7 @@ export const getNearbyLocations = async () => {
 export const exploreLocation = async (locationId) => {
     console.log(locationId);
     try {
-        console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+      //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.post('/climatevisitor/explore/', locationId);
         console.log('API GET Call getNearyLocations', response.data);
         return response.data;
