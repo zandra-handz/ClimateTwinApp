@@ -17,38 +17,34 @@ const WebSocketCurrentLocation: React.FC = () => {
   const { showAppMessage} = useAppMessage();
   const { triggerRefetch } = useNearbyLocations();
   
-  const { sendMessage, lastMessage } = useSurroundingsWS();
+  const { sendMessage, lastMessage, lastLocationName } = useSurroundingsWS();
 
    
   useEffect(() => {
     if (lastMessage) {
-      if (lastMessage.message === 'Searching for ruins!') {
+      if (lastMessage === 'Searching for ruins!') {
         closeSearchExternally(); 
         gettingExploreLocations();
         showAppMessage(true, null, 'Searching for ruins!');
-      } else if (lastMessage.message === 'No ruins found') {
+      } else if (lastMessage === 'No ruins found') {
         showAppMessage(true, null, 'No ruins found nearby');
-      } else if (lastMessage.message === 'Search complete!') {
+      } else if (lastMessage === 'Search complete!') {
         foundExploreLocations();
         triggerRefetch();
         showAppMessage(true, null, 'Search complete!');
-      } else if (lastMessage.message === '') {
+      } else if (lastMessage === '') {
         foundExploreLocations();
       }
     }
   }, [lastMessage]);
   
   useEffect(() => {
-    console.log(lastMessage);
-    // if (lastMessage?.name && lastMessage.name !== update) {
-    //   setUpdate(lastMessage.name);
-    //   closeSearchExternally();
-    // } else 
-    if (lastMessage?.name) {
-      console.log('setting name');
-      setUpdate(lastMessage.name); // This happens only if the name has changed
+    console.log('last location name: ', lastLocationName);
+    if (lastLocationName && lastLocationName !== update) {
+      console.log('setting last location name');
+      setUpdate(lastLocationName); // Only update if the name has changed
     }
-  }, [lastMessage, update]);  
+  }, [lastLocationName]);
 
   return (
     <View style={appContainerStyles.defaultElementRow}>

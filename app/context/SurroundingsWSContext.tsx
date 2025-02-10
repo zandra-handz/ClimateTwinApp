@@ -7,6 +7,7 @@ import { useAppState } from "../context/AppStateContext";
 interface SurroundingsWSContextType {
   sendMessage: (message: any) => void;
   lastMessage: any; // You can specify a more strict type if you know the structure
+  lastLocationName: any;
 }
 
 const SurroundingsWSContext = createContext<SurroundingsWSContextType | undefined>(undefined);
@@ -24,6 +25,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
   // State variable to hold the last message received.
   const [lastMessage, setLastMessage] = useState<any>(null);
+  const [lastLocationName, setLastLocationName] = useState<any>(null);
 
   // State variable to trigger reconnection attempts.
   const [reconnectAttempt, setReconnectAttempt] = useState(0);
@@ -91,7 +93,15 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       const update = JSON.parse(event.data);
       console.log("Received update from socket in WS context:", update);
       // Update state so that consumers can receive the update.
-      setLastMessage(update);
+     // setLastMessage(update);
+
+      if (update.message) {
+        setLastMessage(update.message); // Update the message state
+      }
+    
+      if (update.name) {
+        setLastLocationName(update.name); // Update the name state
+      }
     };
   
     socket.onerror = (event: Event) => {
@@ -148,6 +158,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     } else {
       setToken(null); // Clear token when user logs out or is not authenticated
       setLastMessage(null);
+      setLastLocationName(null);
     }
   }, [user]);
 
@@ -173,7 +184,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   };
 
   return (
-    <SurroundingsWSContext.Provider value={{ sendMessage, lastMessage }}>
+    <SurroundingsWSContext.Provider value={{ sendMessage, lastMessage, lastLocationName }}>
       {children}
     </SurroundingsWSContext.Provider>
   );
