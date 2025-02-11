@@ -14,7 +14,7 @@ const DataList = ({listData, onCardButtonPress}) => {
 
     const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
     return (
-<View style={[themeStyles.primaryBackground, appContainerStyles.dataListContainer]}>
+<View style={[ appContainerStyles.dataListContainer]}>
   <FlatList
     data={listData}
     keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()} 

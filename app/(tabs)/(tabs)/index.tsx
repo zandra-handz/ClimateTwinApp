@@ -29,6 +29,8 @@ import { StatusBar } from "expo-status-bar";
 
 import { useActiveSearch } from "../../context/ActiveSearchContext";
 
+import GoButton from "@/app/components/GoButton";
+
 const home = () => {
   useGeolocationWatcher();
   const { user, onSignOut } = useUser(); 
@@ -166,15 +168,15 @@ const home = () => {
     router.push("/signin"); // Navigate to the /recover-credentials screen
   };
 
-  const handleFindNewLocation = (startingAddress) => {
-    setOpenSocketForGoPress(true);
-    console.log(startingAddress);
-    handleGo(startingAddress);
-    // gettingExploreLocations();
-    showAppMessage(true, null, `Searching for a weather portal!!`);
-    //handleRefresh();
-    setOpenSocketForGoPress(false);
-  };
+  // const handleFindNewLocation = (startingAddress) => {
+  //   setOpenSocketForGoPress(true);
+  //   console.log(startingAddress);
+  //   handleGo(startingAddress);
+  //   // gettingExploreLocations();
+  //   showAppMessage(true, null, `Searching for a weather portal!!`);
+  //   //handleRefresh();
+  //   setOpenSocketForGoPress(false);
+  // };
 
   // useEffect(() => {
   //   console.log("home screen rerendered");
@@ -206,21 +208,9 @@ const home = () => {
         </View>  */}
                
         <View style={appContainerStyles.innerFlexStartContainer}>
+          <GoButton address={homeLocation?.address || "Manchester, NH"} />
        
-          <TouchableOpacity
-            onPress={() =>
-              handleFindNewLocation(homeLocation?.address || "Manchester, NH")
-            }
-            style={{
-              height: "auto",
-              width: "100%",
-              paddingVertical: '2%',
-              alignItems: "center",
-              justifyContent: "center",
-            }}
-          >
-            <Text style={[themeStyles.primaryText, { fontSize: 50 }]}>GO</Text>
-          </TouchableOpacity>
+       
 
           {itemChoices && !searchIsActive && (
           <View style={appContainerStyles.innerFlexStartContainer}>
@@ -242,7 +232,7 @@ const home = () => {
               ]}
             >
               <WebSocketSearchingLocations 
-                reconnectOnUserButtonPress={openSocketForGoPress}
+                reconnectOnUserButtonPress={searchIsActive}
               />
             </View>
 

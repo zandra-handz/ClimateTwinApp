@@ -321,16 +321,49 @@ export const go = async (startingAddress) => {
         Alert.alert('DEBUG MODE: Request Failed', 'The request could not be sent. Please try again.');
         
         if (error.response) {
-            console.error('Error response for /auth/users/:', error);
+            console.error('Error response for /climatevisitor/go/:', error);
         } else if (error.request) {
-            console.error('Error request for /auth/users/:');
+            console.error('Error request for /climatevisitor/go/:');
         } else {
-            console.error('Error message for /auth/users/:');
+            console.error('Error message for /climatevisitor/go/:');
         }
         throw error;
     }
 };
- 
+
+
+
+export const getRemainingGoes = async () => {
+    try {
+        const response = await axios.get('/climatevisitor/get-remaining-goes/');
+        console.log('getRemainingGoes response: ', response.data);
+
+        // Check if response.data is valid and has the properties you're expecting
+        if (response.data) {
+            // Check for specific fields based on your API structure
+            if (response.data.remaining_goes) {
+                return response.data.remaining_goes;
+            } else if (response.data.details) {
+                return response.data.details;
+            }
+        }
+
+        // If nothing matches, you can return an appropriate fallback or throw an error
+        return 'No remaining goes data';
+
+    } catch (error) {
+        // Handle any error that occurs during the request
+        if (error.response) {
+            console.error('Error response:', error.response);
+        } else if (error.request) {
+            console.error('Error request:', error.request);
+        } else {
+            console.error('Error message:', error.message);
+        }
+        throw error;
+    }
+};
+
 
 export const updateUserSettings = async (userId, updatedSettings) => {
     try {

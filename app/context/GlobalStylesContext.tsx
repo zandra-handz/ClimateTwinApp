@@ -184,7 +184,7 @@ const containerStyles = StyleSheet.create({
     width: "100%",
     justifyContent: "space-between",
     flexDirection: "column",
-    paddingVertical: "0%",
+    // paddingVertical: "0%",
     zIndex: 1,
   },
   headerContainer: {
@@ -264,6 +264,7 @@ const containerStyles = StyleSheet.create({
     paddingHorizontal: "3%",
     flexDirection: "column",
     flex: 1,
+  //  backgroundColor: 'teal',
   },
   inScreenHeaderContainer: {
     width: "100%",
@@ -301,7 +302,7 @@ const containerStyles = StyleSheet.create({
   dataCardContainer: {
     height: "auto",
     padding: 30,
-    borderRadius: 20,
+    borderRadius: 30,
     width: "100%",
     flexDirection: "column",
     flex: 1,
@@ -325,6 +326,10 @@ const containerStyles = StyleSheet.create({
 const fontStyles = StyleSheet.create({
   headerText: {
     fontSize: 28,
+  },
+  goButtonText: {
+    fontSize: 50,
+
   },
   solitaryHeaderMessageText: {
     fontSize: 20,

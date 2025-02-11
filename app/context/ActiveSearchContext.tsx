@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, { createContext, useContext, useRef, useState, ReactNode, useEffect } from 'react';
 import { useUser } from './UserContext';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { go } from '../apicalls';
+import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';  
+import { go, getRemainingGoes } from '../apicalls';
 
 interface ActiveSearch {
   id: string;
@@ -32,6 +32,7 @@ interface ActiveSearchProviderProps {
 export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({ children }) => {
   const { user } = useUser(); 
   const queryClient = useQueryClient();
+  const timeoutRef = useRef(null);
   const [activeSearch, setActiveSearch] = useState<ActiveSearch | null>(null);
   const [searchIsActive, setSearchIsActive] = useState<boolean>(false);
   const [exploreLocationsAreReady, setExploreLocationsAreReady] = useState<boolean>(true);
@@ -45,22 +46,49 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({ chil
     setManualSurroundingsRefresh(false);
   }, [user]);
 
+
+  
+  const { data: remainingGoes, isLoading, isFetching, isSuccess, isError } = useQuery({
+    queryKey: ['remainingGoes'],
+    queryFn: () => getRemainingGoes(),
+    enabled: !!user && !!user.authenticated,
+    onSuccess: (data) => { 
+        
+    }
+});
+
+
+const refetchRemainingGoes = () => {
+    queryClient.invalidateQueries({ queryKey: ['remainingGoes'] });
+  };
+
+
   const handleGo = (address) => {
     // Make sure `user?.user?.address` is valid before calling the mutation
     if (address) {
-      mutation.mutate(address);
+      sendGoRequestMutation.mutate(address);
     } else {
       console.error('User address is unavailable');
     }
   };
 
-  const mutation = useMutation({
-    mutationFn: (address) => go(address), // Ensure you pass the required argument
+  const sendGoRequestMutation = useMutation({
+    mutationFn: (address) => go(address),
     onMutate: () => {
       setSearchIsActive(true);
     },
+    onError: (error) => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        sendGoRequestMutation.reset();
+      }, 2000);
+    },
     onSuccess: (data) => {
-      // Create a new data object with a timestamp
+      refetchRemainingGoes();
+
       const dataWithTimestamp = {
         ...data,
         timestamp: new Date().toISOString(), // Add a timestamp when the data is fetched
@@ -72,11 +100,18 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({ chil
       // Optionally update the activeSearch state with the new data
       setActiveSearch(dataWithTimestamp);
       console.log('Data with timestamp:', dataWithTimestamp);
+ 
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        sendGoRequestMutation.reset();
+      }, 2000);
     },
-    onError: (err) => {
-      console.error('Error fetching go data:', err);
-    }
   });
+
 
 
   const gettingExploreLocations = () => {
@@ -111,7 +146,7 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({ chil
   };
 
   return (
-    <ActiveSearchContext.Provider value={{ activeSearch, searchIsActive, exploreLocationsAreReady, gettingExploreLocations, foundExploreLocations, handleGo, closeSearchExternally, refreshSurroundingsManually,  resetRefreshSurroundingsManually, manualSurroundingsRefresh }}>
+    <ActiveSearchContext.Provider value={{ activeSearch, searchIsActive, exploreLocationsAreReady, gettingExploreLocations, foundExploreLocations, handleGo, closeSearchExternally, refreshSurroundingsManually,  resetRefreshSurroundingsManually, manualSurroundingsRefresh, remainingGoes }}>
       {children}
     </ActiveSearchContext.Provider>
   );
