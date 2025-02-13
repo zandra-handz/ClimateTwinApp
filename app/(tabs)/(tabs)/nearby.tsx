@@ -19,13 +19,14 @@ import DataList from "../../components/DataList";
 import { useFocusEffect } from "expo-router";
 
 import { useActiveSearch } from "@/app/context/ActiveSearchContext";
+import { useSurroundings } from "@/app/context/CurrentSurroundingsContext";
 
-
-import { exploreLocation } from "@/app/apicalls";
+import { pickNewSurroundings } from "@/app/apicalls";
 
 const nearby = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();  
   const { triggerRefetch, nearbyLocations  } = useNearbyLocations();
+  const { handlePickNewSurroundings } = useSurroundings();
  
   useFocusEffect(
     useCallback(() => {
@@ -53,14 +54,17 @@ const nearby = () => {
   // originally, twin location couldn't be an explore location (?)
 //this will move to the surroundings context so that i can control behaviors based on mutations
   const handleExploreLocation = (data) => {
-    console.log('handle explore location pressed!', data);
+    //console.log('handle explore location pressed!', data);
+
+
+    handlePickNewSurroundings(data); 
   
-    if (data && data.explore_type) {
-      const locationType = data.explore_type === 'discovery_location' ? 'explore_location' : 'twin_location';
-  //MOVE TO HOOK AND USE A MUTATION TO TRIGGER THE REFRESH
-      exploreLocation({ [locationType]: data.id }); 
-      //refreshSurroundingsManually();
-    }
+  //   if (data && data.explore_type) {
+  //     const locationType = data.explore_type === 'discovery_location' ? 'explore_location' : 'twin_location';
+  // //MOVE TO HOOK AND USE A MUTATION TO TRIGGER THE REFRESH
+  //     pickNewSurroundings({ [locationType]: data.id }); 
+  //     //refreshSurroundingsManually();
+  //   }
   };
   
   return (

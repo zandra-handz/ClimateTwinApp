@@ -422,16 +422,16 @@ export const updateUserSettings = async (userId, updatedSettings) => {
 export const getExploreLocation = async () => {
     try {
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
-        const response = await axios.get('/climatevisitor/currently-exploring/');
-        console.log('API GET Call getExploreLocation', response.data);
+        const response = await axios.get('/climatevisitor/currently-exploring/v2/');
+        console.log('API GET Call getExploreLocation');  //, response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
-            console.error('Error response for /climatevisitor/currently-exploring/:', error.response.data);
+            console.error('Error response for /climatevisitor/currently-exploring/v2/:', error.response.data);
         } else if (error.request) {
-            console.error('Error request for /climatevisitor/currently-exploring/, add console logging in api file for more details');
+            console.error('Error request for /climatevisitor/currently-exploring/v2/, add console logging in api file for more details');
         } else {
-            console.error('Error message for /climatevisitor/currently-exploring/, add console logging in api file for more details');
+            console.error('Error message for /climatevisitor/currently-exploring/v2/, add console logging in api file for more details');
         }
         throw error;
     }
@@ -532,20 +532,20 @@ export const getNearbyLocations = async () => {
 };
 
 
-export const exploreLocation = async (locationId) => {
+export const pickNewSurroundings = async (locationId) => {
     console.log(locationId);
     try {
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
-        const response = await axios.post('/climatevisitor/explore/', locationId);
+        const response = await axios.post('/climatevisitor/explore/v2/', locationId);
         console.log('API GET Call getNearyLocations', response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
-            console.error('Error response for /climatevisitor/explore/:', error.response.data);
+            console.error('Error response for /climatevisitor/explore/v2/:', error.response.data);
         } else if (error.request) {
-            console.error('Error request for /climatevisitor/explore/, add console logging in api file for more details');
+            console.error('Error request for /climatevisitor/explore/v2/, add console logging in api file for more details');
         } else {
-            console.error('Error message for /climatevisitor/explore/, add console logging in api file for more details');
+            console.error('Error message for /climatevisitor/explore/v2/, add console logging in api file for more details');
         }
         throw error;
     }

@@ -319,8 +319,26 @@ const containerStyles = StyleSheet.create({
     height: 'auto',
     width: 'auto',
 
-
   },
+  surroundingsCardContainer: { 
+    borderRadius: 10,
+    padding: 10,
+    paddingTop: 40,
+    marginBottom: 10,
+    width: '30%',  
+    alignItems: 'center',
+    justifyContent: 'center',
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 3.5,
+    // elevation: 5,  // Adds shadow effect on Android
+    margin: 4,
+    flexGrow: 1,
+    height: 140,
+    overflow: 'hidden',
+
+  }
 });
 
 const fontStyles = StyleSheet.create({
@@ -389,6 +407,9 @@ const lightThemeStyles = StyleSheet.create({
   },
   darkerBackground: {
     backgroundColor: "#ccc",
+  },
+  darkestBackground: {
+    backgroundColor: "darkgray",
   },
   primaryBorder: {
     color: "#121212",

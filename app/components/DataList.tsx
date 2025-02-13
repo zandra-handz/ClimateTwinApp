@@ -17,7 +17,11 @@ const DataList = ({listData, onCardButtonPress}) => {
 <View style={[ appContainerStyles.dataListContainer]}>
   <FlatList
     data={listData}
-    keyExtractor={(item, index) => item.id ? item.id.toString() : index.toString()} 
+    keyExtractor={(item, index) => 
+      item.id 
+        ? `${item.id}-${item.timestamp || index}` // Ensures uniqueness if the same ID appears again
+        : index.toString()
+    }
     renderItem={({ item }) => (
       <View style={{ marginVertical: '2%' }}>
         <DataCard data={item} onPress={onCardButtonPress} />

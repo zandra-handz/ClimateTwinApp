@@ -13,7 +13,7 @@ const WebSocketCurrentLocation: React.FC = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const { user } = useUser();
   const [update, setUpdate] = useState<string | null>(null);
-  const { closeSearchExternally, gettingExploreLocations, foundExploreLocations } = useActiveSearch();
+  const { closeSearchExternally, refreshSurroundingsManually, gettingExploreLocations, foundExploreLocations } = useActiveSearch();
   const { showAppMessage} = useAppMessage();
   const { triggerRefetch } = useNearbyLocations();
   
@@ -40,7 +40,12 @@ const WebSocketCurrentLocation: React.FC = () => {
   
   useEffect(() => {
     console.log('last location name: ', lastLocationName);
-    if (lastLocationName && lastLocationName !== update) {
+    if (!lastLocationName) {
+      setUpdate("You are home");
+    } else if (lastLocationName && lastLocationName === "null") {
+      setUpdate("You are home");
+    } else if (lastLocationName && lastLocationName !== update) {
+      refreshSurroundingsManually();
       console.log('setting last location name');
       setUpdate(lastLocationName); // Only update if the name has changed
     }

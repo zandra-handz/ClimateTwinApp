@@ -39,8 +39,7 @@ interface NearbyLocationsProviderProps {
 
 export const NearbyLocationsProvider: React.FC<NearbyLocationsProviderProps> = ({ children }) => {
   const { user } = useUser();
-  const queryClient = useQueryClient(); 
-    const [triggerFetch, setTriggerFetch] = useState<boolean>(false); 
+  const queryClient = useQueryClient();  
 
   const { data: nearbyLocations, isLoading, isError, isSuccess } = useQuery<NearbyLocation[]>({
     queryKey: ['nearbyLocations'],
@@ -61,11 +60,6 @@ export const NearbyLocationsProvider: React.FC<NearbyLocationsProviderProps> = (
   const triggerRefetch = () => {
     queryClient.invalidateQueries({ queryKey: ['nearbyLocations'] });
   };
-
-  // const clearData = () => {
-  //   setNearbyLocations([]); 
-  //   queryClient.removeQueries({ queryKey: ['nearbyLocations'] });
-  // };
  
    
 

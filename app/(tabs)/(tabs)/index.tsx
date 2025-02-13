@@ -1,10 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import {
-  SafeAreaView,
-  View,
-  Text,
-  TouchableOpacity, 
-} from "react-native";
+import { SafeAreaView, View, Text, TouchableOpacity } from "react-native";
 import * as SecureStore from "expo-secure-store";
 import { useGeolocationWatcher } from "../../hooks/useCurrentLocationWatcher";
 import { useFocusEffect } from "expo-router";
@@ -20,6 +15,8 @@ import { useRouter, Link } from "expo-router";
 import { useNearbyLocations } from "@/app/context/NearbyLocationsContext";
 import DataList from "../../components/DataList";
 
+import CurrentSurroundingsView from "@/app/components/CurrentSurroundingsView";
+
 import { useAppMessage } from "../../context/AppMessageContext";
 import { DrawerToggleButton } from "@react-navigation/drawer";
 
@@ -33,157 +30,52 @@ import GoButton from "@/app/components/GoButton";
 
 const home = () => {
   useGeolocationWatcher();
-  const { user, onSignOut } = useUser(); 
+  const { user, onSignOut } = useUser();
   const { itemChoices, triggerItemChoicesRefetch } = useInteractiveElements();
   const { matchedLocation } = useMatchedLocation();
-  const { exploreLocation } = useSurroundings();
+  const { currentSurroundings, portalLocation, ruinsLocation } = useSurroundings();
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const [token, setToken] = useState<string | null>(null);
   const { homeLocation, homeRegion } = useHomeLocation();
   const { showAppMessage } = useAppMessage();
-  const { handleGo, searchIsActive, gettingExploreLocations, exploreLocationsAreReady } = useActiveSearch();
- 
+  const {
+    handleGo,
+    searchIsActive,
+    gettingExploreLocations,
+    exploreLocationsAreReady,
+  } = useActiveSearch();
 
   const TOKEN_KEY = "accessToken";
 
   const router = useRouter();
+ 
 
-
-
-    useFocusEffect(
-      useCallback(() => { 
-        triggerItemChoicesRefetch();
-        return () => {
-          console.log("item choices is unfocused"); 
-        };
-      }, [])
-    );
-
-
-  // useEffect(() => {
-  //   if (itemChoices) {
-  //     console.log('ITEM CHOICES! ', itemChoices);
-  //   }
-
-  // }, [itemChoices]);
-
-
-      //  useFocusEffect(
-      //    useCallback(() => {
-      //      if ( user && user.authenticated) { //if app is in foreground, might be an unnecessary check but I'm not sure
-            
-      //      setToken(null);
-      //      fetchToken();
-      //     //  setTriggerReconnectAfterFetch(true);
-           
-      //     }
-     
-      //      return () => { 
-      //        setToken(null);
-      //       //  setTriggerReconnectAfterFetch(false);
-      //      };
-      //    }, [])
-      //  );
-
-  // useEffect(() => {
-  //   if (matchedLocation) {
-  //     console.log(`matched location!`, matchedLocation.name);
-  //   }
-
-  // }, [matchedLocation]);
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     triggerItemChoicesRefetch();
+  //     return () => {
+  //       console.log("item choices is unfocused");
+  //     };
+  //   }, [])
+  // );
 
   useEffect(() => {
-    if (exploreLocation) {
-      console.log(`explore location!`, exploreLocation.name);
+    if (portalLocation) {
+      console.log('PORTAL LOCATION!!!!!', portalLocation);
     }
-  }, [exploreLocation]);
 
-  // const appState = useRef(AppState.currentState);
-  // const [appStateVisible, setAppStateVisible] = useState(appState.current);
-  const [openSocketForGoPress, setOpenSocketForGoPress] = useState(false);
-  // useEffect(() => {
-  //   const subscription = AppState.addEventListener("change", (nextAppState) => {
-  //     if (
-  //       appState.current.match(/inactive|background/) &&
-  //       nextAppState === "active"
-  //     ) {
-  //       showAppMessage(true, null, `App has come to the foreground!`);
-  //       // handleRefresh();
-  //     }
-
-  //     appState.current = nextAppState;
-  //     setAppStateVisible(appState.current);
-  //     console.log("AppState", appState.current);
-  //   });
-
-  //   return () => {
-  //     subscription.remove();
-  //   };
-  // }, []);
-
-  // const handleRefresh = () => {
-  //   setRefreshKey((prevKey) => prevKey + 1); // Increment the key to force re-render
-  //   showAppMessage(true, null, "Page Refreshed!");
-  // };
-
-  // useEffect(() => {
-  //   const fetchToken = async () => {
-  //     try {
-  //       const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
-  //       setToken(storedToken);
-  //     } catch (error) {
-  //       console.error("Failed to retrieve token:", error);
-  //     }
-  //   };
-
-  //   fetchToken();
-  // }, []);
+  }, [portalLocation]);
 
 
-       const fetchToken = async () => {
-        console.log('fetching user token in current main screen');
-        try {
-          const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
-          console.log(storedToken);
-          setToken(storedToken);
-        } catch (error) {
-          console.error('Failed to retrieve token:', error);
-        }
-      };
 
-  const handleSignOut = () => {
-    onSignOut();
-    // navigateToSignInScreen();
-  };
+  useEffect(() => {
+    if (ruinsLocation) {
+      console.log('RUINS LOCATION!!!!!', ruinsLocation);
+    }
 
-  // useEffect(() => {
-  //   if (!user.authenticated) {
-  //     navigateToSignInScreen();
+  }, [ruinsLocation]);
 
-  //   }
 
-  // }, [user]);
-
-  const navigateToSignInScreen = () => {
-    router.push("/signin"); // Navigate to the /recover-credentials screen
-  };
-
-  // const handleFindNewLocation = (startingAddress) => {
-  //   setOpenSocketForGoPress(true);
-  //   console.log(startingAddress);
-  //   handleGo(startingAddress);
-  //   // gettingExploreLocations();
-  //   showAppMessage(true, null, `Searching for a weather portal!!`);
-  //   //handleRefresh();
-  //   setOpenSocketForGoPress(false);
-  // };
-
-  // useEffect(() => {
-  //   console.log("home screen rerendered");
-  //   showAppMessage(true, null, "hihihihihi!");
-  // }, []);
-
-  //for testing, hardcoded DRF auth token: `31abe86cc4359d469102c68fae094590c3683221`
 
   return (
     <>
@@ -195,30 +87,35 @@ const home = () => {
       <View
         style={[
           appContainerStyles.screenContainer,
-          themeStyles.primaryBackground, 
+          themeStyles.primaryBackground,
         ]}
       >
-        {/* <View style={{   zIndex: 30000,  justifyContent: 'flex-end', flexDirection: 'row', paddingHorizontal: 20, alignItems: 'center', top: -30,  width: '100%'}}>
-
-          
-        <WebSocketCurrentLocation  
-              />
-         <DrawerToggleButton tintColor={themeStyles.primaryText.color}/>
-         
-        </View>  */}
-               
         <View style={appContainerStyles.innerFlexStartContainer}>
           <GoButton address={homeLocation?.address || "Manchester, NH"} />
-       
-       
 
-          {itemChoices && !searchIsActive && (
+          {/* {exploreLocation && !searchIsActive && (
+            <View style={appContainerStyles.innerFlexStartContainer}>
+              <DataList
+                listData={[exploreLocation]}
+                onCardButtonPress={() => {}}
+              />
+            </View>
+          )} */}
+
+          {portalLocation && !searchIsActive && (
+            <CurrentSurroundingsView />
+            // <View style={appContainerStyles.innerFlexStartContainer}>
+            //   <DataList
+            //     listData={[currentSurroundings]}
+            //     onCardButtonPress={() => {}}
+            //   />
+            // </View>
+          )}
+          {/* {itemChoices && currentSurroundings && !searchIsActive && (
           <View style={appContainerStyles.innerFlexStartContainer}>
-        
-        <DataList listData={itemChoices} onCardButtonPress={() => {}} />
-      </View>
-)}
- 
+            <DataList listData={[ currentSurroundings, ...itemChoices]} onCardButtonPress={() => {}} />
+          </View>
+        )} */}
 
           {user && user.authenticated && searchIsActive && (
             <View
@@ -231,15 +128,12 @@ const home = () => {
                 },
               ]}
             >
-              <WebSocketSearchingLocations 
+              <WebSocketSearchingLocations
                 reconnectOnUserButtonPress={searchIsActive}
               />
             </View>
-
           )}
         </View>
-
-   
       </View>
     </>
   );
