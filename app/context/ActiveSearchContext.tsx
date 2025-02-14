@@ -40,11 +40,15 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({ chil
   const [manualSurroundingsRefresh, setManualSurroundingsRefresh ] = useState<boolean>(false);
 
   useEffect(() => {
-    console.log("User changed. Resetting context...");
+    if (!user.authenticated && !user.loading) {
+      
+    console.log("ActiveSearchContext: User changed. Resetting context...");
     setActiveSearch(null);
     setSearchIsActive(false);
     setExploreLocationsAreReady(true);
     setManualSurroundingsRefresh(false);
+    
+  }
   }, [user]);
 
 

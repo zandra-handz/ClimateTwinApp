@@ -53,6 +53,9 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   // Manual WebSocket connection function
   const connectWebSocket = async (token?: string) => {
     // If no token is passed, attempt to fetch it from SecureStore
+
+    let confirmedToken; 
+
     if (!token) {
       try {
         const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
@@ -60,20 +63,24 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
           console.log(`[${new Date().toISOString()}] No token available in SecureStore.`);
           return;
         }
-        token = storedToken; // Use the token fetched from SecureStore
+       // token = storedToken; // Use the token fetched from SecureStore
+        confirmedToken = storedToken;
       } catch (error) {
         console.error("Failed to retrieve token from SecureStore:", error);
         return;
       }
+    } else {
+      confirmedToken = token;
     }
   
     // Proceed with WebSocket connection if a valid token is available
-    const socketUrl = `wss://climatetwin.com/ws/climate-twin/current/?user_token=${token}`;
-    console.log("Connecting to Location Update WebSocket"); //, socketUrl);
+    const socketUrl = `wss://climatetwin.com/ws/climate-twin/current/?user_token=${confirmedToken}`;
+    console.log("Connecting to Location Update WebSocket", confirmedToken); //, socketUrl);
   
     // Close any existing socket if it's not open
     if (socketRef.current && socketRef.current.readyState !== WebSocket.OPEN) {
-      console.log("Closing existing Location Update WebSocket connection.");
+      setIsReconnecting(true) //tp avoid triggering the on close reconnect attempt function
+      console.log("Running connect socket function: Closing existing Location Update WebSocket connection.");
       socketRef.current.close();
     }
   
@@ -83,6 +90,8 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   
     socket.onopen = () => {
       console.log("Location Update WebSocket connection opened");
+
+      Alert.alert("WEBSOCKET CONNECT", "Websocket connected!");
   
       // Reset reconnection attempt state on successful connection
       setIsReconnecting(false);
@@ -105,7 +114,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     };
   
     socket.onerror = (event: Event) => {
-      console.error("WebSocket error:", event);
+      console.log("WebSocket error:", event);
       Alert.alert("WEBSOCKET CONNECT ERROR", "Websocket error on trying to connect.");
       reInitialize(); // This could reset the user state or handle certain errors
       //attemptReconnect(); // Trigger reconnection attempt
@@ -117,7 +126,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       if (event.wasClean) {
         console.log("WebSocket closed cleanly by the server.");
       } else {
-        console.warn("WebSocket closed unexpectedly (possibly a server issue).");
+        console.log("WebSocket closed unexpectedly (possibly a server issue).");
       }
   
       // Handle different closure codes if needed
@@ -153,18 +162,26 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
   // Manually fetch the token and initialize the WebSocket connection when the provider mounts
   useEffect(() => {
-    if (user && user.authenticated && !user.loading) {
+    if (
+      user && 
+      user.authenticated && 
+      !user.loading && 
+      (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN)
+    ) {
+      console.log('WEBSOCKET CONTEXT: Fetching token from SecureStore because the user is authenticated and the WebSocket is not open.');
       fetchToken();
     } else {
+      console.log('WEBSOCKET CONTEXT: Skipping token fetch because WebSocket is already open or user is not authenticated.');
       setToken(null); // Clear token when user logs out or is not authenticated
       setLastMessage(null);
       setLastLocationName(null);
     }
   }, [user]);
+  
 
   useEffect(() => {
     if (token) {
-      console.log('token use effect triggered');
+      console.log('WEBSOCKET CONTEXT: token use effect triggered', token);
       connectWebSocket(token); // Manually trigger WebSocket connection on token change
     }
 

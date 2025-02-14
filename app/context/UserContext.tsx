@@ -35,17 +35,19 @@ export const UserProvider = ({ children }) => {
     // }, [appSettings]);
 
 
-    useEffect(() => {
-        console.log('user triggered rerender!!!!!!!!!!!!!!!');
+    // useEffect(() => {
+    //     console.log('user triggered rerender!!!!!!!!!!!!!!!');
 
-    }, [user]);
+    // }, [user]);
 
      
 
     const reInitialize = async () => {
-        console.log('USER REINIT TRIGGERED!');
+        console.log('USER CONTEXT: USER REINIT TRIGGERED!');
         const token = await SecureStore.getItemAsync(TOKEN_KEY);
         if (token) {
+
+            //Interceptor and secure store saving happens inside of get current user
             const userData = await getCurrentUser();
     
             const userSettingsData = await getUserSettings();
@@ -57,8 +59,10 @@ export const UserProvider = ({ children }) => {
                     authenticated: true,
                     loading: false,
                 }));
+                console.log('USER CONTEXT: user set in reInitialize');
             } else {
                 setUser(prev => ({ ...prev, authenticated: false, loading: false }));
+                console.log('USER CONTEXT: user set to false in reInitialize');
             }
     
             if (userSettingsData) {
@@ -66,14 +70,19 @@ export const UserProvider = ({ children }) => {
                     ...prev,
                     ...userSettingsData
                 }));
+
+                console.log('USER CONTEXT: app settings set in reInitialize');
                 
                 setUserNotificationSettings(prev => ({
                     ...prev,
                     receive_notifications: userSettingsData?.receive_notifications || false
                 }));
+
+                console.log('USER CONTEXT: user notifications set in reInitialize');
             } 
         } else {
             setUser({ user: null, authenticated: false, loading: false });
+            console.log('USER CONTEXT: user set to false in reInitialize because no token in secure store');
         }
     };
     
