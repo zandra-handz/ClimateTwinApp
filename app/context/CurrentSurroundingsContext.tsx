@@ -413,14 +413,8 @@ export const CurrentSurroundingsProvider: React.FC<
     let locationType;
     if (data && data.explore_type) {
       try {
-        locationType =
-          data.explore_type === "discovery_location"
-            ? "explore_location"
-            : "twin_location";
-
-        await pickNewSurroundingsMutation.mutateAsync({
-          [locationType]: data.id,
-        });
+        locationType = data.explore_type === 'discovery_location' ? 'explore_location' : 'twin_location';
+        await pickNewSurroundingsMutation.mutateAsync({[locationType]: data.id });
       } catch (error) {
         console.error("Error updating location:", error);
       }

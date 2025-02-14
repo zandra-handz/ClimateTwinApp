@@ -536,7 +536,7 @@ export const pickNewSurroundings = async (locationId) => {
     console.log(locationId);
     try {
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
-        const response = await axios.post('/climatevisitor/explore/v2/'); //, locationId);
+        const response = await axios.post('/climatevisitor/explore/v2/', locationId); //, locationId);
         console.log('API GET Call getNearyLocations'); //, response.data);
         return response.data;
     } catch (error) {
