@@ -49,7 +49,7 @@ const refreshTokenFunct = async () => {
         const response = await axios.post('/users/token/refresh/', { refresh: storedRefreshToken });
         const newAccessToken = response.data.access;
         await SecureStore.setItemAsync('accessToken',  response.data.access);
-        console.log('ACCESS TOKEN SAVED TO SECURE STORE:',  response.data.access);
+       // console.log('ACCESS TOKEN SAVED TO SECURE STORE:',  response.data.access);
         await SecureStore.setItemAsync('refreshToken',  response.data.refresh);
         return newAccessToken;
     } catch (error) {
@@ -132,7 +132,7 @@ axios.interceptors.response.use(
                     if (!newAccessToken) {
                         throw new Error("Failed to refresh token: new access token is null or undefined");
                     }
-                    console.log('Interceptor acquired new token utilizing refreshTokenFunct!', newAccessToken);
+                   // console.log('Interceptor acquired new token utilizing refreshTokenFunct!', newAccessToken);
          
                     isRefreshing = false;
 
@@ -164,12 +164,12 @@ axios.interceptors.response.use(
 export const signinWithoutRefresh = async ({ username, password }) => {
     try {
         const result = await axios.post('/users/token/', { username, password });
-        console.log(`API POST CALL signinWithoutRefresh`, result);
+        //console.log(`API POST CALL signinWithoutRefresh`, result);
 
         if (result.data && result.data.access) { 
-            console.log(result.data);
+          //  console.log(result.data);
             await SecureStore.setItemAsync('accessToken', result.data.access);
-            console.log('ACCESS TOKEN SAVED TO SECURE STORE:', result.data.access);
+           // console.log('ACCESS TOKEN SAVED TO SECURE STORE:', result.data.access);
             await SecureStore.setItemAsync('refreshToken', result.data.refresh);
             
             
@@ -399,7 +399,7 @@ export const updateUserSettings = async (userId, updatedSettings) => {
 
 
  
-
+//NOT BEING USED
   export const getTwinLocation = async () => {
     try {
        // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
@@ -423,7 +423,7 @@ export const getExploreLocation = async () => {
     try {
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/climatevisitor/currently-exploring/v2/');
-        console.log('API GET Call getExploreLocation');  //, response.data);
+        console.log('API GET Call getExploreLocation'); //, response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
@@ -536,12 +536,12 @@ export const pickNewSurroundings = async (locationId) => {
     console.log(locationId);
     try {
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
-        const response = await axios.post('/climatevisitor/explore/v2/', locationId);
-        console.log('API GET Call getNearyLocations', response.data);
+        const response = await axios.post('/climatevisitor/explore/v2/'); //, locationId);
+        console.log('API GET Call getNearyLocations'); //, response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
-            console.error('Error response for /climatevisitor/explore/v2/:', error.response.data);
+            console.error('Error response for /climatevisitor/explore/v2/', error.response.data);
         } else if (error.request) {
             console.error('Error request for /climatevisitor/explore/v2/, add console logging in api file for more details');
         } else {

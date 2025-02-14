@@ -28,7 +28,11 @@ function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled }) {
         {...props}
       />
     ),
-    nearby: (props) => <NearbyButton {...props} />,
+    nearby: (props) => (
+      <NearbyButton 
+        color={props.color} 
+      />
+    ),
   };
 
   return (
@@ -102,6 +106,7 @@ function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled }) {
                     ? themeStyles.exploreTabBarHighlightedText.color
                     : themeStyles.exploreTabBarText.color,
                 },
+                route.name === "nearby" && { opacity: exploreLocationsAreReady ? 1 : 0 },
                 disabled && { color: themeStyles.exploreTabBarText.color, opacity: 0.5 }, // Modify text color for disabled
               ]}
             >

@@ -1,43 +1,38 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
-import {
-  SafeAreaView,
-  View, 
-} from "react-native"; 
-import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
+import { SafeAreaView, View } from "react-native";
+import { useGlobalStyles } from "../../context/GlobalStylesContext";
 
 import { useAppMessage } from "../../context/AppMessageContext";
-import useLaunchpad from "../../hooks/useLaunchpad";
+ 
 
 import { StatusBar } from "expo-status-bar";
+import { useActiveSearch } from "../../context/ActiveSearchContext";
 
 import DataList from "../../components/DataList";
+import HomeSurroundingsView from "@/app/components/HomeSurroundingsView";
 import { useFocusEffect } from "expo-router";
-  
+import { useSurroundings } from "../../context/CurrentSurroundingsContext";
+
 const home = () => {
-  const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles(); 
+  const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const { showAppMessage } = useAppMessage();
-  const { launchpad } = useLaunchpad();
- 
+  const { homeSurroundings } = useSurroundings();
+  const { searchIsActive } = useActiveSearch(); 
+
   // useFocusEffect(
   //   useCallback(() => {
   //     console.log("Nearby location screen is focused");
   //     triggerRefetch();
   //     return () => {
-  //       console.log("nearby location screen is unfocused"); 
+  //       console.log("nearby location screen is unfocused");
   //     };r
   //   }, [])
   // );
- 
 
-const handlePress = () => {
-  console.log('handlePress in launchpad pressed!');
+  const handlePress = () => {
+    console.log("handlePress in launchpad pressed!");
+  };
 
-};
-
-
- 
- 
-  
   return (
     <>
       <StatusBar
@@ -53,10 +48,10 @@ const handlePress = () => {
         ]}
       >
         <View style={appContainerStyles.innerFlexStartContainer}>
-        
-        {launchpad && <DataList listData={[launchpad]} onCardButtonPress={handlePress} />}
- 
-          </View>
+          {homeSurroundings && !searchIsActive && (
+            <HomeSurroundingsView /> 
+          )}
+        </View>
       </View>
     </>
   );

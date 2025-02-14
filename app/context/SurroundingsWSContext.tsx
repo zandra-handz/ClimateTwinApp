@@ -15,7 +15,7 @@ const SurroundingsWSContext = createContext<SurroundingsWSContextType | undefine
 export const SurroundingsWSProvider: React.FC = ({ children }) => {
   const TOKEN_KEY = "accessToken";
   const socketRef = useRef<WebSocket | null>(null);
-  const { tokenVersion, reInitialize, user, onSignOut } = useUser();
+  const { reInitialize, user } = useUser();
   const { appStateVisible } = useAppState();
   const [token, setToken] = useState<string | null>(null);
   const [isReconnecting, setIsReconnecting] = useState(false);
@@ -34,7 +34,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   const fetchToken = async () => {
     try {
       const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
-      console.log("Fetched token:", storedToken);
+      //console.log("Fetched token:", storedToken);
       setToken(storedToken);
     } catch (error) {
       console.error("Failed to retrieve token:", error);
@@ -69,7 +69,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   
     // Proceed with WebSocket connection if a valid token is available
     const socketUrl = `wss://climatetwin.com/ws/climate-twin/current/?user_token=${token}`;
-    console.log("Connecting to WebSocket:", socketUrl);
+    console.log("Connecting to Location Update WebSocket"); //, socketUrl);
   
     // Close any existing socket if it's not open
     if (socketRef.current && socketRef.current.readyState !== WebSocket.OPEN) {

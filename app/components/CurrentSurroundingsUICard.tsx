@@ -12,6 +12,10 @@ const CurrentSurroundingsUICard = ({ label, value }) => {
   };
 
   return (
+
+    // <>
+    // {value && (
+   
     <View style={[appContainerStyles.surroundingsCardContainer, themeStyles.darkestBackground]}>
        
       <Text style={[styles.label, themeStyles.primaryText]}>{formatLabel(label)}</Text>
@@ -21,6 +25,11 @@ const CurrentSurroundingsUICard = ({ label, value }) => {
             
       </View>
     </View>
+    
+      
+  // )}
+  
+  // </>
   );
 };
 

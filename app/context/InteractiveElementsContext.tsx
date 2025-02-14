@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, ReactNode } from 'react';
 import { useUser } from './UserContext';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getItemChoices } from '../apicalls';  
@@ -37,7 +37,7 @@ interface InteractiveElementsProviderProps {
 
 export const InteractiveElementsProvider: React.FC<InteractiveElementsProviderProps> = ({ children }) => {
   const { user } = useUser(); 
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient(); 
 
   const { data: itemChoicesResponse, isLoading, isError } = useQuery<ItemChoicesResponse | null>({
     queryKey: ['itemChoices'],
@@ -60,7 +60,9 @@ export const InteractiveElementsProvider: React.FC<InteractiveElementsProviderPr
 
     const triggerItemChoicesRefetch = () => {
       queryClient.invalidateQueries({ queryKey: ['itemChoices'] });
+      queryClient.refetchQueries({ queryKey: ['itemChoices'] });
     };
+ 
 
   return (
     <InteractiveElementsContext.Provider 

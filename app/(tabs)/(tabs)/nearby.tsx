@@ -17,7 +17,7 @@ import { StatusBar } from "expo-status-bar";
 
 import DataList from "../../components/DataList";
 import { useFocusEffect } from "expo-router";
-
+import { useInteractiveElements } from "@/app/context/InteractiveElementsContext";
 import { useActiveSearch } from "@/app/context/ActiveSearchContext";
 import { useSurroundings } from "@/app/context/CurrentSurroundingsContext";
 
@@ -26,7 +26,9 @@ import { pickNewSurroundings } from "@/app/apicalls";
 const nearby = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();  
   const { triggerRefetch, nearbyLocations  } = useNearbyLocations();
-  const { handlePickNewSurroundings } = useSurroundings();
+  const { currentSurroundings, handlePickNewSurroundings } = useSurroundings();
+
+  const { itemChoices, triggerItemChoicesRefetch } = useInteractiveElements();
  
   useFocusEffect(
     useCallback(() => {
@@ -58,6 +60,7 @@ const nearby = () => {
 
 
     handlePickNewSurroundings(data); 
+    
   
   //   if (data && data.explore_type) {
   //     const locationType = data.explore_type === 'discovery_location' ? 'explore_location' : 'twin_location';
@@ -66,6 +69,14 @@ const nearby = () => {
   //     //refreshSurroundingsManually();
   //   }
   };
+
+  useEffect(() => {
+    if (currentSurroundings) {
+      triggerItemChoicesRefetch();
+
+    }
+
+  }, [currentSurroundings]);
   
   return (
     <>

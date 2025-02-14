@@ -4,8 +4,7 @@ import { UserProvider } from "./context/UserContext";
 import { useEffect, useRef, useState } from "react";
 import { AppState } from "react-native";
 import { AppStateProvider } from "./context/AppStateContext";
-import { CurrentSurroundingsProvider } from "./context/CurrentSurroundingsContext";
-import { MatchedLocationProvider } from "./context/MatchedLocationContext";
+import { CurrentSurroundingsProvider } from "./context/CurrentSurroundingsContext"; 
 import { NearbyLocationsProvider } from "./context/NearbyLocationsContext";
 import { ActiveSearchProvider } from "./context/ActiveSearchContext";
 import { InteractiveElementsProvider } from "./context/InteractiveElementsContext";
@@ -49,8 +48,7 @@ export default function Layout() {
               <AppMessageContextProvider>
                 {/* Wrap Stack in TopLevelRouter to handle authentication checks */}
                 <TopLevelRouter>
-                  <AppMessage />
-                  <MatchedLocationProvider>
+                  <AppMessage /> 
                     <ActiveSearchProvider>
                       <CurrentSurroundingsProvider>
                         <NearbyLocationsProvider>
@@ -90,8 +88,7 @@ export default function Layout() {
                           </InteractiveElementsProvider>
                         </NearbyLocationsProvider>
                       </CurrentSurroundingsProvider>
-                    </ActiveSearchProvider>
-                  </MatchedLocationProvider>
+                    </ActiveSearchProvider> 
                 </TopLevelRouter>
               </AppMessageContextProvider>
             </GlobalStylesProvider>

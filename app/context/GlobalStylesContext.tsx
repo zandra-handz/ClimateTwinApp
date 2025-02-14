@@ -187,6 +187,65 @@ const containerStyles = StyleSheet.create({
     // paddingVertical: "0%",
     zIndex: 1,
   },
+  portalBannerContainer: {
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    height: 80,  
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignContent: 'center', 
+    justifyContent: "center",
+
+  },
+
+  emptyBannerContainer: {
+    paddingHorizontal: 10,
+    paddingVertical: 10, 
+    height: 'auto',  
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignContent: 'center', 
+    justifyContent: "center",
+
+  },
+  portalTempsAndSvgContainer: {
+    width: '100%', 
+    flexShrink: 1,
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    alignContent: 'center',
+
+  },
+  goButtonContainer: {
+    overflow: 'hidden',
+    textAlign: 'center',
+    alignItems: 'center',
+    paddingVertical: 7,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    height: 'auto',
+    width: 'auto', 
+    borderWidth: StyleSheet.hairlineWidth,
+    
+  }, 
+  goButtonStartingPointTempContainer: {
+    height: '100%', 
+    flexDirection: 'column',
+    justifyContent: 'center', 
+
+  },
+  goButtonPortalTempContainer: { 
+    marginLeft: 6,
+    height: '100%',
+    flexDirection: 'column',
+    justifyContent: 'center', 
+
+  },
   headerContainer: {
     flexDirection: "column",
     //justifyContent: 'space-between',
@@ -201,6 +260,20 @@ const containerStyles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     flexWrap: "wrap",
+  },
+  messageBox: { //use with primaryLightBackground color
+    padding: 20,
+    alignItems: 'center',
+    justifyContent: 'center',
+
+    borderRadius: 20,
+    borderWidth: StyleSheet.hairlineWidth,
+    flexWrap: 'flex',
+    height: 'auto',
+    flexShrink: .8,
+    overflow: 'hidden',
+    
+
   },
   tabBarContainer: {
     position: "absolute",
@@ -346,8 +419,27 @@ const fontStyles = StyleSheet.create({
     fontSize: 28,
   },
   goButtonText: {
-    fontSize: 50,
+    fontSize: 60,
 
+  },
+  smallGoButtonText: {
+    fontSize: 26,
+
+  },
+  startingPointTempText: {
+    fontSize: 24,
+
+  },
+  startingPointHumidityText: {
+    fontSize: 14,
+
+  },
+  remainingTripsText: {
+    fontSize: 11,
+
+  },
+  goButtonPortalSize: {
+    fontSize: 60,
   },
   solitaryHeaderMessageText: {
     fontSize: 20,
@@ -403,7 +495,11 @@ const lightThemeStyles = StyleSheet.create({
     padding: "3%",
   },
   primaryBackground: {
-    backgroundColor: "#ffffff",
+    backgroundColor: "#d3d3d3",
+  },
+  primaryOverlayBackground: {
+    backgroundColor: "#c9c9c9",
+
   },
   darkerBackground: {
     backgroundColor: "#ccc",
@@ -558,6 +654,9 @@ const darkThemeStyles = StyleSheet.create({
 
   primaryBackground: {
     backgroundColor: "#121212",
+  },
+  primaryOverlayBackground: {
+    backgroundColor: "#1a1a1a",
   },
   darkerBackground: {
     backgroundColor: "#2B2B2B",

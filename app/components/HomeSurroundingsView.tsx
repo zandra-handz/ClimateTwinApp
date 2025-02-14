@@ -1,51 +1,26 @@
 import { View, Text, FlatList, StyleSheet } from "react-native";
-import React, { useEffect } from "react";
+import React from "react";
 import { useGlobalStyles } from "../context/GlobalStylesContext";
 import CurrentSurroundingsUICard from "./CurrentSurroundingsUICard";
 import { useSurroundings } from "../context/CurrentSurroundingsContext";
-import { useInteractiveElements } from "@/app/context/InteractiveElementsContext";
 
-
-const CurrentSurroundingsView = () => {
+const HomeSurroundingsView = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
-  const { portalSurroundings, ruinsSurroundings, currentSurroundings } =
-    useSurroundings();
-
-  const { itemChoices, triggerItemChoicesRefetch } = useInteractiveElements();
+  const {  homeSurroundings } = useSurroundings();
 
   // Combine both portalLocation and ruinsLocation into one array of key-value pairs
   const combinedData = [
-    ...(ruinsSurroundings.id !== null
-      ? Object.entries(ruinsSurroundings)
+    ...(homeSurroundings.id !== null
+      ? Object.entries(homeSurroundings)
           .filter(([key, value]) => value) // Filter out empty values
           .map(([key, value]) => ({
             label: key,
             value: value,
           }))
-      : []),
-    ...(portalSurroundings.id !== null
-      ? Object.entries(portalSurroundings)
-          .filter(([key, value]) => value) // Filter out empty values
-          .map(([key, value]) => ({
-            label: key,
-            value: value,
-          }))
-      : []),
-    ...(portalSurroundings.id !== null
-      ? Object.entries(itemChoices)
-          .filter(([key, value]) => value) // Filter out empty values
-          .map(([key, value]) => ({
-            label: key,
-            value: value,
-          }))
-      : []),
+      : []), 
   ];
-
-  useEffect(() => {
-    if (currentSurroundings) {
-      console.log(currentSurroundings);
-    }
-  }, [currentSurroundings]);
+  
+  
 
   // Helper function to convert objects or arrays to strings
   const formatValue = (value) => {
@@ -62,15 +37,15 @@ const CurrentSurroundingsView = () => {
       </Text> */}
       <FlatList
         data={combinedData}
-        renderItem={({ item }) => (
-          <CurrentSurroundingsUICard
-            label={item.label}
-            value={formatValue(item.value)}
-          />
+        renderItem={({ item }) => (  
+            <CurrentSurroundingsUICard
+              label={item.label}
+              value={formatValue(item.value)}
+            />  
         )}
         keyExtractor={(item, index) => index.toString()}
         numColumns={3} // Three cards per row
-        ListFooterComponent={<View style={{ height: 200 }}></View>}
+        ListFooterComponent={<View style={{height: 200}}></View>}
       />
     </View>
   );
@@ -78,10 +53,10 @@ const CurrentSurroundingsView = () => {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 0,
+    padding: 0, 
     width: "100%",
-    justifyContent: "space-between",
-    alignItems: "center",
+    justifyContent: 'space-between', 
+    alignItems: "center", 
   },
   title: {
     fontSize: 24,
@@ -90,4 +65,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CurrentSurroundingsView;
+export default HomeSurroundingsView;

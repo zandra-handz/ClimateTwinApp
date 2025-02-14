@@ -35,6 +35,7 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({ chil
   const timeoutRef = useRef(null);
   const [activeSearch, setActiveSearch] = useState<ActiveSearch | null>(null);
   const [searchIsActive, setSearchIsActive] = useState<boolean>(false);
+  const [userIsHome, setUserIsHome] = useState<boolean>(false);
   const [exploreLocationsAreReady, setExploreLocationsAreReady] = useState<boolean>(true);
   const [manualSurroundingsRefresh, setManualSurroundingsRefresh ] = useState<boolean>(false);
 
@@ -60,7 +61,10 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({ chil
 
 const refetchRemainingGoes = () => {
     queryClient.invalidateQueries({ queryKey: ['remainingGoes'] });
+    queryClient.refetchQueries({ queryKey: ['remainingGoes'] });
   };
+
+ 
 
 
   const handleGo = (address) => {
@@ -130,6 +134,7 @@ const refetchRemainingGoes = () => {
   // search status is updated by current location websocket (component WebSocketCurrentLocation)
   const closeSearchExternally = () => {
     setSearchIsActive(false);  
+    refetchRemainingGoes();
 
   };
 
