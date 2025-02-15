@@ -5,13 +5,11 @@ import { View, StyleSheet, TextInput } from "react-native";
 import Animated, {
   useSharedValue,
   useAnimatedStyle,
-  useAnimatedProps,
-  withTiming,
+  useAnimatedProps, 
 } from "react-native-reanimated";
 import { useGlobalStyles } from "../context/GlobalStylesContext";
 import { useUser } from "../context/UserContext";
-import { useAppMessage } from "../context/AppMessageContext";
-import { useAppState } from "../context/AppStateContext";  
+import { useAppMessage } from "../context/AppMessageContext"; 
 import { useActiveSearch } from "../context/ActiveSearchContext";
 
 import WorldMapSvg from "../assets/svgs/worldmap.svg";

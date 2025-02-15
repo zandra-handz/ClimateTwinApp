@@ -50,6 +50,14 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     }
   };
 
+  useEffect(() => {
+    if (appStateVisible === 'active') {
+      console.log('WS CONTEXT USE EFFECT: appStateVisible === active');
+      
+    }
+
+  }, [appStateVisible]);
+
   // Manual WebSocket connection function
   const connectWebSocket = async (token?: string) => {
     // If no token is passed, attempt to fetch it from SecureStore
@@ -172,6 +180,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   // Manually fetch the token and initialize the WebSocket connection when the provider mounts
   useEffect(() => {
     if (
+    //  appStateVisible === "active" &&
       user && 
       user.authenticated && 
       !user.loading && 
