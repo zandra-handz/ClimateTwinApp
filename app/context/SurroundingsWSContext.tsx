@@ -76,14 +76,16 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     // Proceed with WebSocket connection if a valid token is available
     const socketUrl = `wss://climatetwin.com/ws/climate-twin/current/?user_token=${confirmedToken}`;
     console.log("Connecting to Location Update WebSocket", confirmedToken); //, socketUrl);
-  
-    // Close any existing socket if it's not open
-    if (socketRef.current && socketRef.current.readyState !== WebSocket.OPEN) {
-      setIsReconnecting(true) //tp avoid triggering the on close reconnect attempt function
-      console.log("Running connect socket function: Closing existing Location Update WebSocket connection.");
-      socketRef.current.close();
-    }
-  
+    if (socketRef.current) {
+      if (socketRef.current.readyState === WebSocket.OPEN) {
+        console.log("Closing existing open Location Update WebSocket connection.");
+        
+        socketRef.current.close();
+      } else {
+        console.log("Socket is not open, skipping close.");
+      }
+    } 
+    //setIsReconnecting(true);
     // Create a new WebSocket connection
     const socket = new WebSocket(socketUrl);
     socketRef.current = socket;
@@ -142,21 +144,28 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       attemptReconnect();
     };
   };
+ 
   
 
   // Function to attempt reconnection with exponential backoff
   const attemptReconnect = () => {
     if (!isReconnecting && appStateVisible === "active" && user && user.authenticated) {
       console.log("Attempting to reconnect...");
-      setIsReconnecting(true);
 
-      // Use a timeout with increasing delay
-      setTimeout(() => {
-        console.log("Reconnecting to WebSocket...");
-        setReconnectAttempt((prev) => prev + 1); // Increment reconnect attempt
-        setReconnectionDelay((prev) => Math.min(prev * 2, 60000)); // Exponential backoff, max delay is 1 minute
-        connectWebSocket(); // Attempt to reconnect
-      }, reconnectionDelay);
+      if (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN) {
+      
+        setIsReconnecting(true);
+
+        // Use a timeout with increasing delay
+        setTimeout(() => {
+          console.log("Reconnecting to WebSocket...");
+          setReconnectAttempt((prev) => prev + 1); // Increment reconnect attempt
+          setReconnectionDelay((prev) => Math.min(prev * 2, 60000)); // Exponential backoff, max delay is 1 minute
+          connectWebSocket(); // Attempt to reconnect
+        }, reconnectionDelay);
+      } else {
+        console.log("WebSocket is already open, skipping reconnection.");
+      } 
     }
   };
 
@@ -177,12 +186,21 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       setLastLocationName(null);
     }
   }, [user]);
+
+
   
 
   useEffect(() => {
     if (token) {
       console.log('WEBSOCKET CONTEXT: token use effect triggered', token);
-      connectWebSocket(token); // Manually trigger WebSocket connection on token change
+      if (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN) {
+        console.log("Reconnecting to WebSocket...");
+        connectWebSocket(token);  // Call your WebSocket connection function
+      } else {
+        console.log("WebSocket is already open, skipping reconnection.");
+      }
+      
+     // connectWebSocket(token); // Manually trigger WebSocket connection on token change
     }
 
     // Cleanup the socket on unmount or when token changes

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useRouter } from "expo-router";
+import { Alert } from 'react-native';
 import { useUser } from "../context/UserContext";
 import { useAppState } from "../context/AppStateContext";
 
@@ -24,13 +25,14 @@ const goToRoot = (): void => {
     router.push("(tabs)");
   };
 
-  useEffect(() => {
-    if (appStateVisible === 'active') {
-      console.log('TopRouterNav: appStateVisible triggering reinitialization');
-      reInitialize();
-    }
+  // useEffect(() => {
+  //   if (appStateVisible === 'active') {
+  //     console.log('TopRouterNav: appStateVisible triggering reinitialization');
+  //     //Alert.alert("APP VISIBLE", "Attempting to reinitialize user");
+  //     reInitialize();
+  //   }
 
-  }, [appStateVisible]);
+  // }, [appStateVisible]);
 
   useEffect(() => {
     console.log('use effect in top router!');

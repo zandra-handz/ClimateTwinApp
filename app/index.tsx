@@ -6,8 +6,7 @@ import { useAppMessage } from "./context/AppMessageContext";
 import { useRouter, Link } from "expo-router";
 import SignInButton from "./components/SignInButton";
 import { useFonts } from "expo-font";
-import * as SecureStore from "expo-secure-store";
-import { useNavigation } from "@react-navigation/native";
+import * as SecureStore from "expo-secure-store"; 
 import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "react-native";
 
@@ -63,6 +62,7 @@ const Index = () => {
   // app screens can't be viewed at all if user logged out
 
   const checkIfSignedIn = async () => {
+    console.log('checking if signed in');
     try {
       const token = await SecureStore.getItemAsync(TOKEN_KEY);
       if (token) {
