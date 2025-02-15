@@ -7,7 +7,7 @@ import { useAppState } from "../context/AppStateContext";
 const TopLevelRouter = ({ children }) => {
   const router = useRouter();
   const { appStateVisible } = useAppState();
-  const { user, onSignOut, reInitialize } = useUser();
+  const { user, manuallySetIsLoading, superficiallyDeAuthUser, reInitialize } = useUser();
 
 //expo router.push and router.replace resolve to the index of the current scope, not root
 //found this dismissAll solution here: https://stackoverflow.com/questions/78932668/i-cant-navigate-back-to-root-on-expo-router
@@ -25,14 +25,34 @@ const goToRoot = (): void => {
     router.push("(tabs)");
   };
 
-  // useEffect(() => {
-  //   if (appStateVisible === 'active') {
-  //     console.log('TopRouterNav: appStateVisible triggering reinitialization');
-  //     //Alert.alert("APP VISIBLE", "Attempting to reinitialize user");
-  //     reInitialize();
-  //   }
+  useEffect(() => {
+    if (appStateVisible === 'active') {
+      console.log('TopRouterNav: appStateVisible triggering reinitialization');
+      //Alert.alert("APP VISIBLE", "Attempting to reinitialize user");
+      //manuallySetIsLoading();
+      // THIS IS WHAT CHECKS FOR TOKEN IN SECURE STORE AND REFRESHES IF NEEDED
+      // it sends token to getCurrentUser endpoint and if that throws a 401, the
+      // interceptor will fetch new token then make the call again
+      // then userSettings, userNotifications, and User (flips authenticated to true and loading to false) 
+      // are set, in that order.
+      manuallySetIsLoading();
+      //I think the only other part of the code that reinitializes is the websocket if it errors
+      reInitialize();
+    } else {
 
-  // }, [appStateVisible]);
+    }
+
+  }, [appStateVisible]);
+
+
+  useEffect(() => {
+    if (appStateVisible !== 'active') {
+      console.log('TopRouterNav: appStateVisible triggering deauth');
+      //Alert.alert("APP VISIBLE", "Attempting to reinitialize user");
+      superficiallyDeAuthUser(); 
+    }
+
+  }, [appStateVisible]);
 
   useEffect(() => {
     console.log('use effect in top router!');
@@ -48,7 +68,7 @@ const goToRoot = (): void => {
       goToRoot();
       //router.replace("/signin");
     }
-    if (user && user.authenticated) {
+    if (user && user.authenticated && !user.loading) {
       console.log('TOP ROUTER: user authenticated! Navving to home');
       goToHome();
     

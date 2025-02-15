@@ -9,6 +9,7 @@ import { useFonts } from "expo-font";
 import * as SecureStore from "expo-secure-store"; 
 import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "react-native";
+import { useAppState } from "./context/AppStateContext";
 
 
 //a frienddate assistant for overwhelmed adults, and for people who just have a lot to talk about
@@ -21,6 +22,7 @@ const Index = () => {
   const [showSignIn, setShowSignIn] = useState(true);
   const { reInitialize } = useUser();
   const { showAppMessage } = useAppMessage();
+    const { appStateVisible } = useAppState();
 
   const router = useRouter();
   const usernameInputRef = useRef(null);
@@ -81,9 +83,9 @@ const Index = () => {
     }
   };
 
-  useEffect(() => {
-    checkIfSignedIn();
-  }, []);
+  // useEffect(() => {
+  //   checkIfSignedIn();
+  // }, []);
 
   const handleCreateAccountInitialFocus = () => {
     if (emailInputRef.current) {

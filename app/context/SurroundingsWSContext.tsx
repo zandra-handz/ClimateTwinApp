@@ -64,6 +64,10 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
     let confirmedToken; 
 
+    if (!user.authenticated) {
+      return;
+    }
+
     if (!token) {
       try {
         const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
@@ -159,51 +163,71 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   const attemptReconnect = () => {
     if (!isReconnecting && appStateVisible === "active" && user && user.authenticated) {
       console.log("Attempting to reconnect...");
-
+  
       if (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN) {
-      
         setIsReconnecting(true);
-
-        // Use a timeout with increasing delay
-        setTimeout(() => {
-          console.log("Reconnecting to WebSocket...");
-          setReconnectAttempt((prev) => prev + 1); // Increment reconnect attempt
-          setReconnectionDelay((prev) => Math.min(prev * 2, 60000)); // Exponential backoff, max delay is 1 minute
-          connectWebSocket(); // Attempt to reconnect
+   
+        setTimeout(() => { 
+          if (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN) {
+            console.log("Reconnecting to WebSocket...");
+            setReconnectAttempt((prev) => prev + 1);  
+            setReconnectionDelay((prev) => Math.min(prev * 2, 60000));  
+            connectWebSocket(); 
+          } else {
+            console.log("WebSocket is already open, skipping reconnection.");
+           
+          }
         }, reconnectionDelay);
       } else {
         console.log("WebSocket is already open, skipping reconnection.");
-      } 
+      }
     }
   };
+  
 
   // Manually fetch the token and initialize the WebSocket connection when the provider mounts
   useEffect(() => {
     if (
-    //  appStateVisible === "active" &&
       user && 
       user.authenticated && 
       !user.loading && 
       (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN)
     ) {
       console.log('WEBSOCKET CONTEXT: Fetching token from SecureStore because the user is authenticated and the WebSocket is not open.');
+      console.log(`WebSocket state: ${socketRef.current ? socketRef.current.readyState : 'No socket'}`);
+      
+
       fetchToken();
     } else {
       console.log('WEBSOCKET CONTEXT: Skipping token fetch because WebSocket is already open or user is not authenticated.');
+      console.log(`WebSocket state: ${socketRef.current ? socketRef.current.readyState : 'No socket'}`);
+      console.log(`User authenticated: ${user.authenticated}`);
       setToken(null); // Clear token when user logs out or is not authenticated
+      console.log('token set to null');
       setLastMessage(null);
       setLastLocationName(null);
     }
   }, [user]);
-
-
   
+
+
+    useEffect(() => {
+      if (appStateVisible !== 'active') {
+        console.log('WS Context: appStateVisible triggering token/message/location set to null');
+        //Alert.alert("APP VISIBLE", "Attempting to reinitialize user");
+        
+         
+      }
+  
+    }, [appStateVisible]);
+
+ 
 
   useEffect(() => {
     if (token) {
       console.log('WEBSOCKET CONTEXT: token use effect triggered', token);
       if (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN) {
-        console.log("Reconnecting to WebSocket...");
+        console.log("Connecting to WebSocket triggered by token in dependency...");
         connectWebSocket(token);  // Call your WebSocket connection function
       } else {
         console.log("WebSocket is already open, skipping reconnection.");

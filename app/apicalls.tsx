@@ -48,12 +48,17 @@ const refreshTokenFunct = async () => {
     try {
         const response = await axios.post('/users/token/refresh/', { refresh: storedRefreshToken });
         const newAccessToken = response.data.access;
-        await SecureStore.setItemAsync('accessToken',  response.data.access);
+        const newRefreshToken = response.data.access;
+        
+        await SecureStore.setItemAsync('accessToken',  newAccessToken);
        // console.log('ACCESS TOKEN SAVED TO SECURE STORE:',  response.data.access);
-        await SecureStore.setItemAsync('refreshToken',  response.data.refresh);
+        await SecureStore.setItemAsync('refreshToken', newRefreshToken);
+        
+        console.log('returned from token refresh: ', newAccessToken);
         return newAccessToken;
     } catch (error) {
         console.error('Error refreshing token:', error);
+       
         throw error;
     }
 };

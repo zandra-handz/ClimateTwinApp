@@ -52,18 +52,7 @@ export const UserProvider = ({ children }) => {
     
             const userSettingsData = await getUserSettings();
     
-            if (userData) {
-                setUser(prev => ({
-                    ...prev,
-                    user: userData,
-                    authenticated: true,
-                    loading: false,
-                }));
-                console.log('USER CONTEXT: user set in reInitialize');
-            } else {
-                setUser(prev => ({ ...prev, authenticated: false, loading: false }));
-                console.log('USER CONTEXT: user set to false in reInitialize');
-            }
+
     
             if (userSettingsData) {
                 setAppSettings(prev => ({
@@ -80,10 +69,38 @@ export const UserProvider = ({ children }) => {
 
                 console.log('USER CONTEXT: user notifications set in reInitialize');
             } 
+            if (userData) {
+                setUser(prev => ({
+                    ...prev,
+                    user: userData,
+                    authenticated: true,
+                    loading: false,
+                }));
+                console.log('USER CONTEXT: user set in reInitialize');
+            } else {
+                setUser(prev => ({ ...prev, authenticated: false, loading: false }));
+                console.log('USER CONTEXT: user set to false in reInitialize');
+            }
         } else {
             setUser({ user: null, authenticated: false, loading: false });
             console.log('USER CONTEXT: user set to false in reInitialize because no token in secure store');
         }
+    };
+
+
+    const manuallySetIsLoading = () => {
+        setUser(prev=> ({
+            ...prev,
+            loading: true,
+        }))
+    };
+
+
+    const superficiallyDeAuthUser = () => {
+        setUser(prev=> ({
+            ...prev,
+            authenticated: false,
+        }))
     };
     
     // Reinitialize user data function
@@ -121,13 +138,15 @@ export const UserProvider = ({ children }) => {
     // }; 
  
     const { data: currentUserData } = useQuery({
+        staleTime: 0, //to make sure this data is always fetched from endpoint 
         queryKey: ['fetchUser'],
+        refetchOnMount: true,
         queryFn: async () => {
             const token = await SecureStore.getItemAsync(TOKEN_KEY);
             if (token) return await getCurrentUser();
             return null;
         },
-        enabled: user.authenticated,
+        //enabled: user.authenticated,
         onSuccess: (data) => {
             if (data) {
                 setUser(prev => ({
@@ -329,6 +348,8 @@ const onSignUp = async (username, email, password) => {
     return (
         <UserContext.Provider value={{
             user,
+            manuallySetIsLoading, //for foreground/background transitioning, used in top router
+            superficiallyDeAuthUser, //for foreground/background transitioning, used in top router
             appSettings,
             userNotificationSettings, 
             handleSignup: signupMutation.mutate,
