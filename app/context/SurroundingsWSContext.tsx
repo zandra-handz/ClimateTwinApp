@@ -3,6 +3,8 @@ import * as SecureStore from "expo-secure-store";
 import { Alert } from "react-native";
 import { useUser } from "../context/UserContext";
 import { useAppState } from "../context/AppStateContext";
+import { useAppMessage } from "../context/AppMessageContext";
+ 
 
 interface SurroundingsWSContextType {
   sendMessage: (message: any) => void;
@@ -19,6 +21,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   const { appStateVisible } = useAppState();
   const [token, setToken] = useState<string | null>(null);
   const [isReconnecting, setIsReconnecting] = useState(false);
+  const { showAppMessage } = useAppMessage();
 
   // Time delay for reconnection attempts (e.g., 10 seconds, 20 seconds, etc.)
   const [reconnectionDelay, setReconnectionDelay] = useState(10000); // Start with 10 seconds
@@ -105,7 +108,8 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     socket.onopen = () => {
       console.log("Location Update WebSocket connection opened");
 
-      Alert.alert("WEBSOCKET CONNECT", "Websocket connected!");
+      //Alert.alert("WEBSOCKET CONNECT", "Websocket connected!");
+      showAppMessage(true, null, "Websocket connected!");
   
       // Reset reconnection attempt state on successful connection
       setIsReconnecting(false);
@@ -129,20 +133,21 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   
     socket.onerror = (event: Event) => {
       console.log("WebSocket error:", event);
-      Alert.alert("WEBSOCKET CONNECT ERROR", "Websocket error on trying to connect.");
+      showAppMessage(true, null, "Websocket error on trying to connect.");
+      //Alert.alert("WEBSOCKET CONNECT ERROR", "Websocket error on trying to connect.");
       reInitialize(); // This could reset the user state or handle certain errors
       //attemptReconnect(); // Trigger reconnection attempt
     };
   
     socket.onclose = (event) => {
       console.log("WebSocket closed", event.code, event.reason);
-  
+    
       if (event.wasClean) {
         console.log("WebSocket closed cleanly by the server.");
       } else {
         console.log("WebSocket closed unexpectedly (possibly a server issue).");
       }
-  
+    
       // Handle different closure codes if needed
       if (event.code === 1006) {
         console.error("Abnormal WebSocket closure (possibly lost connection).");
@@ -151,24 +156,31 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       } else if (event.code === 4403) {
         console.error("Forbidden: Authentication token expired or invalid.");
       }
-  
-      // Attempt to reconnect
-      attemptReconnect();
+    
+      // Check if it was manually closed
+      if (event.code === 1000) {
+        console.log("WebSocket closed manually by the client.");
+      } else {
+        // Attempt to reconnect for unexpected closures
+        attemptReconnect();
+      }
     };
+    
   };
  
   
 
   // Function to attempt reconnection with exponential backoff
   const attemptReconnect = () => {
-    if (!isReconnecting && appStateVisible === "active" && user && user.authenticated) {
-      console.log("Attempting to reconnect...");
+    if (!isReconnecting && appStateVisible === "active" && user && user.authenticated && !user.loading) {
+      console.log("Attempting to reconnect triggered");
   
       if (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN) {
+        console.log("Attempting to reconnect: socket is not already open");
         setIsReconnecting(true);
    
         setTimeout(() => { 
-          if (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN) {
+          if (appStateVisible === "active" && user && user.authenticated && !user.loading && (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN)) {
             console.log("Reconnecting to WebSocket...");
             setReconnectAttempt((prev) => prev + 1);  
             setReconnectionDelay((prev) => Math.min(prev * 2, 60000));  
@@ -221,6 +233,16 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   
     }, [appStateVisible]);
 
+
+    
+useEffect(() => {   // Access appStateVisible from context
+
+  if (appStateVisible === 'background') {
+    console.log('App is in the background, closing WebSocket...');
+    closeSocket(); // Close WebSocket when app goes into background
+  }
+}, [appStateVisible]); 
+
  
 
   useEffect(() => {
@@ -234,10 +256,15 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       }
       
      // connectWebSocket(token); // Manually trigger WebSocket connection on token change
-    }
+    } else {
+      if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+      closeSocket();
+    } 
+  }
 
     // Cleanup the socket on unmount or when token changes
     return () => {
+      
       closeSocket();
     };
   }, [token]); // Runs when `token` changes
