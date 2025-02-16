@@ -45,17 +45,18 @@ const goToRoot = (): void => {
   }, [appStateVisible]);
 
 
-  useEffect(() => {
-    if (appStateVisible === 'background') {
-      console.log('TopRouterNav: appStateVisible triggering deauth');
-      //Alert.alert("APP VISIBLE", "Attempting to reinitialize user");
-      if (user && user.authenticated) {
-      
-      superficiallyDeAuthUser(); 
-      }
-    }
+  // useEffect(() => {
+  //   if (appStateVisible !== 'active') {
+  //     console.log('TopRouterNav: appStateVisible triggering deauth');
+  //     //Alert.alert("APP VISIBLE", "Attempting to reinitialize user");
+  //     if (user && user.authenticated) {
 
-  }, [appStateVisible]);
+      
+  //     superficiallyDeAuthUser(); 
+  //     }
+  //   }
+
+  // }, [appStateVisible]);
 
   useEffect(() => {
     console.log('use effect in top router!');

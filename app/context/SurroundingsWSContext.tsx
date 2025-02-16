@@ -221,23 +221,12 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     }
   }, [user]);
   
-
-
-    useEffect(() => {
-      if (appStateVisible !== 'active') {
-        console.log('WS Context: appStateVisible triggering token/message/location set to null');
-        //Alert.alert("APP VISIBLE", "Attempting to reinitialize user");
-        
-         
-      }
-  
-    }, [appStateVisible]);
-
+ 
 
     
 useEffect(() => {   // Access appStateVisible from context
 
-  if (appStateVisible === 'background') {
+  if (appStateVisible !== 'active') {
     console.log('App is in the background, closing WebSocket...');
     closeSocket(); // Close WebSocket when app goes into background
   }
