@@ -1,12 +1,11 @@
 import { View, Text } from "react-native";
 import React from "react";
-import LargeUICard from "./LargeUICard";
-
+import MediumUICard from "./MediumUICard";
 
 
 //maybe get wind direction and wind speed of both home and portal locations and animate that way?
 
-const WindFriendsView = ({
+const HumidityAndPressureView = ({
   description,
   windSpeed,
   windDirection,
@@ -21,16 +20,14 @@ const WindFriendsView = ({
   strongerWindInteraction,
 }) => {
   return ( 
-                  <LargeUICard
-              label={description}
-              value={windFriends}
-              windSpeed={windSpeed}
-              windDirection={windDirection}
+                  <MediumUICard
+              label={'Winds'}
+              value={'value'}
             /> 
   );
 };
 
-export default WindFriendsView;
+export default HumidityAndPressureView;
 
 
 

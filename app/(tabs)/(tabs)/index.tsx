@@ -19,12 +19,14 @@ import { useActiveSearch } from "../../context/ActiveSearchContext";
 
 import PortalBanner from "@/app/components/PortalBanner";
 
+import WindFriendsView from "@/app/components/WindFriendsView";
+
 const home = () => {
   useGeolocationWatcher();
   const { user } = useUser();
   //const { itemChoices, triggerItemChoicesRefetch } = useInteractiveElements();
 
-  const { portalSurroundings } = useSurroundings();
+  const { portalSurroundings, homeSurroundings } = useSurroundings();
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const { homeLocation } = useHomeLocation();
   const { showAppMessage } = useAppMessage();
@@ -66,7 +68,11 @@ const home = () => {
           )} */}
 
           {portalSurroundings && !searchIsActive && (
+            <>
+            <WindFriendsView description={portalSurroundings.description} windSpeed={portalSurroundings.windSpeed} windDirection={portalSurroundings.windDirection} />
             <CurrentSurroundingsView /> 
+            
+            </>
           )}
           {/* {itemChoices && currentSurroundings && !searchIsActive && (
           <View style={appContainerStyles.innerFlexStartContainer}>

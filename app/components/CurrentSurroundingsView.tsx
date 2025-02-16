@@ -4,6 +4,7 @@ import { useGlobalStyles } from "../context/GlobalStylesContext";
 import CurrentSurroundingsUICard from "./CurrentSurroundingsUICard";
 import { useSurroundings } from "../context/CurrentSurroundingsContext";
 import { useInteractiveElements } from "@/app/context/InteractiveElementsContext";
+import CardAnimationWrapper from "./CardAnimationWrapper";
 
 
 const CurrentSurroundingsView = () => {
@@ -67,6 +68,8 @@ const CurrentSurroundingsView = () => {
             label={item.label}
             value={formatValue(item.value)}
           />
+          
+             
         )}
         keyExtractor={(item, index) => index.toString()}
         numColumns={3} // Three cards per row

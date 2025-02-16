@@ -46,10 +46,13 @@ const goToRoot = (): void => {
 
 
   useEffect(() => {
-    if (appStateVisible !== 'active') {
+    if (appStateVisible === 'background') {
       console.log('TopRouterNav: appStateVisible triggering deauth');
       //Alert.alert("APP VISIBLE", "Attempting to reinitialize user");
+      if (user && user.authenticated) {
+      
       superficiallyDeAuthUser(); 
+      }
     }
 
   }, [appStateVisible]);
@@ -57,10 +60,10 @@ const goToRoot = (): void => {
   useEffect(() => {
     console.log('use effect in top router!');
     // If user is still loading, don't perform any check yet
-    // if (user.loading) {
-    //   console.log('TOP ROUTER: user is loading, router will not nav anywhere for now');
-    //   return;
-    // }
+    if (user.loading) {
+      console.log('TOP ROUTER: user is loading, router will not nav anywhere for now');
+      return;
+    }
 
     // If the user is not authenticated, redirect to signin
     if (!user.authenticated) {

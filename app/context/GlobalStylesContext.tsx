@@ -411,12 +411,35 @@ const containerStyles = StyleSheet.create({
     height: 140,
     overflow: 'hidden',
 
+  },
+  windFriendsCardContainer: { 
+    borderRadius: 20,
+    padding: 10,
+    paddingTop: 40,
+    marginBottom: 10,
+    width: '100%',  
+    alignItems: 'center',
+    justifyContent: 'center',
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 3.5,
+    // elevation: 5,  // Adds shadow effect on Android
+   // margin: 4,
+    flexGrow: 1,
+    height: 160,
+    overflow: 'hidden',
+
   }
 });
 
 const fontStyles = StyleSheet.create({
   headerText: {
     fontSize: 28,
+  },
+  bannerHeaderText: {
+    fontSize: 18,
+
   },
   goButtonText: {
     fontSize: 60,
