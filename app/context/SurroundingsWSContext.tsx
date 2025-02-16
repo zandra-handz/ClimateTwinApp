@@ -17,7 +17,7 @@ const SurroundingsWSContext = createContext<SurroundingsWSContextType | undefine
 export const SurroundingsWSProvider: React.FC = ({ children }) => {
   const TOKEN_KEY = "accessToken";
   const socketRef = useRef<WebSocket | null>(null);
-  const { reInitialize, user } = useUser();
+  const { user } = useUser();
   const { appStateVisible } = useAppState();
   const [token, setToken] = useState<string | null>(null);
   const [isReconnecting, setIsReconnecting] = useState(false);
@@ -141,35 +141,41 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     };
   
     socket.onclose = (event) => {
-      console.log("WebSocket closed", event.code, event.reason);
-      showAppMessage(true, null, "Websocket closed.");
+      logWebSocketClosure(event);
+      showAppMessage(true, null, `WebSocket closed: ${event.reason || "No reason provided."}`);
     
-      if (event.wasClean) {
-        console.log("WebSocket closed cleanly by the server.");
-      } else {
-        console.log("WebSocket closed unexpectedly (possibly a server issue).");
-      }
-    
-      // Handle different closure codes if needed
-      if (event.code === 1006) {
-        console.error("Abnormal WebSocket closure (possibly lost connection).");
-      } else if (event.code === 4001) {
-        console.error("Server closed connection due to authentication issues.");
-      } else if (event.code === 4403) {
-        console.error("Forbidden: Authentication token expired or invalid.");
-      }
-    
-      // Check if it was manually closed
-      if (event.code === 1000) {
-        console.log("WebSocket closed manually by the client.");
-        showAppMessage(true, null, "WebSocket closed manually by the client.");
-      } else {
-        // Attempt to reconnect for unexpected closures
-        attemptReconnect();
+      switch (event.code) {
+        case 1000:
+          console.log("WebSocket closed manually by the client.");
+          break;
+        case 1006:
+          console.error("Abnormal WebSocket closure (possibly lost connection).");
+          attemptReconnect();
+          break;
+        case 4001:
+          console.error("Server closed connection due to authentication issues.");
+          break;
+        case 4403:
+          console.error("Forbidden: Authentication token expired or invalid.");
+          break;
+        default:
+          console.warn(`WebSocket closed with code ${event.code}. Attempting reconnection...`);
+          attemptReconnect();
+          break;
       }
     };
     
+    // Utility function for logging
+    const logWebSocketClosure = (event) => {
+      console.log(`WebSocket closed [Code: ${event.code}, Reason: ${event.reason || "No reason"}]`);
+      if (event.wasClean) {
+        console.log("WebSocket closed cleanly by the server.");
+      }
+    };
+    
+    
   };
+
  
   
 

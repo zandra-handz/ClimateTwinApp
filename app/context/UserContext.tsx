@@ -8,6 +8,7 @@ import * as Device from 'expo-device';
 import Constants from "expo-constants";
 import { Platform } from 'react-native';
 import { signup, signin, signinWithoutRefresh, signout, getCurrentUser, getUserSettings } from '../apicalls';
+import { runOnRuntime } from 'react-native-reanimated';
 
 const UserContext = createContext({});
 
@@ -100,6 +101,7 @@ export const UserProvider = ({ children }) => {
         setUser(prev=> ({
             ...prev,
             authenticated: false,
+            loading: true,
         }))
     };
     
