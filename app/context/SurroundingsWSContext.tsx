@@ -135,12 +135,14 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       console.log("WebSocket error:", event);
       showAppMessage(true, null, "Websocket error on trying to connect.");
       //Alert.alert("WEBSOCKET CONNECT ERROR", "Websocket error on trying to connect.");
-      reInitialize(); // This could reset the user state or handle certain errors
+      
+      //reInitialize(); // This could reset the user state or handle certain errors
       //attemptReconnect(); // Trigger reconnection attempt
     };
   
     socket.onclose = (event) => {
       console.log("WebSocket closed", event.code, event.reason);
+      showAppMessage(true, null, "Websocket closed.");
     
       if (event.wasClean) {
         console.log("WebSocket closed cleanly by the server.");
@@ -160,6 +162,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       // Check if it was manually closed
       if (event.code === 1000) {
         console.log("WebSocket closed manually by the client.");
+        showAppMessage(true, null, "WebSocket closed manually by the client.");
       } else {
         // Attempt to reconnect for unexpected closures
         attemptReconnect();
