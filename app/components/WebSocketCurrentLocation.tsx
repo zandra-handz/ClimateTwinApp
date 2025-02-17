@@ -40,7 +40,7 @@ const WebSocketCurrentLocation: React.FC = () => {
   useEffect(() => {
     console.log('last location name: ', lastLocationName);
     if (!lastLocationName) {
-      setUpdate("You are home");
+      setUpdate("");
     } else if (lastLocationName && lastLocationName === "null") {
       setUpdate("You are home");
     } else if (lastLocationName && lastLocationName !== update) {
@@ -51,6 +51,9 @@ const WebSocketCurrentLocation: React.FC = () => {
   }, [lastLocationName]);
 
   return (
+    <>
+    {user?.authenticated && (
+      
     <View style={appContainerStyles.defaultElementRow}>
       {update && (
         <>
@@ -63,6 +66,11 @@ const WebSocketCurrentLocation: React.FC = () => {
         </>
       )}
     </View>
+
+    
+)}
+    
+    </>
   );
 };
 

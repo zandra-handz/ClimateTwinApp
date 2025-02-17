@@ -51,20 +51,12 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
   // Function to close the socket.
   const closeSocket = () => {
-    if (socketRef.current) {
+    if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
       console.log("Closing existing Location Update WebSocket connection");
       socketRef.current.close();
       socketRef.current = null;
     }
-  };
-
-  useEffect(() => {
-    if (appStateVisible === 'active') {
-      console.log('WS CONTEXT USE EFFECT: appStateVisible === active');
-      
-    }
-
-  }, [appStateVisible]);
+  }; 
 
   // Manual WebSocket connection function
   const connectWebSocket = async (token?: string) => {
@@ -186,7 +178,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
   // Function to attempt reconnection with exponential backoff
   const attemptReconnect = () => {
-    if (!isReconnecting && appStateVisible === "active" && user && user.authenticated) {
+    if (!isReconnecting && user?.authenticated) {
       console.log("Attempting to reconnect triggered");
   
       if (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN) {
@@ -194,7 +186,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
         setIsReconnecting(true);
    
         setTimeout(() => { 
-          if (appStateVisible === "active" && user && user.authenticated && (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN)) {
+          if ( user?.authenticated && (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN)) {
             console.log("Reconnecting to WebSocket...");
             setReconnectAttempt((prev) => prev + 1);  
             setReconnectionDelay((prev) => Math.min(prev * 2, 60000));  
@@ -241,7 +233,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 useEffect(() => {   // Access appStateVisible from context
 
   if (appStateVisible !== 'active') {
-    console.log('App is in the background, closing WebSocket...');
+    console.log('App is in the background, triggering close socket...');
     closeSocket(); // Close WebSocket when app goes into background
   }
 }, [appStateVisible]); 
@@ -259,10 +251,9 @@ useEffect(() => {   // Access appStateVisible from context
       }
       
      // connectWebSocket(token); // Manually trigger WebSocket connection on token change
-    } else {
-      if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+    } else { 
       closeSocket();
-    } 
+    
   }
 
     // Cleanup the socket on unmount or when token changes

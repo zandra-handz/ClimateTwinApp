@@ -1,16 +1,16 @@
-import { AppMessageContextProvider } from "./context/AppMessageContext";
+import { AppMessageContextProvider, useAppMessage } from "./context/AppMessageContext";
 import { GlobalStylesProvider } from "./context/GlobalStylesContext";
-import { UserProvider } from "./context/UserContext";
+import { UserProvider, useUser } from "./context/UserContext";
 import { useEffect, useRef, useState } from "react";
 import { AppState } from "react-native";
 import { AppStateProvider } from "./context/AppStateContext";
-import { CurrentSurroundingsProvider } from "./context/CurrentSurroundingsContext"; 
+import { CurrentSurroundingsProvider } from "./context/CurrentSurroundingsContext";
 import { NearbyLocationsProvider } from "./context/NearbyLocationsContext";
 import { ActiveSearchProvider } from "./context/ActiveSearchContext";
 import { InteractiveElementsProvider } from "./context/InteractiveElementsContext";
 import { SurroundingsWSProvider } from "./context/SurroundingsWSContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { notifyManager, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router"; // Expo Router's Stack component
 import TopLevelRouter from "./toprouter/TopLevelRouter"; // Import TopLevelRouter
 import AppMessage from "./components/AppMessage";
@@ -18,26 +18,31 @@ import Header from "./components/Header";
 
 export default function Layout() {
   const queryClient = new QueryClient();
+  const { user, reInitialize } = useUser(); 
 
-  // const appState = useRef(AppState.currentState);
-  // const [appStateVisible, setAppStateVisible] = useState(appState.current);
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
-  //   useEffect(() => {
-  //     const subscription = AppState.addEventListener("change", (nextAppState) => {
-  //       if (
-  //         appState.current.match(/inactive|background/) &&
-  //         nextAppState === "active"
-  //       )
+    // useEffect(() => {
+    //   const subscription = AppState.addEventListener("change", (nextAppState) => {
+    //     if (
+    //       appState.current.match(/inactive|background/) &&
+    //       nextAppState === "active"
+    //     )
 
-  //       appState.current = nextAppState;
-  //       setAppStateVisible(appState.current);
-  //       console.log("AppState", appState.current);
-  //     });
+    //     appState.current = nextAppState;
+    //     setAppStateVisible(appState.current);
+    //     console.log("AppState", appState.current);
+    //     //showAppMessage(true, null, 'Reinitializing user!');
+    
+    //   });
 
-  //     return () => {
-  //       subscription.remove();
-  //     };
-  //   }, []);
+    //   return () => {
+    //     subscription.remove();
+    //   };
+    // }, []);
+
+
 
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
@@ -48,13 +53,28 @@ export default function Layout() {
               <AppMessageContextProvider>
                 {/* Wrap Stack in TopLevelRouter to handle authentication checks */}
                 <TopLevelRouter>
-                  <AppMessage /> 
-                    <ActiveSearchProvider>
-                      <CurrentSurroundingsProvider>
-                        <NearbyLocationsProvider>
-                          <InteractiveElementsProvider>
-                            <SurroundingsWSProvider>
-                              <Stack>
+                  <AppMessage />
+                  <ActiveSearchProvider>
+                    <CurrentSurroundingsProvider>
+                      <NearbyLocationsProvider>
+                        <InteractiveElementsProvider>
+                          <SurroundingsWSProvider>
+                            <Stack>
+                              {user?.authenticated ? (
+                                
+                              <Stack.Screen
+                                name="(tabs)"
+                                options={{
+                                  headerShown: false,
+                                  header: () => <Header />,
+                                  gestureEnabled: false,
+                                
+                                }}
+                              />
+
+                              
+                            ) : ( 
+                              <>
                                 <Stack.Screen
                                   name="index"
                                   options={{
@@ -63,6 +83,7 @@ export default function Layout() {
                                     headerStyle: {
                                       backgroundColor: "teal",
                                     },
+                                    gestureEnabled: false,
                                   }}
                                 />
                                 <Stack.Screen
@@ -73,22 +94,17 @@ export default function Layout() {
                                     headerStyle: {
                                       backgroundColor: "teal",
                                     },
+                                    gestureEnabled: false,
                                   }}
                                 />
-
-                                <Stack.Screen
-                                  name="(tabs)"
-                                  options={{
-                                    headerShown: false,
-                                    header: () => <Header />,
-                                  }}
-                                />
-                              </Stack>
-                            </SurroundingsWSProvider>
-                          </InteractiveElementsProvider>
-                        </NearbyLocationsProvider>
-                      </CurrentSurroundingsProvider>
-                    </ActiveSearchProvider> 
+                              </>
+                            )}
+                            </Stack>
+                          </SurroundingsWSProvider>
+                        </InteractiveElementsProvider>
+                      </NearbyLocationsProvider>
+                    </CurrentSurroundingsProvider>
+                  </ActiveSearchProvider>
                 </TopLevelRouter>
               </AppMessageContextProvider>
             </GlobalStylesProvider>
@@ -98,101 +114,3 @@ export default function Layout() {
     </GestureHandlerRootView>
   );
 }
-
-
-
-
-
-
-// import { AppMessageContextProvider } from "./context/AppMessageContext";
-// import { GlobalStylesProvider } from "./context/GlobalStylesContext";
-// import { UserProvider } from "./context/UserContext";
-// import { AppStateProvider } from "./context/AppStateContext";
-// import { CurrentSurroundingsProvider } from "./context/CurrentSurroundingsContext";
-// import { MatchedLocationProvider } from "./context/MatchedLocationContext";
-// import { NearbyLocationsProvider } from "./context/NearbyLocationsContext";
-// import { ActiveSearchProvider } from "./context/ActiveSearchContext";
-// import { InteractiveElementsProvider } from "./context/InteractiveElementsContext";
-// import { SurroundingsWSProvider } from "./context/SurroundingsWSContext";
-// import { GestureHandlerRootView } from "react-native-gesture-handler";
-// import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-// import { Drawer } from "expo-router/drawer"; // Import Drawer Navigation
-// import AppMessage from "./components/AppMessage";
-// import Header from "./components/Header";
-
-// export default function Layout() {
-//   const queryClient = new QueryClient();
-
-//   return (
-//     <GestureHandlerRootView style={{ flex: 1 }}>
-//       <QueryClientProvider client={queryClient}>
-//         <UserProvider>
-//           <AppStateProvider>
-//             <GlobalStylesProvider>
-//               <AppMessageContextProvider>
-//                 <MatchedLocationProvider>
-//                   <ActiveSearchProvider>
-//                     <CurrentSurroundingsProvider>
-//                       <NearbyLocationsProvider>
-//                         <InteractiveElementsProvider>
-//                           <SurroundingsWSProvider>
-//                             {/* Wrap Stack in a Drawer */}
-//                             <Drawer>
-//                               <Drawer.Screen
-//                                 name="index"
-//                                 options={{
-//                                   headerShown: false,
-//                                   drawerLabel: "Welcome",
-//                                 }}
-//                               />
-//                               <Drawer.Screen
-//                                 name="signin"
-//                                 options={{
-//                                   headerShown: false,
-//                                   drawerLabel: "Sign In",
-//                                 }}
-//                               />
-//                               <Drawer.Screen
-//                                 name="(tabs)"
-//                                 options={{
-//                                   header: () => <Header />,
-//                                   drawerLabel: "Home",
-//                                 }}
-//                               />
-//                               <Drawer.Screen
-//                                 name="friends"
-//                                 options={{
-//                                   headerShown: false,
-//                                   drawerLabel: "Friends",
-//                                 }}
-//                               />
-//                               <Drawer.Screen
-//                                 name="inbox"
-//                                 options={{
-//                                   headerShown: false,
-//                                   drawerLabel: "Inbox",
-//                                 }}
-//                               />
-//                               <Drawer.Screen
-//                                 name="treasures"
-//                                 options={{
-//                                   headerShown: false,
-//                                   drawerLabel: "Treasures",
-//                                 }}
-//                               />
-//                             </Drawer>
-//                           </SurroundingsWSProvider>
-//                         </InteractiveElementsProvider>
-//                       </NearbyLocationsProvider>
-//                     </CurrentSurroundingsProvider>
-//                   </ActiveSearchProvider>
-//                 </MatchedLocationProvider>
-//               </AppMessageContextProvider>
-//             </GlobalStylesProvider>
-//           </AppStateProvider>
-//         </UserProvider>
-//       </QueryClientProvider>
-//     </GestureHandlerRootView>
-//   );
-// }
-

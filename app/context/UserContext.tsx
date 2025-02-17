@@ -1,12 +1,12 @@
 
 
-import React, { createContext, useContext, useState, useEffect, AccessibilityInfo } from 'react';
+import React, { createContext, useContext, useState, useEffect, useRef, AccessibilityInfo } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import * as Notifications from 'expo-notifications';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import * as Device from 'expo-device';
 import Constants from "expo-constants";
-import { Platform } from 'react-native';
+import { Platform, AppState } from 'react-native';
 import { signup, signin, signinWithoutRefresh, signout, getCurrentUser, getUserSettings } from '../apicalls';
 import { runOnRuntime } from 'react-native-reanimated';
 
@@ -26,6 +26,34 @@ export const UserProvider = ({ children }) => {
     const [appSettings, setAppSettings] = useState({});
     const [userNotificationSettings, setUserNotificationSettings] = useState({});
     const queryClient = useQueryClient(); 
+
+  const appState = useRef(AppState.currentState);
+  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+  
+  useEffect(() => {
+    const subscription = AppState.addEventListener("change", (nextAppState) => {
+      console.log("Next AppState:", nextAppState);
+      
+      if (appState.current !== nextAppState) {
+        appState.current = nextAppState;  // Update ref
+        setAppStateVisible(nextAppState); // Trigger re-render
+      }
+    });
+  
+    return () => subscription.remove(); // Correct cleanup
+  }, []);
+  
+  useEffect(() => {
+    console.log("AppState Visible Changed:", appStateVisible);
+  
+    if (appStateVisible === "active") { 
+      console.log('Deauthing and reinitializing user in user context!');
+      deAuthUser();
+      reInitialize();
+    } else {
+      deAuthUser();
+    }
+  }, [appStateVisible]);
 
 
     // useEffect(() => {
@@ -97,7 +125,7 @@ export const UserProvider = ({ children }) => {
     };
 
 
-    const superficiallyDeAuthUser = () => {
+    const deAuthUser = () => {
         setUser(prev=> ({
             ...prev,
             authenticated: false,
@@ -349,9 +377,7 @@ const onSignUp = async (username, email, password) => {
 
     return (
         <UserContext.Provider value={{
-            user,
-            manuallySetIsLoading, //for foreground/background transitioning, used in top router
-            superficiallyDeAuthUser, //for foreground/background transitioning, used in top router
+            user, 
             appSettings,
             userNotificationSettings, 
             handleSignup: signupMutation.mutate,
@@ -362,6 +388,7 @@ const onSignUp = async (username, email, password) => {
             signinMutation,
             signupMutation,
             onSignOut,
+            deAuthUser,
             reInitialize, // Added to the context
             updateUserSettings: setAppSettings,
             updateUserNotificationSettings: setUserNotificationSettings,  
