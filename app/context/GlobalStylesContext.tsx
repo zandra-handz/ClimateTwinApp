@@ -414,8 +414,7 @@ const containerStyles = StyleSheet.create({
   },
   windFriendsCardContainer: { 
     borderRadius: 20,
-    padding: 10,
-    paddingTop: 40,
+    padding: 10, 
     marginBottom: 10,
     width: '100%',  
     alignItems: 'center',

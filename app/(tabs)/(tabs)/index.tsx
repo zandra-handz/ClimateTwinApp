@@ -1,13 +1,12 @@
 import React from "react";
-import { View } from "react-native"; 
-import { useGeolocationWatcher } from "../../hooks/useCurrentLocationWatcher"; 
+import { View } from "react-native";
+import { useGeolocationWatcher } from "../../hooks/useCurrentLocationWatcher";
 import useHomeLocation from "../../hooks/useHomeLocation";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import { useUser } from "../../context/UserContext";
 import { useSurroundings } from "../../context/CurrentSurroundingsContext";
 import { useInteractiveElements } from "@/app/context/InteractiveElementsContext";
 import WebSocketSearchingLocations from "../../components/WebSocketSearchingLocations";
- 
 
 import CurrentSurroundingsView from "@/app/components/CurrentSurroundingsView";
 
@@ -40,7 +39,6 @@ const home = () => {
   //     };
   //   }, [])
   // );
- 
 
   return (
     <>
@@ -69,9 +67,16 @@ const home = () => {
 
           {portalSurroundings && !searchIsActive && (
             <>
-            <WindFriendsView description={portalSurroundings.description} windSpeed={portalSurroundings.windSpeed} windDirection={portalSurroundings.windDirection} />
-            <CurrentSurroundingsView /> 
-            
+              <WindFriendsView
+                description={portalSurroundings.description}
+                windSpeed={portalSurroundings.windSpeed}
+                windDirection={portalSurroundings.windDirection}
+                windFriends={portalSurroundings.windFriends}
+                homeDescription={homeSurroundings.description}
+                homeWindSpeed={homeSurroundings.windSpeed}
+                homeWindDirection={homeSurroundings.windDirection}
+              />
+              <CurrentSurroundingsView />
             </>
           )}
           {/* {itemChoices && currentSurroundings && !searchIsActive && (

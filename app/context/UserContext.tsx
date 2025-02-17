@@ -101,7 +101,7 @@ export const UserProvider = ({ children }) => {
         setUser(prev=> ({
             ...prev,
             authenticated: false,
-            loading: true,
+            loading: true, //NEED APP TO COME BACK TO FORGROUND WITH USER IN LOADING STATE
         }))
     };
     

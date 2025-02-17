@@ -2,7 +2,8 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import WindStreamSvg from '../assets/svgs/wind-stream.svg';
 
-const WindSquare = ({ windSpeed, windDirection, windFriends, specialHarmony }) => {
+
+const WindSquare = ({ windSpeed, windDirection, windFriends, specialHarmony, size=100, opacity=1, color="white"}) => {
   // Calculate the corrected wind direction (subtract 45 degrees)
   let correctedWindDirection = (windDirection - 90) % 360; // Subtract 45 degrees from wind direction
   
@@ -18,7 +19,7 @@ const WindSquare = ({ windSpeed, windDirection, windFriends, specialHarmony }) =
       
       {/* Windstream SVG with rotation based on the wind direction */}
       <View style={[styles.svgContainer, { transform: [{ rotate: `${correctedWindDirection - 90}deg` }] }]}>
-        <WindStreamSvg width={100} height={100} color={'white'} />
+        <WindStreamSvg width={size} height={size} color={color} style={{opacity: opacity}} />
       </View>
     </View>
   );
