@@ -40,6 +40,7 @@ const goToRoot = (): void => {
       //manuallySetIsLoading();
       //I think the only other part of the code that reinitializes is the websocket if it errors
       reInitialize();
+      showAppMessage(true, null, 'TOP ROUTER: triggered reinit');
     } else {
 
     }
@@ -62,21 +63,21 @@ const goToRoot = (): void => {
   useEffect(() => {
     console.log('use effect in top router!');
     // If user is still loading, don't perform any check yet
-    if (user.loading) {
-      console.log('TOP ROUTER: user is loading, router will not nav anywhere for now');
-      showAppMessage(true, null,'TOP ROUTER: user is loading, router will not nav anywhere for now');
-      return;
-    }
+    // if (user.loading) {
+    //   console.log('TOP ROUTER: user is loading, router will not nav anywhere for now');
+    //   showAppMessage(true, null,'TOP ROUTER: user is loading, router will not nav anywhere for now');
+    //   return;
+    // }
 
     // If the user is not authenticated, redirect to signin
-    if (!user.authenticated && !user.loading) {
+    if (!user.authenticated) {
       console.log('TOP ROUTER user not authenticated! Navving to root screen if not already there.');
       showAppMessage(true, null,'TOP ROUTER user not authenticated! Navving to root screen if not already there.');
      
       goToRoot();
       //router.replace("/signin");
     }
-    if (user && user.authenticated && !user.loading) {
+    if (user && user.authenticated) {
       showAppMessage(true, null,'TOP ROUTER: user authenticated! Navving to home.');
      
       console.log('TOP ROUTER: user authenticated! Navving to home');

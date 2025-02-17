@@ -1,9 +1,10 @@
 import React, { createContext, useContext, useEffect, useRef, useState } from "react";
 import * as SecureStore from "expo-secure-store";
-import { Alert } from "react-native";
+import { AppState } from "react-native";
 import { useUser } from "../context/UserContext";
 import { useAppState } from "../context/AppStateContext";
 import { useAppMessage } from "../context/AppMessageContext";
+ 
  
 
 interface SurroundingsWSContextType {
@@ -22,6 +23,10 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   const [token, setToken] = useState<string | null>(null);
   const [isReconnecting, setIsReconnecting] = useState(false);
   const { showAppMessage } = useAppMessage();
+
+
+  const appState = useRef(AppState.currentState);
+  const [appVisible, setAppVisible] = useState(appState.current);
 
   // Time delay for reconnection attempts (e.g., 10 seconds, 20 seconds, etc.)
   const [reconnectionDelay, setReconnectionDelay] = useState(10000); // Start with 10 seconds
@@ -181,7 +186,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
   // Function to attempt reconnection with exponential backoff
   const attemptReconnect = () => {
-    if (!isReconnecting && appStateVisible === "active" && user && user.authenticated && !user.loading) {
+    if (!isReconnecting && appStateVisible === "active" && user && user.authenticated) {
       console.log("Attempting to reconnect triggered");
   
       if (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN) {
@@ -189,7 +194,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
         setIsReconnecting(true);
    
         setTimeout(() => { 
-          if (appStateVisible === "active" && user && user.authenticated && !user.loading && (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN)) {
+          if (appStateVisible === "active" && user && user.authenticated && (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN)) {
             console.log("Reconnecting to WebSocket...");
             setReconnectAttempt((prev) => prev + 1);  
             setReconnectionDelay((prev) => Math.min(prev * 2, 60000));  
@@ -211,7 +216,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     if (
       user && 
       user.authenticated && 
-      !user.loading && 
+     // !user.loading && 
       (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN)
     ) {
       console.log('WEBSOCKET CONTEXT: Fetching token from SecureStore because the user is authenticated and the WebSocket is not open.');
