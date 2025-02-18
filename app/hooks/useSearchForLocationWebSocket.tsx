@@ -59,7 +59,7 @@ const useSearchForLocationWebSocket = ({
   
       fetchToken();
     }
-    }, [user]);
+    }, [isAuthenticated]);
 
   
 

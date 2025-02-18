@@ -49,7 +49,7 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({ chil
     setManualSurroundingsRefresh(false);
     
   }
-  }, [user]);
+  }, [isAuthenticated]);
 
 
   

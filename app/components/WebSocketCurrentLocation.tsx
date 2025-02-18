@@ -1,7 +1,6 @@
 import React, { useEffect, useCallback, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { useGlobalStyles } from "../context/GlobalStylesContext";
-import { useUser } from "../context/UserContext"; 
+import { useGlobalStyles } from "../context/GlobalStylesContext"; 
 import { useActiveSearch } from "../context/ActiveSearchContext";
 import { useFocusEffect } from "expo-router";
 import { useSurroundingsWS } from "../context/SurroundingsWSContext";
@@ -10,7 +9,7 @@ import { useNearbyLocations } from "../context/NearbyLocationsContext";
 
 const WebSocketCurrentLocation: React.FC = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
-  const { user } = useUser();
+ 
   const [update, setUpdate] = useState<string | null>(null);
   const { closeSearchExternally, refreshSurroundingsManually, gettingExploreLocations, foundExploreLocations } = useActiveSearch();
   const { showAppMessage} = useAppMessage();

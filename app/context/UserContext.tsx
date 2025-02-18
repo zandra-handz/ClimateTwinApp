@@ -153,6 +153,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
   const reInitialize = async () => {
     setLoading(true);
+    setAuthenticated(false);
     const token = await SecureStore.getItemAsync(TOKEN_KEY);
     if (token) {
       const userData = await getCurrentUser();
@@ -190,18 +191,19 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   }, []);
 
 
-//   useEffect(() => {
-//     if (appStateVisible === 'active') {
+  useEffect(() => {
+    if (appStateVisible === 'active') {
          
-//     console.log('BEGINNING INITIALIZE!!!!!!!!!!!!!!!!!!!!!!!!');
-//     reInitialize();
-//     }
-//   }, [appStateVisible]);
+    console.log('APP IN FOREGROUND, REINITTING IN USER CONTEXT!!!!!!!!!!!!!!!!!!!!!!!!');
+   
+    reInitialize();
+    }
+  }, [appStateVisible]);
 
-  //   const deAuthUser = () => {
-  //     setAuthenticated(false);
-  //     setLoading(true);
-  //   };
+    const deAuthUser = () => {
+      setAuthenticated(false);
+      setLoading(true);
+    };
 
   const signinMutation = useMutation({
     mutationFn: signinWithoutRefresh,

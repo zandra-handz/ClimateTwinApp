@@ -40,6 +40,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
   // Function to fetch the token.
   const fetchToken = async () => {
+    setToken(null);
     console.log('fetchToken in socket context triggered!');
     try {
       const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
@@ -235,8 +236,8 @@ useEffect(() => {   // Access appStateVisible from context
     console.log('App is in the background, triggering close socket...');
     closeSocket(); // Close WebSocket when app goes into background
   } else {
-    console.log('attempting reconnect because app is back in foreground');
-    attemptReconnect();
+    console.log('(REMOVED THIS FOR NOW) attempting reconnect because app is back in foreground');
+   // attemptReconnect();
   }
 }, [appStateVisible]); 
 

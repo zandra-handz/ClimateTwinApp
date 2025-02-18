@@ -49,7 +49,7 @@ const useWebSocket = ({
 
   const TOKEN_KEY = "accessToken";
 
-  const { user } = useUser();
+  const { user, isAuthenticated } = useUser();
   const [token, setToken] = useState<string | null>(null);
   const [triggerReconnectAfterFetch, setTriggerReconnectAfterFetch] =
     useState(false);
@@ -57,7 +57,7 @@ const useWebSocket = ({
   useFocusEffect(
     useCallback(() => {
       console.log("Location Searcher socket is focused");
-      if (user && user.authenticated) {
+      if (isAuthenticated) {
         //if app is in foreground, might be an unnecessary check but I'm not sure
 
         fetchToken();
@@ -72,7 +72,7 @@ const useWebSocket = ({
   );
 
   useEffect(() => {
-    if (!reconnectOnUserButtonPress || !user || !user?.authenticated) {
+    if (!reconnectOnUserButtonPress || !isAuthenticated) {
       return;
     }
     fetchToken();
@@ -178,8 +178,7 @@ const useWebSocket = ({
 const WebSocketSearchingLocations: React.FC<{ 
   reconnectOnUserButtonPress: boolean;
 }> = ({ reconnectOnUserButtonPress }) => {
-  const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { user, reinitialize } = useUser();
+  const { themeStyles, appContainerStyles } = useGlobalStyles(); 
   const { searchIsActive } = useActiveSearch();
 
   const [mapDimensions, setMapDimensions] = useState({ width: 0, height: 0 });

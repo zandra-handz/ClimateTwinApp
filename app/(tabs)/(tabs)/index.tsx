@@ -22,7 +22,7 @@ import WindFriendsView from "@/app/components/WindFriendsView";
 
 const home = () => {
   useGeolocationWatcher();
-  const { user } = useUser();
+  const { user, isAuthenticated } = useUser();
   //const { itemChoices, triggerItemChoicesRefetch } = useInteractiveElements();
 
   const { portalSurroundings, homeSurroundings } = useSurroundings();
@@ -85,7 +85,7 @@ const home = () => {
           </View>
         )} */}
 
-          {user && user.authenticated && searchIsActive && (
+          {isAuthenticated && searchIsActive && (
             <View
               style={[
                 appContainerStyles.defaultScreenElementContainer,
