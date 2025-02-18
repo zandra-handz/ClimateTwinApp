@@ -208,7 +208,8 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     const signinMutation = useMutation({
         mutationFn: signinWithoutRefresh,
         onSuccess: () => {
-          reInitialize(); // Will run only after tokens are stored
+            console.log('removed reinit from sign in mutation for now');
+         // reInitialize(); // Will run only after tokens are stored
         },
         onError: (error) => {
           console.error("Sign in mutation error:", error);
@@ -227,13 +228,18 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     //     },
     //   });
       
-  const onSignin = async (username: string, password: string) => {
-    try {
-      await signinMutation.mutateAsync({ username, password });
-    } catch (error) {
-      console.error("Sign in error", error);
-    }
-  };
+    const onSignin = async (username: string, password: string) => {
+        try {
+          // Call the mutation to sign in
+          await signinMutation.mutateAsync({ username, password });
+      
+          // Call reInitialize after successful sign-in
+          await reInitialize();
+        } catch (error) {
+          console.error("Sign in error", error);
+        }
+      };
+      
 
   const signupMutation = useMutation({
     mutationFn: signup,
