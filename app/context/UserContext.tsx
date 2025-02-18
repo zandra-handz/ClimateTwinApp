@@ -71,7 +71,7 @@ interface UserProviderProps {
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [authenticated, setAuthenticated] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [appSettings, setAppSettings] = useState<Record<string, any>>({});
   const [userNotificationSettings, setUserNotificationSettings] = useState<
     Record<string, any>
@@ -205,21 +205,28 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     //   setLoading(true);
     // };
 
-  const signinMutation = useMutation({
-    mutationFn: signinWithoutRefresh,
-    onSuccess: async (result) => {
-      if (result.data) {
-        const { access, refresh } = result.data;
-        await SecureStore.setItemAsync(TOKEN_KEY, access);
-        await SecureStore.setItemAsync("refreshToken", refresh);
-        reInitialize();
-      }
-    },
-    onError: (error) => {
-      console.error("Sign in mutation error:", error);
-    },
-  });
+    const signinMutation = useMutation({
+        mutationFn: signinWithoutRefresh,
+        onSuccess: () => {
+          reInitialize(); // Will run only after tokens are stored
+        },
+        onError: (error) => {
+          console.error("Sign in mutation error:", error);
+        },
+      });
 
+//in case i end up needing async
+    //   const signinMutation = useMutation({
+    //     mutationFn: signinWithoutRefresh,
+    //     onSuccess: async () => {
+    //       console.log("Tokens should now be saved before reInitialize runs.");
+    //       await reInitialize(); // Ensures it waits for any potential async operations
+    //     },
+    //     onError: (error) => {
+    //       console.error("Sign in mutation error:", error);
+    //     },
+    //   });
+      
   const onSignin = async (username: string, password: string) => {
     try {
       await signinMutation.mutateAsync({ username, password });

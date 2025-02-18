@@ -21,7 +21,7 @@ const RuinsSurroundingsView = () => {
 
   return (
     <View style={{ flex: 1 }}>
-      {ruinsSurroundings && (
+      {ruinsSurroundings?.id && (
         <>
           <RuinsHarmonyView
             name={ruinsSurroundings.name}
@@ -33,28 +33,38 @@ const RuinsSurroundingsView = () => {
           />
 
           <SingleDetailPanel
-            label={"Experience"}
-            value={portalSurroundings.experience}
+            label={"Wind compass"}
+            value={ruinsSurroundings.windCompass}
           />
 
           <SingleDetailPanel
-            label={"Details"}
-            value={portalSurroundings.details}
+            label={"Wind harmony"}
+            value={ruinsSurroundings.windHarmony}
           />
+          <SingleDetailPanel
+            label={"Wind agreement score"}
+            value={ruinsSurroundings.windAgreementScore}
+          />
+          {ruinsSurroundings.tags && ruinsSurroundings.tags.historic && (
+            <SingleDetailPanel
+              label={"#"}
+              value={ruinsSurroundings.tags.historic}
+            />
+          )}
 
-          <SingleDetailPanel
-            label={"Wind speed interaction"}
-            value={portalSurroundings.windSpeedInteraction}
-          />
+          {ruinsSurroundings.tags && ruinsSurroundings.tags.description && (
+            <SingleDetailPanel
+              label={"Ruins description"}
+              value={ruinsSurroundings.tags.description}
+            />
+          )}
 
-          <SingleDetailPanel
-            label={"Pressure interaction"}
-            value={portalSurroundings.pressureInteraction}
-          />
-          <SingleDetailPanel
-            label={"Humidity interaction"}
-            value={portalSurroundings.humidityInteraction}
-          />
+          {ruinsSurroundings.streetViewImage && (
+            <SingleDetailPanel
+              label={"Image"}
+              value={ruinsSurroundings.streetViewImage}
+            />
+          )}
         </>
       )}
     </View>
