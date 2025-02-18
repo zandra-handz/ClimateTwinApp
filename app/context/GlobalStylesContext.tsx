@@ -431,7 +431,19 @@ const containerStyles = StyleSheet.create({
     height: 160,
     overflow: 'hidden',
 
-  }
+  },
+  singleDetailPanelContainer: {
+    borderRadius: 20, 
+    padding: 10, 
+    marginBottom: 10,
+    width: '100%',  
+    alignItems: 'center',
+    justifyContent: 'center', 
+ 
+    height: 'auto',
+    overflow: 'hidden',
+
+  },
 });
 
 const fontStyles = StyleSheet.create({

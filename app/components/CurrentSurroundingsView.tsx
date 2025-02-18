@@ -73,7 +73,7 @@ const CurrentSurroundingsView = () => {
         )}
         keyExtractor={(item, index) => index.toString()}
         numColumns={3} // Three cards per row
-        ListFooterComponent={<View style={{ height: 200 }}></View>}
+        ListFooterComponent={<View style={{ height: 100 }}></View>}
       />
     </View>
   );

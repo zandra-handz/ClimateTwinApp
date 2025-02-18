@@ -200,10 +200,10 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     }
   }, [appStateVisible]);
 
-    const deAuthUser = () => {
-      setAuthenticated(false);
-      setLoading(true);
-    };
+    // const deAuthUser = () => {
+    //   setAuthenticated(false);
+    //   setLoading(true);
+    // };
 
   const signinMutation = useMutation({
     mutationFn: signinWithoutRefresh,
@@ -212,7 +212,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         const { access, refresh } = result.data;
         await SecureStore.setItemAsync(TOKEN_KEY, access);
         await SecureStore.setItemAsync("refreshToken", refresh);
-        await reInitialize();
+        reInitialize();
       }
     },
     onError: (error) => {

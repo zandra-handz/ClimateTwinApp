@@ -1,5 +1,5 @@
-import React from "react";
-import { View } from "react-native";
+import React, { useRef } from "react";
+import { View, ScrollView } from "react-native";
 import { useGeolocationWatcher } from "../../hooks/useCurrentLocationWatcher";
 import useHomeLocation from "../../hooks/useHomeLocation";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
@@ -9,9 +9,11 @@ import { useInteractiveElements } from "@/app/context/InteractiveElementsContext
 import WebSocketSearchingLocations from "../../components/WebSocketSearchingLocations";
 
 import CurrentSurroundingsView from "@/app/components/CurrentSurroundingsView";
-
+import SingleDetailPanel from "@/app/components/SingleDetailPanel";
 import { useAppMessage } from "../../context/AppMessageContext";
 
+import PortalSurroundingsView from "@/app/components/PortalSurroundingsView";
+import RuinsSurroundingsView from "@/app/components/RuinsSurroundingsView";
 import { StatusBar } from "expo-status-bar";
 
 import { useActiveSearch } from "../../context/ActiveSearchContext";
@@ -56,28 +58,13 @@ const home = () => {
         <View style={appContainerStyles.innerFlexStartContainer}>
           <PortalBanner address={homeLocation?.address || "Manchester, NH"} />
 
-          {/* {exploreLocation && !searchIsActive && (
-            <View style={appContainerStyles.innerFlexStartContainer}>
-              <DataList
-                listData={[exploreLocation]}
-                onCardButtonPress={() => {}}
-              />
-            </View>
-          )} */}
-
           {portalSurroundings && !searchIsActive && (
-            <>
-              <WindFriendsView
-                description={portalSurroundings.description}
-                windSpeed={portalSurroundings.windSpeed}
-                windDirection={portalSurroundings.windDirection}
-                windFriends={portalSurroundings.windFriends}
-                homeDescription={homeSurroundings.description}
-                homeWindSpeed={homeSurroundings.windSpeed}
-                homeWindDirection={homeSurroundings.windDirection}
-              />
+            <ScrollView style={{ flex: 1 }}>
+              <PortalSurroundingsView />
+              <RuinsSurroundingsView />
+
               <CurrentSurroundingsView />
-            </>
+            </ScrollView>
           )}
           {/* {itemChoices && currentSurroundings && !searchIsActive && (
           <View style={appContainerStyles.innerFlexStartContainer}>
