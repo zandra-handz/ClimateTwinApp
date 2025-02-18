@@ -51,8 +51,8 @@ const WebSocketCurrentLocation: React.FC = () => {
   }, [lastLocationName]);
 
   return (
-    <>
-    {user?.authenticated && (
+    // <>
+    // {user?.authenticated && (
       
     <View style={appContainerStyles.defaultElementRow}>
       {update && (
@@ -68,9 +68,9 @@ const WebSocketCurrentLocation: React.FC = () => {
     </View>
 
     
-)}
+// )}
     
-    </>
+//     </>
   );
 };
 

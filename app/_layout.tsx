@@ -59,14 +59,14 @@ export default function Layout() {
                       <NearbyLocationsProvider>
                         <InteractiveElementsProvider>
                           <SurroundingsWSProvider>
-                            <Stack>
+                          <Stack screenOptions={{ headerShown: false }}>
+
                               {user?.authenticated ? (
                                 
                               <Stack.Screen
                                 name="(tabs)"
                                 options={{
-                                  headerShown: false,
-                                  header: () => <Header />,
+                                  headerShown: false, 
                                   gestureEnabled: false,
                                 
                                 }}
