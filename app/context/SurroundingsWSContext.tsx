@@ -225,7 +225,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       setLastMessage(null);
       setLastLocationName(null);
     }
-  }, [user]);
+  }, [isAuthenticated]);
   
  
 
@@ -235,10 +235,11 @@ useEffect(() => {   // Access appStateVisible from context
   if (appStateVisible !== 'active') {
     console.log('App is in the background, triggering close socket...');
     closeSocket(); // Close WebSocket when app goes into background
-  } else {
-    console.log('(REMOVED THIS FOR NOW) attempting reconnect because app is back in foreground');
-   // attemptReconnect();
-  }
+  } 
+  // else {
+  //   console.log('(REMOVED THIS FOR NOW) attempting reconnect because app is back in foreground');
+  
+  // }
 }, [appStateVisible]); 
 
 
@@ -258,10 +259,12 @@ useEffect(() => {   // Access appStateVisible from context
       }
       
      // connectWebSocket(token); // Manually trigger WebSocket connection on token change
-    } else { 
-      closeSocket();
+    } 
     
-  }
+  //   else { 
+  //     closeSocket();
+    
+  // }
 
     // Cleanup the socket on unmount or when token changes
     return () => {
