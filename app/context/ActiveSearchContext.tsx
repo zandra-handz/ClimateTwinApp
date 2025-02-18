@@ -30,7 +30,7 @@ interface ActiveSearchProviderProps {
 }
 
 export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({ children }) => {
-  const { user } = useUser(); 
+  const { user, isAuthenticated, isInitializing } = useUser(); 
   const queryClient = useQueryClient();
   const timeoutRef = useRef(null);
   const [activeSearch, setActiveSearch] = useState<ActiveSearch | null>(null);
@@ -40,7 +40,7 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({ chil
   const [manualSurroundingsRefresh, setManualSurroundingsRefresh ] = useState<boolean>(false);
 
   useEffect(() => {
-    if (!user.authenticated && !user.loading) {
+    if (!isAuthenticated) {
       
     console.log("ActiveSearchContext: User changed. Resetting context...");
     setActiveSearch(null);
@@ -56,7 +56,7 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({ chil
   const { data: remainingGoes, isLoading, isFetching, isSuccess, isError } = useQuery({
     queryKey: ['remainingGoes'],
     queryFn: () => getRemainingGoes(),
-    enabled: !!user && !!user.authenticated,
+    enabled: !!isAuthenticated,
     onSuccess: (data) => { 
         
     }

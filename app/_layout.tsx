@@ -18,7 +18,7 @@ import Header from "./components/Header";
 
 export default function Layout() {
   const queryClient = new QueryClient();
-  const { user, reInitialize } = useUser(); 
+  // const { user, reInitialize } = useUser(); 
 
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
@@ -61,7 +61,7 @@ export default function Layout() {
                           <SurroundingsWSProvider>
                           <Stack screenOptions={{ headerShown: false }}>
 
-                              {user?.authenticated ? (
+                              {/* {user?.authenticated ? ( */}
                                 
                               <Stack.Screen
                                 name="(tabs)"
@@ -73,7 +73,7 @@ export default function Layout() {
                               />
 
                               
-                            ) : ( 
+                            {/* ) : (  */}
                               <>
                                 <Stack.Screen
                                   name="index"
@@ -98,7 +98,7 @@ export default function Layout() {
                                   }}
                                 />
                               </>
-                            )}
+                            {/* )} */}
                             </Stack>
                           </SurroundingsWSProvider>
                         </InteractiveElementsProvider>

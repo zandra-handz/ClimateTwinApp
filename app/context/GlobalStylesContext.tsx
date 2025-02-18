@@ -63,7 +63,7 @@ interface GlobalStylesProviderProps {
 export const GlobalStylesProvider: React.FC<GlobalStylesProviderProps> = ({
   children,
 }) => {
-  const { user, appSettings } = useUser();
+  const { user, isAuthenticated, appSettings } = useUser();
   const colorScheme = useColorScheme();
   const [nonCustomHeaderPage, setNonCustomHeaderPage] =
     useState<boolean>(false);
@@ -95,7 +95,7 @@ export const GlobalStylesProvider: React.FC<GlobalStylesProviderProps> = ({
   });
 
   useEffect(() => {
-    if (user.authenticated && appSettings) {
+    if (isAuthenticated && appSettings) {
       console.log(
         `APP SETTINGS IN GLOBAL STYLES: ${appSettings.manual_dark_mode}`
       );
@@ -120,7 +120,7 @@ export const GlobalStylesProvider: React.FC<GlobalStylesProviderProps> = ({
         theme: colorScheme || "dark",
       }));
     }
-  }, [user.authenticated, appSettings, colorScheme]);
+  }, [isAuthenticated, appSettings, colorScheme]);
 
   // Effect to adjust styles based on the theme
   useEffect(() => {

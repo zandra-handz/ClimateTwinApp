@@ -1,399 +1,283 @@
-
-
-import React, { createContext, useContext, useState, useEffect, useRef, AccessibilityInfo } from 'react';
-import * as SecureStore from 'expo-secure-store';
-import * as Notifications from 'expo-notifications';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import * as Device from 'expo-device';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useRef,
+  AccessibilityInfo,
+} from "react";
+import * as SecureStore from "expo-secure-store";
+import * as Notifications from "expo-notifications";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import * as Device from "expo-device";
 import Constants from "expo-constants";
-import { Platform, AppState } from 'react-native';
-import { signup, signin, signinWithoutRefresh, signout, getCurrentUser, getUserSettings } from '../apicalls';
-import { runOnRuntime } from 'react-native-reanimated';
+import { Platform, AppState } from "react-native";
+import useProtectedRoute from "../hooks/useProtectedRoute";
+import {
+  signup,
+  signin,
+  signinWithoutRefresh,
+  signout,
+  getCurrentUser,
+  getUserSettings,
+} from "../apicalls";
+import { runOnRuntime } from "react-native-reanimated";
+import { useRootNavigation, useNavigationContainerRef, useNavigation, useRouter, useSegments } from "expo-router";
+//import { useRootNavigation } from "@react-navigation/native";
 
-const UserContext = createContext({});
+interface User {
+  id?: string;
+  username?: string;
+  email?: string;
+  // Add other user properties as needed
+}
+
+interface UserContextType {
+  user: User | null;
+  isAuthenticated: boolean;
+  isInitializing: boolean;
+  appSettings: Record<string, any>;
+  userNotificationSettings: Record<string, any>;
+  onSignin: (username: string, password: string) => Promise<void>;
+  onSignUp: (
+    username: string,
+    email: string,
+    password: string
+  ) => Promise<void>;
+  reInitialize: () => Promise<void>;
+  deAuthUser: () => void;
+}
+
+const UserContext = createContext<UserContextType | undefined>(undefined);
+
+ 
+
+export const useUser = () => {
+  const context = useContext(UserContext);
+  if (!context) {
+    throw new Error("useUser must be used within a UserProvider");
+  }
+  return context;
+};
+
+const TOKEN_KEY = "accessToken";
 
 
-export const useUser = () => useContext(UserContext);
 
-const TOKEN_KEY = 'accessToken';
+interface UserProviderProps {
+  children: React.ReactNode;
+}
 
-export const UserProvider = ({ children }) => {
-    const [user, setUser] = useState({
-        user: null,
-        authenticated: false,
-        loading: true,
-    });
-    const [appSettings, setAppSettings] = useState({});
-    const [userNotificationSettings, setUserNotificationSettings] = useState({});
-    const queryClient = useQueryClient(); 
-
+export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
+  const [user, setUser] = useState<User | null>(null);
+  const [authenticated, setAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [appSettings, setAppSettings] = useState<Record<string, any>>({});
+  const [userNotificationSettings, setUserNotificationSettings] = useState<
+    Record<string, any>
+  >({});
+  const queryClient = useQueryClient();
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
-  
+
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (nextAppState) => {
-      console.log("Next AppState:", nextAppState);
-      
       if (appState.current !== nextAppState) {
-        appState.current = nextAppState;  // Update ref
-        setAppStateVisible(nextAppState); // Trigger re-render
+        appState.current = nextAppState;
+        setAppStateVisible(nextAppState);
       }
     });
-  
-    return () => subscription.remove(); // Correct cleanup
+    return () => subscription.remove();
   }, []);
+
+  useProtectedRoute(user); 
+
+//   const useProtectedRoute = (user: User | null) => {
+//     //console.log('usePROTECTEDROUTERUNNING, rootNavigation value: ', rootNavigation);
+//     const rootNavigation = useNavigationContainerRef();
+//     const navigationRef = useNavigationContainerRef();
+    
+//     console.log('usePROTECTEDROUTERUNNING, userData: ', user);
+//     console.log('usePROTECTEDROUTERUNNING, navigationRef value: ', navigationRef.isReady());
+   
+
+//     const segments = useSegments();
+//     const router = useRouter();
+//     const [isNavigationReady, setNavigationReady] = useState(false);
+
+//     useEffect(() => {
+//         if (navigationRef.isReady()) {
+//           setNavigationReady(true);
+//           console.log("NAVIGATION READY");
+//         } else {
+//           console.log("Navigation ref is not ready yet.");
+//         }
+    
+//         const unsubscribe = navigationRef.addListener("state", () => {
+//           setNavigationReady(true);
+//           console.log("NAVIGATION READY (via state listener)");
+//         });
+    
+//         return () => unsubscribe && unsubscribe();
+//       }, [navigationRef.isReady()]);
+
+//     useEffect(() => {
+//         console.log('authenticated triggered useProtected route!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1');
+//       if (!isNavigationReady) {
+//         console.log("NAVIGATION IS NOT READY");
+//         return;
+//       }
+
+//       const isAuthGroup = segments[0] === "(auth)";
+
+//       if (!user && !isAuthGroup) {
+//         router.push("/sign-in");
+//       } else if (user && isAuthGroup) {
+//         router.push("(tabs)");
+//       }
+//     }, [user, authenticated, segments, isNavigationReady]);
+//   };
+
+
+  //   useEffect(() => {
+  //     if (appStateVisible === "active") {
+  //       deAuthUser();
+  //       reInitialize();
+  //     } else {
+  //       deAuthUser();
+  //     }
+  //   }, [appStateVisible]);
+
+
   
-  useEffect(() => {
-    console.log("AppState Visible Changed:", appStateVisible);
-  
-    if (appStateVisible === "active") { 
-      console.log('Deauthing and reinitializing user in user context!');
-      deAuthUser();
-      reInitialize();
-    } else {
-      deAuthUser();
-    }
-  }, [appStateVisible]);
 
+  const reInitialize = async () => {
+    setLoading(true);
+    const token = await SecureStore.getItemAsync(TOKEN_KEY);
+    if (token) {
+      const userData = await getCurrentUser();
+      const userSettingsData = await getUserSettings();
 
-    // useEffect(() => {
-    //     if (appSettings) {
-    //         console.log('app settings useeffect in context: ', appSettings);
-    //     }
-
-    // }, [appSettings]);
-
-
-    // useEffect(() => {
-    //     console.log('user triggered rerender!!!!!!!!!!!!!!!');
-
-    // }, [user]);
-
-     
-
-    const reInitialize = async () => {
-        console.log('USER CONTEXT: USER REINIT TRIGGERED!');
-        const token = await SecureStore.getItemAsync(TOKEN_KEY);
-        if (token) {
-
-            //Interceptor and secure store saving happens inside of get current user
-            const userData = await getCurrentUser();
-    
-            const userSettingsData = await getUserSettings();
-    
-
-    
-            if (userSettingsData) {
-                setAppSettings(prev => ({
-                    ...prev,
-                    ...userSettingsData
-                }));
-
-                console.log('USER CONTEXT: app settings set in reInitialize');
-                
-                setUserNotificationSettings(prev => ({
-                    ...prev,
-                    receive_notifications: userSettingsData?.receive_notifications || false
-                }));
-
-                console.log('USER CONTEXT: user notifications set in reInitialize');
-            } 
-            if (userData) {
-                setUser(prev => ({
-                    ...prev,
-                    user: userData,
-                    authenticated: true,
-                    loading: false,
-                }));
-                console.log('USER CONTEXT: user set in reInitialize');
-            } else {
-                setUser(prev => ({ ...prev, authenticated: false, loading: false }));
-                console.log('USER CONTEXT: user set to false in reInitialize');
-            }
-        } else {
-            setUser({ user: null, authenticated: false, loading: false });
-            console.log('USER CONTEXT: user set to false in reInitialize because no token in secure store');
-        }
-    };
-
-
-    const manuallySetIsLoading = () => {
-        setUser(prev=> ({
-            ...prev,
-            loading: true,
-        }))
-    };
-
-
-    const deAuthUser = () => {
-        setUser(prev=> ({
-            ...prev,
-            authenticated: false,
-            loading: true, //NEED APP TO COME BACK TO FORGROUND WITH USER IN LOADING STATE
-        }))
-    };
-    
-    // Reinitialize user data function
-    // const reInitialize = async () => {
-    //     const token = await SecureStore.getItemAsync(TOKEN_KEY);
-    //     if (token) {
-    //        // const userData = null;
-    //        const userData = await getCurrentUser();
-           
-    //         if (userData) {
-    //             setUser(prev => ({
-    //                 ...prev,
-    //                 user: userData,
-    //                 authenticated: true,
-    //                 loading: false, 
-    //             })); 
-    //         } else {
-    //             // Handle case where user data is null
-    //             setUser(prev => ({ ...prev, authenticated: false, loading: false }));
-    //         }
-
-    //         const userSettingsData = await getUserSettings();
-
-    //         if (userSettingsData) {
-    //             setAppSettings(userSettingsData || {});
-                
-                
-    //             setUserNotificationSettings({
-    //                 receive_notifications: userSettingsData?.receive_notifications || false
-    //             }); 
-    //         }
-    //     } else {
-    //         setUser({ user: null, authenticated: false, loading: false });
-    //     }
-    // }; 
- 
-    const { data: currentUserData } = useQuery({
-        staleTime: 0, //to make sure this data is always fetched from endpoint 
-        queryKey: ['fetchUser'],
-        refetchOnMount: true,
-        queryFn: async () => {
-            const token = await SecureStore.getItemAsync(TOKEN_KEY);
-            if (token) return await getCurrentUser();
-            return null;
-        },
-        //enabled: user.authenticated,
-        onSuccess: (data) => {
-            if (data) {
-                setUser(prev => ({
-                    ...prev,
-                    user: data,
-                    authenticated: true,
-                    loading: false
-                }));
-            //     setAppSettings(data.settings || {});
-            //     console.log('user app settings', appSettings);
-            //     setUserNotificationSettings({ receive_notifications: data.settings?.receive_notifications || false });
-            }
-        },
-        onError: () => {
-            setUser(prev => ({ ...prev, loading: false }));
-        }
-    });
-
-    
-
-    useEffect(() => {
-        const fetchInitialSettings = async () => {
-            console.log('SCREEN READER CONTEXT');
-            try {
-                const isActive = await AccessibilityInfo.isScreenReaderEnabled();
-                setAppSettings(prevSettings => ({
-                    ...prevSettings,
-                    screen_reader: isActive,
-                }));
-            } catch (error) {
-                console.error('Error fetching initial screen reader status:', error);
-            }
-        };
-    
-        if (user.authenticated && currentUserData && appSettings) {
-            fetchInitialSettings();
-        }
-    }, [user.authenticated]);
-    
-    
-    const signinMutation = useMutation({
-        mutationFn: signinWithoutRefresh, //swapped this out with signin 1/1/2025 could be buggy
-        onMutate: () => {  
-            console.log('signin is fetching from onMutate');
-        },
-        onSuccess: async (result) => { 
-            if (result.data) {
-                const { access, refresh } = result.data;
-                await SecureStore.setItemAsync(TOKEN_KEY, access);  // Store the access token
-                await SecureStore.setItemAsync('refreshToken', refresh);  // Store the refresh token
-                await reInitialize();  
-            }
-        },
-        onError: (error) => {
-            console.error('Sign in mutation error:', error);
-            //alert("Sign-in failed: " + (error.response?.data.msg || 'Unknown error occurred'));
-        },
-        onSettled: () => { 
-          //  signinMutation.reset();
-
-        },
-    });
-    
-
-const onSignin = async (username, password) => {
-    try {
-        
-        const credentials = { username, password };
-
-         //console.log('Signing in with credentials:', credentials);
- 
-        await signinMutation.mutateAsync(credentials);
-    } catch (error) {
-        console.error('Sign in error', error); 
-    }
-};
-
-
-//giving me a lot of errors when I try to log the new user in but it does log them in
-const onSignUp = async (username, email, password) => {
-    try {
-        
-        const credentials = { username, email, password };
-
-       //  console.log('Signing in with credentials:', credentials);
-        
- 
-        await signupMutation.mutateAsync( credentials );
-        onSignin(username, password);
-    } catch (error) {
-        console.error('Sign up error', error); 
-    }
-};
-
-
-    const signupMutation = useMutation({
-        mutationFn: signup,
-        onSuccess: async (result) => {
-            if (result.data) {
-                // WHAT IS THIS?
-                await SecureStore.setItemAsync(TOKEN_KEY, result.data.token);
-                await reInitialize(); // Refetch user data after sign-up
-            }
-        }
-    });
-
-    // const updateAppSettings = async (newSettings) => {
-    //     try {
-    //         await updateAppSettingsMutation.mutateAsync({
-    //             userId: user.user.id, // User ID
-    //             fieldUpdates: newSettings // Pass newSettings directly as fieldUpdates
-    //         });
-    //     } catch (error) {
-    //         console.error('Error updating app settings:', error);
-    //     }
-    // };
-
-    // const updateAppSettingsMutation = useMutation({
-    //     mutationFn: (data) => updateUserAccessibilitySettings(data.userId, data.setting),
-    //     onSuccess: (data) => {
-    //         setAppSettings(data); // Assuming the API returns updated settings
-            
-    //         queryClient.setQueryData(['fetchUser'], (oldData) => ({
-    //             ...oldData,
-    //             settings: data.settings
-    //         }));
-    //     },
-    //     onError: (error) => {
-    //         console.error('Update app settings error:', error);
-    //     }
-    // });
-
-    const onSignOut = async () => {
-        await signout();  
-    
-        // Reset user-related state
-        setUser({
-            user: null,
-            authenticated: false,
-            loading: false,
-            // credentials: {
-            //     token: null,  
-            // },
+      if (userSettingsData) {
+        setAppSettings((prev) => ({ ...prev, ...userSettingsData }));
+        setUserNotificationSettings({
+          receive_notifications:
+            userSettingsData?.receive_notifications || false,
         });
-     
-        // setAppSettings(null); 
-        // setUserNotificationSettings(null);   
-        queryClient.clear();
-    };
+      }
+
+      if (userData) {
+        setUser(userData);
+        setAuthenticated(true);
+      } else {
+        setAuthenticated(false);
+      }
+
+      
+     // useProtectedRoute(userData || null);
+    } else {
+      setUser(null);
+      setAuthenticated(false);
+     // useProtectedRoute(null);
+    }
+    
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    console.log('BEGINNING INITIALIZE!!!!!!!!!!!!!!!!!!!!!!!!');
+    reInitialize();
+  }, []);
+
+
+//   useEffect(() => {
+//     if (appStateVisible === 'active') {
+         
+//     console.log('BEGINNING INITIALIZE!!!!!!!!!!!!!!!!!!!!!!!!');
+//     reInitialize();
+//     }
+//   }, [appStateVisible]);
+
+  //   const deAuthUser = () => {
+  //     setAuthenticated(false);
+  //     setLoading(true);
+  //   };
+
+  const signinMutation = useMutation({
+    mutationFn: signinWithoutRefresh,
+    onSuccess: async (result) => {
+      if (result.data) {
+        const { access, refresh } = result.data;
+        await SecureStore.setItemAsync(TOKEN_KEY, access);
+        await SecureStore.setItemAsync("refreshToken", refresh);
+        await reInitialize();
+      }
+    },
+    onError: (error) => {
+      console.error("Sign in mutation error:", error);
+    },
+  });
+
+  const onSignin = async (username: string, password: string) => {
+    try {
+      await signinMutation.mutateAsync({ username, password });
+    } catch (error) {
+      console.error("Sign in error", error);
+    }
+  };
+
+  const signupMutation = useMutation({
+    mutationFn: signup,
+    onSuccess: async (result) => {
+      if (result.data) {
+        await SecureStore.setItemAsync(TOKEN_KEY, result.data.token);
+        await reInitialize();
+      }
+    },
+  });
+
+  const onSignUp = async (
+    username: string,
+    email: string,
+    password: string
+  ) => {
+    try {
+      await signupMutation.mutateAsync({ username, email, password });
+      await onSignin(username, password);
+    } catch (error) {
+      console.error("Sign up error", error);
+    }
+  };
+
+  const onSignOut = async () => {
+    await signout();  
+
+    // Reset user-related state
+    setUser(null);
+    setAuthenticated(false);
     
  
-    useEffect(() => {
-      //  console.log('usernotifs useEffect triggered in context');
-        if (userNotificationSettings?.receive_notifications) {
-            // console.log('registering for notifs');
-            registerForNotifications();
-        } else {
-            // console.log('removing notifs permissions');
-            removeNotificationPermissions();
-        }
-    }, [userNotificationSettings]);
+    // setAppSettings(null); 
+    // setUserNotificationSettings(null);   
+    queryClient.clear();
+};
 
-
-    const registerForNotifications = async () => {
-        if (Platform.OS === "android") {
-            await Notifications.setNotificationChannelAsync("default", {
-                name: "default",
-                importance: Notifications.AndroidImportance.MAX,
-                vibrationPattern: [0, 250, 250, 250],
-                lightColor: "#FF231F7C",
-            });
-        }
-
-        if (Device.isDevice) {
-            const { status: existingStatus } = await Notifications.getPermissionsAsync();
-            let finalStatus = existingStatus;
-            if (existingStatus !== "granted") {
-                const { status } = await Notifications.requestPermissionsAsync();
-                finalStatus = status;
-            }
-
-            if (finalStatus === "granted") {
-                const projectId = Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId;
-                const pushTokenString = (await Notifications.getExpoPushTokenAsync({ projectId })).data;
-                await SecureStore.setItemAsync('pushToken', pushTokenString);
-                //await updateUserAccessibilitySettings(user.user.id, { receive_notifications: true, expo_push_token: pushTokenString });
-                // console.log(pushTokenString);
-            }
-        }
-    };
-
-    const removeNotificationPermissions = async () => {
-        await SecureStore.deleteItemAsync('pushToken');
-        if (user.user) {
-          //  await updateUserAccessibilitySettings(user.user.id, { receive_notifications: false, expo_push_token: null });
-        } 
-    };
-
-    return (
-        <UserContext.Provider value={{
-            user, 
-            appSettings,
-            userNotificationSettings, 
-            handleSignup: signupMutation.mutate,
-            onSignin, 
-            onSignUp,
-            // updateAppSettingsMutation, 
-            // updateAppSettings,
-            signinMutation,
-            signupMutation,
-            onSignOut,
-            deAuthUser,
-            reInitialize, // Added to the context
-            updateUserSettings: setAppSettings,
-            updateUserNotificationSettings: setUserNotificationSettings,  
-        }}>
-            {children}
-        </UserContext.Provider>
-    );
+  return (
+    <UserContext.Provider
+      value={{
+        user,
+        isAuthenticated: authenticated,
+        isInitializing: loading,
+        appSettings,
+        userNotificationSettings,
+        onSignin,
+        onSignUp,
+        onSignOut,
+        reInitialize,
+        // deAuthUser,
+      }}
+    >
+      {children}
+    </UserContext.Provider>
+  );
 };

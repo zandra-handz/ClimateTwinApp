@@ -18,7 +18,7 @@ const SurroundingsWSContext = createContext<SurroundingsWSContextType | undefine
 export const SurroundingsWSProvider: React.FC = ({ children }) => {
   const TOKEN_KEY = "accessToken";
   const socketRef = useRef<WebSocket | null>(null);
-  const { user } = useUser();
+  const { user, isAuthenticated } = useUser();
   const { appStateVisible } = useAppState();
   const [token, setToken] = useState<string | null>(null);
   const [isReconnecting, setIsReconnecting] = useState(false);
@@ -40,9 +40,10 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
   // Function to fetch the token.
   const fetchToken = async () => {
+    console.log('fetchToken in socket context triggered!');
     try {
       const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
-      //console.log("Fetched token:", storedToken);
+      console.log("Fetched token:", storedToken);
       setToken(storedToken);
     } catch (error) {
       console.error("Failed to retrieve token:", error);
@@ -64,7 +65,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
     let confirmedToken; 
 
-    if (!user.authenticated) {
+    if (!isAuthenticated) {
       return;
     }
 
@@ -177,7 +178,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
   // Function to attempt reconnection with exponential backoff
   const attemptReconnect = () => {
-    if (!isReconnecting && user?.authenticated) {
+    if (!isReconnecting && isAuthenticated) {
       console.log("Attempting to reconnect triggered");
   
       if (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN) {
@@ -185,7 +186,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
         setIsReconnecting(true);
    
         setTimeout(() => { 
-          if ( user?.authenticated && (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN)) {
+          if (  isAuthenticated && (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN)) {
             console.log("Reconnecting to WebSocket...");
             setReconnectAttempt((prev) => prev + 1);  
             setReconnectionDelay((prev) => Math.min(prev * 2, 60000));  
@@ -205,8 +206,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   // Manually fetch the token and initialize the WebSocket connection when the provider mounts
   useEffect(() => {
     if (
-      user && 
-      user.authenticated && 
+       isAuthenticated && 
      // !user.loading && 
       (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN)
     ) {
@@ -218,7 +218,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     } else {
       console.log('WEBSOCKET CONTEXT: Skipping token fetch because WebSocket is already open or user is not authenticated.');
       console.log(`WebSocket state: ${socketRef.current ? socketRef.current.readyState : 'No socket'}`);
-      console.log(`User authenticated: ${user.authenticated}`);
+      console.log(`User authenticated: ${ isAuthenticated}`);
       setToken(null); // Clear token when user logs out or is not authenticated
       console.log('token set to null');
       setLastMessage(null);
@@ -234,8 +234,15 @@ useEffect(() => {   // Access appStateVisible from context
   if (appStateVisible !== 'active') {
     console.log('App is in the background, triggering close socket...');
     closeSocket(); // Close WebSocket when app goes into background
+  } else {
+    console.log('attempting reconnect because app is back in foreground');
+    attemptReconnect();
   }
 }, [appStateVisible]); 
+
+
+ 
+
 
  
 

@@ -25,7 +25,7 @@ const useSearchForLocationWebSocket = ({
 
   const socketRef = useRef<WebSocket | null>(null);
 
-  const { user, reInitialize } = useUser();
+  const { user, isAuthenticated } = useUser();
    const [token, setToken] = useState<string | null>(null);
 
 
@@ -44,7 +44,7 @@ const useSearchForLocationWebSocket = ({
 
 
     useEffect(() => {
-      if (user && user.authenticated) {
+      if (isAuthenticated) {
         
       const fetchToken = async () => {
         try {

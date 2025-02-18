@@ -13,7 +13,7 @@ import { DrawerToggleButton } from "@react-navigation/drawer";
 
 const ExploreTabsHeader = () => {
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
-  const { user, onSignOut } = useUser();
+  const { user, isAuthenticated, isInitializing, onSignOut } = useUser();
 
   const handleSignOut = () => {
     onSignOut();

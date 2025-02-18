@@ -17,6 +17,8 @@ const WebSocketCurrentLocation: React.FC = () => {
   const { triggerRefetch } = useNearbyLocations();
   
   const { sendMessage, lastMessage, lastLocationName } = useSurroundingsWS();
+  // const lastMessage = 'hi';
+  // const lastLocationName = 'hi';
 
    
   useEffect(() => {
