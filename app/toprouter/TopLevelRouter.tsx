@@ -61,11 +61,12 @@ const goToRoot = (): void => {
 
   useEffect(() => {
     if (user?.authenticated) {
-      router.replace("/(tabs)"); // Redirect to main app
-    } else {
-      //goToRoot();
-      router.replace("/signin"); // Redirect to sign-in if not authenticated
-    }
+      router.push("/(tabs)"); // Redirect to main app
+    } 
+     else {
+      goToRoot();
+    //   //router.replace("/signin"); // Redirect to sign-in if not authenticated
+     }
   }, [user?.authenticated]);
 
 

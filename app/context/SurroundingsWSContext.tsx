@@ -87,16 +87,15 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   
     // Proceed with WebSocket connection if a valid token is available
     const socketUrl = `wss://climatetwin.com/ws/climate-twin/current/?user_token=${confirmedToken}`;
-    console.log("Connecting to Location Update WebSocket", confirmedToken); //, socketUrl);
     if (socketRef.current) {
       if (socketRef.current.readyState === WebSocket.OPEN) {
-        console.log("Closing existing open Location Update WebSocket connection.");
-        
+        console.log("WebSocket is already open, skipping connection.");
+        return; // Skip creating a new connection
+      } else if (socketRef.current.readyState === WebSocket.CLOSING || socketRef.current.readyState === WebSocket.CLOSED) {
+        console.log("Closing existing WebSocket connection before reopening.");
         socketRef.current.close();
-      } else {
-        console.log("Socket is not open, skipping close.");
       }
-    } 
+    }
     //setIsReconnecting(true);
     // Create a new WebSocket connection
     const socket = new WebSocket(socketUrl);
