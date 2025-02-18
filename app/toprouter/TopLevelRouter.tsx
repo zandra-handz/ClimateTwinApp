@@ -61,7 +61,8 @@ const goToRoot = (): void => {
 
   useEffect(() => {
     if (user?.authenticated) {
-      router.push("/(tabs)"); // Redirect to main app
+      console.log('do nothing here for this build');
+     // router.push("/(tabs)"); // Redirect to main app
     } 
      else {
       goToRoot();
