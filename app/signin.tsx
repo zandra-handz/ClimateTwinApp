@@ -176,14 +176,14 @@ const router = useRouter();
   //   }
   // };
 
-  useEffect(() => {
-    console.log('user useeffect in auth screen triggered');
-    if (user && user.authenticated) {
-      console.log('navigating to home screen');
-      navigateToHome();
-    }
+  // useEffect(() => {
+  //   console.log('user useeffect in auth screen triggered');
+  //   if (user && user.authenticated) {
+  //     console.log('navigating to home screen');
+  //     navigateToHome();
+  //   }
 
-  }, [user]);
+  // }, [user]);
 
 
   const navigateToRecoverCredentials = () => {

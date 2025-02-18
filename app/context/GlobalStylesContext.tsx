@@ -217,6 +217,7 @@ const containerStyles = StyleSheet.create({
     justifyContent: 'flex-start',
     alignItems: 'center',
     alignContent: 'center',
+   
 
   },
   goButtonContainer: {
@@ -233,13 +234,14 @@ const containerStyles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     
   }, 
-  goButtonStartingPointTempContainer: {
+  startingPointTempContainer: {
     height: '100%', 
     flexDirection: 'column',
     justifyContent: 'center', 
+    marginRight: -10,
 
   },
-  goButtonPortalTempContainer: { 
+  portalTempContainer: { 
     marginLeft: 6,
     height: '100%',
     flexDirection: 'column',
@@ -449,10 +451,18 @@ const fontStyles = StyleSheet.create({
 
   },
   startingPointTempText: {
-    fontSize: 24,
+    fontSize: 18,
 
   },
   startingPointHumidityText: {
+    fontSize: 12,
+
+  },
+  portalTempText: {
+    fontSize: 28,
+
+  },
+  portalHumidityText: {
     fontSize: 14,
 
   },

@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useGlobalStyles } from "../context/GlobalStylesContext"; 
 import { useActiveSearch } from "../context/ActiveSearchContext";
 import PortalSvg from "../assets/svgs/portal.svg";
+import PortalPixellySvg from "../assets/svgs/portal-pixelly.svg";
 import { useSurroundings } from "../context/CurrentSurroundingsContext";
 import GoButton from "./GoButton";
 
@@ -17,7 +18,7 @@ const PortalBanner = ({ address }) => {
       style={portalSurroundings?.id != null ? appContainerStyles.portalBannerContainer : appContainerStyles.emptyBannerContainer} > 
       {portalSurroundings?.id != null && (
         <View style={appContainerStyles.portalTempsAndSvgContainer}>
-          <View style={appContainerStyles.goButtonStartingPointTempContainer}>
+          <View style={appContainerStyles.startingPointTempContainer}>
             {homeSurroundings?.temperature && (
               <Text
                 style={[
@@ -39,16 +40,17 @@ const PortalBanner = ({ address }) => {
               </Text>
             )}
           </View>
-          <PortalSvg
+          <PortalPixellySvg
             height={appFontStyles.goButtonPortalSize.fontSize}
             width={appFontStyles.goButtonPortalSize.fontSize}
-            color={themeStyles.primaryText.color}
+            color={themeStyles.primaryText.color} 
+            style={{ opacity: .8, transform: [{rotate: '-90deg'}]}}
           />
-          <View style={appContainerStyles.goButtonPortalTempContainer}>
+          <View style={appContainerStyles.portalTempContainer}>
             {portalSurroundings?.temperature && (
               <Text
                 style={[
-                  appFontStyles.smallGoButtonText,
+                  appFontStyles.portalTempText,
                   themeStyles.primaryText,
                 ]}
               >
@@ -58,7 +60,7 @@ const PortalBanner = ({ address }) => {
             {portalSurroundings?.humidity && (
               <Text
                 style={[
-                  appFontStyles.startingPointHumidityText,
+                  appFontStyles.portalHumidityText,
                   themeStyles.primaryText,
                 ]}
               >
