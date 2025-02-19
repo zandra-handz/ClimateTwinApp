@@ -7,7 +7,7 @@ import { getFriends } from '../apicalls';
 
 
 const useFriends = () => { 
-    const { user } = useUser();
+    const { user, isAuthenticated } = useUser();
     
     const queryClient = useQueryClient();
 
@@ -17,7 +17,7 @@ const useFriends = () => {
     const { data: friends, isLoading, isFetching, isSuccess, isError } = useQuery({
         queryKey: ['friends'],
         queryFn: () => getFriends(),
-        enabled: !!user && !!user.authenticated,
+        enabled: !!isAuthenticated,
         onSuccess: (data) => { 
             
         }

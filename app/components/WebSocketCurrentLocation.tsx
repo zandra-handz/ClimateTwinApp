@@ -1,8 +1,7 @@
 import React, { useEffect, useCallback, useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useGlobalStyles } from "../context/GlobalStylesContext"; 
-import { useActiveSearch } from "../context/ActiveSearchContext";
-import { useFocusEffect } from "expo-router";
+import { useActiveSearch } from "../context/ActiveSearchContext"; 
 import { useSurroundingsWS } from "../context/SurroundingsWSContext";
 import { useAppMessage } from "../context/AppMessageContext";
 import { useNearbyLocations } from "../context/NearbyLocationsContext";

@@ -140,14 +140,15 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   
     socket.onclose = (event) => {
       logWebSocketClosure(event);
-      showAppMessage(true, null, `WebSocket closed: ${event.reason || "No reason provided."}`);
+      const tokenLastTen = confirmedToken ? confirmedToken.slice(-10) : null;
+      showAppMessage(true, null, `WebSocket closed, ${isAuthenticated} ${tokenLastTen}: ${event.reason || "No reason provided."}`);
     
       switch (event.code) {
         case 1000:
           console.log("WebSocket closed manually by the client.");
           break;
         case 1006:
-          console.error("Abnormal WebSocket closure (possibly lost connection).");
+          console.error(`Abnormal WebSocket closure ${isAuthenticated} ${tokenLastTen} (possibly lost connection).`);
           attemptReconnect();
           break;
         case 4001:
@@ -212,15 +213,15 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
      // !user.loading && 
       (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN)
     ) {
-      console.log('WEBSOCKET CONTEXT: Fetching token from SecureStore because the user is authenticated and the WebSocket is not open.');
-      console.log(`WebSocket state: ${socketRef.current ? socketRef.current.readyState : 'No socket'}`);
+      //console.log('WEBSOCKET CONTEXT: Fetching token from SecureStore because the user is authenticated and the WebSocket is not open.');
+      //console.log(`WebSocket state: ${socketRef.current ? socketRef.current.readyState : 'No socket'}`);
       
 
       fetchToken();
     } else {
-      console.log('WEBSOCKET CONTEXT: Skipping token fetch because WebSocket is already open or user is not authenticated.');
-      console.log(`WebSocket state: ${socketRef.current ? socketRef.current.readyState : 'No socket'}`);
-      console.log(`User authenticated: ${ isAuthenticated}`);
+      //console.log('WEBSOCKET CONTEXT: Skipping token fetch because WebSocket is already open or user is not authenticated.');
+      //console.log(`WebSocket state: ${socketRef.current ? socketRef.current.readyState : 'No socket'}`);
+      //console.log(`User authenticated: ${ isAuthenticated}`);
       setToken(null); // Clear token when user logs out or is not authenticated
       console.log('token set to null');
       setLastMessage(null);

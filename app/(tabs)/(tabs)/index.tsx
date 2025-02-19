@@ -49,6 +49,8 @@ const home = () => {
         translucent={true}
         backgroundColor="transparent"
       />
+      {isAuthenticated && (
+        
       <View
         style={[
           appContainerStyles.screenContainer,
@@ -90,6 +92,8 @@ const home = () => {
           )}
         </View>
       </View>
+      
+    )}
     </>
   );
 };

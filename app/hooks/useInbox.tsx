@@ -7,7 +7,7 @@ import { getInboxItems } from '../apicalls';
 
 
 const useInbox = () => { 
-    const { user } = useUser();
+    const { user, isAuthenticated } = useUser();
     
     const queryClient = useQueryClient();
 
@@ -17,7 +17,7 @@ const useInbox = () => {
     const { data: inboxItems, isLoading, isFetching, isSuccess, isError } = useQuery({
         queryKey: ['inboxItems'],
         queryFn: () => getInboxItems(),
-        enabled: !!user && !!user.authenticated,
+        enabled: !!isAuthenticated,
         onSuccess: (data) => { 
             
         }

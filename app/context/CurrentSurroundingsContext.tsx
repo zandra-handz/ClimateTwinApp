@@ -143,6 +143,16 @@ export const CurrentSurroundingsProvider: React.FC<
     },
   });
 
+
+useEffect(() => {
+  if (!isAuthenticated) {
+    queryClient.removeQueries(["currentSurroundings"]);
+    setPortalSurroundings(null);
+    setRuinsSurroundings(null);
+    setHomeSurroundings(null);
+  }
+}, [isAuthenticated, queryClient]);
+
   useEffect(() => {
     if (manualSurroundingsRefresh) {
       // console.log("CURRENT SURROUNDINGS REFETCH TRIGGERED");

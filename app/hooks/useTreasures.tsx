@@ -7,7 +7,7 @@ import { getTreasures } from '../apicalls';
 
 
 const useTreasures = () => { 
-    const { user } = useUser();
+    const { user, isAuthenticated } = useUser();
     
     const queryClient = useQueryClient();
 
@@ -17,7 +17,7 @@ const useTreasures = () => {
     const { data: treasures, isLoading, isFetching, isSuccess, isError } = useQuery({
         queryKey: ['treasures'],
         queryFn: () => getTreasures(),
-        enabled: !!user && !!user.authenticated,
+        enabled: !!isAuthenticated,
         onSuccess: (data) => { 
             
         }

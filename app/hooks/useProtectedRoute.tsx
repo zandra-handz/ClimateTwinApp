@@ -3,6 +3,8 @@ import { useState, useEffect } from "react";
 
 
 // Hook for protected route handling
+//(i am passing in authenticated instead of the full user, because this is now set as its own variable 
+//in the context, separate from the user object)
 const useProtectedRoute = (user: User | null) => {
   const navigationRef = useNavigationContainerRef();
   const router = useRouter();
@@ -45,7 +47,7 @@ const useProtectedRoute = (user: User | null) => {
     console.log(isNavigationReady);
     console.log(segments[0]);
 
-    if (!user && isHome) {
+    if (!user) { //} && isHome) {
         console.log('rpotected route navving to index');
       //router.push("/index");
       goToRoot();

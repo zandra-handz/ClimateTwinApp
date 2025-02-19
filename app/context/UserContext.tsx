@@ -90,7 +90,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     return () => subscription.remove();
   }, []);
 
-  useProtectedRoute(user); 
+  useProtectedRoute(authenticated); 
 
 //   const useProtectedRoute = (user: User | null) => {
 //     //console.log('usePROTECTEDROUTERUNNING, rootNavigation value: ', rootNavigation);
@@ -268,12 +268,13 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     await signout();  
 
     // Reset user-related state
-    setUser(null);
     setAuthenticated(false);
+    setUser(null);
+    
     
  
-    // setAppSettings(null); 
-    // setUserNotificationSettings(null);   
+    setAppSettings(null); 
+    setUserNotificationSettings(null);   
     queryClient.clear();
 };
 

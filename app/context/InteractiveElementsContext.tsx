@@ -36,13 +36,13 @@ interface InteractiveElementsProviderProps {
 }
 
 export const InteractiveElementsProvider: React.FC<InteractiveElementsProviderProps> = ({ children }) => {
-  const { user } = useUser(); 
+  const { user, isAuthenticated } = useUser(); 
   const queryClient = useQueryClient(); 
 
   const { data: itemChoicesResponse, isLoading, isError } = useQuery<ItemChoicesResponse | null>({
     queryKey: ['itemChoices'],
     queryFn: getItemChoices,
-    enabled: !!user && !!user.authenticated,
+    enabled: !!isAuthenticated,
     onError: (err) => {
       console.error('Error fetching location data:', err);
     },
