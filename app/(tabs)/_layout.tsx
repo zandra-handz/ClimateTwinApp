@@ -44,7 +44,7 @@ export default () => {
       // <Tabs.Screen name="treasures" options={{ header: () => null }} /> */}
 
 
-      <Drawer.Screen name="(tabs)" options={{ header: () => <ExploreTabsHeader />, drawerLabel: 'Explore', title: 'home' }} />
+      <Drawer.Screen name="(main)" options={{ header: () => <ExploreTabsHeader />, drawerLabel: 'Explore', title: 'home' }} />
     
       <Drawer.Screen name="friends" options={{ header: () => null,drawerLabel: 'Friends' }} />
       <Drawer.Screen name="inbox" options={{ header: () => null, drawerLabel: 'Inbox' }} />

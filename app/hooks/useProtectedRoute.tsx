@@ -43,7 +43,7 @@ const useProtectedRoute = (user: User | null) => {
     }
 
     const isAuthGroup = segments[0] === ("+not-found" || '(tabs)');
-    const isHome = segments[0] === ('(tabs)');
+    const isHome = segments[0] === ("(tabs)/(main)");
     console.log(isNavigationReady);
     console.log(segments[0]);
 
@@ -53,7 +53,7 @@ const useProtectedRoute = (user: User | null) => {
       goToRoot();
     } else if (user && !isHome) {
         console.log('rpotected route navving to (tabs)');
-      router.push("(tabs)");
+      router.push("(tabs)/(main)");
     }
   }, [user, segments, isNavigationReady]);
 };
