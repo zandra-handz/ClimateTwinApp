@@ -18,7 +18,7 @@ const SurroundingsWSContext = createContext<SurroundingsWSContextType | undefine
 export const SurroundingsWSProvider: React.FC = ({ children }) => {
   const TOKEN_KEY = "accessToken";
   const socketRef = useRef<WebSocket | null>(null);
-  const { user, isAuthenticated } = useUser();
+  const { user, reInitialize, isAuthenticated } = useUser();
   const { appStateVisible } = useAppState();
   const [token, setToken] = useState<string | null>(null);
   const [isReconnecting, setIsReconnecting] = useState(false);
@@ -152,6 +152,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
           break;
         case 4001:
           console.error("Server closed connection due to authentication issues.");
+          reInitialize();
           break;
         case 4403:
           console.error("Forbidden: Authentication token expired or invalid.");
