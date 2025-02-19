@@ -47,7 +47,7 @@ const useProtectedRoute = (user: User | null) => {
     console.log(isNavigationReady);
     console.log(segments[0]);
 
-    if (!user) { //} && isHome) {
+    if (!user && isHome) {
         console.log('rpotected route navving to index');
       //router.push("/index");
       goToRoot();
