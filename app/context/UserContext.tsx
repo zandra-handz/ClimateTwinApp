@@ -90,7 +90,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     return () => subscription.remove();
   }, []);
 
-  useProtectedRoute(authenticated); 
+  useProtectedRoute(authenticated, loading); 
 
 //   const useProtectedRoute = (user: User | null) => {
 //     //console.log('usePROTECTEDROUTERUNNING, rootNavigation value: ', rootNavigation);
