@@ -87,6 +87,17 @@ export default function Layout() {
                                   }}
                                 />
                                 <Stack.Screen
+                                  name="secondindex"
+                                  options={{
+                                    headerShown: false,
+                                    headerTitle: "Welcome Again",
+                                    headerStyle: {
+                                      backgroundColor: "teal",
+                                    },
+                                    gestureEnabled: false,
+                                  }}
+                                />
+                                <Stack.Screen
                                   name="signin"
                                   options={{
                                     headerShown: false,

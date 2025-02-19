@@ -44,14 +44,16 @@ const useProtectedRoute = (isAuthenticated: boolean, isLoading: boolean) => {
     const isAuthGroup = segments[0] === "+not-found" || segments[0] === "(tabs)";
     const isHome = segments[0] === "(tabs)/(main)";
     const isOnSignIn = segments[0] === "signin";
+    const isOnRootPage = segments.length === 0 || segments[0] === "" || segments[0] === "secondindex" ; 
+
     console.log(isNavigationReady);
     console.log(segments[0]);
 
     if (!isAuthenticated && !isOnSignIn) {
       console.log('Protected route redirecting to index');
-      //router.push("/");
-      goToRoot();
-    } else if (isAuthenticated && !isHome) {
+      router.push("secondindex");
+      //goToRoot();
+    } else if (isAuthenticated && (isOnSignIn || isOnRootPage)) {
       console.log('Protected route redirecting to (tabs)');
       router.push("(tabs)/(main)");
     }

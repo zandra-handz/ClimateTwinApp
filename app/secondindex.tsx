@@ -16,7 +16,7 @@ import { useAppState } from "./context/AppStateContext";
 
 const TOKEN_KEY = "accessToken";
 
-const Index = () => {
+const SecondIndex = () => {
   //const { showMessage } = useMessage();
   const { themeStyles, manualGradientColors } = useGlobalStyles();
   const [showSignIn, setShowSignIn] = useState(true);
@@ -141,7 +141,7 @@ const Index = () => {
                     position: "absolute",
                   }}
                 >
-                  {/* <SignInButton
+                  <SignInButton
                     onPress={() => handleNavigateToSignIn()}
                     title={"Sign in"}
                     // shapeSource={require("../assets/shapes/coffeecupdarkheart.png")}
@@ -154,7 +154,7 @@ const Index = () => {
                     accessible={true}
                     accessibilityLabel={"Sign in button"}
                     accessibilityHint="Press to sign in or create an account"
-                  /> */}
+                  />
 
                   {/* <View style={{paddingTop: '3%'}}>
 
@@ -252,4 +252,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Index;
+export default SecondIndex;
