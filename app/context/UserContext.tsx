@@ -82,6 +82,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
   const segments = useSegments(); 
+  const isOnSignIn = segments[0] === "signin";
   const isOnAPreSignInPage = segments.length === 0 || segments[0] === "" || segments[0] === "secondindex" || segments[0] === "signin"; 
 
   useEffect(() => {
@@ -196,7 +197,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
 
   useEffect(() => {
-    if (appStateVisible === 'active' && authenticated) {
+    if (appStateVisible === 'active' && authenticated && !isOnSignIn) {
          
     console.log('APP IN FOREGROUND, REINITTING IN USER CONTEXT!!!!!!!!!!!!!!!!!!!!!!!!');
    
