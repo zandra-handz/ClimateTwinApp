@@ -190,10 +190,10 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     setLoading(false);
   };
 
-  useEffect(() => {
-    console.log('BEGINNING INITIALIZE!!!!!!!!!!!!!!!!!!!!!!!!');
-    reInitialize();
-  }, []);
+  // useEffect(() => {
+  //   console.log('BEGINNING INITIALIZE!!!!!!!!!!!!!!!!!!!!!!!!');
+  //   reInitialize();
+  // }, []);
 
 
   useEffect(() => {
