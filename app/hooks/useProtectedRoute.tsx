@@ -34,7 +34,7 @@ const useProtectedRoute = (isAuthenticated: boolean, isLoading: boolean) => {
   }, [navigationRef.isReady()]);
 
   useEffect(() => {
-    if (!isNavigationReady) {
+    if (!isNavigationReady || isLoading) {
       console.log("NAVIGATION IS NOT READY");
       return;
     } else {
@@ -57,7 +57,7 @@ const useProtectedRoute = (isAuthenticated: boolean, isLoading: boolean) => {
       console.log('Protected route redirecting to (tabs)');
       router.push("(tabs)/(main)");
     }
-  }, [isAuthenticated, segments, isNavigationReady]);
+  }, [isAuthenticated, isLoading, segments, isNavigationReady]);
 };
 
 export default useProtectedRoute;
