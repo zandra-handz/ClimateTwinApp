@@ -22,7 +22,8 @@ import {
   getUserSettings,
 } from "../apicalls";
 import { runOnRuntime } from "react-native-reanimated";
-import { useRootNavigation, useNavigationContainerRef, useNavigation, useRouter, useSegments } from "expo-router";
+import { useNavigationContainerRef, useRouter, useSegments } from "expo-router";
+
 //import { useRootNavigation } from "@react-navigation/native";
 
 interface User {
@@ -79,6 +80,9 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const queryClient = useQueryClient();
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
+
+  const segments = useSegments(); 
+  const isOnAPreSignInPage = segments.length === 0 || segments[0] === "" || segments[0] === "secondindex" || segments[0] === "signin"; 
 
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (nextAppState) => {
@@ -192,7 +196,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
 
   useEffect(() => {
-    if (appStateVisible === 'active') {
+    if (appStateVisible === 'active' && authenticated) {
          
     console.log('APP IN FOREGROUND, REINITTING IN USER CONTEXT!!!!!!!!!!!!!!!!!!!!!!!!');
    
