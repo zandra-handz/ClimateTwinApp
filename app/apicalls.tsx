@@ -39,29 +39,51 @@ export const deleteTokens = async () => {
 // 
 
 const refreshTokenFunct = async () => {
+    console.log('refreshTokenFunct triggered!');
+    isMakingRefetchCall = true;
+
     const storedRefreshToken = await SecureStore.getItemAsync('refreshToken');
+    console.log('Stored Refresh Token:', storedRefreshToken);
+
+   
+    
     if (!storedRefreshToken) {
         console.warn('No refresh token available');
         return null;
     } 
 
     try {
+        console.log('Making refresh token request...');
+        
         const response = await axios.post('/users/token/refresh/', { refresh: storedRefreshToken });
-        const newAccessToken = response.data.access;
-        const newRefreshToken = response.data.access;
+
+        console.log('REFRESH ENDPOINT RESPONSE:', response); // Log entire response
+        console.log('Response Data:', response.data); // Log just the data
+
+        if (!response.data || !response.data.access) {
+            console.error('No access token received from refresh call:', response.data);
+            return null;
+        }
+
+        const newAccessToken = response.data.access; 
+        console.log('Saving new access token...');
+        await SecureStore.setItemAsync('accessToken', newAccessToken); 
         
-        await SecureStore.setItemAsync('accessToken',  newAccessToken);
-       // console.log('ACCESS TOKEN SAVED TO SECURE STORE:',  response.data.access);
-        await SecureStore.setItemAsync('refreshToken', newRefreshToken);
-        
-        console.log('returned from token refresh: ', newAccessToken);
+        console.log('New Access Token:', newAccessToken); // Log before returning
         return newAccessToken;
     } catch (error) {
         console.error('Error refreshing token:', error);
-       
-        throw error;
+        console.error('Error response:', error.response ? error.response.data : 'No response data');
+        console.error('Error status:', error.response ? error.response.status : 'No status');
+     
+
+        return null;
+    } finally {
+        console.log('refreshTokenFunct completed.');
+        isMakingRefetchCall = false; 
     }
 };
+
 
 
 export const signout = async () => {
@@ -83,6 +105,7 @@ export const signout = async () => {
 
 // Function to handle token refresh
 let isRefreshing = false;
+
 let refreshSubscribers = [];
 
 // Subscribe to token refresh completion
@@ -110,10 +133,12 @@ axios.interceptors.request.use(
         return Promise.reject(error);
     }
 );
-
+let isMakingRefetchCall = false;
 
 // Axios Response Interceptor
 axios.interceptors.response.use(
+
+    
 
     
     (response) => {
@@ -124,17 +149,26 @@ axios.interceptors.response.use(
         const { config, response } = error;
         const originalRequest = config;
 
+        console.log(isMakingRefetchCall);
+
         // If the error is a 401 and the request has not been retried yet
-        if (response && response.status === 401 && !originalRequest._retry) {
+        if (response && response.status === 401 && !originalRequest._retry && !isMakingRefetchCall) {
             console.log('Interceptor caught a 401!');
+            console.log(isRefreshing);
+           
             if (!isRefreshing) {
+                console.log('Attempting to refresh token...');
+
                 isRefreshing = true;
                 originalRequest._retry = true;
 
-                try {
-                    const newAccessToken = await refreshTokenFunct();
+                const newAccessToken = await refreshTokenFunct();
+                console.log(`PASSED IN AS TOKEN NY INTERCEPTOR: `, newAccessToken);
+
+                try { 
 
                     if (!newAccessToken) {
+                        console.log('no accesstoken returned from refreshTokenFunct');
                         throw new Error("Failed to refresh token: new access token is null or undefined");
                     }
                    // console.log('Interceptor acquired new token utilizing refreshTokenFunct!', newAccessToken);
@@ -151,6 +185,7 @@ axios.interceptors.response.use(
                     return Promise.reject(err);
                 }
             } else {
+                console.log('is already refreshing');
                 // If token refresh is already in progress, queue the request
                 return new Promise((resolve) => {
                     subscribeTokenRefresh((newAccessToken) => {
@@ -170,7 +205,7 @@ export const signinWithoutRefresh = async ({ username, password }) => {
     try {
         const response = await axios.post('/users/token/', { username, password });
         const newAccessToken = response.data.access;
-        const newRefreshToken = response.data.access;
+        const newRefreshToken = response.data.refresh;
 
         await SecureStore.setItemAsync('accessToken',  newAccessToken);
         await SecureStore.setItemAsync('refreshToken', newRefreshToken);

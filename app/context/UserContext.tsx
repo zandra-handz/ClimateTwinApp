@@ -99,37 +99,47 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
  
   
-
   const reInitialize = async () => {
+    console.log('reinitializing!!!!');
     setLoading(true);
-    setAuthenticated(false);
+
     const token = await SecureStore.getItemAsync(TOKEN_KEY);
     if (token) {
-      const userData = await getCurrentUser();
-      const userSettingsData = await getUserSettings();
+        let userData = null;
 
-      if (userSettingsData) {
-        setAppSettings((prev) => ({ ...prev, ...userSettingsData }));
-        setUserNotificationSettings({
-          receive_notifications:
-            userSettingsData?.receive_notifications || false,
-        });
-      }
+        try {
+            userData = await getCurrentUser();
+            console.log(`REINIT USER DATA ON OTHER SIDE OF INTERCEPTOR: `, userData);
+        } catch (error) {
+            console.error('Error fetching current user:', error);
+          
+            await onSignOut();
+            return;
+        }
 
-      if (userData) {
-        setUser(userData);
-        setAuthenticated(true);
-      } else {
-        setAuthenticated(false);
-      }
- 
+        const userSettingsData = await getUserSettings();
+        if (userSettingsData) {
+            setAppSettings((prev) => ({ ...prev, ...userSettingsData }));
+            setUserNotificationSettings({
+                receive_notifications:
+                    userSettingsData?.receive_notifications || false,
+            });
+        }
+
+        if (userData) {
+            setUser(userData);
+            setAuthenticated(true);
+        } else {
+            setAuthenticated(false);
+        }
     } else {
-      setUser(null);
-      setAuthenticated(false); 
+        setUser(null);
+        setAuthenticated(false); 
     }
-    
+
     setLoading(false);
-  };
+};
+
 
   // useEffect(() => {
   //   console.log('BEGINNING INITIALIZE!!!!!!!!!!!!!!!!!!!!!!!!');
@@ -211,13 +221,13 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     await signout();  
 
     // Reset user-related state
-    setAuthenticated(false);
-    setUser(null);
-    
-    
- 
+
+    setUser(null); 
     setAppSettings(null); 
-    setUserNotificationSettings(null);   
+    setUserNotificationSettings(null);  
+    setAuthenticated(false);
+    setLoading(false); 
+
     queryClient.clear();
 };
 
