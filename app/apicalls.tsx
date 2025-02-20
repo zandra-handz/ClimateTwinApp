@@ -168,21 +168,18 @@ axios.interceptors.response.use(
 
 export const signinWithoutRefresh = async ({ username, password }) => {
     try {
-        const result = await axios.post('/users/token/', { username, password });
-        //console.log(`API POST CALL signinWithoutRefresh`, result);
+        const response = await axios.post('/users/token/', { username, password });
+        const newAccessToken = response.data.access;
+        const newRefreshToken = response.data.access;
 
-        if (result.data && result.data.access) { 
-          //  console.log(result.data);
-            await SecureStore.setItemAsync('accessToken', result.data.access);
-           // console.log('ACCESS TOKEN SAVED TO SECURE STORE:', result.data.access);
-            await SecureStore.setItemAsync('refreshToken', result.data.refresh);
+        await SecureStore.setItemAsync('accessToken',  newAccessToken);
+        await SecureStore.setItemAsync('refreshToken', newRefreshToken);
             
             
-            setAuthHeader(result.data.access); 
-            return result; 
-        } else {
-            throw new Error("Unexpected response format");
-        }
+        setAuthHeader(newAccessToken); 
+
+        return response; 
+        
     } catch (e) {
         console.error("Error during signinWithoutRefresh:", e);
 

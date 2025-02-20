@@ -18,7 +18,7 @@ const SurroundingsWSContext = createContext<SurroundingsWSContextType | undefine
 export const SurroundingsWSProvider: React.FC = ({ children }) => {
   const TOKEN_KEY = "accessToken";
   const socketRef = useRef<WebSocket | null>(null);
-  const { user, reInitialize, isAuthenticated } = useUser();
+  const { user, reInitialize, isAuthenticated, isInitializing } = useUser();
   const { appStateVisible } = useAppState();
   const [token, setToken] = useState<string | null>(null);
   const [isReconnecting, setIsReconnecting] = useState(false);
@@ -153,7 +153,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
           break;
         case 4001:
           console.error("Server closed connection due to authentication issues.");
-          reInitialize();
+         // reInitialize();
           break;
         case 4403:
           console.error("Forbidden: Authentication token expired or invalid.");
@@ -181,7 +181,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
   // Function to attempt reconnection with exponential backoff
   const attemptReconnect = () => {
-    if (!isReconnecting && isAuthenticated) {
+    if (!isReconnecting && isAuthenticated && !isInitializing) {
       console.log("Attempting to reconnect triggered");
   
       if (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN) {
@@ -210,38 +210,28 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   useEffect(() => {
     if (
        isAuthenticated && 
-     // !user.loading && 
+      !isInitializing && 
       (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN)
-    ) {
-      //console.log('WEBSOCKET CONTEXT: Fetching token from SecureStore because the user is authenticated and the WebSocket is not open.');
-      //console.log(`WebSocket state: ${socketRef.current ? socketRef.current.readyState : 'No socket'}`);
-      
+    ) { 
 
       fetchToken();
-    } else {
-      //console.log('WEBSOCKET CONTEXT: Skipping token fetch because WebSocket is already open or user is not authenticated.');
-      //console.log(`WebSocket state: ${socketRef.current ? socketRef.current.readyState : 'No socket'}`);
-      //console.log(`User authenticated: ${ isAuthenticated}`);
+    } else { 
       setToken(null); // Clear token when user logs out or is not authenticated
       console.log('token set to null');
       setLastMessage(null);
       setLastLocationName(null);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, isInitializing]);
   
  
 
     
-useEffect(() => {   // Access appStateVisible from context
+useEffect(() => {    
 
   if (appStateVisible !== 'active') {
     console.log('App is in the background, triggering close socket...');
-    closeSocket(); // Close WebSocket when app goes into background
-  } 
-  // else {
-  //   console.log('(REMOVED THIS FOR NOW) attempting reconnect because app is back in foreground');
-  
-  // }
+    closeSocket(); 
+  }  
 }, [appStateVisible]); 
 
 
@@ -261,14 +251,7 @@ useEffect(() => {   // Access appStateVisible from context
       }
       
      // connectWebSocket(token); // Manually trigger WebSocket connection on token change
-    } 
-    
-  //   else { 
-  //     closeSocket();
-    
-  // }
-
-    // Cleanup the socket on unmount or when token changes
+    }  
     return () => {
       
       closeSocket();

@@ -97,63 +97,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
   useProtectedRoute(authenticated, loading); 
 
-//   const useProtectedRoute = (user: User | null) => {
-//     //console.log('usePROTECTEDROUTERUNNING, rootNavigation value: ', rootNavigation);
-//     const rootNavigation = useNavigationContainerRef();
-//     const navigationRef = useNavigationContainerRef();
-    
-//     console.log('usePROTECTEDROUTERUNNING, userData: ', user);
-//     console.log('usePROTECTEDROUTERUNNING, navigationRef value: ', navigationRef.isReady());
-   
-
-//     const segments = useSegments();
-//     const router = useRouter();
-//     const [isNavigationReady, setNavigationReady] = useState(false);
-
-//     useEffect(() => {
-//         if (navigationRef.isReady()) {
-//           setNavigationReady(true);
-//           console.log("NAVIGATION READY");
-//         } else {
-//           console.log("Navigation ref is not ready yet.");
-//         }
-    
-//         const unsubscribe = navigationRef.addListener("state", () => {
-//           setNavigationReady(true);
-//           console.log("NAVIGATION READY (via state listener)");
-//         });
-    
-//         return () => unsubscribe && unsubscribe();
-//       }, [navigationRef.isReady()]);
-
-//     useEffect(() => {
-//         console.log('authenticated triggered useProtected route!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1');
-//       if (!isNavigationReady) {
-//         console.log("NAVIGATION IS NOT READY");
-//         return;
-//       }
-
-//       const isAuthGroup = segments[0] === "(auth)";
-
-//       if (!user && !isAuthGroup) {
-//         router.push("/sign-in");
-//       } else if (user && isAuthGroup) {
-//         router.push("(tabs)");
-//       }
-//     }, [user, authenticated, segments, isNavigationReady]);
-//   };
-
-
-  //   useEffect(() => {
-  //     if (appStateVisible === "active") {
-  //       deAuthUser();
-  //       reInitialize();
-  //     } else {
-  //       deAuthUser();
-  //     }
-  //   }, [appStateVisible]);
-
-
+ 
   
 
   const reInitialize = async () => {
@@ -178,13 +122,10 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       } else {
         setAuthenticated(false);
       }
-
-      
-     // useProtectedRoute(userData || null);
+ 
     } else {
       setUser(null);
-      setAuthenticated(false);
-     // useProtectedRoute(null);
+      setAuthenticated(false); 
     }
     
     setLoading(false);
@@ -204,22 +145,30 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     reInitialize();
     }
   }, [appStateVisible]);
-
-    // const deAuthUser = () => {
-    //   setAuthenticated(false);
-    //   setLoading(true);
-    // };
+ 
 
     const signinMutation = useMutation({
         mutationFn: signinWithoutRefresh,
         onSuccess: () => {
             console.log('removed reinit from sign in mutation for now');
-         // reInitialize(); // Will run only after tokens are stored
+            reInitialize(); // Will run only after tokens are stored
         },
         onError: (error) => {
           console.error("Sign in mutation error:", error);
         },
       });
+
+      const onSignin = async (username: string, password: string) => {
+        try {
+          // Call the mutation to sign in
+          await signinMutation.mutateAsync({ username, password });
+      
+          // Call reInitialize after successful sign-in
+          // await reInitialize();
+        } catch (error) {
+          console.error("Sign in error", error);
+        }
+      };
 
 //in case i end up needing async
     //   const signinMutation = useMutation({
@@ -232,18 +181,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     //       console.error("Sign in mutation error:", error);
     //     },
     //   });
-      
-    const onSignin = async (username: string, password: string) => {
-        try {
-          // Call the mutation to sign in
-          await signinMutation.mutateAsync({ username, password });
-      
-          // Call reInitialize after successful sign-in
-          await reInitialize();
-        } catch (error) {
-          console.error("Sign in error", error);
-        }
-      };
+       
       
 
   const signupMutation = useMutation({

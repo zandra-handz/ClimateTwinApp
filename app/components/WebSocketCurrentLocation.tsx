@@ -5,10 +5,11 @@ import { useActiveSearch } from "../context/ActiveSearchContext";
 import { useSurroundingsWS } from "../context/SurroundingsWSContext";
 import { useAppMessage } from "../context/AppMessageContext";
 import { useNearbyLocations } from "../context/NearbyLocationsContext";
+import { useUser } from "../context/UserContext";
 
 const WebSocketCurrentLocation: React.FC = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
- 
+ const { isAuthenticated, isInitializing } = useUser();
   const [update, setUpdate] = useState<string | null>(null);
   const { closeSearchExternally, refreshSurroundingsManually, gettingExploreLocations, foundExploreLocations } = useActiveSearch();
   const { showAppMessage} = useAppMessage();
