@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, Text, Animated } from 'react-native';
 import { useGlobalStyles } from '../context/GlobalStylesContext';
-import { useAppMessage } from '../context/AppMessageContext'; 
+import { useAppMessage } from '../context/AppMessageContext';  
 
 //simple temporary popup message to let user know if action was successful
 //does not affect flow of app
@@ -21,6 +21,7 @@ const AppMessage = ({
   const [showResultsMessage, setShowResultsMessage] = useState(false); // State for showing results message
   const { appMessageData, hideAppMessage } = useAppMessage();
   const { themeStyles } = useGlobalStyles();
+ 
   
   const translateY = useRef(new Animated.Value(-100)).current; // Start off-screen, above the view
 

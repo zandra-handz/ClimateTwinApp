@@ -20,9 +20,9 @@ import {
   signout,
   getCurrentUser,
   getUserSettings,
-} from "../apicalls";
-import { runOnRuntime } from "react-native-reanimated";
-import { useNavigationContainerRef, useRouter, useSegments } from "expo-router";
+} from "../apicalls"; 
+import { useAppMessage } from "./AppMessageContext";
+import {  useSegments } from "expo-router";
 
 //import { useRootNavigation } from "@react-navigation/native";
 
@@ -78,6 +78,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     Record<string, any>
   >({});
   const queryClient = useQueryClient();
+  const { showAppMessage } = useAppMessage();
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
@@ -101,6 +102,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   
   const reInitialize = async () => {
     console.log('reinitializing!!!!');
+    showAppMessage(true, null, 'Initializing...');
     setLoading(true);
 
     const token = await SecureStore.getItemAsync(TOKEN_KEY);
@@ -130,9 +132,11 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
             setUser(userData);
             setAuthenticated(true);
         } else {
+            showAppMessage(true, null, 'Oh no :( Could not initialize user.');
             setAuthenticated(false);
         }
     } else {
+        showAppMessage(true, null, 'Not signed in.');
         setUser(null);
         setAuthenticated(false); 
     }
@@ -148,7 +152,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
 
   useEffect(() => {
-    if (appStateVisible === 'active' && authenticated && !isOnSignIn) {
+    if (appStateVisible === 'active' && !isOnSignIn) { //authenticated &&
          
     console.log('APP IN FOREGROUND, REINITTING IN USER CONTEXT!!!!!!!!!!!!!!!!!!!!!!!!');
    
@@ -227,6 +231,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     setUserNotificationSettings(null);  
     setAuthenticated(false);
     setLoading(false); 
+    showAppMessage(true, null, 'Signed out.');
 
     queryClient.clear();
 };
