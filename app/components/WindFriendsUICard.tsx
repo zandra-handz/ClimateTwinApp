@@ -4,6 +4,7 @@ import { useGlobalStyles } from "../context/GlobalStylesContext";
 import WindSquare from "./WindSquare";
 
 const WindFriendsUICard = ({
+  name,
   description,
   windFriends,
   windSpeed,
@@ -30,11 +31,18 @@ const WindFriendsUICard = ({
         themeStyles.darkestBackground,
       ]}
     >
-      <View style={{flexDirection: 'column', top: 10, left: 10, height: 30, width: '100%', justifyContent: 'flex-start'}}>
+      <View style={{flexDirection: 'column', top: 10, left: 10, height: 'auto', width: '100%', justifyContent: 'flex-start', paddingHorizontal: 8}}>
       <Text
         style={[ 
           themeStyles.primaryText,
           appFontStyles.bannerHeaderText,
+        ]}
+      >
+        {name}
+      </Text>
+      <Text
+        style={[ 
+          themeStyles.primaryText, 
         ]}
       >
         {formatDescription(description)}

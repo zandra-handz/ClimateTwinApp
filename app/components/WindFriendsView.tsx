@@ -5,6 +5,7 @@ import WindFriendsUICard from "./WindFriendsUICard";
 //maybe get wind direction and wind speed of both home and portal locations and animate that way?
 
 const WindFriendsView = ({
+  name,
   description,
   windSpeed,
   windDirection,
@@ -23,6 +24,7 @@ const WindFriendsView = ({
 }) => {
   return (
     <WindFriendsUICard
+      name={name}
       description={description}
       windFriends={windFriends}
       windSpeed={windSpeed}

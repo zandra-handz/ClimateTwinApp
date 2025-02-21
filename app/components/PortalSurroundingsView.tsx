@@ -11,7 +11,7 @@ import { useActiveSearch } from "../context/ActiveSearchContext";
 
 import WindFriendsView from "@/app/components/WindFriendsView";
 
-const PortalSurroundingsView = () => {
+const PortalSurroundingsView = ({height}) => {
    
     const { portalSurroundings, homeSurroundings } = useSurroundings();
     const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
@@ -20,9 +20,10 @@ const PortalSurroundingsView = () => {
     const { searchIsActive } = useActiveSearch();
 
   return ( 
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, height: height }}>
           <>
             <WindFriendsView
+              name={portalSurroundings.name}
               description={portalSurroundings.description}
               windSpeed={portalSurroundings.windSpeed}
               windDirection={portalSurroundings.windDirection}

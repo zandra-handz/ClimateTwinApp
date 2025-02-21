@@ -10,10 +10,10 @@ const useProtectedRoute = (isAuthenticated: boolean, isLoading: boolean) => {
   const segments = useSegments();
   const [isNavigationReady, setNavigationReady] = useState(false);
 
-  console.log('useProtectedRoute triggered, isAuthenticated:', isAuthenticated);
-  console.log('useProtectedRoute triggered, isLoading:', isLoading);
-  console.log('useProtectedRoute triggered, is nav ready:', navigationRef.isReady());
-  console.log(segments[0]);
+  // console.log('useProtectedRoute triggered, isAuthenticated:', isAuthenticated);
+  // console.log('useProtectedRoute triggered, isLoading:', isLoading);
+  // console.log('useProtectedRoute triggered, is nav ready:', navigationRef.isReady());
+  // console.log(segments[0]);
 
   const goToRoot = (): void => {
     if (router.canDismiss()) {

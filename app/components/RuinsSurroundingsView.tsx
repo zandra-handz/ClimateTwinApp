@@ -4,6 +4,7 @@ import useHomeLocation from "../hooks/useHomeLocation";
 import { useGlobalStyles } from "../context/GlobalStylesContext";
 import { useSurroundings } from "../context/CurrentSurroundingsContext";
 import SingleDetailPanel from "@/app/components/SingleDetailPanel";
+import SingleImagePanel from "@/app/components/SingleImagePanel";
 import { useAppMessage } from "../context/AppMessageContext";
 
 import { useActiveSearch } from "../context/ActiveSearchContext";
@@ -11,7 +12,7 @@ import { useActiveSearch } from "../context/ActiveSearchContext";
 import WindFriendsView from "@/app/components/WindFriendsView";
 import RuinsHarmonyView from "./RuinsHarmonyView";
 
-const RuinsSurroundingsView = () => {
+const RuinsSurroundingsView = ({ height }) => {
   const { portalSurroundings, ruinsSurroundings, homeSurroundings } =
     useSurroundings();
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
@@ -20,7 +21,7 @@ const RuinsSurroundingsView = () => {
   const { searchIsActive } = useActiveSearch();
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, height: height }}>
       {ruinsSurroundings?.id && (
         <>
           <RuinsHarmonyView
@@ -36,11 +37,17 @@ const RuinsSurroundingsView = () => {
             label={"Wind compass"}
             value={ruinsSurroundings.windCompass}
           />
+          {ruinsSurroundings.streetViewImage && (
+            <SingleImagePanel
+              label={"Image"}
+              value={ruinsSurroundings.streetViewImage}
+            />
+          )}
 
-          <SingleDetailPanel
+          {/* <SingleDetailPanel
             label={"Wind harmony"}
             value={ruinsSurroundings.windHarmony}
-          />
+          /> */}
           <SingleDetailPanel
             label={"Wind agreement score"}
             value={ruinsSurroundings.windAgreementScore}
@@ -56,13 +63,6 @@ const RuinsSurroundingsView = () => {
             <SingleDetailPanel
               label={"Ruins description"}
               value={ruinsSurroundings.tags.description}
-            />
-          )}
-
-          {ruinsSurroundings.streetViewImage && (
-            <SingleDetailPanel
-              label={"Image"}
-              value={ruinsSurroundings.streetViewImage}
             />
           )}
         </>
