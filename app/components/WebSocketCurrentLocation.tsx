@@ -11,7 +11,7 @@ const WebSocketCurrentLocation: React.FC = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
  const { isAuthenticated, isInitializing } = useUser();
   const [update, setUpdate] = useState<string | null>(null);
-  const { closeSearchExternally, refreshSurroundingsManually, gettingExploreLocations, foundExploreLocations } = useActiveSearch();
+  const { searchIsActive, closeSearchExternally, refreshSurroundingsManually, gettingExploreLocations, foundExploreLocations } = useActiveSearch();
   const { showAppMessage} = useAppMessage();
   const { triggerRefetch } = useNearbyLocations();
   
@@ -27,12 +27,21 @@ const WebSocketCurrentLocation: React.FC = () => {
         gettingExploreLocations();
         showAppMessage(true, null, 'Searching for ruins!');
       } else if (lastMessage === 'No ruins found') {
+        if (searchIsActive) {
+          closeSearchExternally();
+        }
         showAppMessage(true, null, 'No ruins found nearby');
       } else if (lastMessage === 'Search complete!') {
+        if (searchIsActive) {
+          closeSearchExternally();
+        }
         foundExploreLocations();
         triggerRefetch();
         showAppMessage(true, null, 'Search complete!');
-      } else if (lastMessage === '') {
+      } else if (lastMessage === 'Clear') {
+        if (searchIsActive) {
+          closeSearchExternally();
+        }
         foundExploreLocations();
       }
     }

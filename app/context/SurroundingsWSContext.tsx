@@ -1,11 +1,15 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import * as SecureStore from "expo-secure-store";
 import { AppState } from "react-native";
 import { useUser } from "../context/UserContext";
 import { useAppState } from "../context/AppStateContext";
 import { useAppMessage } from "../context/AppMessageContext";
- 
- 
 
 interface SurroundingsWSContextType {
   sendMessage: (message: any) => void;
@@ -13,7 +17,9 @@ interface SurroundingsWSContextType {
   lastLocationName: any;
 }
 
-const SurroundingsWSContext = createContext<SurroundingsWSContextType | undefined>(undefined);
+const SurroundingsWSContext = createContext<
+  SurroundingsWSContextType | undefined
+>(undefined);
 
 export const SurroundingsWSProvider: React.FC = ({ children }) => {
   const TOKEN_KEY = "accessToken";
@@ -24,12 +30,12 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   const [isReconnecting, setIsReconnecting] = useState(false);
   const { showAppMessage } = useAppMessage();
 
-
   const appState = useRef(AppState.currentState);
   const [appVisible, setAppVisible] = useState(appState.current);
 
-  // Time delay for reconnection attempts (e.g., 10 seconds, 20 seconds, etc.)
-  const [reconnectionDelay, setReconnectionDelay] = useState(10000); // Start with 10 seconds
+   // 1 second to start, has exponential backoff capped at 
+   // 60 seconds in timeout in attemptReconnect function
+  const [reconnectionDelay, setReconnectionDelay] = useState(10000);
 
   // State variable to hold the last message received.
   const [lastMessage, setLastMessage] = useState<any>(null);
@@ -41,7 +47,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   // Function to fetch the token.
   const fetchToken = async () => {
     setToken(null);
-    console.log('fetchToken in socket context triggered!');
+    console.log("fetchToken in socket context triggered!");
     try {
       const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
       console.log("Fetched token:", storedToken);
@@ -58,13 +64,13 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       socketRef.current.close();
       socketRef.current = null;
     }
-  }; 
+  };
 
   // Manual WebSocket connection function
   const connectWebSocket = async (token?: string) => {
     // If no token is passed, attempt to fetch it from SecureStore
 
-    let confirmedToken; 
+    let confirmedToken;
 
     if (!isAuthenticated) {
       return;
@@ -74,10 +80,12 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       try {
         const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
         if (!storedToken) {
-          console.log(`[${new Date().toISOString()}] No token available in SecureStore.`);
+          console.log(
+            `[${new Date().toISOString()}] No token available in SecureStore.`
+          );
           return;
         }
-       // token = storedToken; // Use the token fetched from SecureStore
+        // token = storedToken; // Use the token fetched from SecureStore
         confirmedToken = storedToken;
       } catch (error) {
         console.error("Failed to retrieve token from SecureStore:", error);
@@ -86,117 +94,132 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     } else {
       confirmedToken = token;
     }
-  
-    // Proceed with WebSocket connection if a valid token is available
+
     const socketUrl = `wss://climatetwin.com/ws/climate-twin/current/?user_token=${confirmedToken}`;
     if (socketRef.current) {
       if (socketRef.current.readyState === WebSocket.OPEN) {
         console.log("WebSocket is already open, skipping connection.");
-        return; // Skip creating a new connection
-      } else if (socketRef.current.readyState === WebSocket.CLOSING || socketRef.current.readyState === WebSocket.CLOSED) {
+        return;
+      } else if (
+        socketRef.current.readyState === WebSocket.CLOSING ||
+        socketRef.current.readyState === WebSocket.CLOSED
+      ) {
         console.log("Closing existing WebSocket connection before reopening.");
         socketRef.current.close();
       }
     }
-    //setIsReconnecting(true);
-    // Create a new WebSocket connection
     const socket = new WebSocket(socketUrl);
     socketRef.current = socket;
-  
+
     socket.onopen = () => {
       console.log("Location Update WebSocket connection opened");
 
-      //Alert.alert("WEBSOCKET CONNECT", "Websocket connected!");
       showAppMessage(true, null, "Websocket connected!");
-  
-      // Reset reconnection attempt state on successful connection
+
       setIsReconnecting(false);
-      setReconnectionDelay(10000); // Reset delay to 10 seconds
+      setReconnectionDelay(3000); // Reset delay to 10 seconds
     };
-  
+
     socket.onmessage = (event: WebSocketMessageEvent) => {
       const update = JSON.parse(event.data);
       console.log("Received update from socket in WS context:", update);
       // Update state so that consumers can receive the update.
-     // setLastMessage(update);
+      // setLastMessage(update);
 
       if (update.message) {
         setLastMessage(update.message); // Update the message state
       }
-    
+
       if (update.name) {
         setLastLocationName(update.name); // Update the name state
       }
     };
-  
+
     socket.onerror = (event: Event) => {
       console.log("WebSocket error:", event);
       showAppMessage(true, null, "Websocket error on trying to connect.");
       //Alert.alert("WEBSOCKET CONNECT ERROR", "Websocket error on trying to connect.");
-      
+
       //reInitialize(); // This could reset the user state or handle certain errors
       //attemptReconnect(); // Trigger reconnection attempt
     };
-  
+
     socket.onclose = (event) => {
       logWebSocketClosure(event);
       const tokenLastTen = confirmedToken ? confirmedToken.slice(-10) : null;
-      showAppMessage(true, null, `WebSocket closed, ${isAuthenticated} ${tokenLastTen}: ${event.reason || "No reason provided."}`);
-    
+      showAppMessage(
+        true,
+        null,
+        `WebSocket closed, ${isAuthenticated} ${tokenLastTen}: ${
+          event.reason || "No reason provided."
+        }`
+      );
+
       switch (event.code) {
         case 1000:
           console.log("WebSocket closed manually by the client.");
           break;
         case 1006:
-          console.error(`Abnormal WebSocket closure ${isAuthenticated} ${tokenLastTen} (possibly lost connection).`);
+          console.error(
+            `Abnormal WebSocket closure ${isAuthenticated} ${tokenLastTen} (possibly lost connection).`
+          );
           attemptReconnect();
           break;
         case 4001:
-          console.error("Server closed connection due to authentication issues.");
-         // reInitialize();
+          console.error(
+            "Server closed connection due to authentication issues."
+          );
+          // reInitialize();
           break;
         case 4403:
           console.error("Forbidden: Authentication token expired or invalid.");
           break;
         default:
-          console.warn(`WebSocket closed with code ${event.code}. Attempting reconnection...`);
+          console.warn(
+            `WebSocket closed with code ${event.code}. Attempting reconnection...`
+          );
           attemptReconnect();
           break;
       }
     };
-    
+
     // Utility function for logging
     const logWebSocketClosure = (event) => {
-      console.log(`WebSocket closed [Code: ${event.code}, Reason: ${event.reason || "No reason"}]`);
+      console.log(
+        `WebSocket closed [Code: ${event.code}, Reason: ${
+          event.reason || "No reason"
+        }]`
+      );
       if (event.wasClean) {
         console.log("WebSocket closed cleanly by the server.");
       }
     };
-    
-    
   };
-
- 
-  
 
   // Function to attempt reconnection with exponential backoff
   const attemptReconnect = () => {
     if (!isReconnecting && isAuthenticated && !isInitializing) {
       console.log("Attempting to reconnect triggered");
-  
-      if (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN) {
+
+      if (
+        !socketRef.current ||
+        socketRef.current.readyState !== WebSocket.OPEN
+      ) {
         console.log("Attempting to reconnect: socket is not already open");
         setIsReconnecting(true);
-   
-        setTimeout(() => { 
-          if (  isAuthenticated && (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN)) {
+
+        setTimeout(() => {
+          if (
+            isAuthenticated &&
+            (!socketRef.current ||
+              socketRef.current.readyState !== WebSocket.OPEN)
+          ) {
             console.log("Reconnecting to WebSocket...");
-            setReconnectAttempt((prev) => prev + 1);  
-            setReconnectionDelay((prev) => Math.min(prev * 2, 60000));  
-            connectWebSocket(); 
+            setReconnectAttempt((prev) => prev + 1);
+            setReconnectionDelay((prev) => Math.min(prev * 2, 60000));
+            connectWebSocket();
           } else {
             console.log("WebSocket is already open, skipping reconnection.");
-           
           }
         }, reconnectionDelay);
       } else {
@@ -204,56 +227,48 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       }
     }
   };
-  
 
   // Manually fetch the token and initialize the WebSocket connection when the provider mounts
   useEffect(() => {
     if (
-       isAuthenticated && 
-      !isInitializing && 
+      isAuthenticated &&
+      !isInitializing &&
       (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN)
-    ) { 
-
+    ) {
       fetchToken();
-    } else { 
+    } else {
       setToken(null); // Clear token when user logs out or is not authenticated
-      console.log('token set to null');
+      console.log("token set to null");
       setLastMessage(null);
       setLastLocationName(null);
     }
   }, [isAuthenticated, isInitializing]);
-  
- 
 
-    
-useEffect(() => {    
-
-  if (appStateVisible !== 'active') {
-    console.log('App is in the background, triggering close socket...');
-    closeSocket(); 
-  }  
-}, [appStateVisible]); 
-
-
- 
-
-
- 
+  useEffect(() => {
+    if (appStateVisible !== "active") {
+      console.log("App is in the background, triggering close socket...");
+      closeSocket();
+    }
+  }, [appStateVisible]);
 
   useEffect(() => {
     if (token) {
-      console.log('WEBSOCKET CONTEXT: token use effect triggered', token);
-      if (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN) {
-        console.log("Connecting to WebSocket triggered by token in dependency...");
-        connectWebSocket(token);  // Call your WebSocket connection function
+      console.log("WEBSOCKET CONTEXT: token use effect triggered", token);
+      if (
+        !socketRef.current ||
+        socketRef.current.readyState !== WebSocket.OPEN
+      ) {
+        console.log(
+          "Connecting to WebSocket triggered by token in dependency..."
+        );
+        connectWebSocket(token); // Call your WebSocket connection function
       } else {
         console.log("WebSocket is already open, skipping reconnection.");
       }
-      
-     // connectWebSocket(token); // Manually trigger WebSocket connection on token change
-    }  
+
+      // connectWebSocket(token); // Manually trigger WebSocket connection on token change
+    }
     return () => {
-      
       closeSocket();
     };
   }, [token]); // Runs when `token` changes
@@ -268,7 +283,9 @@ useEffect(() => {
   };
 
   return (
-    <SurroundingsWSContext.Provider value={{ sendMessage, lastMessage, lastLocationName }}>
+    <SurroundingsWSContext.Provider
+      value={{ sendMessage, lastMessage, lastLocationName }}
+    >
       {children}
     </SurroundingsWSContext.Provider>
   );
@@ -277,7 +294,9 @@ useEffect(() => {
 export const useSurroundingsWS = () => {
   const context = useContext(SurroundingsWSContext);
   if (context === undefined) {
-    throw new Error("useSurroundingsWS must be used within a SurroundingsWSProvider");
+    throw new Error(
+      "useSurroundingsWS must be used within a SurroundingsWSProvider"
+    );
   }
   return context;
 };
