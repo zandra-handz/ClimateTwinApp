@@ -323,6 +323,8 @@ export const getUserSettings = async () => {
     }
 };
 
+ 
+
 
 
 export const getCurrentUser = async () => {
@@ -413,6 +415,8 @@ export const updateUserSettings = async (userId, updatedSettings) => {
         throw error;
     }
   };
+
+  
 
 
 
@@ -510,6 +514,26 @@ export const getTreasures = async () => {
         throw error;
     }
 };
+
+
+export const getHistory = async () => {
+    try {
+      //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.get('/users/visited-places/'); //summary is an interesting endpoint too
+        console.log('API GET Call getUserVisits'); //, response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/visits/:', error.response.data);
+        } else if (error.request) {
+            console.error('Error request for /users/visits/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /users/visits/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
 
 
 export const getInboxItems = async () => {

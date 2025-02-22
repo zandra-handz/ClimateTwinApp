@@ -178,7 +178,7 @@ const useWebSocket = ({
 const WebSocketSearchingLocations: React.FC<{ 
   reconnectOnUserButtonPress: boolean;
 }> = ({ reconnectOnUserButtonPress }) => {
-  const { themeStyles, appContainerStyles } = useGlobalStyles(); 
+  const { themeStyles, constantColorsStyles, appContainerStyles } = useGlobalStyles(); 
   const { searchIsActive } = useActiveSearch();
 
   const [mapDimensions, setMapDimensions] = useState({ width: 0, height: 0 });
@@ -362,7 +362,7 @@ const WebSocketSearchingLocations: React.FC<{
 
         {/* <AnimatedDot style={animatedStyle} animatedProps={animatedCoords} /> */}
 
-        <WorldMapSvg width={"100%"} color={"blue"} />
+        <WorldMapSvg width={"100%"} color={constantColorsStyles.v1LogoColor.backgroundColor} />
         {/* Only show the Dot if the map has dimensions */}
         {mapDimensions.width > 0 &&
           mapDimensions.height > 0 &&

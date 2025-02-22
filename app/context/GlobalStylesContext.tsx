@@ -152,8 +152,11 @@ export const GlobalStylesProvider: React.FC<GlobalStylesProviderProps> = ({
   }, [styles.theme]);
 
   // Define theme styles for dark and light modes
+  const lightOrDark = styles.theme;
+
   const themeStyles =
     styles.theme === "dark" ? darkThemeStyles : lightThemeStyles;
+  const constantColorsStyles = constantColors;
   const appFontStyles = fontStyles;
   const appContainerStyles = containerStyles;
 
@@ -166,7 +169,9 @@ export const GlobalStylesProvider: React.FC<GlobalStylesProviderProps> = ({
       value={{
         ...styles,
         themeStyles,
+        lightOrDark,
         appFontStyles,
+        constantColorsStyles,
         appContainerStyles,
         themeStyleSpinners,
         nonCustomHeaderPage,
@@ -177,6 +182,14 @@ export const GlobalStylesProvider: React.FC<GlobalStylesProviderProps> = ({
     </GlobalStylesContext.Provider>
   );
 };
+
+const constantColors = StyleSheet.create({
+  v1LogoColor: {
+    backgroundColor: '#60aa68',
+    color: '#ffffff',
+  }
+
+});
 
 const containerStyles = StyleSheet.create({
   screenContainer: {
@@ -234,6 +247,87 @@ const containerStyles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
     
   }, 
+  drawerContainer: {
+    width: '100%',
+    flex: 1,
+  },
+  drawerHeaderContainer: { 
+    width: '100%',
+    flex: 1, 
+    height: 200,
+    paddingTop:30, 
+    paddingHorizontal: 20,
+    paddingBottom: 10,
+    flexDirection: 'column',
+     
+  },
+  drawerHeaderMainRow: {
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
+    height: 110,
+    alignContent: 'center',
+
+  },
+  drawerHeaderImageContainer: {
+    //position: 'absolute',
+    //top: 30,
+    //left: -20,
+    width: 110,
+    overflow: 'hidden',  
+    height: 110,
+    
+    
+  },
+  drawerHeaderUserInfo: {
+    paddingTop: 30, //custom tinkering ugh 
+    flex: 1, 
+    height: 'auto', 
+    flexDirection: 'row',
+    alignItems: 'center',
+    alignContent: 'center',//this needs both alignItems and alignContents, NO i do not understand why
+    
+   // backgroundColor: 'teal',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-end', 
+
+  },
+  drawerHeaderBottomRow: {
+    flexDirection: 'column',
+    justifyContent: 'flex-end', 
+    width: '100%',
+    flex: 1,  
+
+  },
+  drawerButtonContainer: { 
+    marginHorizontal: 10,
+    borderBottomWidth: 1, 
+    borderRadius: 0,
+
+  },
+  drawerSignoutButton: {
+    marginTop: 20,
+    padding: 10,
+    width: '100%',
+    flexShrink: 1,
+    backgroundColor: "red",
+    alignItems: "left",
+    borderRadius: 5,
+
+  },
+  drawerLightDarkButtons: {
+    flexDirection: 'row',
+    width: '100%',
+    marginTop: 20,
+    padding: 10,
+    width: '100%',
+    flexShrink: 1, 
+    alignItems: "left",
+    borderRadius: 5,
+    justifyContent: 'space-between',
+
+  },
+
   startingPointTempContainer: {
     height: '100%', 
     flexDirection: 'column',
@@ -383,6 +477,18 @@ const containerStyles = StyleSheet.create({
     flex: 1,
     borderWidth: StyleSheet.hairlineWidth,
   },
+  countDownerContainer: {
+    overflow: 'hidden',
+    textAlign: 'center',
+    paddingVertical: 3,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    height: 'auto',
+    width: 'auto',
+
+  },
   signOutButtonContainer: {
     overflow: 'hidden',
     textAlign: 'center',
@@ -454,12 +560,26 @@ const fontStyles = StyleSheet.create({
     fontSize: 18,
 
   },
+  drawerHeaderWelcomeText: {
+    fontSize: 30,
+    fontWeight: 'bold',
+
+  },
+  drawerHeaderSubRowText: {
+    fontSize: 15,
+    fontWeight: 'bold',
+
+  },
   goButtonText: {
     fontSize: 60,
 
   },
   smallGoButtonText: {
     fontSize: 26,
+
+  },
+  drawerLabelText: {
+    fontSize: 15, 
 
   },
   startingPointTempText: {
@@ -510,6 +630,11 @@ const fontStyles = StyleSheet.create({
   exploreTabBarIcon: {
     height: 22,
     width: 22,
+  },
+  countDownText: {
+    fontSize: 13,
+    fontWeight: 'bold',
+    
   },
   signOutText: {
     fontSize: 12,

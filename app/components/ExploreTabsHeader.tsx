@@ -3,17 +3,16 @@ import { useGlobalStyles } from "../context/GlobalStylesContext";
 import { useUser } from "../context/UserContext";
 import { SafeAreaView } from "react-native-safe-area-context";
 import WebSocketCurrentLocation from "../components/WebSocketCurrentLocation";
+import CountDowner from "./CountDowner";
+ 
 
-import SignoutSvg from "../assets/svgs/signout.svg";
-
-import { View, Text, TouchableOpacity } from "react-native";
-import { useNavigation } from "expo-router";
+import { View, Text, TouchableOpacity } from "react-native"; 
 
 import { DrawerToggleButton } from "@react-navigation/drawer";
 
 const ExploreTabsHeader = () => {
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
-  const { user, isAuthenticated, isInitializing, onSignOut } = useUser();
+  const {   onSignOut } = useUser();
 
   const handleSignOut = () => {
     onSignOut();
@@ -57,8 +56,10 @@ const ExploreTabsHeader = () => {
         > */}
           <WebSocketCurrentLocation />
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
-            <TouchableOpacity onPress={() => handleSignOut()} style={[appContainerStyles.signOutButtonContainer, themeStyles.darkerBackground]}
+            {/* <TouchableOpacity onPress={() => handleSignOut()} style={[appContainerStyles.signOutButtonContainer, themeStyles.darkerBackground]}
             ><Text style={[appFontStyles.signOutText, themeStyles.primaryText]}>Sign out</Text></TouchableOpacity>
+         */}
+        <CountDowner />
           {/* <SignoutSvg
             onPress={() => handleSignOut()}
             width={22}

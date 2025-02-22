@@ -20,6 +20,7 @@ import {
   signout,
   getCurrentUser,
   getUserSettings,
+  updateUserSettings,
 } from "../apicalls"; 
 import { useAppMessage } from "./AppMessageContext";
 import {  useSegments } from "expo-router";
@@ -118,15 +119,31 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
             await onSignOut();
             return;
         }
+        try {
+          // Fetch user settings using React Query's fetchQuery
+          const userSettingsData = await queryClient.fetchQuery({
+            queryKey: ['userSettings', userData?.id], 
+              queryFn: getUserSettings,
+          });
+  
+          if (userSettingsData) {
+              setAppSettings((prev) => ({ ...prev, ...userSettingsData }));
+              setUserNotificationSettings({
+                  receive_notifications: userSettingsData?.receive_notifications || false,
+              });
+          }
+      } catch (error) {
+          console.error('Error fetching user settings:', error);
+      }
 
-        const userSettingsData = await getUserSettings();
-        if (userSettingsData) {
-            setAppSettings((prev) => ({ ...prev, ...userSettingsData }));
-            setUserNotificationSettings({
-                receive_notifications:
-                    userSettingsData?.receive_notifications || false,
-            });
-        }
+        // const userSettingsData = await getUserSettings();
+        // if (userSettingsData) {
+        //     setAppSettings((prev) => ({ ...prev, ...userSettingsData }));
+        //     setUserNotificationSettings({
+        //         receive_notifications:
+        //             userSettingsData?.receive_notifications || false,
+        //     });
+        // }
 
         if (userData) {
             setUser(userData);
@@ -144,6 +161,17 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     setLoading(false);
 };
 
+useEffect(() => {
+  if (appSettings) {
+    console.log('!!!!!!!!!!!!!!!!!!!!!!!APP SETTINGS', appSettings)
+  }
+  const cachedSettings = queryClient.getQueryData(['userSettings', user?.id]);
+  
+  if (cachedSettings) {
+    console.log('!!!!!!!!!!!!!!!!!!!!!!! REACT QUERY CACHE: ', cachedSettings);
+  }
+
+}, [appSettings]);
 
   // useEffect(() => {
   //   console.log('BEGINNING INITIALIZE!!!!!!!!!!!!!!!!!!!!!!!!');
@@ -158,8 +186,37 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
    
     reInitialize();
     }
-  }, [appStateVisible]);
- 
+  }, [appStateVisible]); 
+  
+  const updateUserSettingsMutation = useMutation({
+    mutationFn: (newSettings) => updateUserSettings(user?.id, newSettings),
+  onSuccess: (data) => {
+    setAppSettings((prev) => ({ ...prev, ...data }));
+    queryClient.invalidateQueries(["userSettings", user?.id]);  
+    queryClient.refetchQueries(["userSettings", user?.id]).then(() => {
+      
+      const updatedSettings = queryClient.getQueryData(["userSettings", user?.id]);
+      console.log("Refetched user settings:", updatedSettings);
+    });
+  },
+    onError: (error) => {
+      console.error("Error updating user settings:", error);
+    },
+  });
+   
+  const updateSettings = async (newSettings: Record<string, any>) => {
+    if (!user?.id) {
+      console.error("User ID is not available");
+      return;
+    }
+  
+    try {
+      await updateUserSettingsMutation.mutateAsync(newSettings);  
+    } catch (error) {
+      console.error("Update settings error:", error);
+    }
+  };
+  
 
     const signinMutation = useMutation({
         mutationFn: signinWithoutRefresh,
@@ -184,17 +241,8 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         }
       };
 
-//in case i end up needing async
-    //   const signinMutation = useMutation({
-    //     mutationFn: signinWithoutRefresh,
-    //     onSuccess: async () => {
-    //       console.log("Tokens should now be saved before reInitialize runs.");
-    //       await reInitialize(); // Ensures it waits for any potential async operations
-    //     },
-    //     onError: (error) => {
-    //       console.error("Sign in mutation error:", error);
-    //     },
-    //   });
+
+
        
       
 
@@ -248,6 +296,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         onSignUp,
         onSignOut,
         reInitialize,
+        updateSettings,
         // deAuthUser,
       }}
     >

@@ -22,7 +22,16 @@ const WebSocketCurrentLocation: React.FC = () => {
    
   useEffect(() => {
     if (lastMessage) {
-      if (lastMessage === 'Searching for ruins!') {
+      if (lastMessage === 'User has returned home.' && lastLocationName === "null") {
+        if (searchIsActive) {
+          closeSearchExternally();
+        }
+        refreshSurroundingsManually();
+        
+        triggerRefetch(); //do i need to reset the items?
+        showAppMessage(true, null, 'You have returned home');
+      }
+     if (lastMessage === 'Searching for ruins!') {
         closeSearchExternally(); 
         gettingExploreLocations();
         showAppMessage(true, null, 'Searching for ruins!');

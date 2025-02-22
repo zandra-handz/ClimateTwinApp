@@ -36,15 +36,12 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
    // 1 second to start, has exponential backoff capped at 
    // 60 seconds in timeout in attemptReconnect function
   const [reconnectionDelay, setReconnectionDelay] = useState(10000);
-
-  // State variable to hold the last message received.
+ 
   const [lastMessage, setLastMessage] = useState<any>(null);
   const [lastLocationName, setLastLocationName] = useState<any>(null);
-
-  // State variable to trigger reconnection attempts.
+ 
   const [reconnectAttempt, setReconnectAttempt] = useState(0);
-
-  // Function to fetch the token.
+ 
   const fetchToken = async () => {
     setToken(null);
     console.log("fetchToken in socket context triggered!");
@@ -84,8 +81,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
             `[${new Date().toISOString()}] No token available in SecureStore.`
           );
           return;
-        }
-        // token = storedToken; // Use the token fetched from SecureStore
+        } 
         confirmedToken = storedToken;
       } catch (error) {
         console.error("Failed to retrieve token from SecureStore:", error);
@@ -137,11 +133,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
     socket.onerror = (event: Event) => {
       console.log("WebSocket error:", event);
-      showAppMessage(true, null, "Websocket error on trying to connect.");
-      //Alert.alert("WEBSOCKET CONNECT ERROR", "Websocket error on trying to connect.");
-
-      //reInitialize(); // This could reset the user state or handle certain errors
-      //attemptReconnect(); // Trigger reconnection attempt
+      showAppMessage(true, null, "Websocket error on trying to connect."); 
     };
 
     socket.onclose = (event) => {
@@ -195,8 +187,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       }
     };
   };
-
-  // Function to attempt reconnection with exponential backoff
+ 
   const attemptReconnect = () => {
     if (!isReconnecting && isAuthenticated && !isInitializing) {
       console.log("Attempting to reconnect triggered");
@@ -227,8 +218,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       }
     }
   };
-
-  // Manually fetch the token and initialize the WebSocket connection when the provider mounts
+ 
   useEffect(() => {
     if (
       isAuthenticated &&
@@ -237,7 +227,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     ) {
       fetchToken();
     } else {
-      setToken(null); // Clear token when user logs out or is not authenticated
+      setToken(null);  
       console.log("token set to null");
       setLastMessage(null);
       setLastLocationName(null);
@@ -261,7 +251,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
         console.log(
           "Connecting to WebSocket triggered by token in dependency..."
         );
-        connectWebSocket(token); // Call your WebSocket connection function
+        connectWebSocket(token); 
       } else {
         console.log("WebSocket is already open, skipping reconnection.");
       }
@@ -271,7 +261,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     return () => {
       closeSocket();
     };
-  }, [token]); // Runs when `token` changes
+  }, [token]);  
 
   const sendMessage = (message: any) => {
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {

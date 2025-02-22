@@ -14,9 +14,14 @@ const RuinsHarmonyView = ({
   direction,
   directionDegree,
 }) => {
+
+  const englishNameKey = `name:en`;
+  const internationalNameKey = `int_name`;
+  
+  const bestNameOption = tags[englishNameKey] || tags[internationalNameKey] || name;
   return (
     <RuinsHarmonyUICard
-      name={name}
+      name={bestNameOption}
       windCompass={windCompass}
       tags={tags}
       milesAway={milesAway}
