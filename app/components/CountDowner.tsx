@@ -1,21 +1,27 @@
 import { View, TextInput, AppState } from "react-native";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState,  useRef } from "react";
 import { useGlobalStyles } from "../context/GlobalStylesContext";
 import { useSurroundings } from "../context/CurrentSurroundingsContext";
+import { useAppMessage } from "../context/AppMessageContext";
 import { useAppState } from "../context/AppStateContext";
 import Animated, { useSharedValue, useAnimatedProps } from "react-native-reanimated";
+import { useSurroundingsWS } from "../context/SurroundingsWSContext";
 
 const CountDowner = () => {
+    const { sendMessage, lastMessage, lastLocationName } = useSurroundingsWS();
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
   const { currentSurroundings } = useSurroundings();
   const { appStateVisible } = useAppState();
+    const { showAppMessage} = useAppMessage();
+
+    const [isCountDownReady, setIsCountDownReady ] = useState(false);
   
   const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
   const timeSharedValue = useSharedValue(0);
-  const intervalRef = useRef(null); // Store interval reference
+  const intervalRef = useRef(null); 
 
   const animatedTime = useAnimatedProps(() => {
-    const time = Math.max(0, timeSharedValue.value); // Ensure it never goes negative
+    const time = Math.max(0, timeSharedValue.value); 
     const hours = Math.floor(time / 3600);
     const minutes = Math.floor((time % 3600) / 60);
     const seconds = time % 60;
@@ -23,35 +29,49 @@ const CountDowner = () => {
     return { text: formattedTime, defaultValue: formattedTime };
   });
 
-  // Function to calculate time remaining (in seconds) until last_accessed + 1 hour
+  // Adds hour to last_accessed property of current location
   const getTimeDifferenceInSeconds = (lastAccessed) => {
     const currentTime = new Date();
     const lastAccessedTime = new Date(lastAccessed);
     lastAccessedTime.setHours(lastAccessedTime.getHours() + 1);
     return Math.floor((lastAccessedTime - currentTime) / 1000);
   };
-
-  // Function to reset countdown
+ 
   const resetCountdown = () => {
+    setIsCountDownReady(false);
     if (currentSurroundings && !currentSurroundings.expired) {
       const timeDifference = getTimeDifferenceInSeconds(currentSurroundings.last_accessed);
       timeSharedValue.value = timeDifference > 0 ? timeDifference : 0;
+      
+      setIsCountDownReady(true);
     }
   };
-
-  // Effect to restart countdown when appState changes or surroundings update
+ 
   useEffect(() => {
+    // showAppMessage(true, null, 'Resetting count down');
+    console.log('RESETTING COUNTDOWN'); 
+    if (appStateVisible === 'active') {
+      
     resetCountdown();
-  }, [currentSurroundings, appStateVisible]);
+    
+  }
+  }, [appStateVisible, lastLocationName]);
 
-  // Start and manage countdown interval
-  useEffect(() => {
-    // Clear any existing interval
+  useEffect(() => { 
+    // showAppMessage(true, null, 'Resetting count down remount trigger');
+    console.log('RESETTING COUNTDOWN');
+    if (appStateVisible === 'active') {
+      
+    resetCountdown(); 
+    
+  }
+  }, []);
+ 
+  useEffect(() => { 
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
-
-    // Start new interval
+ 
     intervalRef.current = setInterval(() => {
       if (timeSharedValue.value > 0) {
         timeSharedValue.value -= 1;
@@ -60,18 +80,27 @@ const CountDowner = () => {
       }
     }, 1000);
 
-    return () => clearInterval(intervalRef.current); // Cleanup on unmount
+    return () => clearInterval(intervalRef.current); 
+    
   }, [timeSharedValue]);
 
   return (
-    <View style={[appContainerStyles.countDownerContainer, themeStyles.darkerBackground]}>
+    <>
+      {lastLocationName && lastLocationName !== 'null' && isCountDownReady && (
+          
+    <View style={[appContainerStyles.countDownerContainer, themeStyles.primaryBackground]}>
+    
+      
       <AnimatedTextInput
         style={[appFontStyles.countDownText, themeStyles.primaryText]}
         animatedProps={animatedTime}
         editable={false}
-        defaultValue={"00:00"}
-      />
+        defaultValue={"    "}
+      /> 
+       
     </View>
+  ) }
+    </>
   );
 };
 

@@ -192,8 +192,8 @@ const router = useRouter();
 
 
   const navigateToHome = () => {
-
-    router.push('(tabs)'); // Navigate to the /recover-credentials screen
+    //not the route anymore
+    //router.push('(tabs)'); // Navigate to the /recover-credentials screen
   };
 
   const handleAuthentication = async () => {

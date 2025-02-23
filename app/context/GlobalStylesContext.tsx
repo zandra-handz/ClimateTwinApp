@@ -550,6 +550,26 @@ const containerStyles = StyleSheet.create({
     overflow: 'hidden',
 
   },
+  twoButtonFooterContainer: {
+    // zIndex: 100,
+    // position: 'absolute',
+    bottom: 0, 
+    //height: 80,  managed in Footer component because it changes if keyboard is visible
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+
+  },
+  footerButton: {
+    width: '50%',
+    height: '100%', 
+    flexGrow: 1,
+    textAlign: 'center',
+    alignItems: 'center', 
+    justifyContent: 'center',
+
+  },
 });
 
 const fontStyles = StyleSheet.create({
@@ -641,6 +661,13 @@ const fontStyles = StyleSheet.create({
     fontWeight: 'bold',
     
   },
+
+  
+
+  actionFooterLabel: {
+    fontSize: 15,
+    fontWeight: 'bold',
+  }
 });
 
 const lightThemeStyles = StyleSheet.create({
@@ -798,6 +825,10 @@ const lightThemeStyles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   headerTextColor: "#121212",
+
+
+
+
  
 });
 

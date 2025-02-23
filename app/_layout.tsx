@@ -68,7 +68,7 @@ export default function Layout() {
                             {/* {user?.authenticated ? ( */}
 
                             <Stack.Screen
-                              name="(tabs)"
+                              name="(drawer)"
                               options={{
                                 headerShown: false,
                                 gestureEnabled: false,

@@ -102,6 +102,25 @@ const DrawerCustomizer = (props) => {
         <DrawerItem
           icon={() => (
             <Feather
+              name="compass"
+              size={appFontStyles.exploreTabBarIcon.width}
+              color={themeStyles.exploreTabBarText.color}
+              {...props}
+            />
+          )}
+          labelStyle={[themeStyles.primaryText, appFontStyles.drawerLabelText]}
+          pressColor={"lightblue"}
+          style={[
+            themeStyles.darkerBackground,
+            appContainerStyles.drawerButtonContainer,
+            { borderBottomColor: themeStyles.primaryText.color },
+          ]}
+          label="Go!"
+          onPress={() => router.push("/(exploretabs)")}
+        />
+        <DrawerItem
+          icon={() => (
+            <Feather
               name="users"
               size={appFontStyles.exploreTabBarIcon.width}
               color={themeStyles.exploreTabBarText.color}
@@ -135,7 +154,7 @@ const DrawerCustomizer = (props) => {
             { borderBottomColor: themeStyles.primaryText.color },
           ]}
           label="Inbox"
-          onPress={() => router.push("/inbox")}
+          onPress={() => router.push("(inbox)")}
         />
         <DrawerItem
           icon={() => (
@@ -154,7 +173,7 @@ const DrawerCustomizer = (props) => {
             { borderBottomColor: themeStyles.primaryText.color },
           ]}
           label="Treasures"
-          onPress={() => router.push("/treasures")}
+          onPress={() => router.push("(treasures)")}
         />
         <DrawerItem
           icon={() => (

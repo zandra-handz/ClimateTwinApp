@@ -516,6 +516,47 @@ export const getTreasures = async () => {
 };
 
 
+export const getTreasure = async (treasureId) => {
+    try {
+      //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.get(`/users/treasure/${treasureId}/`);
+        console.log('API GET Call getTreaure'); //, response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/treasure/:', error.response.data);
+        } else if (error.request) {
+            console.error('Error request for /users/treasure/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /users/treasure/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
+
+export const requestToGiftTreasure = async (data) => {
+    try {
+        console.log(data);
+      //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.post(`/users/send-gift-request/`, data);
+        console.log('API GET Call getTreaure'); //, response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/send-gift-request/:', );
+        } else if (error.request) {
+            console.error('Error request for /users/send-gift-request/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /users/send-gift-request/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
+
+
+
 export const getHistory = async () => {
     try {
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
@@ -554,6 +595,42 @@ export const getInboxItems = async () => {
     }
 };
 
+
+export const getInboxItem = async (id) => {
+    try {
+       // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.get(`/users/inbox/item/${id}/`);
+        console.log('API GET Call getInboxItem'); //, response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/inbox/item/:', error.response.data);
+        } else if (error.request) {
+            console.error('Error request for /users/inbox/item/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /users/inbox/item/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
+export const getMessage = async (messageId) => {
+    try {
+       // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.get(`/users/message/${messageId}/`);
+        console.log('API GET Call getMessage'); //, response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/message/:', error.response.data);
+        } else if (error.request) {
+            console.error('Error request for /users/message/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /users/message/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
 
 
 export const getFriends = async () => {

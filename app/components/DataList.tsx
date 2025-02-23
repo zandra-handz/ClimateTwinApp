@@ -3,7 +3,7 @@ import DataCard from './DataCard';
 import React, {useEffect } from 'react';
 import { useGlobalStyles } from '../context/GlobalStylesContext';
 
-const DataList = ({listData, onCardButtonPress}) => {
+const DataList = ({listData, onCardButtonPress, onOpenButtonPress, onOpenTreasurePress}) => {
 
   // useEffect(() => {
   //   if (listData) {
@@ -24,7 +24,7 @@ const DataList = ({listData, onCardButtonPress}) => {
     }
     renderItem={({ item }) => (
       <View style={{ marginVertical: '2%' }}>
-        <DataCard data={item} onPress={onCardButtonPress} />
+        <DataCard data={item} onPress={onCardButtonPress} onOpenPress={onOpenButtonPress} onOpenTreasurePress={onOpenTreasurePress} />
       </View>
     )}
     contentContainerStyle={{ paddingBottom: 60 }} 

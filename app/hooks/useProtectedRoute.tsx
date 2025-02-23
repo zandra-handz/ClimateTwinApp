@@ -60,8 +60,8 @@ const useProtectedRoute = (isAuthenticated: boolean, isLoading: boolean) => {
       router.push("secondindex");
       //goToRoot();
     } else if (isAuthenticated && (isOnSignIn || isOnRootPage)) {
-      console.log('Protected route redirecting to (tabs)');
-      router.push("(tabs)/(main)");
+      console.log('Protected route redirecting to (main)');
+      router.push("(drawer)/(exploretabs)");
     }
   }, [isAuthenticated, isLoading, segments, isNavigationReady]);
 };

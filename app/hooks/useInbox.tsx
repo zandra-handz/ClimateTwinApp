@@ -1,90 +1,83 @@
-import React, { useMemo, useRef } from 'react';
-import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';  
+import React, { useMemo, useRef, useState } from "react";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useUser } from "../context/UserContext";
+import { getInboxItems, getInboxItem } from "../apicalls";
 
+// Define types for inbox items and messages
 
-import { useUser } from '../context/UserContext';
-import { getInboxItems } from '../apicalls';
+interface ContentObject {
+  id: number;
+  special_type: string;
+  message: string;
+  recipient: number;
+  treasure_descriptor?: string;
+  treasure_description?: string;
+}
 
+interface Message {
+  id: number;
+  sender: number;
+  recipient: number;
+  content: string;
+  created_on: string;
+  content_object: ContentObject;
+}
 
-const useInbox = () => { 
-    const { user, isAuthenticated } = useUser();
-    
-    const queryClient = useQueryClient();
+interface InboxItem {
+  id: number;
+  created_on: string;
+  is_read: boolean;
+  user: number;
+  message: Message;
+}
 
-    const timeoutRef = useRef(null);
+const useInbox = () => {
+  const { user, isAuthenticated } = useUser();
+  const queryClient = useQueryClient();
 
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [viewingInboxItem, setViewingInboxItem] = useState<InboxItem | null>(
+    null
+  );
+  const [viewingMessage, setViewingMessage] = useState<Message | null>(null);
 
-    const { data: inboxItems, isLoading, isFetching, isSuccess, isError } = useQuery({
-        queryKey: ['inboxItems'],
-        queryFn: () => getInboxItems(),
-        enabled: !!isAuthenticated,
-        onSuccess: (data) => { 
-            
-        }
-    });
+  const {
+    data: inboxItems,
+    isLoading,
+    isFetching,
+    isSuccess,
+    isError,
+  } = useQuery<InboxItem[]>({
+    queryKey: ["inboxItems"],
+    queryFn: getInboxItems,
+    enabled: !!isAuthenticated,
+    onSuccess: (data) => {
+      // Handle successful fetch
+    },
+  });
 
+  const handleGetInboxItem = async (id: number) => {
+    try {
+      const inboxItem = await queryClient.fetchQuery<InboxItem>({
+        queryKey: ["inboxItem", user?.id, id],
+        queryFn: () => getInboxItem(id),
+      });
 
+      if (inboxItem) {
+        setViewingInboxItem(inboxItem);
+        setViewingMessage(inboxItem.message); // Extract and store the message separately
+      }
+    } catch (error) {
+      console.error("Error fetching inbox item:", error);
+    }
+  };
 
-    // const createHelloMutation = useMutation({
-    //     mutationFn: (data) => saveHello(data),
-    //     onError: (error) => {
-    //       if (timeoutRef.current) {
-    //         clearTimeout(timeoutRef.current);
-    //       }
-    
-    //       timeoutRef.current = setTimeout(() => {
-    //         createHelloMutation.reset();
-    //       }, 2000);
-    //     },
-    //     onSuccess: (data) => {
-    //       queryClient.setQueryData(["pastHelloes"], (old) => {
-    //         const updatedHelloes = old ? [data, ...old] : [data];
-    //         return updatedHelloes;
-    //       });
-    
-    //       const actualHelloesList = queryClient.getQueryData(["pastHelloes"]);
-    //       console.log("Actual HelloesList after mutation:", actualHelloesList);
-    
-    //       if (timeoutRef.current) {
-    //         clearTimeout(timeoutRef.current);
-    //       }
-    
-    //       timeoutRef.current = setTimeout(() => {
-    //         createHelloMutation.reset();
-    //       }, 2000);
-    //     },
-    //   });
-
-
-    //   const handleCreateHello = async (helloData) => {
-    //     const hello = {
-    //       user: authUserState.user.id,
-    //       friend: helloData.friend,
-    //       type: helloData.type,
-    //       typed_location: helloData.manualLocation,
-    //       additional_notes: helloData.notes,
-    //       location: helloData.locationId,
-    //       date: helloData.date,
-    //       thought_capsules_shared: helloData.momentsShared,
-    //       delete_all_unshared_capsules: helloData.deleteMoments, // ? true : false,
-    //     };
-    
-    //     console.log("Payload before sending:", hello);
-    
-    //     try {
-    //       await createHelloMutation.mutateAsync(hello); // Call the mutation with the location data
-    //     } catch (error) {
-    //       console.error("Error saving hello:", error);
-    //     }
-    //   };
-  
-
-    return { 
-        inboxItems, 
+  return {
+    inboxItems,
+    viewingInboxItem,
+    handleGetInboxItem,
+    viewingMessage,
+  };
 };
-
-};
-
-
 
 export default useInbox;

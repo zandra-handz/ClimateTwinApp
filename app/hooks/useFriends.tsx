@@ -1,28 +1,64 @@
-import React, { useMemo, useRef } from 'react';
-import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';  
-
+import React, { useMemo, useRef, useState, useEffect } from 'react';
+import { useQuery, useQueryClient, UseQueryResult } from '@tanstack/react-query';
 
 import { useUser } from '../context/UserContext';
 import { getFriends } from '../apicalls';
 
+// Define the types for the response from getFriends API
+interface Friend {
+  id: number;
+  nickname: string;
+  created_on: string;
+  user: number;
+  friend: number;
+  friendship: number;
+  // Add other properties based on your actual friend data structure
+}
 
-const useFriends = () => { 
-    const { user, isAuthenticated } = useUser();
-    
-    const queryClient = useQueryClient();
+// Define the type for the dropdown data
+interface DropdownOption {
+  label: string;
+  value: number;
+  friendshipNumber: number;
+}
 
-    const timeoutRef = useRef(null);
+const useFriends = () => {
+  const { user, isAuthenticated } = useUser();
+  const [friendsDropDown, setFriendsDropDown] = useState<DropdownOption[]>([]);
 
+  const queryClient = useQueryClient();
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-    const { data: friends, isLoading, isFetching, isSuccess, isError } = useQuery({
-        queryKey: ['friends'],
-        queryFn: () => getFriends(),
-        enabled: !!isAuthenticated,
-        onSuccess: (data) => { 
-            
-        }
-    });
+  // The return type of useQuery, assuming 'friends' is an array of Friend objects
+  const { data: friends, isLoading, isFetching, isSuccess, isError }: UseQueryResult<Friend[], Error> = useQuery({
+    queryKey: ['friends'],
+    queryFn: getFriends,
+    enabled: !!isAuthenticated,
+    onSuccess: (data) => {
+      // Convert the friends data into a dropdown array
+      const dropdownData = data.map((friend) => ({
+        label: friend.nickname,
+        value: friend.id,
+        friendshipNumber: friend.friendship,
+      }));
+      setFriendsDropDown(dropdownData);
+    }
+  });
 
+  // Memoize the dropdown data to avoid unnecessary re-renders
+  const memoizedDropDown = useMemo(() => friendsDropDown, [friendsDropDown]);
+
+  return {
+    friends,
+    isLoading,
+    isFetching,
+    isSuccess,
+    isError,
+    friendsDropDown: memoizedDropDown,
+  };
+};
+
+export default useFriends;
 
 
     // const createHelloMutation = useMutation({
@@ -77,14 +113,3 @@ const useFriends = () => {
     //       console.error("Error saving hello:", error);
     //     }
     //   };
-  
-
-    return { 
-        friends, 
-};
-
-};
-
-
-
-export default useFriends;

@@ -8,24 +8,23 @@ import { useNearbyLocations } from "../context/NearbyLocationsContext";
 import { useUser } from "../context/UserContext";
 
 const WebSocketCurrentLocation: React.FC = () => {
-  const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
- const { isAuthenticated, isInitializing } = useUser();
+  const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles(); 
   const [update, setUpdate] = useState<string | null>(null);
   const { searchIsActive, closeSearchExternally, refreshSurroundingsManually, gettingExploreLocations, foundExploreLocations } = useActiveSearch();
   const { showAppMessage} = useAppMessage();
   const { triggerRefetch } = useNearbyLocations();
   
   const { sendMessage, lastMessage, lastLocationName } = useSurroundingsWS();
-  // const lastMessage = 'hi';
-  // const lastLocationName = 'hi';
+ 
 
    
   useEffect(() => {
     if (lastMessage) {
-      if (lastMessage === 'User has returned home.' && lastLocationName === "null") {
+      if (lastMessage === 'User has returned home.') {
         if (searchIsActive) {
           closeSearchExternally();
         }
+        setUpdate("You are home");
         refreshSurroundingsManually();
         
         triggerRefetch(); //do i need to reset the items?

@@ -61,11 +61,11 @@ export default () => {
           options={{ header: () => null, drawerLabel: "Friends" }}
         />
         <Drawer.Screen
-          name="inbox"
+          name="(inbox)"
           options={{ header: () => null, drawerLabel: "Inbox" }}
         />
         <Drawer.Screen
-          name="treasures"
+          name="(treasures)"
           options={{ header: () => null, drawerLabel: "Treasures" }}
         />
                 <Drawer.Screen
