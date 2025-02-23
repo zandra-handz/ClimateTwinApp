@@ -48,7 +48,7 @@ const WindFriendsUICard = ({
         {formatDescription(description)}
       </Text>
       <Text style={[ themeStyles.primaryText]}>
-          {windFriends}
+          {windFriends} 
         </Text>
 
       </View>
@@ -56,14 +56,14 @@ const WindFriendsUICard = ({
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: "100%", height: "100%", flexGrow: 1, flex: 1 }}>
       <WindSquare
           windSpeed={homeWindSpeed || 50}
-          windDirection={homeWindDirection || 60}
+          windDirection={homeWindDirection}
           size={50}
           opacity={.8}
           color={themeStyles.primaryText.color}
         />
         <WindSquare
           windSpeed={windSpeed || 50}
-          windDirection={windDirection || 60}
+          windDirection={windDirection}
           size={120}
           opacity={.8}
           color={themeStyles.primaryText.color}
