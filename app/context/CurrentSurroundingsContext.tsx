@@ -11,18 +11,14 @@ import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { getExploreLocation, pickNewSurroundings } from "../apicalls";
 
 import { useActiveSearch } from "./ActiveSearchContext";
-
-import { useNearbyLocations } from "./NearbyLocationsContext";
-
-// Define your interfaces for `currentSurroundings`
+ 
 interface CurrentSurroundings {
   id: number;
   explore_location?: RuinsSurroundings; // Use RuinsLocation for explore_location
   twin_location?: PortalSurroundings; // Use PortalLocation for twin_location
   user: number;
   last_accessed: string;
-  expired: boolean;
-  // Other fields depending on the structure
+  expired: boolean; 
 }
 
 interface PortalSurroundings {
@@ -77,7 +73,7 @@ interface RuinsSurroundings {
   directionDegree: number;
   direction: string;
   milesAway: number;
-  locationId: number; // you can keep this or remove it if unnecessary
+  //locationId: number; 
   latitude: number;
   longitude: number;
   tags: Record<string, string>;
@@ -154,8 +150,7 @@ useEffect(() => {
 }, [isAuthenticated, queryClient]);
 
   useEffect(() => {
-    if (manualSurroundingsRefresh) {
-      // console.log("CURRENT SURROUNDINGS REFETCH TRIGGERED");
+    if (manualSurroundingsRefresh) { 
       triggerRefetch();
       resetRefreshSurroundingsManually();
     }
@@ -173,8 +168,7 @@ useEffect(() => {
       setHomeSurroundings(null);
     }
 
-    if (currentSurroundings) {
-      // console.log('CURRENT SURROUNDINGS', currentSurroundings);
+    if (currentSurroundings) { 
       const { twin_location, explore_location } = currentSurroundings;
 
       if (twin_location) {
@@ -360,7 +354,7 @@ useEffect(() => {
         directionDegree: 0,
         direction: "",
         milesAway: 0,
-        locationId: 0,
+        //locationId: 0,
         latitude: 0,
         longitude: 0,
         tags: {},
@@ -373,53 +367,10 @@ useEffect(() => {
 
     setPortalSurroundings(portalSurroundingsData);
     setRuinsSurroundings(ruinsSurroundingsData);
-    setHomeSurroundings(homeSurroundingsData);
+    setHomeSurroundings(homeSurroundingsData); 
+  }, [currentSurroundings]); 
 
-    // console.log('USE EFFECT IN CONTEXT: ', currentSurroundings);
-    // console.log('PortalLocation Data: ', portalLocationData);
-    // console.log('RuinsLocation Data: ', ruinsLocationData);
-  }, [currentSurroundings]);
-
-  // useEffect(() => {
-  //   if (portalSurroundings) {
-  //     console.log(
-  //       `Portal location!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: `,
-  //       portalSurroundings
-  //     );
-  //   }
-  // }, [portalSurroundings]);
-
-  // useEffect(() => {
-  //   if (ruinsSurroundings) {
-  //     console.log(
-  //       `Ruins location!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: `,
-  //       ruinsSurroundings
-  //     );
-  //   }
-  // }, [ruinsSurroundings]);
-
-  // useEffect(() => {
-  //   if (homeSurroundings) {
-  //     console.log(
-  //       `Home location!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!: `,
-  //       homeSurroundings
-  //     );
-  //   }
-  // }, [homeSurroundings]);
-
-  // const handleExploreLocation = (data) => {
-  //   console.log('handle explore location pressed!', data);
-
-  //   if (data && data.explore_type) {
-  //     const locationType = data.explore_type === 'discovery_location' ? 'explore_location' : 'twin_location';
-  // //MOVE TO HOOK AND USE A MUTATION TO TRIGGER THE REFRESH
-  //     exploreLocation({ [locationType]: data.id });
-  //     //refreshSurroundingsManually();
-  //   }
-  // };
-
-  const handlePickNewSurroundings = async (data) => {
-    //console.log('Updating location:', locationId, locationUpdate);
+  const handlePickNewSurroundings = async (data) => { 
     let locationType;
     if (data && data.explore_type) {
       try {
@@ -429,9 +380,7 @@ useEffect(() => {
         console.error("Error updating location:", error);
       }
     }
-  };
-
-  // console.log("onSuccess called:", isSuccess);
+  }; 
 
   const pickNewSurroundingsMutation = useMutation({
     mutationFn: (locationData) => pickNewSurroundings(locationData),
@@ -454,7 +403,7 @@ useEffect(() => {
   const triggerRefetch = () => {
    // console.log("Triggering immediate refetch");
     queryClient.invalidateQueries({ queryKey: ["currentSurroundings"] });
-    queryClient.refetchQueries({ queryKey: ["currentSurroundings"] }); // Force refetch
+    //queryClient.refetchQueries({ queryKey: ["currentSurroundings"] }); // Force refetch
   };
 
   return (

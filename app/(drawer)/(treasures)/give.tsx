@@ -8,8 +8,13 @@ import { useAppMessage } from "../../context/AppMessageContext";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import useFriends from "../../hooks/useFriends";
 import Picker from "@/app/components/Picker";
-
 import TextInputBlock from "@/app/components/TextInputBlock";
+
+
+interface Friend {
+  id: number;
+  nickame: string;
+}
 
 const give = () => {
   const { id } = useLocalSearchParams<{ id: number }>();
@@ -18,8 +23,9 @@ const give = () => {
   const { friends, friendsDropDown } = useFriends(); // Assuming friendsDropDown is already a list of { label, value }
   const { showAppMessage } = useAppMessage();
   const router = useRouter();
-  const { viewingTreasure, handleGiftTreasure } = useTreasures();
+  const { viewingTreasure, handleGiftTreasure, giftTreasureMutation } = useTreasures();
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
+  
 
   const { width, height } = Dimensions.get("window");
 
@@ -28,7 +34,24 @@ const give = () => {
   const oneThirdHeight = height / 3;
   const oneHalfHeight = height / 2;
 
-  const [selectedFriend, setSelectedFriend] = useState<number | null>(null);
+  const [selectedFriend, setSelectedFriend] = useState<Friend | null>(null);
+
+
+  useEffect(() => {
+    if (giftTreasureMutation.isSuccess) {
+      showAppMessage(true, null, `${descriptor} sent!`);
+    }
+
+  }, [giftTreasureMutation.isSuccess]);
+
+
+  useEffect(() => {
+    if (giftTreasureMutation.isError) {
+      showAppMessage(true, null, `Oops! ${descriptor} not sent.`);
+    }
+
+  }, [giftTreasureMutation.isError]);
+
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -53,15 +76,16 @@ const give = () => {
     }
   };
 
-  const handleFriendSelect = (selectedValue: number) => {
+
+  const handleFriendSelect = (selectedValue: Friend) => {
     setSelectedFriend(selectedValue);
-    console.log("Selected Friend:", selectedValue);
+    console.log("Selected Friend:", selectedValue.nickname);
   };
 
   const handleGift = () => {
     if (selectedFriend && id) {
       console.log("attempting to send treasure", selectedFriend, id);
-      handleGiftTreasure(id, selectedFriend, editedTextRef.current.getText());
+      handleGiftTreasure(id, selectedFriend.id, editedTextRef.current.getText());
     }
   };
 
@@ -104,7 +128,7 @@ const give = () => {
           </View>
 
           {/* Optionally, display the selected friend */}
-          {selectedFriend && <Text>Selected Friend: {selectedFriend}</Text>}
+          {selectedFriend && <Text>Selected Friend: {selectedFriend.nickname}</Text>}
         </View>
 
         <ActionsFooter

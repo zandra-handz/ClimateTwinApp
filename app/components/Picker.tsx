@@ -25,9 +25,9 @@ const Picker = forwardRef((props: PickerProps, ref) => {
   }));
 
   // Handle button selection and call onSelect
-  const handleButtonPress = (value: string, nickname: string) => {
-    setSelectedValue(value);
-    onSelect(value); // Forward the selected value to the parent
+  const handleButtonPress = (data: Record<string, any>) => {
+    setSelectedValue(data.id);
+    onSelect(data); // Forward the selected value to the parent
     setIsListVisible(false); // Hide the list after selection
     heightAnim.value = withTiming(0, { duration: 200 }); // Collapse the list
     widthAnim.value = withTiming(120, { duration: 200 }); // Reset component width to original size
@@ -89,7 +89,7 @@ const Picker = forwardRef((props: PickerProps, ref) => {
           <Animated.View key={item.id} style={optionButtonStyle}>
             <Button
               title={item.nickname}
-              onPress={() => handleButtonPress(item.id, item.nickname)}
+              onPress={() => handleButtonPress(item)}
             />
           </Animated.View>
         ))}

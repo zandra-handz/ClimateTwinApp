@@ -234,12 +234,12 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     }
   }, [isAuthenticated, isInitializing]);
 
-  useEffect(() => {
-    if (appStateVisible !== "active") {
-      console.log("App is in the background, triggering close socket...");
-      closeSocket();
-    }
-  }, [appStateVisible]);
+  // useEffect(() => {
+  //   if (appStateVisible !== "active") {
+  //     console.log("App is in the background, triggering close socket...");
+  //     closeSocket();
+  //   }
+  // }, [appStateVisible]);
 
   useEffect(() => {
     if (token) {

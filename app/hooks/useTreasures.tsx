@@ -69,16 +69,35 @@ const useTreasures = () => {
     };
 
   // New mutation using the new syntax for Tanstack Query v4
-  const mutation = useMutation({
-    mutationFn: requestToGiftTreasure,
+  const giftTreasureMutation = useMutation({
+    mutationFn: (data) => requestToGiftTreasure(data),
     onSuccess: (data) => {
-      console.log("Gift sent successfully:", data); 
+      //console.log("Gift sent successfully:", data); 
+
+      triggerRefetch();
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        giftTreasureMutation.reset();
+      }, 2000); 
     },
     onError: (error) => {
-      console.error("Error gifting treasure:", error); 
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        giftTreasureMutation.reset();
+      }, 2000); 
     },
   });
 
+
+
+  
 
   const handleGiftTreasure = (treasureId: number, recipientId: number, message: string) => {
     
@@ -94,8 +113,15 @@ const useTreasures = () => {
       recipient: recipientId,  // Include recipient's ID
     };
  
-    mutation.mutate(giftData);
+    giftTreasureMutation.mutate(giftData);
   };
+
+  const triggerRefetch = () => { 
+    console.log('Refreshing treasures...');
+    queryClient.invalidateQueries({ queryKey: ["treasures"] });
+    queryClient.refetchQueries({ queryKey: ["teasures"] });  
+  };
+
 
   return {
     treasures,
@@ -106,6 +132,7 @@ const useTreasures = () => {
     handleGetTreasure,
     handleGiftTreasure,
     viewingTreasure,
+    giftTreasureMutation,
   };
 };
 

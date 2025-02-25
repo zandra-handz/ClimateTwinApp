@@ -10,6 +10,7 @@ import { useGlobalStyles } from "../context/GlobalStylesContext";
 import WebSocketCurrentLocation from "../components/WebSocketCurrentLocation";
 //(This also needs currentSurroundings from CurrentSurroundingsContext)
 import CountDowner from "../components/CountDowner"; //needs: lastLocationName
+//lastLocationName is triggered by appState so there is no need to use appState in CountDowner!
 
 
 

@@ -59,16 +59,8 @@ const nearby = () => {
 
     await handlePickNewSurroundings(data);
     setTimeout(() => {
-      router.push("(tabs)/(main)");
-    }, 0);
-    
-
-    //   if (data && data.explore_type) {
-    //     const locationType = data.explore_type === 'discovery_location' ? 'explore_location' : 'twin_location';
-    // //MOVE TO HOOK AND USE A MUTATION TO TRIGGER THE REFRESH
-    //     pickNewSurroundings({ [locationType]: data.id });
-    //     //refreshSurroundingsManually();
-    //   }
+      router.push("(drawer)/(exploretabs)");
+    }, 0); 
   };
 
  

@@ -59,7 +59,7 @@ const nearby = () => {
 
     await handlePickNewSurroundings(data);
     setTimeout(() => {
-      router.push("(tabs)/(main)");
+      router.push("(drawer)/(exploretabs)");
     }, 0);
     
 
@@ -90,7 +90,7 @@ const nearby = () => {
         style={[
           appContainerStyles.screenContainer,
           themeStyles.primaryBackground,
-          { paddingTop: 90 },
+          { paddingTop: 10 },
         ]}
       >
         <View style={appContainerStyles.innerFlexStartContainer}>

@@ -2,16 +2,14 @@ import { View, TextInput, AppState } from "react-native";
 import React, { useEffect, useState,  useRef } from "react";
 import { useGlobalStyles } from "../context/GlobalStylesContext";
 import { useSurroundings } from "../context/CurrentSurroundingsContext";
-import { useAppMessage } from "../context/AppMessageContext";
-import { useAppState } from "../context/AppStateContext";
+import { useAppMessage } from "../context/AppMessageContext"; 
 import Animated, { useSharedValue, useAnimatedProps } from "react-native-reanimated";
 import { useSurroundingsWS } from "../context/SurroundingsWSContext";
 
 const CountDowner = () => {
     const { sendMessage, lastMessage, lastLocationName } = useSurroundingsWS();
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
-  const { currentSurroundings } = useSurroundings();
-  const { appStateVisible } = useAppState();
+  const { currentSurroundings } = useSurroundings(); 
     const { showAppMessage} = useAppMessage();
 
     const [isCountDownReady, setIsCountDownReady ] = useState(false);
@@ -42,30 +40,16 @@ const CountDowner = () => {
     if (currentSurroundings && !currentSurroundings.expired) {
       const timeDifference = getTimeDifferenceInSeconds(currentSurroundings.last_accessed);
       timeSharedValue.value = timeDifference > 0 ? timeDifference : 0;
-      
       setIsCountDownReady(true);
     }
   };
  
-  useEffect(() => {
-    // showAppMessage(true, null, 'Resetting count down');
-    console.log('RESETTING COUNTDOWN'); 
-    if (appStateVisible === 'active') {
-      
+  useEffect(() => {  
+    // if (appStateVisible === 'active') { 
     resetCountdown();
-    
-  }
-  }, [appStateVisible, lastLocationName]);
-
-  useEffect(() => { 
-    // showAppMessage(true, null, 'Resetting count down remount trigger');
-    console.log('RESETTING COUNTDOWN');
-    if (appStateVisible === 'active') {
-      
-    resetCountdown(); 
-    
-  }
-  }, []);
+  // }
+  }, [currentSurroundings, lastLocationName]); 
+ 
  
   useEffect(() => { 
     if (intervalRef.current) {
@@ -85,21 +69,15 @@ const CountDowner = () => {
   }, [timeSharedValue]);
 
   return (
-    <>
-      {lastLocationName && lastLocationName !== 'null' && isCountDownReady && (
-          
+    <> 
     <View style={[appContainerStyles.countDownerContainer, themeStyles.primaryBackground]}>
-    
-      
       <AnimatedTextInput
         style={[appFontStyles.countDownText, themeStyles.primaryText]}
         animatedProps={animatedTime}
         editable={false}
         defaultValue={"    "}
       /> 
-       
-    </View>
-  ) }
+    </View> 
     </>
   );
 };
