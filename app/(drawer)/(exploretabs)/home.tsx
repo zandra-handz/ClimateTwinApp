@@ -4,18 +4,18 @@ import { useGlobalStyles } from "../../context/GlobalStylesContext";
 
 import { useAppMessage } from "../../context/AppMessageContext";
  
-
+import { useUser } from "@/app/context/UserContext";
 import { StatusBar } from "expo-status-bar";
 import { useActiveSearch } from "../../context/ActiveSearchContext";
-
-import DataList from "../../components/DataList";
+ 
 import HomeSurroundingsView from "@/app/components/HomeSurroundingsView";
-import { useFocusEffect } from "expo-router";
+ 
 import { useSurroundings } from "../../context/CurrentSurroundingsContext";
 
 const home = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const { showAppMessage } = useAppMessage();
+  const { appSettings } = useUser();
   const { homeSurroundings } = useSurroundings();
   const { searchIsActive } = useActiveSearch(); 
 
@@ -35,11 +35,11 @@ const home = () => {
 
   return (
     <>
-      <StatusBar
-        barStyle={themeStyles.primaryBackground.backgroundColor}
+      {/* <StatusBar
+       style="light"
         translucent={true}
         backgroundColor="transparent"
-      />
+      /> */}
       <View
         style={[
           appContainerStyles.screenContainer,

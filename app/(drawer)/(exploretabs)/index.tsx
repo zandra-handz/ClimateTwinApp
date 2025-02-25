@@ -80,12 +80,7 @@ const home = () => {
   
 
   return (
-    <>
-      <StatusBar
-        barStyle={themeStyles.primaryBackground.backgroundColor}
-        translucent={true}
-        backgroundColor="transparent"
-      />
+    <> 
       {isAuthenticated && (
         <View
           style={[
