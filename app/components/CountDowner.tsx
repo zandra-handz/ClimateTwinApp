@@ -37,7 +37,7 @@ const CountDowner = () => {
  
   const resetCountdown = () => {
     setIsCountDownReady(false);
-    if (currentSurroundings && !currentSurroundings.expired) {
+    if (currentSurroundings && currentSurroundings.id && !currentSurroundings.expired) {
       const timeDifference = getTimeDifferenceInSeconds(currentSurroundings.last_accessed);
       timeSharedValue.value = timeDifference > 0 ? timeDifference : 0;
       setIsCountDownReady(true);

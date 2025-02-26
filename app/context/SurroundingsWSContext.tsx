@@ -10,6 +10,7 @@ import { AppState } from "react-native";
 import { useUser } from "../context/UserContext";
 import { useAppState } from "../context/AppStateContext";
 import { useAppMessage } from "../context/AppMessageContext";
+import { useActiveSearch } from "./ActiveSearchContext";
 
 interface SurroundingsWSContextType {
   sendMessage: (message: any) => void;
@@ -28,6 +29,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   const { appStateVisible } = useAppState();
   const [token, setToken] = useState<string | null>(null);
   const [isReconnecting, setIsReconnecting] = useState(false);
+  const { handleLocationUpdateWSIsOpen, handleLocationUpdateWSIsClosed } = useActiveSearch();
   const { showAppMessage } = useAppMessage();
 
   const appState = useRef(AppState.currentState);
@@ -109,6 +111,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
     socket.onopen = () => {
       console.log("Location Update WebSocket connection opened");
+      handleLocationUpdateWSIsOpen(true);
 
       showAppMessage(true, null, "Websocket connected!");
 
@@ -137,6 +140,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     };
 
     socket.onclose = (event) => {
+      handleLocationUpdateWSIsClosed();
       logWebSocketClosure(event);
       const tokenLastTen = confirmedToken ? confirmedToken.slice(-10) : null;
       showAppMessage(

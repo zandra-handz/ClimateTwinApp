@@ -5,14 +5,16 @@ import { useActiveSearch } from "../context/ActiveSearchContext";
 import { useSurroundingsWS } from "../context/SurroundingsWSContext";
 import { useAppMessage } from "../context/AppMessageContext";
 import { useNearbyLocations } from "../context/NearbyLocationsContext";
+import { useInteractiveElements } from "../context/InteractiveElementsContext";
 import { useUser } from "../context/UserContext";
 
 const WebSocketCurrentLocation: React.FC = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles(); 
   const [update, setUpdate] = useState<string | null>(null);
-  const { searchIsActive, closeSearchExternally, refreshSurroundingsManually, gettingExploreLocations, foundExploreLocations } = useActiveSearch();
+  const { searchIsActive, locationUpdateWSIsOpen, closeSearchExternally, refreshSurroundingsManually, gettingExploreLocations, foundExploreLocations } = useActiveSearch();
   const { showAppMessage} = useAppMessage();
   const { triggerRefetch } = useNearbyLocations();
+  const { triggerItemChoicesRefetch} = useInteractiveElements();
   
   const { sendMessage, lastMessage, lastLocationName } = useSurroundingsWS();
  
@@ -63,6 +65,8 @@ const WebSocketCurrentLocation: React.FC = () => {
       setUpdate("You are home");
     } else if (lastLocationName && lastLocationName !== update) {
       refreshSurroundingsManually();
+      //triggerRefetch(); this is nearby locations
+      triggerItemChoicesRefetch();
       console.log('setting last location name');
       setUpdate(lastLocationName); // Only update if the name has changed
     }
@@ -73,7 +77,7 @@ const WebSocketCurrentLocation: React.FC = () => {
     // {user?.authenticated && (
       
     <View style={appContainerStyles.defaultElementRow}>
-      {update && (
+      {update && locationUpdateWSIsOpen && (
         <>
           <Text style={[appFontStyles.subHeaderMessageText, themeStyles.primaryText]}>
             {update !== "You are home" ? `you are in: ` : ``}

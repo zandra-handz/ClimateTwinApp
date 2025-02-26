@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useQuery, useQueryClient, UseQueryResult, useMutation } from '@tanstack/react-query';
 import { useUser } from '../context/UserContext';
-import { getTreasures, getTreasure, requestToGiftTreasure } from '../apicalls';
+import { getTreasures, getTreasure, collectTreasure, acceptTreasureGift, declineTreasureGift, requestToGiftTreasure } from '../apicalls';
 
 interface User {
   id: string; // Assuming the user model has an 'id' as a string (e.g., a UUID or integer)
@@ -68,9 +68,72 @@ const useTreasures = () => {
       }
     };
 
+
+    // New mutation using the new syntax for Tanstack Query v4
+    const giftTreasureMutation = useMutation({
+      mutationFn: (data) => requestToGiftTreasure(data),
+      onSuccess: (data) => {
+        //console.log("Gift sent successfully:", data); 
+  
+        triggerRefetch();
+  
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+  
+        timeoutRef.current = setTimeout(() => {
+          giftTreasureMutation.reset();
+        }, 2000); 
+      },
+      onError: (error) => {
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+  
+        timeoutRef.current = setTimeout(() => {
+          giftTreasureMutation.reset();
+        }, 2000); 
+      },
+    });
+  
+  
+  
+    
+  
+    const handleCollectTreasure = (item: string, descriptor: string, description: string, thirdData: string) => {
+      
+      if (!item || !descriptor || !description) {
+        console.error("Item, descriptor, or description is missing.");
+        return;
+      }
+   
+      const collectData = {
+        item: item,
+        descriptor: descriptor,
+        description: description,
+        third_data: thirdData || null,  // Include recipient's ID
+      };
+   
+      collectTreasureMutation.mutate(collectData);
+    };
+
+//     {item: "twin_location__pressure", descriptor: "test", description: "hiii", third_data: ""}
+// description
+// : 
+// "hiii"
+// descriptor
+// : 
+// "test"
+// item
+// : 
+// "twin_location__pressure"
+// third_data
+// : 
+// ""
+
   // New mutation using the new syntax for Tanstack Query v4
-  const giftTreasureMutation = useMutation({
-    mutationFn: (data) => requestToGiftTreasure(data),
+  const collectTreasureMutation = useMutation({
+    mutationFn: (data) => collectTreasure(data),
     onSuccess: (data) => {
       //console.log("Gift sent successfully:", data); 
 
@@ -81,7 +144,7 @@ const useTreasures = () => {
       }
 
       timeoutRef.current = setTimeout(() => {
-        giftTreasureMutation.reset();
+        collectTreasureMutation.reset();
       }, 2000); 
     },
     onError: (error) => {
@@ -90,7 +153,7 @@ const useTreasures = () => {
       }
 
       timeoutRef.current = setTimeout(() => {
-        giftTreasureMutation.reset();
+        collectTreasureMutation.reset();
       }, 2000); 
     },
   });
@@ -123,6 +186,46 @@ const useTreasures = () => {
   };
 
 
+  
+  
+  const handleAcceptTreasureGift = (itemViewId) => {
+      
+    if (!itemViewId) {
+      console.error("Item view id is missing.");
+      return;
+    }
+  
+ 
+    acceptTreasureGiftMutation.mutate(itemViewId);
+  };
+  
+const acceptTreasureGiftMutation = useMutation({
+  mutationFn: (itemViewId) => acceptTreasureGift(itemViewId),
+  onSuccess: (itemViewId) => { 
+
+    triggerRefetch();
+
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      acceptTreasureGiftMutation.reset();
+    }, 2000); 
+  },
+  onError: (error) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+
+    timeoutRef.current = setTimeout(() => {
+      acceptTreasureGiftMutation.reset();
+    }, 2000); 
+  },
+});
+
+
+
   return {
     treasures,
     isLoading,
@@ -130,9 +233,13 @@ const useTreasures = () => {
     isSuccess,
     isError,
     handleGetTreasure,
+    handleCollectTreasure,
     handleGiftTreasure,
+    handleAcceptTreasureGift,
     viewingTreasure,
+    collectTreasureMutation,
     giftTreasureMutation,
+    acceptTreasureGiftMutation,
   };
 };
 

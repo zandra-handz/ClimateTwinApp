@@ -8,7 +8,7 @@ import { useAppMessage } from "../../context/AppMessageContext";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import useFriends from "../../hooks/useFriends";
 import Picker from "@/app/components/Picker";
-import TextInputBlock from "@/app/components/TextInputBlock";
+import TextInputBlock from "@/app/components/TextInputBlock"; 
 
 
 interface Friend {
@@ -16,16 +16,16 @@ interface Friend {
   nickame: string;
 }
 
-const give = () => {
+const collect = () => {
   const { id } = useLocalSearchParams<{ id: number }>();
-  const { descriptor } = useLocalSearchParams<{ descriptor: string | null }>();
+  const { base } = useLocalSearchParams<{ base: string | null }>();
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { friends, friendsDropDown } = useFriends(); // Assuming friendsDropDown is already a list of { label, value }
   const { showAppMessage } = useAppMessage();
-  const router = useRouter();
-  const { viewingTreasure, handleGiftTreasure, giftTreasureMutation } = useTreasures();
+
+  const { viewingTreasure, handleCollectTreasure, handleGiftTreasure, giftTreasureMutation, collectTreasureMutation } = useTreasures();
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
-  
+  const router = useRouter();
 
   const { width, height } = Dimensions.get("window");
 
@@ -38,20 +38,20 @@ const give = () => {
 
 
   useEffect(() => {
-    if (giftTreasureMutation.isSuccess) {
-      showAppMessage(true, null, `${descriptor} sent!`);
+    if (collectTreasureMutation.isSuccess) {
+      showAppMessage(true, null, `Treasure collected!`);
       router.back();
     }
 
-  }, [giftTreasureMutation.isSuccess]);
+  }, [collectTreasureMutation.isSuccess]);
 
 
   useEffect(() => {
-    if (giftTreasureMutation.isError) {
-      showAppMessage(true, null, `Oops! ${descriptor} not sent.`);
+    if (collectTreasureMutation.isError) {
+      showAppMessage(true, null, `Oops! Treasure not collected.`);
     }
 
-  }, [giftTreasureMutation.isError]);
+  }, [collectTreasureMutation.isError]);
 
 
   useEffect(() => {
@@ -83,10 +83,12 @@ const give = () => {
     console.log("Selected Friend:", selectedValue.nickname);
   };
 
-  const handleGift = () => {
-    if (selectedFriend && id) {
-      console.log("attempting to send treasure", selectedFriend, id);
-      handleGiftTreasure(id, selectedFriend.id, editedTextRef.current.getText());
+  const handleCollect = () => {
+    if (base && id && editedTextRef.current) {
+      const parsedValue = JSON.parse(base);
+const firstString = parsedValue[0];
+      console.log("attempting to collect treasure", base);
+      handleCollectTreasure(firstString, 'Test!', editedTextRef.current.getText(), null);
     }
   };
 
@@ -105,12 +107,15 @@ const give = () => {
         ]}
       >
         <View style={appContainerStyles.innerFlexStartContainer}>
-          {!isKeyboardVisible && (
+          <Text>
+            {base}
+          </Text>
+          {/* {!isKeyboardVisible && (
             <Picker
               items={friends} // Passing label/value pairs (friendsDropDown)
               onSelect={handleFriendSelect} // Handling the selection
             />
-          )}
+          )} */}
           <View style={{ flex: 1, flexGrow: 1 }}>
             <TextInputBlock
               width={"100%"}
@@ -136,7 +141,7 @@ const give = () => {
           height={isKeyboardVisible ? 40 : 80}
           onPressLeft={() => router.replace("(treasures)")}
           labelLeft={"Cancel"}
-          onPressRight={handleGift}
+          onPressRight={handleCollect}
           labelRight={"Send"}
         />
       </View>
@@ -144,4 +149,4 @@ const give = () => {
   );
 };
 
-export default give;
+export default collect;

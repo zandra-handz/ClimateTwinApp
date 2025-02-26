@@ -1,24 +1,14 @@
 import React from "react";
-import { View } from "react-native";
-import useHomeLocation from "../hooks/useHomeLocation";
-import { useGlobalStyles } from "../context/GlobalStylesContext";
+import { View } from "react-native"; 
 import { useSurroundings } from "../context/CurrentSurroundingsContext";
 import SingleDetailPanel from "@/app/components/SingleDetailPanel";
-import SingleImagePanel from "@/app/components/SingleImagePanel";
-import { useAppMessage } from "../context/AppMessageContext";
+import SingleImagePanel from "@/app/components/SingleImagePanel";  
 
-import { useActiveSearch } from "../context/ActiveSearchContext";
-
-import WindFriendsView from "@/app/components/WindFriendsView";
 import RuinsHarmonyView from "./RuinsHarmonyView";
 
 const RuinsSurroundingsView = ({ height }) => {
-  const { portalSurroundings, ruinsSurroundings, homeSurroundings } =
-    useSurroundings();
-  const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
-  const { homeLocation } = useHomeLocation();
-  const { showAppMessage } = useAppMessage();
-  const { searchIsActive } = useActiveSearch();
+  const { ruinsSurroundings } = useSurroundings();
+ 
 
   return (
     <View style={{ flex: 1, height: height }}>

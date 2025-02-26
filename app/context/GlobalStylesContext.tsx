@@ -508,15 +508,10 @@ const containerStyles = StyleSheet.create({
     marginBottom: 10,
     width: '30%',  
     alignItems: 'center',
-    justifyContent: 'center',
-    // shadowColor: '#000',
-    // shadowOffset: { width: 0, height: 2 },
-    // shadowOpacity: 0.1,
-    // shadowRadius: 3.5,
-    // elevation: 5,  // Adds shadow effect on Android
+    justifyContent: 'center', 
     margin: 4,
     flexGrow: 1,
-    height: 140,
+    height: 70,
     overflow: 'hidden',
 
   },

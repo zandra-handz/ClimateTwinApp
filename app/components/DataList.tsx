@@ -1,25 +1,19 @@
-import { View, Text, FlatList } from 'react-native';
+import { View, FlatList } from 'react-native';
 import DataCard from './DataCard';
-import React, {useEffect } from 'react';
+import React from 'react';
 import { useGlobalStyles } from '../context/GlobalStylesContext';
 
 const DataList = ({listData, onCardButtonPress, onOpenButtonPress, onOpenTreasurePress}) => {
+ 
 
-  // useEffect(() => {
-  //   if (listData) {
-  //     console.log('DATA LIST DATA: ', listData);
-  //   }
-
-  // }, [listData]);
-
-    const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
+    const {  appContainerStyles  } = useGlobalStyles();
     return (
 <View style={[ appContainerStyles.dataListContainer]}>
   <FlatList
     data={listData}
     keyExtractor={(item, index) => 
       item.id 
-        ? `${item.id}-${item.timestamp || index}` // Ensures uniqueness if the same ID appears again
+        ? `${item.id}-${item.timestamp || index}`  
         : index.toString()
     }
     renderItem={({ item }) => (

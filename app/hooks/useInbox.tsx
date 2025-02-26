@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useUser } from "../context/UserContext";
-import { getInboxItems, getInboxItem } from "../apicalls";
+import { getInboxItems, getInboxItem, acceptTreasureGift } from "../apicalls";
 
 // Define types for inbox items and messages
 
@@ -72,11 +72,20 @@ const useInbox = () => {
     }
   };
 
+
+  const triggerInboxItemsRefetch = () => {  
+    queryClient.invalidateQueries({ queryKey: ["inboxItems"] });
+    queryClient.refetchQueries({ queryKey: ["inboxItems"] });  
+  };
+
+
+
   return {
     inboxItems,
     viewingInboxItem,
     handleGetInboxItem,
     viewingMessage,
+    triggerInboxItemsRefetch,
   };
 };
 

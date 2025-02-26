@@ -1,24 +1,18 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
-import {
-  SafeAreaView,
+import React from "react";
+import { 
   View, 
 } from "react-native"; 
 import { useRouter } from "expo-router";
 import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
-
-import { useAppMessage } from "../../context/AppMessageContext";
+ 
 import useTreasures from "../../hooks/useTreasures";
-
 import { StatusBar } from "expo-status-bar";
-
-import DataList from "../../components/DataList";
-import { useFocusEffect } from "expo-router";
+import DataList from "../../components/DataList"; 
 
 import ActionsFooter from "@/app/components/ActionsFooter";
   
 const index = () => {
-  const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles(); 
-  const { showAppMessage } = useAppMessage();
+  const { themeStyles,  appContainerStyles } = useGlobalStyles();  
   const { treasures } = useTreasures();
   const router = useRouter();
 
@@ -37,11 +31,7 @@ const handleViewTreasure = (id, descriptor) => {
     }
 
 }
-
-const handleGiveTreasure = () => {
-  console.log('handleGiveTreasure pressed!');
-
-};
+ 
  
  
   

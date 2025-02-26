@@ -482,7 +482,7 @@ export const getItemChoices = async () => {
     try {
        // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/climatevisitor/item-choices/');
-        console.log('API GET Call getItemChoices'); //, response.data);
+        console.log('API GET Call getItemChoices: '); //, response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
@@ -495,6 +495,27 @@ export const getItemChoices = async () => {
         throw error;
     }
 };
+
+export const collectTreasure = async (data) => {
+    try {
+        console.log(data);
+      //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.post(`/climatevisitor/collect/`, data);
+        console.log('API POST Call collectTreaure'); //, response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /climatevisitor/collect/:', error.response );
+        } else if (error.request) {
+            console.error('Error request for /climatevisitor/collect/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /climatevisitor/collect/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
+
 
 
 export const getTreasures = async () => {
@@ -613,6 +634,49 @@ export const getInboxItem = async (id) => {
         throw error;
     }
 };
+
+export const acceptTreasureGift = async (itemViewId) => {
+    try { 
+      //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.put(`/users/inbox/accept-gift-request/${itemViewId}/`, {
+            "is_accepted": true,
+            "message": "Thank you!"  // Optional message
+          });
+        console.log('API PUT Call acceptTreaureGift'); //, response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/inbox/accept-gift-request/:', error.response);
+        } else if (error.request) {
+            console.error('Error request for /users/inbox/accept-gift-request/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /users/inbox/accept-gift-request/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
+export const declineTreasureGift = async (itemViewId) => {
+    try { 
+      //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.put(`/users/inbox/accept-gift-request/${itemViewId}/`, {
+            "is_accepted": false,
+          //  "message": "Thank you!"  // Optional message
+          });
+        console.log('API PUT Call declineTreaureGift'); //, response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/inbox/accept-gift-request/:', );
+        } else if (error.request) {
+            console.error('Error request for /users/inbox/accept-gift-request/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /users/inbox/accept-gift-request/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
 
 export const getMessage = async (messageId) => {
     try {

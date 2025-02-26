@@ -385,7 +385,7 @@ useEffect(() => {
   const pickNewSurroundingsMutation = useMutation({
     mutationFn: (locationData) => pickNewSurroundings(locationData),
     onSuccess: (data) => {
-      triggerRefetch();
+     // triggerRefetch(); //active state + websocket
     },
     onError: (error) => {
       console.error("Update failed:", error);
@@ -403,7 +403,7 @@ useEffect(() => {
   const triggerRefetch = () => {
    // console.log("Triggering immediate refetch");
     queryClient.invalidateQueries({ queryKey: ["currentSurroundings"] });
-    //queryClient.refetchQueries({ queryKey: ["currentSurroundings"] }); // Force refetch
+    queryClient.refetchQueries({ queryKey: ["currentSurroundings"] }); // Force refetch
   };
 
   return (

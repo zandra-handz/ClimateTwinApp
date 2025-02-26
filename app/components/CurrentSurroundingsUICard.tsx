@@ -34,26 +34,7 @@ const CurrentSurroundingsUICard = ({ label, value }) => {
 };
 
 const styles = StyleSheet.create({
-  card: {
-    backgroundColor: '#fff',
-    borderRadius: 10,
-    padding: 10,
-    paddingTop: 40,
-    marginBottom: 10,
-    width: '30%',  // Ensures the card takes up 1/3 of the screen for 3 cards per row
-    alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.5,
-    elevation: 5,  // Adds shadow effect on Android
-    margin: 4,
-    flexGrow: 1,
-    height: 140,
-    overflow: 'hidden',
-  },
-  
+ 
   label: {
     fontWeight: 'bold',
     fontSize: 12,
@@ -63,8 +44,7 @@ const styles = StyleSheet.create({
     left: 10,  // Distance from the left of the card
   },
   value: {
-    fontSize: 11,
-    color: '#555',
+    fontSize: 11, 
     textAlign: 'left',
   },
 });

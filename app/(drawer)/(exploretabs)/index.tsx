@@ -9,8 +9,7 @@ import { useSurroundings } from "../../context/CurrentSurroundingsContext";
 import { useInteractiveElements } from "@/app/context/InteractiveElementsContext";
 import WebSocketSearchingLocations from "../../components/WebSocketSearchingLocations";
 
-import CurrentSurroundingsView from "@/app/components/CurrentSurroundingsView";
-import SingleDetailPanel from "@/app/components/SingleDetailPanel";
+import CurrentSurroundingsView from "@/app/components/CurrentSurroundingsView"; 
 import { useAppMessage } from "../../context/AppMessageContext";
 
 import PortalSurroundingsView from "@/app/components/PortalSurroundingsView";
@@ -35,20 +34,37 @@ const home = () => {
   const { showAppMessage } = useAppMessage();
   const { searchIsActive } = useActiveSearch();
   const [containerHeight, setContainerHeight] = useState(0);
+  const [surroundingsViews, setSurroundingsViews ] = useState({});
 
   const ITEM_HEIGHT = 700;
   const ITEM_BOTTOM_MARGIN = 0; //Add to value for snapToInterval
 
-  const surroundingsViews = [
-    { id: "1", component: <PortalSurroundingsView height={ITEM_HEIGHT} /> },
-    { id: "2", component: <RuinsSurroundingsView height={ITEM_HEIGHT}  /> },
-    { id: "3", component: <CurrentSurroundingsView /> },
-  ];
+  // const surroundingsViews = [
+  //   { id: "1", component: <PortalSurroundingsView height={ITEM_HEIGHT} /> },
+  //   { id: "2", component: <RuinsSurroundingsView height={ITEM_HEIGHT}  /> },
+  //   { id: "3", component: <CurrentSurroundingsView height={ITEM_HEIGHT}  /> },
+  // ];
+
+
+  useEffect(() => {
+    if (ruinsSurroundings?.id) {
+      setSurroundingsViews([
+        { id: "1", component: <PortalSurroundingsView height={ITEM_HEIGHT} /> },
+        { id: "2", component: <RuinsSurroundingsView height={ITEM_HEIGHT} /> },
+        { id: "3", component: <CurrentSurroundingsView height={ITEM_HEIGHT} /> }
+      ]);
+    } else {
+      setSurroundingsViews([
+        { id: "1", component: <PortalSurroundingsView height={ITEM_HEIGHT} /> },
+        { id: "3", component: <CurrentSurroundingsView height={ITEM_HEIGHT} /> }
+      ]);
+    }
+  }, [portalSurroundings, ruinsSurroundings]);
+  
 
  
   const flatListRef = useRef(null);
-
-  //to prevent the sometimes-occurring cannot scroll to index of null error
+ 
   useFocusEffect(
     React.useCallback(() => {
       if (flatListRef.current && surroundingsViews.length > 0) {
@@ -62,13 +78,7 @@ const home = () => {
   );
   
 
-
-
-  // useFocusEffect(
-  //   React.useCallback(() => {
-  //     // Your code here
-  //   }, [depA, depB])
-  // );
+ 
 
   const scrollToIndex = (index) => {
     if (flatListRef.current && surroundingsViews.length > index) {
@@ -91,7 +101,7 @@ const home = () => {
           <View style={appContainerStyles.innerFlexStartContainer}>
             <PortalBanner address={homeLocation?.address || "Manchester, NH"} />
 
-            {portalSurroundings && !searchIsActive && (
+            {portalSurroundings && !searchIsActive && surroundingsViews && (
               
               <Animated.FlatList
                 ref={flatListRef}
@@ -105,7 +115,7 @@ const home = () => {
                   item.id ? item.id.toString() : `surView-${index}`
                 }
                 renderItem={({ item }) => <View>{item.component}</View>}
-                initialNumToRender={3} 
+                initialNumToRender={ruinsSurroundings?.id ? 3 : 2} 
                 snapToInterval={ITEM_HEIGHT + ITEM_BOTTOM_MARGIN}
 
                 snapToAlignment="start" // Align items to the top of the list when snapped
