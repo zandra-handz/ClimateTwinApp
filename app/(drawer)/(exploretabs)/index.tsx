@@ -17,6 +17,7 @@ import RuinsSurroundingsView from "@/app/components/RuinsSurroundingsView";
 import { StatusBar } from "expo-status-bar";
 
 import { useActiveSearch } from "../../context/ActiveSearchContext";
+import NotificationNotifier from "@/app/components/NotificationNotifier";
 
 import PortalBanner from "@/app/components/PortalBanner";
 
@@ -92,12 +93,14 @@ const home = () => {
   return (
     <> 
       {isAuthenticated && (
+       
         <View
           style={[
             appContainerStyles.screenContainer,
             themeStyles.primaryBackground,
           ]}
         >
+           <NotificationNotifier />
           <View style={appContainerStyles.innerFlexStartContainer}>
             <PortalBanner address={homeLocation?.address || "Manchester, NH"} />
 

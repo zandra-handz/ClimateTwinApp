@@ -45,6 +45,21 @@ const useFriends = () => {
     }
   });
 
+
+  const extractUserIdFromNotification = (notification: string): number | null => {
+    const match = notification.match(/User ID (\d+)/);
+    return match ? parseInt(match[1], 10) : null;
+};
+
+const replaceUserIdWithFriendName = (notification: string): string => {
+  const userId = extractUserIdFromNotification(notification);
+  if (userId === null) return notification; // Return the original notification if no user ID is found
+
+  const friendName = friends?.find((f) => f.id === userId)?.nickname;
+  if (!friendName) return notification; // Return the original string if no friend is found
+
+  return notification.replace(`User ID ${userId}`, friendName);
+};
   // Memoize the dropdown data to avoid unnecessary re-renders
   const memoizedDropDown = useMemo(() => friendsDropDown, [friendsDropDown]);
 
@@ -55,6 +70,7 @@ const useFriends = () => {
     isSuccess,
     isError,
     friendsDropDown: memoizedDropDown,
+    replaceUserIdWithFriendName , //this is for the notification update from the websocket
   };
 };
 

@@ -357,6 +357,47 @@ const containerStyles = StyleSheet.create({
     alignItems: "center",
     flexWrap: "wrap",
   },
+  notifierContainer: {
+    height: 180,
+    width: '96%',  
+    alignSelf: 'center',
+    alignItems: 'center',
+    alignContent: 'center', 
+    top: 0,
+    flexDirection: "column",
+    justifyContent: "space-between",
+    borderRadius: 20,  
+    borderWidth: 0, 
+    padding: 20,
+    zIndex: 2,
+  },
+  notifierTextContainer: { 
+    flex: 1,
+    flexWrap: 'flex', 
+    width: "100%", 
+    alignItems: 'center',
+    justifyContent: 'center',
+
+  },
+  notifierButtonTray: {
+    width: "100%", 
+    flexDirection: "row",
+    height: 40,
+    justifyContent: "space-between",
+    overflow: "hidden",
+
+  },
+  notifierButton: {
+    height: '100%',
+    width: '50%',
+    flexGrow: 1,
+    flex: 1,
+    backgroundColor: 'pink', 
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 4,
+
+  },
   messageBox: { //use with primaryLightBackground color
     padding: 20,
     alignItems: 'center',
@@ -521,16 +562,57 @@ const containerStyles = StyleSheet.create({
     marginBottom: 10,
     width: '100%',  
     alignItems: 'center',
-    justifyContent: 'center',
-    // shadowColor: '#000',
-    // shadowOffset: { width: 0, height: 2 },
-    // shadowOpacity: 0.1,
-    // shadowRadius: 3.5,
-    // elevation: 5,  // Adds shadow effect on Android
-   // margin: 4,
+    justifyContent: 'center', 
     flexGrow: 1,
     height: 160,
     overflow: 'hidden',
+
+  },
+  treasureCardContainer: { 
+    borderRadius: 20,
+    padding: 10, 
+    marginBottom: 10,
+    width: '100%',  
+    alignItems: 'center',
+    justifyContent: 'center',  
+
+    height: "auto",
+    padding: 30,
+    borderRadius: 30,
+    width: "100%",
+    flexDirection: "column",
+    flex: 1,
+    borderWidth: StyleSheet.hairlineWidth,
+
+  },
+  treasureHeaderRow: {
+    width: '100%',
+    textAlign: 'left',
+    alignItems: 'center',
+    alignContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+      
+    paddingVertical: 10,
+
+  },
+  treasureCollectionDetailsSubheader: {
+    width: '100%',
+    textAlign: 'left',
+    height: 'auto',
+    paddingTop: 4,
+    marginBottom: 20,
+
+  },
+  treasureDescriptionContainer: {
+    width: '100%',
+    textAlign: 'left',
+    height: 40,
+    marginVertical: 4,
+    height: 'auto',
+    flexWrap: 'flex',
+    borderRadius: 16, 
+    padding: 20,
 
   },
   singleDetailPanelContainer: {
@@ -593,6 +675,15 @@ const fontStyles = StyleSheet.create({
     fontSize: 26,
 
   },
+  notifierText: {
+
+    fontSize: 20,
+  },
+  notifierButtonText: {
+    fontWeight: 'bold',
+    fontSize: 18,
+
+  },
   drawerLabelText: {
     fontSize: 15, 
 
@@ -629,6 +720,28 @@ const fontStyles = StyleSheet.create({
   emphasizedText: {
     fontSize: 16,
     fontWeight: "bold",
+  },
+  treasureHeaderText: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    lineHeight: 20,
+
+  },
+  treasureDescriptionText: {
+    fontSize: 15,
+    lineHeight: 20,
+
+  },
+  treasureCollectionDetailsBoldText: {
+    fontWeight: 'bold',
+    fontSize: 14,
+    lineHeight: 20,
+
+  },
+  treasureCollectionDetailsText: {
+    fontSize: 14,
+    lineHeight: 20,
+
   },
   tabBarText: {
     fontSize: 11,

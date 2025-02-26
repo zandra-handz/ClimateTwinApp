@@ -20,6 +20,7 @@ import {
 } from "@tanstack/react-query";
 import { Stack } from "expo-router"; // Expo Router's Stack component
 import AppMessage from "./components/AppMessage";
+import NotificationNotifier from "./components/NotificationNotifier";
 import Header from "./components/Header";
 
 export default function Layout() {
@@ -64,6 +65,7 @@ export default function Layout() {
                     <NearbyLocationsProvider>
                       <InteractiveElementsProvider>
                         <SurroundingsWSProvider>
+                          {/* <NotificationNotifier /> */}
                           <Stack screenOptions={{ headerShown: false }}>
                             {/* {user?.authenticated ? ( */}
 

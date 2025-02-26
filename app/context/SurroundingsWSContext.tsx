@@ -41,6 +41,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
  
   const [lastMessage, setLastMessage] = useState<any>(null);
   const [lastLocationName, setLastLocationName] = useState<any>(null);
+  const [lastNotification, setLastNotification] = useState<any>(null);
  
   const [reconnectAttempt, setReconnectAttempt] = useState(0);
  
@@ -128,6 +129,11 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       if (update.message) {
         setLastMessage(update.message); // Update the message state
       }
+
+      if (update.notification) {
+        setLastNotification(update.notification); // Update the message state
+      }
+
 
       if (update.name) {
         setLastLocationName(update.name); // Update the name state
@@ -234,6 +240,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       setToken(null);  
       console.log("token set to null");
       setLastMessage(null);
+      setLastNotification(null);
       setLastLocationName(null);
     }
   }, [isAuthenticated, isInitializing]);
@@ -278,7 +285,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
   return (
     <SurroundingsWSContext.Provider
-      value={{ sendMessage, lastMessage, lastLocationName }}
+      value={{ sendMessage, lastMessage, lastNotification, lastLocationName }}
     >
       {children}
     </SurroundingsWSContext.Provider>

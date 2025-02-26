@@ -5,12 +5,14 @@ import { useSurroundings } from "../context/CurrentSurroundingsContext";
 import { useAppMessage } from "../context/AppMessageContext"; 
 import Animated, { useSharedValue, useAnimatedProps } from "react-native-reanimated";
 import { useSurroundingsWS } from "../context/SurroundingsWSContext";
+import useDateTimeFunctions from '../hooks/useDateTimeFunctions';
 
 const CountDowner = () => {
     const { sendMessage, lastMessage, lastLocationName } = useSurroundingsWS();
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
   const { currentSurroundings } = useSurroundings(); 
     const { showAppMessage} = useAppMessage();
+    const { getTimeDifferenceInSeconds } = useDateTimeFunctions();
 
     const [isCountDownReady, setIsCountDownReady ] = useState(false);
   
@@ -28,12 +30,12 @@ const CountDowner = () => {
   });
 
   // Adds hour to last_accessed property of current location
-  const getTimeDifferenceInSeconds = (lastAccessed) => {
-    const currentTime = new Date();
-    const lastAccessedTime = new Date(lastAccessed);
-    lastAccessedTime.setHours(lastAccessedTime.getHours() + 1);
-    return Math.floor((lastAccessedTime - currentTime) / 1000);
-  };
+  // const getTimeDifferenceInSeconds = (lastAccessed) => {
+  //   const currentTime = new Date();
+  //   const lastAccessedTime = new Date(lastAccessed);
+  //   lastAccessedTime.setHours(lastAccessedTime.getHours() + 1);
+  //   return Math.floor((lastAccessedTime - currentTime) / 1000);
+  // };
  
   const resetCountdown = () => {
     setIsCountDownReady(false);

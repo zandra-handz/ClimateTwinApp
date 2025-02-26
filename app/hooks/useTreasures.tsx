@@ -75,7 +75,7 @@ const useTreasures = () => {
       onSuccess: (data) => {
         //console.log("Gift sent successfully:", data); 
   
-        triggerRefetch();
+        triggerTreasuresRefetch();
   
         if (timeoutRef.current) {
           clearTimeout(timeoutRef.current);
@@ -137,7 +137,7 @@ const useTreasures = () => {
     onSuccess: (data) => {
       //console.log("Gift sent successfully:", data); 
 
-      triggerRefetch();
+      triggerTreasuresRefetch();
 
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
@@ -179,7 +179,7 @@ const useTreasures = () => {
     giftTreasureMutation.mutate(giftData);
   };
 
-  const triggerRefetch = () => { 
+  const triggerTreasuresRefetch = () => { 
     console.log('Refreshing treasures...');
     queryClient.invalidateQueries({ queryKey: ["treasures"] });
     queryClient.refetchQueries({ queryKey: ["teasures"] });  
@@ -203,7 +203,7 @@ const acceptTreasureGiftMutation = useMutation({
   mutationFn: (itemViewId) => acceptTreasureGift(itemViewId),
   onSuccess: (itemViewId) => { 
 
-    triggerRefetch();
+    triggerTreasuresRefetch();
 
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -240,6 +240,7 @@ const acceptTreasureGiftMutation = useMutation({
     collectTreasureMutation,
     giftTreasureMutation,
     acceptTreasureGiftMutation,
+    triggerTreasuresRefetch,
   };
 };
 

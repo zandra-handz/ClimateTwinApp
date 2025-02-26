@@ -16,7 +16,7 @@ const WebSocketCurrentLocation: React.FC = () => {
   const { triggerRefetch } = useNearbyLocations();
   const { triggerItemChoicesRefetch} = useInteractiveElements();
   
-  const { sendMessage, lastMessage, lastLocationName } = useSurroundingsWS();
+  const { sendMessage, lastMessage, lastNotification, lastLocationName } = useSurroundingsWS();
  
 
    
@@ -56,6 +56,14 @@ const WebSocketCurrentLocation: React.FC = () => {
       }
     }
   }, [lastMessage]);
+
+
+  // useEffect(() => {
+  //   if (lastNotification) {
+  //      showAppMessage(true, null, lastNotification);
+  //      console.log(`Last notification: ${lastNotification}`);
+  //   }
+  // }, [lastNotification]);
   
   useEffect(() => {
     console.log('last location name: ', lastLocationName);

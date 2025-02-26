@@ -8,6 +8,7 @@ import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import useTreasures from "../../hooks/useTreasures";
 import { StatusBar } from "expo-status-bar";
 import DataList from "../../components/DataList"; 
+import TreasuresView from '../../components/TreasuresView';
 
 import ActionsFooter from "@/app/components/ActionsFooter";
   
@@ -51,7 +52,7 @@ const handleViewTreasure = (id, descriptor) => {
       >
         <View style={appContainerStyles.innerFlexStartContainer}>
         
-        {treasures && <DataList listData={treasures} onCardButtonPress={handlePress} onOpenTreasurePress={handleViewTreasure} />}
+        {treasures && <TreasuresView listData={treasures} onCardButtonPress={handlePress} onOpenTreasurePress={handleViewTreasure} />}
  
           </View>
       </View>
