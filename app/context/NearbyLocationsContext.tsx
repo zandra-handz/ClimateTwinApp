@@ -1,8 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useUser } from './UserContext';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getNearbyLocations } from '../apicalls';
-import { useActiveSearch } from './ActiveSearchContext';
+import { getNearbyLocations } from '../apicalls'; 
 
 interface NearbyLocation {
   id: number;

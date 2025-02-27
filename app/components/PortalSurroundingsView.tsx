@@ -1,23 +1,14 @@
 import React from "react";
 import { View } from "react-native"; 
-import useHomeLocation from "../hooks/useHomeLocation";
-import { useGlobalStyles } from "../context/GlobalStylesContext"; 
 import { useSurroundings } from "../context/CurrentSurroundingsContext"; 
-import SingleDetailPanel from "@/app/components/SingleDetailPanel";
-import { useAppMessage } from "../context/AppMessageContext";
- 
-import { useActiveSearch } from "../context/ActiveSearchContext";
+import SingleDetailPanel from "@/app/components/SingleDetailPanel"; 
  
 
 import WindFriendsView from "@/app/components/WindFriendsView";
 
 const PortalSurroundingsView = ({height}) => {
    
-    const { portalSurroundings, homeSurroundings } = useSurroundings();
-    const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
-    const { homeLocation } = useHomeLocation();
-    const { showAppMessage } = useAppMessage();
-    const { searchIsActive } = useActiveSearch();
+    const { portalSurroundings, homeSurroundings } = useSurroundings(); 
 
   return ( 
         <View style={{ flex: 1, height: height }}>

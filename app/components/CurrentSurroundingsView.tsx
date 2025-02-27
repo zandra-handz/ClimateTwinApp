@@ -15,7 +15,9 @@ const CurrentSurroundingsView = ( {height}) => {
 
   const router = useRouter();
 
-  const { itemChoices, triggerItemChoicesRefetch } = useInteractiveElements();
+
+ 
+  const { itemChoices  } = useInteractiveElements();
 
   // Combine both portalLocation and ruinsLocation into one array of key-value pairs
   const [combinedData, setCombinedData] = useState([]);
@@ -24,7 +26,7 @@ const CurrentSurroundingsView = ( {height}) => {
     const getCombinedData = () => {
       if (!itemChoices || !currentSurroundings || currentSurroundings.id === null) return [];
 
-      console.log(itemChoices);
+      //console.log(itemChoices);
       
       return Object.entries(itemChoices)
         .filter(([_, value]) => value) // Filter out empty values

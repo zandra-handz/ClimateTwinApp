@@ -1,35 +1,24 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
-import {
-  SafeAreaView,
-  View,
-  Text,
-  TouchableOpacity,
-  AppState,
-} from "react-native";
-import * as SecureStore from "expo-secure-store";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
-import { useUser } from "../../context/UserContext";
-
-import { useAppMessage } from "../../context/AppMessageContext";
+import React, {  useCallback, useEffect } from "react";
+import { 
+  View, 
+} from "react-native"; 
+import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
 import { useNearbyLocations } from "../../context/NearbyLocationsContext";
-
-import { StatusBar } from "expo-status-bar";
+ 
 import { useRouter } from "expo-router";
 import DataList from "../../components/DataList";
 import { useFocusEffect } from "expo-router";
-import { useInteractiveElements } from "@/app/context/InteractiveElementsContext";
-import { useActiveSearch } from "@/app/context/ActiveSearchContext";
+import { useInteractiveElements } from "@/app/context/InteractiveElementsContext"; 
 import { useSurroundings } from "@/app/context/CurrentSurroundingsContext";
-
-import { pickNewSurroundings } from "@/app/apicalls";
+ 
 
 const nearby = () => {
-  const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
+  const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { triggerRefetch, nearbyLocations } = useNearbyLocations();
-  const { currentSurroundings, ruinsSurroundings, handlePickNewSurroundings } = useSurroundings();
+  const { currentSurroundings, handlePickNewSurroundings } = useSurroundings();
   const router = useRouter();
 
-  const { itemChoices, triggerItemChoicesRefetch } = useInteractiveElements();
+  const { triggerItemChoicesRefetch } = useInteractiveElements();
 
   useFocusEffect(
     useCallback(() => {
@@ -75,6 +64,7 @@ const nearby = () => {
   
   useEffect(() => {
     if (currentSurroundings) {
+      console.log('nearby screen triggered item choices refetch!');
       triggerItemChoicesRefetch();
     }
   }, [currentSurroundings]);

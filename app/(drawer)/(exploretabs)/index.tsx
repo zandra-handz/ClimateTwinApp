@@ -5,49 +5,36 @@ import { useGeolocationWatcher } from "../../hooks/useCurrentLocationWatcher";
 import useHomeLocation from "../../hooks/useHomeLocation";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import { useUser } from "../../context/UserContext";
-import { useSurroundings } from "../../context/CurrentSurroundingsContext";
-import { useInteractiveElements } from "@/app/context/InteractiveElementsContext";
+import { useSurroundings } from "../../context/CurrentSurroundingsContext"; 
 import WebSocketSearchingLocations from "../../components/WebSocketSearchingLocations";
 
 import CurrentSurroundingsView from "@/app/components/CurrentSurroundingsView"; 
-import { useAppMessage } from "../../context/AppMessageContext";
-
+ 
 import PortalSurroundingsView from "@/app/components/PortalSurroundingsView";
 import RuinsSurroundingsView from "@/app/components/RuinsSurroundingsView";
-import { StatusBar } from "expo-status-bar";
+ 
 
 import { useActiveSearch } from "../../context/ActiveSearchContext";
 import NotificationNotifier from "@/app/components/NotificationNotifier";
 
 import PortalBanner from "@/app/components/PortalBanner";
-
-
-import WindFriendsView from "@/app/components/WindFriendsView";
+ 
 
 const home = () => {
   useGeolocationWatcher();
-  const { user, isAuthenticated } = useUser();
-  //const { itemChoices, triggerItemChoicesRefetch } = useInteractiveElements();
+  const { user, isAuthenticated } = useUser(); 
 
-  const { portalSurroundings, ruinsSurroundings, homeSurroundings } =
+  const { portalSurroundings, ruinsSurroundings } =
     useSurroundings();
-  const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
-  const { homeLocation } = useHomeLocation();
-  const { showAppMessage } = useAppMessage();
-  const { searchIsActive } = useActiveSearch();
-  const [containerHeight, setContainerHeight] = useState(0);
+  const { themeStyles, appContainerStyles } = useGlobalStyles();
+  const { homeLocation } = useHomeLocation(); 
+  const { searchIsActive } = useActiveSearch(); 
   const [surroundingsViews, setSurroundingsViews ] = useState({});
 
   const ITEM_HEIGHT = 700;
   const ITEM_BOTTOM_MARGIN = 0; //Add to value for snapToInterval
 
-  // const surroundingsViews = [
-  //   { id: "1", component: <PortalSurroundingsView height={ITEM_HEIGHT} /> },
-  //   { id: "2", component: <RuinsSurroundingsView height={ITEM_HEIGHT}  /> },
-  //   { id: "3", component: <CurrentSurroundingsView height={ITEM_HEIGHT}  /> },
-  // ];
-
-
+ 
   useEffect(() => {
     if (ruinsSurroundings?.id) {
       setSurroundingsViews([
@@ -122,16 +109,11 @@ const home = () => {
                 initialNumToRender={ruinsSurroundings?.id ? 3 : 2} 
                 snapToInterval={ITEM_HEIGHT + ITEM_BOTTOM_MARGIN}
 
-                snapToAlignment="start" // Align items to the top of the list when snapped
-                decelerationRate="fast" // Optional: makes the scroll feel snappier
-                keyboardDismissMode="on-drag"// Customize based on how many items you want rendered initially
+                snapToAlignment="start" 
+                decelerationRate="fast"
+                keyboardDismissMode="on-drag" 
               />
-            )}
-            {/* {itemChoices && currentSurroundings && !searchIsActive && (
-          <View style={appContainerStyles.innerFlexStartContainer}>
-            <DataList listData={[ currentSurroundings, ...itemChoices]} onCardButtonPress={() => {}} />
-          </View>
-        )} */}
+            )} 
 
             {isAuthenticated && searchIsActive && (
               <View

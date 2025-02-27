@@ -13,7 +13,7 @@ import Animated, {
 
 const NearbyButton = ({ color }) => {
   const { themeStyles, appFontStyles } = useGlobalStyles();
-  const { searchIsActive, exploreLocationsAreReady } = useActiveSearch();
+  const {  exploreLocationsAreReady } = useActiveSearch();
 
   // Create shared values for rotation and scale
   const rotation = useSharedValue(0);

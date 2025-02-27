@@ -87,13 +87,13 @@ interface InteractiveElementsProviderProps {
 }
 
 export const InteractiveElementsProvider: React.FC<InteractiveElementsProviderProps> = ({ children }) => {
-  const { user, isAuthenticated } = useUser(); 
+  const { user, isAuthenticated, isInitializing } = useUser(); 
   const queryClient = useQueryClient(); 
 
   const { data: itemChoicesResponse, isLoading, isError } = useQuery<ItemChoicesResponse | null>({
     queryKey: ['itemChoices'],
     queryFn: getItemChoices,
-    enabled: !!isAuthenticated,
+    enabled: !!isAuthenticated && !isInitializing,
     onError: (err) => {
       console.error('Error fetching location data:', err);
     },
@@ -104,6 +104,7 @@ export const InteractiveElementsProvider: React.FC<InteractiveElementsProviderPr
     },
   });
 
+  
   // Convert itemChoices.choices (object) into an array of key-value pairs
   const itemChoices = itemChoicesResponse?.choices
     ? Object.entries(itemChoicesResponse.choices)

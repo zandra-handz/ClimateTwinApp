@@ -109,7 +109,7 @@ interface CurrentSurroundingsProviderProps {
 export const CurrentSurroundingsProvider: React.FC<
   CurrentSurroundingsProviderProps
 > = ({ children }) => {
-  const { user, isAuthenticated } = useUser();
+  const { user, isAuthenticated, isInitializing } = useUser();
   const queryClient = useQueryClient();
   const timeoutRef = useRef(null);
   const { manualSurroundingsRefresh, resetRefreshSurroundingsManually } =
@@ -129,7 +129,7 @@ export const CurrentSurroundingsProvider: React.FC<
   } = useQuery<CurrentSurroundings | null>({
     queryKey: ["currentSurroundings"],
     queryFn: getExploreLocation,
-    enabled: !!isAuthenticated,
+    enabled: !!isAuthenticated && !isInitializing,
     onError: (err) => {
       console.error("Error fetching location data:", err);
     },
@@ -141,16 +141,17 @@ export const CurrentSurroundingsProvider: React.FC<
 
 
 useEffect(() => {
-  if (!isAuthenticated) {
+  if (!isAuthenticated && !isInitializing) {
     queryClient.removeQueries(["currentSurroundings"]);
     setPortalSurroundings(null);
     setRuinsSurroundings(null);
     setHomeSurroundings(null);
   }
-}, [isAuthenticated, queryClient]);
+}, [isAuthenticated, isInitializing, queryClient]);
 
   useEffect(() => {
     if (manualSurroundingsRefresh) { 
+      console.log('manualSurroundingsRefresh triggered currentSurroundings to refetch');
       triggerRefetch();
       resetRefreshSurroundingsManually();
     }

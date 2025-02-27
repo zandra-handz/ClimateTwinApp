@@ -1,14 +1,11 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react";
-import { useGlobalStyles } from "../context/GlobalStylesContext"; 
-import { useActiveSearch } from "../context/ActiveSearchContext";
-import PortalSvg from "../assets/svgs/portal.svg";
+import { View, Text } from "react-native";
+import React from "react";
+import { useGlobalStyles } from "../context/GlobalStylesContext";  
 import PortalPixellySvg from "../assets/svgs/portal-pixelly.svg";
 import { useSurroundings } from "../context/CurrentSurroundingsContext";
 import GoButton from "./GoButton";
 
-const PortalBanner = ({ address }) => {
-  const { handleGo } = useActiveSearch();
+const PortalBanner = ({ address }) => { 
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const { portalSurroundings, homeSurroundings } = useSurroundings();
 

@@ -10,7 +10,7 @@ import { useUser } from "../context/UserContext";
 
 const WebSocketCurrentLocation: React.FC = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles(); 
-  const [update, setUpdate] = useState<string | null>(null);
+  const [update, setUpdate] = useState<string>(' ');
   const { searchIsActive, locationUpdateWSIsOpen, closeSearchExternally, refreshSurroundingsManually, gettingExploreLocations, foundExploreLocations } = useActiveSearch();
   const { showAppMessage} = useAppMessage();
   const { triggerRefetch } = useNearbyLocations();
@@ -68,16 +68,21 @@ const WebSocketCurrentLocation: React.FC = () => {
   useEffect(() => {
     console.log('last location name: ', lastLocationName);
     if (!lastLocationName) {
-      setUpdate("");
-    } else if (lastLocationName && lastLocationName === "null") {
-      setUpdate("You are home");
-    } else if (lastLocationName && lastLocationName !== update) {
-      refreshSurroundingsManually();
-      //triggerRefetch(); this is nearby locations
-      triggerItemChoicesRefetch();
-      console.log('setting last location name');
-      setUpdate(lastLocationName); // Only update if the name has changed
+      setUpdate(" "); // If no location name, reset the state
+    } else if (lastLocationName === "null") {
+      setUpdate("You are home"); // If lastLocationName is the string "null"
+    } else if (lastLocationName !== update) {
+     // console.log(`update:`, update);
+      if (update === ' ') {
+        setUpdate(lastLocationName); 
+      } else {
+        refreshSurroundingsManually(); 
+        triggerItemChoicesRefetch();  
+        console.log('setting last location name');
+        setUpdate(lastLocationName);  
+      }
     }
+ 
   }, [lastLocationName]);
 
   return (
