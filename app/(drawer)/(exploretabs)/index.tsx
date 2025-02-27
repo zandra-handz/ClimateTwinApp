@@ -21,6 +21,7 @@ import NotificationNotifier from "@/app/components/NotificationNotifier";
 
 import PortalBanner from "@/app/components/PortalBanner";
 
+
 import WindFriendsView from "@/app/components/WindFriendsView";
 
 const home = () => {
@@ -91,7 +92,7 @@ const home = () => {
   
 
   return (
-    <> 
+    <>  
       {isAuthenticated && (
        
         <View

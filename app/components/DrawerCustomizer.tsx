@@ -16,6 +16,7 @@ import ClimateTwinLogo from "../assets/images/logo.png";
 import ClimateTwinLogoSvg from "../assets/svgs/logo-outline.svg";
 import DarkLightSwitch from "./DarkLightSwitch";
 import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
+import CustomStatusBar from "./CustomStatusBar";
 
 const DrawerCustomizer = (props) => {
   const {
@@ -52,7 +53,8 @@ const DrawerCustomizer = (props) => {
           backgroundColor: themeStyles.darkerBackground.backgroundColor,
         }}
       >
-        <StatusBar style={lightOrDark} translucent={true} />
+        {/* <CustomStatusBar /> */}
+        {/* <StatusBar translucent={true} /> */}
         <View
           style={[
             //themeStyles.primaryBackground,

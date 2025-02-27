@@ -7,6 +7,7 @@ import { useGlobalStyles } from "../context/GlobalStylesContext";
 import useFriends from "../hooks/useFriends";
 import useInbox from "../hooks/useInbox";
 import useTreasures from "../hooks/useTreasures";
+import { clearNotificationCache } from "../apicalls";
 
 const NotificationNotifier = () => {
   const { themeStyles, appContainerStyles, appFontStyles, constantColorsStyles } = useGlobalStyles();
@@ -32,7 +33,7 @@ const NotificationNotifier = () => {
   };
 
   useEffect(() => {
-    if (lastNotification &&  locationUpdateWSIsOpen && !modalMessage) {
+    if (lastNotification && locationUpdateWSIsOpen && !modalMessage) {
       const updatedMessage = replaceUserIdWithFriendName(lastNotification);
       
       if (updatedMessage) {
@@ -52,9 +53,15 @@ const NotificationNotifier = () => {
     }
   }, [lastNotification, locationUpdateWSIsOpen]);
   
-  const handleGoToTreasures = () => {
+  const handleGoToTreasures = async () => {
+    await clearNotificationCache();
     triggerInboxItemsRefetch();
     router.push("/(drawer)/(inbox)");
+    closeModal();
+  }
+
+  const handleAcknowledgeNonActionNotif = async () => {
+    await clearNotificationCache(); 
     closeModal();
   }
 
@@ -102,10 +109,10 @@ const NotificationNotifier = () => {
                     appContainerStyles.notifierButton,
                     themeStyles.darkestBackground, 
                   ]}
-                  onPress={isNewTreasureMessage ? handleGoToTreasures : closeModal}
+                  onPress={isNewTreasureMessage ? handleGoToTreasures : handleAcknowledgeNonActionNotif}
                 >
                   <Text style={[appFontStyles.notifierButtonText, themeStyles.primaryText]}>
-                    Go to messages
+                    { isNewTreasureMessage ? `Go to messages` : `Yay!`}
                   </Text>
                 </TouchableOpacity>
               </View>

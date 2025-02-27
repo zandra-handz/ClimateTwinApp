@@ -10,6 +10,7 @@ import * as SecureStore from "expo-secure-store";
 import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "react-native";
 import { useAppState } from "./context/AppStateContext";
+import CustomStatusBar from "./components/CustomStatusBar";
 
 
 //a frienddate assistant for overwhelmed adults, and for people who just have a lot to talk about
@@ -95,10 +96,7 @@ const Index = () => {
 
   return (
     <>
-      <StatusBar 
-        translucent={true}
-        backgroundColor="transparent"
-      />
+     <CustomStatusBar/>
       <LinearGradient
         colors={[
           manualGradientColors.darkColor,

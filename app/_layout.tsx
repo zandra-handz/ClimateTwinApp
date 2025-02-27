@@ -22,6 +22,8 @@ import { Stack } from "expo-router"; // Expo Router's Stack component
 import AppMessage from "./components/AppMessage";
 import NotificationNotifier from "./components/NotificationNotifier";
 import Header from "./components/Header";
+import { StatusBar } from 'react-native';
+import CustomStatusBar from "./components/CustomStatusBar";
 
 export default function Layout() {
   const queryClient = new QueryClient();
@@ -60,11 +62,13 @@ export default function Layout() {
                 {/* Wrap Stack in TopLevelRouter to handle authentication checks */}
 
                 <AppMessage />
+                <CustomStatusBar />
                 <ActiveSearchProvider>
                   <CurrentSurroundingsProvider>
                     <NearbyLocationsProvider>
                       <InteractiveElementsProvider>
                         <SurroundingsWSProvider>
+                             
                           {/* <NotificationNotifier /> */}
                           <Stack screenOptions={{ headerShown: false }}>
                             {/* {user?.authenticated ? ( */}
