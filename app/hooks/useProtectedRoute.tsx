@@ -15,13 +15,13 @@ const useProtectedRoute = (isAuthenticated: boolean, isLoading: boolean) => {
   // console.log('useProtectedRoute triggered, is nav ready:', navigationRef.isReady());
   // console.log(segments[0]);
 
-  const goToRoot = (): void => {
-    if (router.canDismiss()) {
-      router.dismissAll();
-    } else {
-      console.log("Already at the root screen, no need to dismiss.");
-    }
-  };
+  // const goToRoot = (): void => {
+  //   if (router.canDismiss()) {
+  //     router.dismissAll();
+  //   } else {
+  //     console.log("Already at the root screen, no need to dismiss.");
+  //   }
+  // };
 
   useEffect(() => {
     if (navigationRef.isReady()) {
@@ -37,21 +37,23 @@ const useProtectedRoute = (isAuthenticated: boolean, isLoading: boolean) => {
 
   useEffect(() => {
     if (!isNavigationReady || isLoading) {
-      console.log("NAVIGATION IS NOT READY");
-      console.log(segments[0]);
+      // console.log("NAVIGATION IS NOT READY");
+      // console.log(segments[0]);
       return;
-    } else {
-      console.log('NAV IS READY!');
-      console.log(segments[0]);
     } 
+    // else {
+    //   console.log('NAV IS READY!');
+    //   console.log(segments[0]);
+    // } 
     const isOnSignIn = segments[0] === "signin";
     const isOnRootPage = segments.length === 0 || segments[0] === "" || segments[0] === "secondindex" ; 
 
-    console.log(isNavigationReady);
-    console.log(segments[0]);
+    // console.log(isNavigationReady);
+    // console.log(segments[0]);
 
     if (!isAuthenticated && !isOnSignIn) {
-      console.log('Protected route redirecting to index');
+      // console.log('Protected route redirecting to index');
+
       //I may be able to get rid of secondindex and go back to using goToRoot
       //because the actual looping issue seemed to be either signin flow fumbling reinit
       //or not using a loading state to prevent things from running while user is in the process if reinitializing
@@ -60,7 +62,7 @@ const useProtectedRoute = (isAuthenticated: boolean, isLoading: boolean) => {
       router.push("secondindex");
       //goToRoot();
     } else if (isAuthenticated && (isOnSignIn || isOnRootPage)) {
-      console.log('Protected route redirecting to (main)');
+      // console.log('Protected route redirecting to (main)');
       router.push("(drawer)/(exploretabs)");
     }
   }, [isAuthenticated, isLoading, segments, isNavigationReady]);

@@ -328,6 +328,27 @@ const containerStyles = StyleSheet.create({
 
   },
 
+  newItemsCircle: {
+    height: 50,
+    width: 50,
+    borderRadius: 50 / 2,
+    textAlign: 'center',
+    alignItems: 'center',
+
+  },
+  newItemsNonCircle: {
+    height: 'auto',
+    width: 'auto',
+    borderRadius: 10,
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    textAlign: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+
+  },
+
+
   startingPointTempContainer: {
     height: '100%', 
     flexDirection: 'column',
@@ -664,6 +685,11 @@ const fontStyles = StyleSheet.create({
   },
   drawerHeaderSubRowText: {
     fontSize: 15,
+    fontWeight: 'bold',
+
+  },
+  newItemsText: {
+    fontSize: 13,
     fontWeight: 'bold',
 
   },

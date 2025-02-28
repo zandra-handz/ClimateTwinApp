@@ -9,14 +9,13 @@ import {
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { useRouter } from "expo-router";
 import { useGlobalStyles } from "../context/GlobalStylesContext";
-import { useUser } from "../context/UserContext";
-import { StatusBar } from "expo-status-bar";
+import { useUser } from "../context/UserContext"; 
 import { Image } from "expo-image";
 import ClimateTwinLogo from "../assets/images/logo.png";
-import ClimateTwinLogoSvg from "../assets/svgs/logo-outline.svg";
 import DarkLightSwitch from "./DarkLightSwitch";
 import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
 import CustomStatusBar from "./CustomStatusBar";
+import InboxWithNotifs from "./InboxWithNotifs";
 
 const DrawerCustomizer = (props) => {
   const {
@@ -139,7 +138,8 @@ const DrawerCustomizer = (props) => {
           label="Friends"
           onPress={() => router.push("/friends")}
         />
-        <DrawerItem
+        <InboxWithNotifs/>
+        {/* <DrawerItem
           icon={() => (
             <Feather
               name="mail"
@@ -157,7 +157,7 @@ const DrawerCustomizer = (props) => {
           ]}
           label="Inbox"
           onPress={() => router.push("(inbox)")}
-        />
+        /> */}
         <DrawerItem
           icon={() => (
             <AntDesign

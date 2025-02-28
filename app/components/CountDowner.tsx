@@ -6,6 +6,7 @@ import { useAppMessage } from "../context/AppMessageContext";
 import Animated, { useSharedValue, useAnimatedProps } from "react-native-reanimated";
 import { useSurroundingsWS } from "../context/SurroundingsWSContext";
 import useDateTimeFunctions from '../hooks/useDateTimeFunctions';
+import { useAppState } from "../context/AppStateContext";
 
 const CountDowner = () => {
     const { sendMessage, lastMessage, lastLocationName } = useSurroundingsWS();
@@ -13,6 +14,7 @@ const CountDowner = () => {
   const { currentSurroundings } = useSurroundings(); 
     const { showAppMessage} = useAppMessage();
     const { getTimeDifferenceInSeconds } = useDateTimeFunctions();
+    const { appStateVisible } = useAppState();
 
     const [isCountDownReady, setIsCountDownReady ] = useState(false);
   
@@ -36,6 +38,13 @@ const CountDowner = () => {
   //   lastAccessedTime.setHours(lastAccessedTime.getHours() + 1);
   //   return Math.floor((lastAccessedTime - currentTime) / 1000);
   // };
+
+  useEffect(() => {  
+    if (appStateVisible === 'active') { 
+    resetCountdown();
+  }
+  }, [currentSurroundings, appStateVisible]); 
+
  
   const resetCountdown = () => {
     setIsCountDownReady(false);
@@ -45,12 +54,8 @@ const CountDowner = () => {
       setIsCountDownReady(true);
     }
   };
- 
-  useEffect(() => {  
-    // if (appStateVisible === 'active') { 
-    resetCountdown();
-  // }
-  }, [currentSurroundings, lastLocationName]); 
+  
+
  
  
   useEffect(() => { 

@@ -41,6 +41,8 @@ const useInbox = () => {
   );
   const [viewingMessage, setViewingMessage] = useState<Message | null>(null);
 
+  const [unreadCount, setUnreadCount] = useState(0);
+
   const {
     data: inboxItems,
     isLoading,
@@ -52,6 +54,12 @@ const useInbox = () => {
     queryFn: getInboxItems,
     enabled: !!isAuthenticated,
     onSuccess: (data) => {
+
+      //not working
+      // let count;
+      // count = data?.filter(item => item.is_read === false).length;
+      // setUnreadCount(count);
+
       // Handle successful fetch
     },
   });
@@ -71,7 +79,7 @@ const useInbox = () => {
       console.error("Error fetching inbox item:", error);
     }
   };
-
+ 
 
   const triggerInboxItemsRefetch = () => {  
     queryClient.invalidateQueries({ queryKey: ["inboxItems"] });
@@ -82,6 +90,7 @@ const useInbox = () => {
 
   return {
     inboxItems,
+    unreadCount,
     viewingInboxItem,
     handleGetInboxItem,
     viewingMessage,

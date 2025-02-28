@@ -1,7 +1,7 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text } from "react-native";
 import React from "react";
 import { useGlobalStyles } from "../context/GlobalStylesContext";
-import WindSquare from "./WindSquare";
+import DirectionSquare from "./DirectionSquare";
 
 const RuinsHarmonyUICard = ({
   name,
@@ -14,15 +14,9 @@ const RuinsHarmonyUICard = ({
 }) => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
 
-    const formatWords = (words) => {
-      return words
-        .replace(/([A-Z])/g, " $1") // Add space before uppercase letters
-        .replace(/^\S+\s(\S)/, (match, p1) => match.toLowerCase()); // Lowercase the first letter of the second word
-    };
+ 
 
-  return (
-    // <>
-    // {value && (
+  return ( 
 
     <View
       style={[
@@ -56,29 +50,17 @@ const RuinsHarmonyUICard = ({
           flex: 1,
         }}
       > 
-        <WindSquare
-          windSpeed={null}
-          windDirection={directionDegree}
+        <DirectionSquare
+          locationDirection={directionDegree}
           size={120}
           opacity={0.8}
           color={themeStyles.primaryText.color}
         />
       </View>
     </View>
-
-    // )}
-
-    // </>
+ 
   );
 };
-
-const styles = StyleSheet.create({
-  desc: {
-    fontWeight: "bold",
-    position: "absolute", // Absolute position within the card
-    top: 10, // Distance from the top of the card
-    left: 10, // Distance from the left of the card
-  },
-});
+  
 
 export default RuinsHarmonyUICard;
