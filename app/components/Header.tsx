@@ -7,11 +7,7 @@ import WebSocketCurrentLocation from "../components/WebSocketCurrentLocation";
 
 import SignoutSvg from "../assets/svgs/signout.svg";
 
-import { View, Text } from "react-native";
-import { useNavigation } from "expo-router";
-
-import { DrawerToggleButton } from "@react-navigation/drawer";
-
+import { View, Text } from "react-native"; 
 
 
 

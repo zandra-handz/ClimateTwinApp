@@ -7,6 +7,7 @@ import { StatusBar } from "expo-status-bar";
 import { useGlobalStyles } from "../context/GlobalStylesContext";
 import { useColorScheme } from "react-native";
 import { useUser } from "../context/UserContext";
+import CustomStatusBar from "./CustomStatusBar";
 
 //IMPORTANT: these both depend on SurroundingsWSContext to render appropriately
 import WebSocketCurrentLocation from "../components/WebSocketCurrentLocation";
@@ -39,7 +40,7 @@ const ExploreTabsHeader = () => {
 
   return (
     <>
-    {statusIconTheme && (
+    {/* {statusIconTheme && (
       
       <StatusBar
         style={statusIconTheme}
@@ -47,7 +48,7 @@ const ExploreTabsHeader = () => {
         backgroundColor="transparent"
       />
       
-    )}
+    )} */}
       <SafeAreaView style={[themeStyles.primaryBackground, { flex: 1 }]}>
         <View
           style={[

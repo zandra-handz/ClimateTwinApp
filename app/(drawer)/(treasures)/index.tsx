@@ -38,11 +38,11 @@ const handleViewTreasure = (id, descriptor) => {
   
   return (
     <>
-      <StatusBar
+      {/* <StatusBar
         barStyle={themeStyles.primaryBackground.backgroundColor}
         translucent={true}
         backgroundColor="transparent"
-      />
+      /> */}
       <View
         style={[
           appContainerStyles.screenContainer,

@@ -47,11 +47,11 @@ const { treasures, handleGetTreasure, viewingTreasure } = useTreasures();
 
   return (
     <>
-      <StatusBar
+      {/* <StatusBar
         barStyle={themeStyles.primaryBackground.backgroundColor}
         translucent={true}
         backgroundColor="transparent"
-      />
+      /> */}
       <View
         style={[
           appContainerStyles.screenContainer,
