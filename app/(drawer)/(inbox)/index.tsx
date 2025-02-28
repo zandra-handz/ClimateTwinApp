@@ -5,6 +5,7 @@ import { useAppMessage } from "../../context/AppMessageContext";
 import useInbox from "../../hooks/useInbox"; 
 import { StatusBar } from "expo-status-bar"; 
 import DataList from "../../components/DataList"; 
+import InboxView from "@/app/components/InboxView";
 import { useRouter } from "expo-router";
 
 import ActionsFooter from "@/app/components/ActionsFooter";
@@ -50,7 +51,7 @@ const index = () => {
       >
         <View style={appContainerStyles.innerFlexStartContainer}>
           {inboxItems && (
-            <DataList
+            <InboxView
               listData={inboxItems}
               onCardButtonPress={handlePress}
               onOpenButtonPress={handleOpenInboxItem}

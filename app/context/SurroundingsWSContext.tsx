@@ -45,17 +45,17 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
  
   const [reconnectAttempt, setReconnectAttempt] = useState(0);
  
-  const fetchToken = async () => {
-    setToken(null);
-    console.log("fetchToken in socket context triggered!");
-    try {
-      const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
-      console.log("Fetched token:", storedToken);
-      setToken(storedToken);
-    } catch (error) {
-      console.error("Failed to retrieve token:", error);
-    }
-  };
+  // const fetchToken = async () => {
+  //   setToken(null);
+  //   console.log("fetchToken in socket context triggered!");
+  //   try {
+  //     const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
+  //     console.log("Fetched token:", storedToken);
+  //     setToken(storedToken);
+  //   } catch (error) {
+  //     console.error("Failed to retrieve token:", error);
+  //   }
+  // };
 
   // Function to close the socket.
   const closeSocket = () => {
@@ -269,6 +269,8 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       setLastMessage(null);
       setLastNotification(null);
       setLastLocationName(null);
+      setReconnectAttempt(0);
+      setReconnectionDelay(1000); 
       // if (!isAuthenticated) {  // Clear state only when user logs out
       //   setLastMessage(null);
       //   setLastNotification(null);
@@ -300,12 +302,12 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   //   };
   // }, [token]); 
 
-  useEffect(() => {
-    if (appStateVisible !== "active") {
-      console.log("App is in the background, triggering close socket...");
-      closeSocket();
-    }
-  }, [appStateVisible]);
+  // useEffect(() => {
+  //   if (appStateVisible !== "active") {
+  //     console.log("App is in the background, triggering close socket...");
+  //     closeSocket();
+  //   }
+  // }, [appStateVisible]);
 
 
   
