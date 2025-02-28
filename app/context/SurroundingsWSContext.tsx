@@ -64,6 +64,9 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       socketRef.current.close();
       socketRef.current = null;
     }
+    setLastMessage(null);
+    setLastNotification(null);
+    setLastLocationName(null); 
   };
 
   // Manual WebSocket connection function
@@ -98,8 +101,10 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     const socketUrl = `wss://climatetwin.com/ws/climate-twin/current/?user_token=${confirmedToken}`;
     if (socketRef.current) {
       if (socketRef.current.readyState === WebSocket.OPEN) {
-        console.log("WebSocket is already open, skipping connection.");
-        return;
+        console.log("WebSocket is already open, closing existing connection and reopening.");
+        socketRef.current.close(); 
+        // console.log("WebSocket is already open, skipping connection.");
+        // return;
       } else if (socketRef.current.readyState === WebSocket.CLOSING) {
         console.log("WebSocket is closing, closing existing WebSocket connection before reopening.");
         socketRef.current.close();
@@ -266,16 +271,15 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     return () => {
       console.log('Cleaning up WebSocket connection');
       closeSocket(); // Always close socket in cleanup
-      setLastMessage(null);
-      setLastNotification(null);
-      setLastLocationName(null);
+
+      //moved these inside closeSocket:
+      // setLastMessage(null);
+      // setLastNotification(null);
+      // setLastLocationName(null);
       setReconnectAttempt(0);
       setReconnectionDelay(1000); 
-      // if (!isAuthenticated) {  // Clear state only when user logs out
-      //   setLastMessage(null);
-      //   setLastNotification(null);
-      //   setLastLocationName(null);
-      // }
+
+      
     };
   }, [isAuthenticated, isInitializing]);
   
