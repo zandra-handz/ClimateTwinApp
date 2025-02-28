@@ -73,11 +73,11 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
     let confirmedToken;
 
-    if (!isAuthenticated || isInitializing || (!token && !noTokenPassed) ) {
+    if (!isAuthenticated || isInitializing ) {
       return;
     }
 
-    if (!token && noTokenPassed) {
+    if (isAuthenticated && !isInitializing) {
       try {
         const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
         if (!storedToken) {
@@ -92,7 +92,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
         return;
       }
     } else {
-      confirmedToken = token;
+      return;
     }
 
     const socketUrl = `wss://climatetwin.com/ws/climate-twin/current/?user_token=${confirmedToken}`;
@@ -211,14 +211,14 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
         setTimeout(() => {
           if (
-            isAuthenticated &&
+            isAuthenticated && !isInitializing &&
             (!socketRef.current ||
               socketRef.current.readyState !== WebSocket.OPEN)
           ) {
             console.log("Reconnecting to WebSocket...");
             setReconnectAttempt((prev) => prev + 1);
             setReconnectionDelay((prev) => Math.min(prev * 2, 60000));
-            connectWebSocket(undefined, true);
+            connectWebSocket();
           } else {
             console.log("WebSocket is already open, skipping reconnection.");
           }
@@ -229,22 +229,76 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     }
   };
  
+  //triggered by Reinit
+  //is the main trigger for socket to connect
+  // useEffect(() => {
+  //   if (
+  //     isAuthenticated &&
+  //     !isInitializing 
+  //     // &&
+  //     // (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN)
+  //   ) {
+  //     //fetchToken();
+  //     console.log('connectWebSocket triggered');
+  //     connectWebSocket();
+  //   } else if (!isAuthenticated && !isInitializing) {
+  //    // setToken(null);  //triggers useEffect to connect socket 
+  //     console.log('user not signed in');
+
+  //   }
+  //   return () => {
+  //     setLastMessage(null);
+  //     setLastNotification(null);
+  //     setLastLocationName(null);
+  //     closeSocket();
+  //   };
+  // }, [isAuthenticated, isInitializing]);
+
+
   useEffect(() => {
-    if (
-      isAuthenticated &&
-      !isInitializing 
-      // &&
-      // (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN)
-    ) {
-      fetchToken();
+    if (isAuthenticated && !isInitializing) {
+      console.log('connectWebSocket triggered');
+      connectWebSocket(); // Reconnect when authenticated & done initializing
     } else {
-      setToken(null);  //triggers useEffect to connect socket 
-      console.log("token set to null");
+      console.log('Closing WebSocket due to logout or reinitialization');
+    }
+  
+    return () => {
+      console.log('Cleaning up WebSocket connection');
+      closeSocket(); // Always close socket in cleanup
       setLastMessage(null);
       setLastNotification(null);
       setLastLocationName(null);
-    }
+      // if (!isAuthenticated) {  // Clear state only when user logs out
+      //   setLastMessage(null);
+      //   setLastNotification(null);
+      //   setLastLocationName(null);
+      // }
+    };
   }, [isAuthenticated, isInitializing]);
+  
+
+
+  // useEffect(() => {
+  //   if (token) {
+  //     console.log("WEBSOCKET CONTEXT: token use effect triggered", token);
+      
+  //     if (
+  //       !socketRef.current || 
+  //       socketRef.current.readyState !== WebSocket.OPEN
+  //     ) {
+  //       console.log("Connecting to WebSocket triggered by token in dependency...");
+  //       connectWebSocket(token);
+  //     } else {
+  //       console.log("WebSocket is already open, skipping reconnection.");
+  //     }
+  //   }
+  
+  //   // Cleanup WebSocket when token is null or component unmounts
+  //   return () => {
+  //     closeSocket();
+  //   };
+  // }, [token]); 
 
   useEffect(() => {
     if (appStateVisible !== "active") {
@@ -253,26 +307,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     }
   }, [appStateVisible]);
 
-  useEffect(() => {
-    if (token && isAuthenticated && !isInitializing) {
-      console.log("WEBSOCKET CONTEXT: token use effect triggered", token);
-      
-      if (
-        !socketRef.current || 
-        socketRef.current.readyState !== WebSocket.OPEN
-      ) {
-        console.log("Connecting to WebSocket triggered by token in dependency...");
-        connectWebSocket(token);
-      } else {
-        console.log("WebSocket is already open, skipping reconnection.");
-      }
-    }
-  
-    // Cleanup WebSocket when token is null or component unmounts
-    return () => {
-      closeSocket();
-    };
-  }, [token, isAuthenticated, isInitializing]); 
+
   
 
   const sendMessage = (message: any) => {

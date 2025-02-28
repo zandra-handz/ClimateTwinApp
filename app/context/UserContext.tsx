@@ -115,6 +115,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
             console.log(`REINIT USER DATA ON OTHER SIDE OF INTERCEPTOR: `, userData);
         } catch (error) {
             console.error('Error fetching current user:', error);
+            showAppMessage(true, null, 'Token detected but cannot fetch user');
           
             await onSignOut();
             return;

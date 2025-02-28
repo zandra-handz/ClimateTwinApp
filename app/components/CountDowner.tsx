@@ -7,6 +7,7 @@ import Animated, { useSharedValue, useAnimatedProps } from "react-native-reanima
 import { useSurroundingsWS } from "../context/SurroundingsWSContext";
 import useDateTimeFunctions from '../hooks/useDateTimeFunctions';
 import { useAppState } from "../context/AppStateContext";
+import { useActiveSearch } from "../context/ActiveSearchContext";
 
 const CountDowner = () => {
     const { sendMessage, lastMessage, lastLocationName } = useSurroundingsWS();
@@ -15,6 +16,7 @@ const CountDowner = () => {
     const { showAppMessage} = useAppMessage();
     const { getTimeDifferenceInSeconds } = useDateTimeFunctions();
     const { appStateVisible } = useAppState();
+    const { searchIsActive } = useActiveSearch();
 
     const [isCountDownReady, setIsCountDownReady ] = useState(false);
   
@@ -40,10 +42,11 @@ const CountDowner = () => {
   // };
 
   useEffect(() => {  
-    if (appStateVisible === 'active') { 
+    if (lastLocationName && (appStateVisible === 'active')) { 
+      console.log('resetting countdown');
     resetCountdown();
   }
-  }, [currentSurroundings, appStateVisible]); 
+  }, [appStateVisible, lastLocationName]);  //currentSurroundings
 
  
   const resetCountdown = () => {
@@ -78,12 +81,16 @@ const CountDowner = () => {
   return (
     <> 
     <View style={[appContainerStyles.countDownerContainer, themeStyles.primaryBackground]}>
+      {!searchIsActive && currentSurroundings?.id && (
+        
       <AnimatedTextInput
         style={[appFontStyles.countDownText, themeStyles.primaryText]}
         animatedProps={animatedTime}
         editable={false}
         defaultValue={"    "}
       /> 
+      
+    )}
     </View> 
     </>
   );

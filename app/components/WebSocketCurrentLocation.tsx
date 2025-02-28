@@ -6,6 +6,7 @@ import { useSurroundingsWS } from "../context/SurroundingsWSContext";
 import { useAppMessage } from "../context/AppMessageContext";
 import { useNearbyLocations } from "../context/NearbyLocationsContext";
 import { useInteractiveElements } from "../context/InteractiveElementsContext";
+
 import { useUser } from "../context/UserContext";
 
 const WebSocketCurrentLocation: React.FC = () => {
@@ -90,7 +91,7 @@ const WebSocketCurrentLocation: React.FC = () => {
     // {user?.authenticated && (
       
     <View style={appContainerStyles.defaultElementRow}>
-      {update && locationUpdateWSIsOpen && (
+      {update && locationUpdateWSIsOpen && !searchIsActive && (
         <>
           <Text style={[appFontStyles.subHeaderMessageText, themeStyles.primaryText]}>
             {update !== "You are home" ? `you are in: ` : ``}

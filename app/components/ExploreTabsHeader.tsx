@@ -8,6 +8,7 @@ import { useGlobalStyles } from "../context/GlobalStylesContext";
 import { useColorScheme } from "react-native";
 import { useUser } from "../context/UserContext";
 import CustomStatusBar from "./CustomStatusBar";
+import { useActiveSearch } from "../context/ActiveSearchContext";
 
 //IMPORTANT: these both depend on SurroundingsWSContext to render appropriately
 import WebSocketCurrentLocation from "../components/WebSocketCurrentLocation";
@@ -17,30 +18,30 @@ import CountDowner from "../components/CountDowner"; //needs: lastLocationName
 
 const ExploreTabsHeader = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { isAuthenticated, appSettings } = useUser();
-  const colorScheme = useColorScheme();
+  // const { isAuthenticated, appSettings } = useUser();
+  // const colorScheme = useColorScheme();
+  // const { searchIsActive } = useActiveSearch();
 
-  const [statusIconTheme, setStatusIconTheme] = useState('light');
+  // const [statusIconTheme, setStatusIconTheme] = useState("light");
 
-  const statusBarStyle = () => { 
-        if (appSettings.manual_dark_mode !== null) { 
-          return appSettings.manual_dark_mode ? "light" : "dark";
-        }
-        return colorScheme || "dark";
-      };  
+  // const statusBarStyle = () => {
+  //   if (appSettings.manual_dark_mode !== null) {
+  //     return appSettings.manual_dark_mode ? "light" : "dark";
+  //   }
+  //   return colorScheme || "dark";
+  // };
 
-  useEffect(() => {
-    if (isAuthenticated && appSettings) {
-      const theme = statusBarStyle();
-      setStatusIconTheme(theme);
-      console.log(theme);
-    }
-
-  }, [appSettings]);
+  // useEffect(() => {
+  //   if (isAuthenticated && appSettings) {
+  //     const theme = statusBarStyle();
+  //     setStatusIconTheme(theme);
+  //     console.log(theme);
+  //   }
+  // }, [appSettings]);
 
   return (
     <>
-    {/* {statusIconTheme && (
+      {/* {statusIconTheme && (
       
       <StatusBar
         style={statusIconTheme}
@@ -58,6 +59,7 @@ const ExploreTabsHeader = () => {
         >
           <View style={appContainerStyles.headerRow}>
             <WebSocketCurrentLocation />
+
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <CountDowner />
               <DrawerToggleButton tintColor={themeStyles.primaryText.color} />
