@@ -57,14 +57,14 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
     useState<boolean>(false);
 
   useEffect(() => {
-    if (!isAuthenticated && !isInitializing) {
-      console.log("ActiveSearchContext: User changed. Resetting context...");
+    if (!isAuthenticated) {
+      console.log("isAuthenticated === false --> resetting ActiveSearch context");
       setActiveSearch(null);
       setSearchIsActive(false);
       //setExploreLocationsAreReady(true);
       //setManualSurroundingsRefresh(false);
     }
-  }, [isAuthenticated, isInitializing]);
+  }, [isAuthenticated]);
 
   const {
     data: remainingGoes,
@@ -75,7 +75,7 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
   } = useQuery({
     queryKey: ["remainingGoes"],
     queryFn: () => getRemainingGoes(),
-    enabled: !!isAuthenticated,
+    enabled: !!isAuthenticated && !isInitializing,
     onSuccess: (data) => {},
   });
 

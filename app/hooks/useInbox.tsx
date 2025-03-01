@@ -32,7 +32,7 @@ interface InboxItem {
 }
 
 const useInbox = () => {
-  const { user, isAuthenticated } = useUser();
+  const { user, isAuthenticated, isInitializing } = useUser();
   const queryClient = useQueryClient();
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -52,7 +52,7 @@ const useInbox = () => {
   } = useQuery<InboxItem[]>({
     queryKey: ["inboxItems"],
     queryFn: getInboxItems,
-    enabled: !!isAuthenticated,
+    enabled: !!isAuthenticated && !isInitializing,
     onSuccess: (data) => {
 
       //not working

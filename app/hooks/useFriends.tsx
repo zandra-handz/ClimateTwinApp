@@ -23,7 +23,7 @@ interface DropdownOption {
 }
 
 const useFriends = () => {
-  const { user, isAuthenticated } = useUser();
+  const { user, isAuthenticated, isInitializing } = useUser();
   const [friendsDropDown, setFriendsDropDown] = useState<DropdownOption[]>([]);
 
   const queryClient = useQueryClient();
@@ -33,7 +33,7 @@ const useFriends = () => {
   const { data: friends, isLoading, isFetching, isSuccess, isError }: UseQueryResult<Friend[], Error> = useQuery({
     queryKey: ['friends'],
     queryFn: getFriends,
-    enabled: !!isAuthenticated,
+    enabled: !!isAuthenticated && !isInitializing,
     onSuccess: (data) => {
       // Convert the friends data into a dropdown array
       const dropdownData = data.map((friend) => ({

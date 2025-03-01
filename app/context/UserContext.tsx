@@ -101,32 +101,97 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
  
   
-  const reInitialize = async () => {
-    console.log('reinitializing!!!!');
-    showAppMessage(true, null, 'Initializing...');
-    setLoading(true);
+//   const reInitialize = async () => {
+//     console.log('reinitializing!!!!');
+//     showAppMessage(true, null, 'Initializing...');
+//     setLoading(true);
+//     console.log('use loading --> true');
+//     const token = await SecureStore.getItemAsync(TOKEN_KEY);
+//     if (token) {
+//         let userData = null;
 
-    const token = await SecureStore.getItemAsync(TOKEN_KEY);
-    if (token) {
-        let userData = null;
-
-        try {
-            userData = await getCurrentUser();
-            console.log(`REINIT USER DATA ON OTHER SIDE OF INTERCEPTOR: `, userData);
-        } catch (error) {
-            console.error('Error fetching current user:', error);
-            showAppMessage(true, null, 'Token detected but cannot fetch user');
+//         try {
+//             userData = await getCurrentUser();
+//             console.log(`REINIT USER DATA ON OTHER SIDE OF INTERCEPTOR: `, userData);
+//         } catch (error) {
+//             console.error('Error fetching current user:', error);
+//             showAppMessage(true, null, 'Token detected but cannot fetch user');
           
-            await onSignOut();
-            return;
-        }
-        try {
+//             await onSignOut();
+//             return;
+//         }
+//         try {
+//           // Fetch user settings using React Query's fetchQuery
+//           const userSettingsData = await queryClient.fetchQuery({
+//             queryKey: ['userSettings', userData?.id], 
+//               queryFn: getUserSettings,
+//           });
+  
+//           if (userSettingsData) {
+//               setAppSettings((prev) => ({ ...prev, ...userSettingsData }));
+//               setUserNotificationSettings({
+//                   receive_notifications: userSettingsData?.receive_notifications || false,
+//               });
+//           }
+//       } catch (error) {
+//           console.error('Error fetching user settings:', error);
+//       }
+
+//         // const userSettingsData = await getUserSettings();
+//         // if (userSettingsData) {
+//         //     setAppSettings((prev) => ({ ...prev, ...userSettingsData }));
+//         //     setUserNotificationSettings({
+//         //         receive_notifications:
+//         //             userSettingsData?.receive_notifications || false,
+//         //     });
+//         // }
+
+//         if (userData) {
+//             setUser(userData);
+//             setAuthenticated(true);
+//         } else {
+//             showAppMessage(true, null, 'Oh no :( Could not initialize user.');
+//             setAuthenticated(false);
+//         }
+//     } else {
+//         showAppMessage(true, null, 'Not signed in.');
+//         setUser(null);
+//         setAuthenticated(false); 
+//     }
+    
+//     setLoading(false);
+//     console.log('use loading --> false', authenticated);
+
+// };
+
+const reInitialize = async () => {
+  console.log('reinitializing!!!!');
+  showAppMessage(true, null, 'Initializing...');
+  setLoading(true);
+  console.log('use loading --> true');
+
+  const token = await SecureStore.getItemAsync(TOKEN_KEY);
+
+  if (token) {
+      let userData = null;
+
+      try {
+          userData = await getCurrentUser();
+          console.log(`REINIT USER DATA ON OTHER SIDE OF INTERCEPTOR: `, userData);
+      } catch (error) {
+          console.error('Error fetching current user:', error);
+          showAppMessage(true, null, 'Token detected but cannot fetch user');
+          await onSignOut();
+          return;
+      }
+
+      try {
           // Fetch user settings using React Query's fetchQuery
           const userSettingsData = await queryClient.fetchQuery({
-            queryKey: ['userSettings', userData?.id], 
+              queryKey: ['userSettings', userData?.id],
               queryFn: getUserSettings,
           });
-  
+
           if (userSettingsData) {
               setAppSettings((prev) => ({ ...prev, ...userSettingsData }));
               setUserNotificationSettings({
@@ -137,42 +202,103 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
           console.error('Error fetching user settings:', error);
       }
 
-        // const userSettingsData = await getUserSettings();
-        // if (userSettingsData) {
-        //     setAppSettings((prev) => ({ ...prev, ...userSettingsData }));
-        //     setUserNotificationSettings({
-        //         receive_notifications:
-        //             userSettingsData?.receive_notifications || false,
-        //     });
-        // }
+      if (userData) {
+          setUser(userData);
+          setAuthenticated(true);
 
-        if (userData) {
-            setUser(userData);
-            setAuthenticated(true);
-        } else {
-            showAppMessage(true, null, 'Oh no :( Could not initialize user.');
-            setAuthenticated(false);
-        }
-    } else {
-        showAppMessage(true, null, 'Not signed in.');
-        setUser(null);
-        setAuthenticated(false); 
-    }
-
-    setLoading(false);
+          // ✅ Ensure loading is only stopped after `authenticated` updates
+          setTimeout(() => {
+              setLoading(false);
+              console.log('use loading --> false', authenticated); // Might still log old state but UI will update correctly
+          }, 0);
+      } else {
+          showAppMessage(true, null, 'Oh no :( Could not initialize user.');
+          setAuthenticated(false);
+          setLoading(false);
+      }
+  } else {
+      showAppMessage(true, null, 'Not signed in.');
+      setUser(null);
+      setAuthenticated(false);
+      setLoading(false);
+  }
 };
 
+
+// const reInitialize = async () => {
+//   console.log('reinitializing!!!!');
+//   showAppMessage(true, null, 'Initializing...');
+//   setLoading(true);
+//   console.log('use loading --> true');
+
+//   const token = await SecureStore.getItemAsync(TOKEN_KEY);
+
+//   if (token) {
+//       let userData = null;
+
+//       try {
+//           userData = await getCurrentUser();
+//           console.log(`REINIT USER DATA ON OTHER SIDE OF INTERCEPTOR: `, userData);
+//       } catch (error) {
+//           console.error('Error fetching current user:', error);
+//           showAppMessage(true, null, 'Token detected but cannot fetch user');
+//           await onSignOut();
+//           return;
+//       }
+
+//       try {
+//           // Fetch user settings using React Query's fetchQuery
+//           const userSettingsData = await queryClient.fetchQuery({
+//               queryKey: ['userSettings', userData?.id],
+//               queryFn: getUserSettings,
+//           });
+
+//           if (userSettingsData) {
+//               setAppSettings((prev) => ({ ...prev, ...userSettingsData }));
+//               setUserNotificationSettings({
+//                   receive_notifications: userSettingsData?.receive_notifications || false,
+//               });
+//           }
+//       } catch (error) {
+//           console.error('Error fetching user settings:', error);
+//       }
+
+//       if (userData) {
+//           setUser(userData);
+//           setAuthenticated(true);
+//       } else {
+//           showAppMessage(true, null, 'Oh no :( Could not initialize user.');
+//           setAuthenticated(false);
+//       }
+//   } else {
+//       showAppMessage(true, null, 'Not signed in.');
+//       setUser(null);
+//       setAuthenticated(false);
+//   }
+// };
+
+// // ✅ Wait for `authenticated` to be updated before setting `loading` to `false`
+// useEffect(() => {
+//     if (authenticated !== null) {
+//         setLoading(false);
+//         console.log('use loading --> false', authenticated);
+//     }
+// }, [authenticated]); // Runs only when `authenticated` changes
+
+
+
 useEffect(() => {
-  if (appSettings) {
-    console.log('!!!!!!!!!!!!!!!!!!!!!!!APP SETTINGS', appSettings)
+  if (appSettings && Object.keys(appSettings).length > 0) {
+    console.log('!!!!!!!!!!!!!!!!!!!!!!!APP SETTINGS', appSettings);
   }
+
   const cachedSettings = queryClient.getQueryData(['userSettings', user?.id]);
-  
+
   if (cachedSettings) {
     console.log('!!!!!!!!!!!!!!!!!!!!!!! REACT QUERY CACHE: ', cachedSettings);
   }
-
 }, [appSettings]);
+
 
   // useEffect(() => {
   //   console.log('BEGINNING INITIALIZE!!!!!!!!!!!!!!!!!!!!!!!!');
@@ -222,7 +348,7 @@ useEffect(() => {
     const signinMutation = useMutation({
         mutationFn: signinWithoutRefresh,
         onSuccess: () => {
-            console.log('removed reinit from sign in mutation for now');
+            console.log('Sign in mutation is running reInit');
             reInitialize(); // Will run only after tokens are stored
         },
         onError: (error) => {

@@ -37,13 +37,13 @@ interface NearbyLocationsProviderProps {
 }
 
 export const NearbyLocationsProvider: React.FC<NearbyLocationsProviderProps> = ({ children }) => {
-  const { user, isAuthenticated } = useUser();
+  const { user, isAuthenticated, isInitializing } = useUser();
   const queryClient = useQueryClient();  
 
   const { data: nearbyLocations, isLoading, isError, isSuccess } = useQuery<NearbyLocation[]>({
     queryKey: ['nearbyLocations'],
     queryFn: getNearbyLocations,
-    enabled: !!isAuthenticated,
+    enabled: !!isAuthenticated && !isInitializing,
     onError: (err) => {
       console.error('Error fetching location data:', err);
     },

@@ -97,7 +97,7 @@ const Index = () => {
   return (
     <>
            <StatusBar
-             barStyle={themeStyles.primaryBackground.backgroundColor}
+             //barStyle={themeStyles.primaryBackground.backgroundColor}
              translucent={true}
              backgroundColor="transparent"
            />

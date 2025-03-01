@@ -25,7 +25,7 @@ const useSearchForLocationWebSocket = ({
 
   const socketRef = useRef<WebSocket | null>(null);
 
-  const { user, isAuthenticated } = useUser();
+  const { user, isAuthenticated, isInitializing } = useUser();
    const [token, setToken] = useState<string | null>(null);
 
 
@@ -76,13 +76,13 @@ const useSearchForLocationWebSocket = ({
     //const socketUrl = `wss://climatetwin-lzyyd.ondigitalocean.app/ws/climate-twin/current/?user_token=${userToken}`;
     const socketUrl = `wss://climatetwin.com/ws/climate-twin/current/?user_token=${userToken}`;
 
-    console.log("WebSocket connection URL:", socketUrl); // Log the WebSocket URL and token
+    console.log("Searcher WebSocket connection URL:", socketUrl); // Log the WebSocket URL and token
 
     const socket = new WebSocket(socketUrl);
     socketRef.current = socket;
  
     socket.onopen = () => {
-      console.log("WebSocket connection opened");
+      console.log("Searcher WebSocket connection opened");
     };
  
     socket.onmessage = (event: WebSocketMessageEvent) => {
@@ -91,9 +91,9 @@ const useSearchForLocationWebSocket = ({
     };
  
     socket.onerror = (event: Event) => {
-      console.error("WebSocket error:", event);
+      console.error("Searcher WebSocket error:", event);
     
-      let errorMessage = "Unknown error occurred.";
+      let errorMessage = "Unknown error occurred in Searcher WebSocket.";
       
       if ('message' in event) {
         errorMessage = (event as any).message; // TypeScript workaround if message exists
@@ -136,10 +136,10 @@ const useSearchForLocationWebSocket = ({
         socketRef.current &&
         socketRef.current.readyState === WebSocket.OPEN
       ) {
-        console.log("Sending message to WebSocket:", message); 
+        console.log("Sending message to Searcher WebSocket:", message); 
         socketRef.current.send(JSON.stringify(message));
       } else {
-        console.warn("WebSocket is not open");
+        console.warn("Searcher WebSocket is not open");
       }
     },
   };

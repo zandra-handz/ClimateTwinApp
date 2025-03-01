@@ -59,8 +59,9 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
   // Function to close the socket.
   const closeSocket = () => {
+
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-      
+      console.log('Location Socket open --> resetting variables and closing...');
       setLastMessage(null);
       setLastNotification(null);
       console.log('setting last location name to null in context');
@@ -69,6 +70,9 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       console.log("Closing existing Location Update WebSocket connection");
       socketRef.current.close();
       socketRef.current = null;
+      console.log('Location Socket closed');
+    } else {
+      console.log('Location Socket closed already --> CloseSocket() will do nothing')
     }
   };
 
@@ -264,13 +268,14 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
 
   useEffect(() => {
+    console.log('WS connection useEffect triggered');
     if (isAuthenticated && !isInitializing) {
       console.log('connectWebSocket triggered');
       connectWebSocket(); // Reconnect when authenticated & done initializing
     } 
   
     return () => {
-      console.log('Cleaning up WebSocket connection due to not authenticated');
+      console.log('isAuthenticated === false --> running CloseSocket()');
       closeSocket(); // Always close socket in cleanup
 
       //moved these inside closeSocket:
@@ -285,7 +290,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
       
     };
-  }, [isAuthenticated, isInitializing]);
+  }, [isInitializing]);
   
 
 
