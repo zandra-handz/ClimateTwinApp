@@ -52,12 +52,12 @@ const CountDowner = () => {
   };
 
   useEffect(() => {  
-    if (lastLocationName) { 
+    if (currentSurroundings?.id) { 
       console.log('resetting countdown');
     //  clearCountdown();
       resetCountdown();
     }
-  }, [lastLocationName, currentSurroundings?.id]);  
+  }, [currentSurroundings]);  
 
   const resetCountdown = () => { 
     if (currentSurroundings && currentSurroundings.id && !currentSurroundings.expired) {
