@@ -15,13 +15,13 @@ const useProtectedRoute = (isAuthenticated: boolean, isLoading: boolean) => {
   // console.log('useProtectedRoute triggered, is nav ready:', navigationRef.isReady());
   // console.log(segments[0]);
 
-  // const goToRoot = (): void => {
-  //   if (router.canDismiss()) {
-  //     router.dismissAll();
-  //   } else {
-  //     console.log("Already at the root screen, no need to dismiss.");
-  //   }
-  // };
+  const goToRoot = (): void => {
+    if (router.canDismiss()) {
+      router.dismissAll();
+    } else {
+      console.log("Already at the root screen, no need to dismiss.");
+    }
+  };
 
   useEffect(() => {
     if (navigationRef.isReady()) {
@@ -59,8 +59,8 @@ const useProtectedRoute = (isAuthenticated: boolean, isLoading: boolean) => {
       //or not using a loading state to prevent things from running while user is in the process if reinitializing
       //uh but this has been a long debug session and i don't want to touch anything right now 
       //since it finally seems to work
-      router.push("secondindex");
-      //goToRoot();
+      //router.push("/");
+      goToRoot();
     } else if (isAuthenticated && (isOnSignIn || isOnRootPage)) {
       // console.log('Protected route redirecting to (main)');
       router.push("(drawer)/(exploretabs)");

@@ -94,7 +94,7 @@ export default function Layout() {
                                   gestureEnabled: false,
                                 }}
                               />
-                              <Stack.Screen
+                              {/* <Stack.Screen
                                 name="secondindex"
                                 options={{
                                   headerShown: false,
@@ -104,7 +104,7 @@ export default function Layout() {
                                   },
                                   gestureEnabled: false,
                                 }}
-                              />
+                              /> */}
                               <Stack.Screen
                                 name="signin"
                                 options={{

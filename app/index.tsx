@@ -96,7 +96,11 @@ const Index = () => {
 
   return (
     <>
-     <CustomStatusBar/>
+           <StatusBar
+             barStyle={themeStyles.primaryBackground.backgroundColor}
+             translucent={true}
+             backgroundColor="transparent"
+           />
       <LinearGradient
         colors={[
           manualGradientColors.darkColor,
@@ -138,7 +142,7 @@ const Index = () => {
                     position: "absolute",
                   }}
                 >
-                  {/* <SignInButton
+                  <SignInButton
                     onPress={() => handleNavigateToSignIn()}
                     title={"Sign in"}
                     // shapeSource={require("../assets/shapes/coffeecupdarkheart.png")}
@@ -151,7 +155,7 @@ const Index = () => {
                     accessible={true}
                     accessibilityLabel={"Sign in button"}
                     accessibilityHint="Press to sign in or create an account"
-                  /> */}
+                  />
 
                   {/* <View style={{paddingTop: '3%'}}>
 

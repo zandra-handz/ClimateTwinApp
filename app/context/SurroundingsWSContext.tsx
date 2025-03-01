@@ -60,13 +60,16 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   // Function to close the socket.
   const closeSocket = () => {
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+      
+      setLastMessage(null);
+      setLastNotification(null);
+      console.log('setting last location name to null in context');
+      setLastLocationName(null); 
+      handleLocationUpdateWSIsClosed();
       console.log("Closing existing Location Update WebSocket connection");
       socketRef.current.close();
       socketRef.current = null;
     }
-    setLastMessage(null);
-    setLastNotification(null);
-    setLastLocationName(null); 
   };
 
   // Manual WebSocket connection function
@@ -140,7 +143,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       }
 
 
-      if (update.name) {
+      if (update.name) { 
         setLastLocationName(update.name); // Update the name state
       }
     };
@@ -151,7 +154,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     };
 
     socket.onclose = (event) => {
-      handleLocationUpdateWSIsClosed();
+     
       logWebSocketClosure(event);
       const tokenLastTen = confirmedToken ? confirmedToken.slice(-10) : null;
       showAppMessage(
@@ -264,20 +267,21 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     if (isAuthenticated && !isInitializing) {
       console.log('connectWebSocket triggered');
       connectWebSocket(); // Reconnect when authenticated & done initializing
-    } else {
-      console.log('Closing WebSocket due to logout or reinitialization');
-    }
+    } 
   
     return () => {
-      console.log('Cleaning up WebSocket connection');
+      console.log('Cleaning up WebSocket connection due to not authenticated');
       closeSocket(); // Always close socket in cleanup
 
       //moved these inside closeSocket:
       // setLastMessage(null);
       // setLastNotification(null);
       // setLastLocationName(null);
+      
       setReconnectAttempt(0);
       setReconnectionDelay(1000); 
+      setIsReconnecting(false);
+     
 
       
     };

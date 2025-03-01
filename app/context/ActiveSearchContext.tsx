@@ -57,14 +57,14 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
     useState<boolean>(false);
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!isAuthenticated && !isInitializing) {
       console.log("ActiveSearchContext: User changed. Resetting context...");
       setActiveSearch(null);
       setSearchIsActive(false);
-      setExploreLocationsAreReady(true);
-      setManualSurroundingsRefresh(false);
+      //setExploreLocationsAreReady(true);
+      //setManualSurroundingsRefresh(false);
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, isInitializing]);
 
   const {
     data: remainingGoes,

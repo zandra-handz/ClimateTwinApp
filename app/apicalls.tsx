@@ -606,7 +606,7 @@ export const getInboxItems = async () => {
         return response.data;
     } catch (error) {
         if (error.response) {
-            console.error('Error response for /users/inbox/items/:', error.response.data);
+            console.error('Error response for /users/inbox/items/:');
         } else if (error.request) {
             console.error('Error request for /users/inbox/items/, add console logging in api file for more details');
         } else {

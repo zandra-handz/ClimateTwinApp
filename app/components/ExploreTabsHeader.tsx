@@ -39,6 +39,11 @@ const ExploreTabsHeader = () => {
   //   }
   // }, [appSettings]);
 
+    useEffect(() => {
+      console.log('exploretabheader rerendered');
+  
+    }, []);
+
   return (
     <>
       {/* {statusIconTheme && (

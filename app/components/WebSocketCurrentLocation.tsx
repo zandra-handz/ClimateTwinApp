@@ -59,9 +59,15 @@ const WebSocketCurrentLocation: React.FC = () => {
   }, [lastMessage]);
 
 
+  useEffect(() => {
+    if (lastLocationName) { 
+       console.log(`Last location: ${lastLocationName}`);
+    }
+  }, [lastLocationName]);
+
+
   // useEffect(() => {
-  //   if (lastNotification) {
-  //      showAppMessage(true, null, lastNotification);
+  //   if (lastNotification) { 
   //      console.log(`Last notification: ${lastNotification}`);
   //   }
   // }, [lastNotification]);
