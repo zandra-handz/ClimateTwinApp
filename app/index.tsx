@@ -96,11 +96,12 @@ const Index = () => {
 
   return (
     <>
-           <StatusBar
+    <CustomStatusBar />
+           {/* <StatusBar
              //barStyle={themeStyles.primaryBackground.backgroundColor}
              translucent={true}
              backgroundColor="transparent"
-           />
+           /> */}
       <LinearGradient
         colors={[
           manualGradientColors.darkColor,
