@@ -7,7 +7,7 @@ import Animated, { useSharedValue, useAnimatedProps } from "react-native-reanima
 import { useSurroundingsWS } from "../context/SurroundingsWSContext";
 import useDateTimeFunctions from '../hooks/useDateTimeFunctions';
 import { useAppState } from "../context/AppStateContext";
-import { useActiveSearch } from "../context/ActiveSearchContext"; 
+import { useActiveSearch } from "../context/ActiveSearchContext";  
 
 const CountDowner = () => {
   const { sendMessage, lastMessage, lastLocationName } = useSurroundingsWS();
@@ -52,12 +52,12 @@ const CountDowner = () => {
   };
 
   useEffect(() => {  
-    if (currentSurroundings?.id) { 
+    if (lastLocationName) { 
       console.log('resetting countdown');
     //  clearCountdown();
       resetCountdown();
     }
-  }, [currentSurroundings]);  
+  }, [lastLocationName, currentSurroundings]);  
 
   const resetCountdown = () => { 
     if (currentSurroundings && currentSurroundings.id && !currentSurroundings.expired) {

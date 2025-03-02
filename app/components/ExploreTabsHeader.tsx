@@ -9,6 +9,8 @@ import { useColorScheme } from "react-native";
 import { useUser } from "../context/UserContext";
 import CustomStatusBar from "./CustomStatusBar";
 import { useActiveSearch } from "../context/ActiveSearchContext";
+import { useSurroundings } from "../context/CurrentSurroundingsContext";
+import { useSurroundingsWS } from "../context/SurroundingsWSContext";
 
 //IMPORTANT: these both depend on SurroundingsWSContext to render appropriately
 import WebSocketCurrentLocation from "../components/WebSocketCurrentLocation";
@@ -18,6 +20,8 @@ import CountDowner from "../components/CountDowner"; //needs: lastLocationName
 
 const ExploreTabsHeader = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
+  const { currentSurroundings } = useSurroundings();
+   const { lastLocationName } = useSurroundingsWS();
   // const { isAuthenticated, appSettings } = useUser();
   // const colorScheme = useColorScheme();
   // const { searchIsActive } = useActiveSearch();
@@ -66,8 +70,14 @@ const ExploreTabsHeader = () => {
             <WebSocketCurrentLocation />
 
             <View style={{ flexDirection: "row", alignItems: "center" }}>
+              <>
+            {currentSurroundings?.id && !currentSurroundings.expired && lastLocationName && (
+              
               <CountDowner />
+              
+            )}
               <DrawerToggleButton tintColor={themeStyles.primaryText.color} />
+              </>
             </View>
           </View>
         </View>
