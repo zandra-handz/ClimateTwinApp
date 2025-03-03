@@ -20,7 +20,7 @@ import CountDowner from "../components/CountDowner"; //needs: lastLocationName
 
 const ExploreTabsHeader = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { currentSurroundings } = useSurroundings();
+  const { currentSurroundings, locationId } = useSurroundings();
    const { lastLocationName } = useSurroundingsWS();
   // const { isAuthenticated, appSettings } = useUser();
   // const colorScheme = useColorScheme();
@@ -71,7 +71,7 @@ const ExploreTabsHeader = () => {
 
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <>
-            {(currentSurroundings?.explore_location?.id || currentSurroundings?.twin_location?.id) && !currentSurroundings.expired && lastLocationName && (
+            {locationId && !currentSurroundings.expired && lastLocationName && (
               
               <CountDowner />
               

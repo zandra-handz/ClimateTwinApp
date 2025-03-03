@@ -18,7 +18,7 @@ interface CurrentSurroundings {
   twin_location?: PortalSurroundings; // Use PortalLocation for twin_location
   user: number;
   last_accessed: string;
-  expired: boolean; 
+  expired: boolean;  
 }
 
  
@@ -123,6 +123,8 @@ export const CurrentSurroundingsProvider: React.FC<
   const [homeSurroundings, setHomeSurroundings] =
     useState<HomeSurroundings | null>(null);
 
+    const [locationId, setLocationId] = useState<number | null>(null);
+
   const {
     data: currentSurroundings,
     isLoading,
@@ -149,7 +151,7 @@ useEffect(() => {
     setRuinsSurroundings(null);
     setHomeSurroundings(null);
   }
-}, [isInitializing, queryClient]);
+}, [isInitializing]);
 
   useEffect(() => {
     if (manualSurroundingsRefresh) { 
@@ -236,6 +238,8 @@ useEffect(() => {
           windHarmony: false,
           streetViewImage: "",
         };
+        setLocationId(twin_location.id);
+
       } else if (explore_location) {
         const { origin_location } = explore_location;
         const { home_location } = origin_location;
@@ -303,6 +307,7 @@ useEffect(() => {
           streetViewImage: explore_location.street_view_image || "",
         };
       }
+      setLocationId(explore_location.id);
     } else {
       // Reset both data objects if currentSurroundings is null or undefined
       portalSurroundingsData = {
@@ -366,6 +371,7 @@ useEffect(() => {
         windHarmony: false,
         streetViewImage: "",
       };
+      setLocationId(null);
     }
 
     setPortalSurroundings(portalSurroundingsData);
@@ -413,6 +419,7 @@ useEffect(() => {
     <CurrentSurroundingsContext.Provider
       value={{
         currentSurroundings,
+        locationId,
         portalSurroundings,
         homeSurroundings,
         ruinsSurroundings,

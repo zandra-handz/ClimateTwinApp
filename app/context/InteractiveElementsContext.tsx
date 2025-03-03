@@ -89,13 +89,13 @@ interface InteractiveElementsProviderProps {
 
 export const InteractiveElementsProvider: React.FC<InteractiveElementsProviderProps> = ({ children }) => {
   const { user, isAuthenticated, isInitializing } = useUser(); 
-  const { currentSurroundings  } = useSurroundings();
+  const { currentSurroundings, locationId  } = useSurroundings();
   const queryClient = useQueryClient(); 
 
   const { data: itemChoicesResponse, isLoading, isError } = useQuery<ItemChoicesResponse | null>({
-    queryKey: ['itemChoices', currentSurroundings?.explore_location?.id ?? null, currentSurroundings?.twin_location?.id ?? null],
+    queryKey: ['itemChoices', locationId],
     queryFn: getItemChoices,
-    enabled: !!isAuthenticated && !isInitializing && (!!currentSurroundings?.explore_location?.id || !!currentSurroundings?.twin_location?.id), 
+    enabled: !!isAuthenticated && !isInitializing && !!locationId, 
     onError: (err) => {
       console.error('Error fetching location data:', err);
     },
@@ -115,12 +115,12 @@ export const InteractiveElementsProvider: React.FC<InteractiveElementsProviderPr
   const triggerItemChoicesRefetch = () => {
     console.log('invalidating item choices query');
     queryClient.invalidateQueries({
-      queryKey: ['itemChoices', currentSurroundings?.explore_location?.id ?? null, currentSurroundings?.twin_location?.id ?? null],
+      queryKey: ['itemChoices', locationId],
       // Include currentSurroundings.id
     });
     console.log('refetching item choices query');
     queryClient.refetchQueries({
-      queryKey: ['itemChoices', currentSurroundings?.explore_location?.id ?? null, currentSurroundings?.twin_location?.id ?? null],
+      queryKey: ['itemChoices', locationId],
     
     });
   };
@@ -142,7 +142,7 @@ export const InteractiveElementsProvider: React.FC<InteractiveElementsProviderPr
     return () => {
       unsubscribe(); // Unsubscribe when the component unmounts
     };
-  }, [(currentSurroundings?.explore_location?.id, currentSurroundings?.twin_location?.id)]); //passing in queryClient will trigger useEffect any time ANY query key is updated
+  }, [locationId]); //passing in queryClient will trigger useEffect any time ANY query key is updated
   
 
   return (

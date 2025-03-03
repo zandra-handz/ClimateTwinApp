@@ -12,7 +12,7 @@ import { useActiveSearch } from "../context/ActiveSearchContext";
 const CountDowner = () => {
   const { sendMessage, lastMessage, lastLocationName } = useSurroundingsWS();
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
-  const { currentSurroundings } = useSurroundings(); 
+  const { currentSurroundings, locationId } = useSurroundings(); 
   const { showAppMessage} = useAppMessage();
   const { getTimeDifferenceInSeconds } = useDateTimeFunctions();
   const { appStateVisible } = useAppState(); 
@@ -59,7 +59,7 @@ const CountDowner = () => {
   }, [lastLocationName, currentSurroundings?.explore_location, currentSurroundings?.twin_location]);  
 
   const resetCountdown = () => { 
-    if (currentSurroundings && !currentSurroundings.expired) {
+    if (currentSurroundings && !currentSurroundings.expired && locationId) {
      // clearCountdown();
       const timeDifference = getTimeDifferenceInSeconds(currentSurroundings.last_accessed);
       timeSharedValue.value = timeDifference > 0 ? timeDifference : 0;
