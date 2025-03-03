@@ -3,16 +3,16 @@ import {
   SafeAreaView,
   View, 
 } from "react-native"; 
-import { useGlobalStyles } from "../context/GlobalStylesContext"; 
+import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
 
-import { useAppMessage } from "../context/AppMessageContext";
-import useHistory from "../hooks/useHistory";
+import { useAppMessage } from "../../context/AppMessageContext";
+import useHistory from "../../hooks/useHistory";
 
 import { StatusBar } from "expo-status-bar";
 
-import DataList from "../components/DataList"; 
+import DataList from "../../components/DataList"; 
   
-const history = () => {
+const index = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles(); 
   const { showAppMessage } = useAppMessage();
   const { history } = useHistory();
@@ -37,11 +37,11 @@ const handlePress = () => {
   
   return (
     <>
-      <StatusBar
+      {/* <StatusBar
         barStyle={themeStyles.primaryBackground.backgroundColor}
         translucent={true}
         backgroundColor="transparent"
-      />
+      /> */}
       <View
         style={[
           appContainerStyles.screenContainer,
@@ -59,4 +59,4 @@ const handlePress = () => {
   );
 };
 
-export default history;
+export default index;

@@ -136,28 +136,9 @@ const DrawerCustomizer = (props) => {
             { borderBottomColor: themeStyles.primaryText.color },
           ]}
           label="Friends"
-          onPress={() => router.push("/friends")}
+          onPress={() => router.push("/(friends)")}
         />
-        <InboxWithNotifs/>
-        {/* <DrawerItem
-          icon={() => (
-            <Feather
-              name="mail"
-              size={appFontStyles.exploreTabBarIcon.width}
-              color={themeStyles.exploreTabBarText.color}
-              {...props}
-            />
-          )}
-          labelStyle={[themeStyles.primaryText, appFontStyles.drawerLabelText]}
-          pressColor={"lightblue"}
-          style={[
-            themeStyles.darkerBackground,
-            appContainerStyles.drawerButtonContainer,
-            { borderBottomColor: themeStyles.primaryText.color },
-          ]}
-          label="Inbox"
-          onPress={() => router.push("(inbox)")}
-        /> */}
+        <InboxWithNotifs/> 
         <DrawerItem
           icon={() => (
             <AntDesign
@@ -175,7 +156,7 @@ const DrawerCustomizer = (props) => {
             { borderBottomColor: themeStyles.primaryText.color },
           ]}
           label="Treasures"
-          onPress={() => router.push("(treasures)")}
+          onPress={() => router.push("/(treasures)")}
         />
         <DrawerItem
           icon={() => (
@@ -194,7 +175,7 @@ const DrawerCustomizer = (props) => {
             { borderBottomColor: themeStyles.primaryText.color },
           ]}
           label="History"
-          onPress={() => router.push("/history")}
+          onPress={() => router.push("/(history)")}
         />
         <DrawerItem
                   icon={() => (
@@ -213,7 +194,7 @@ const DrawerCustomizer = (props) => {
             { borderBottomColor: themeStyles.primaryText.color },
           ]}
           label="Accessibility"
-          onPress={() => router.push("/treasures")}
+          onPress={() => router.push("/(treasures)")}
         />
         <DarkLightSwitch />
         <DrawerItem

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Animated, FlatList, View, ScrollView } from "react-native";
+import { Animated, View  } from "react-native";
 import { useFocusEffect } from "expo-router";
 import { useGeolocationWatcher } from "../../hooks/useCurrentLocationWatcher";
 import useHomeLocation from "../../hooks/useHomeLocation";
@@ -22,7 +22,7 @@ import PortalBanner from "@/app/components/PortalBanner";
 
 const home = () => {
   useGeolocationWatcher();
-  const { user, isAuthenticated } = useUser(); 
+  const { isAuthenticated } = useUser(); 
 
   const { portalSurroundings, ruinsSurroundings } =
     useSurroundings();

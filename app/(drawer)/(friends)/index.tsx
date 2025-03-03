@@ -1,19 +1,18 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
-import {
-  SafeAreaView,
+import React from "react";
+import { 
   View, 
 } from "react-native"; 
-import { useGlobalStyles } from "../context/GlobalStylesContext"; 
+import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
 
-import { useAppMessage } from "../context/AppMessageContext";
-import useFriends from "../hooks/useFriends";
+import { useAppMessage } from "../../context/AppMessageContext";
+import useFriends from "../../hooks/useFriends";
 
 import { StatusBar } from "expo-status-bar";
 
-import DataList from "../components/DataList";
+import DataList from "../../components/DataList";
 import { useFocusEffect } from "expo-router";
   
-const friends = () => {
+const index = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles(); 
   const { showAppMessage } = useAppMessage();
   const { friends } = useFriends();
@@ -38,11 +37,11 @@ const handlePress = () => {
   
   return (
     <>
-      <StatusBar
+      {/* <StatusBar
         barStyle={themeStyles.primaryBackground.backgroundColor}
         translucent={true}
         backgroundColor="transparent"
-      />
+      /> */}
       <View
         style={[
           appContainerStyles.screenContainer,
@@ -60,4 +59,4 @@ const handlePress = () => {
   );
 };
 
-export default friends;
+export default index;
