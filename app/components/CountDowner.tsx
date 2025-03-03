@@ -15,8 +15,7 @@ const CountDowner = () => {
   const { currentSurroundings } = useSurroundings(); 
   const { showAppMessage} = useAppMessage();
   const { getTimeDifferenceInSeconds } = useDateTimeFunctions();
-  const { appStateVisible } = useAppState();
-  const { searchIsActive } = useActiveSearch(); 
+  const { appStateVisible } = useAppState(); 
 
   const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
   const timeSharedValue = useSharedValue(0);
@@ -57,10 +56,10 @@ const CountDowner = () => {
     //  clearCountdown();
       resetCountdown();
     }
-  }, [lastLocationName, currentSurroundings]);  
+  }, [lastLocationName, currentSurroundings?.explore_location, currentSurroundings?.twin_location]);  
 
   const resetCountdown = () => { 
-    if (currentSurroundings && currentSurroundings.id && !currentSurroundings.expired) {
+    if (currentSurroundings && !currentSurroundings.expired) {
      // clearCountdown();
       const timeDifference = getTimeDifferenceInSeconds(currentSurroundings.last_accessed);
       timeSharedValue.value = timeDifference > 0 ? timeDifference : 0;

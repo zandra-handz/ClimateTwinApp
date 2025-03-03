@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, ReactNode } from 'react';
 import { useUser } from './UserContext';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getItemChoices } from '../apicalls';  
+import { useSurroundings } from './CurrentSurroundingsContext';
 
 interface LocationDetails {
   id: number | null;
@@ -88,12 +89,13 @@ interface InteractiveElementsProviderProps {
 
 export const InteractiveElementsProvider: React.FC<InteractiveElementsProviderProps> = ({ children }) => {
   const { user, isAuthenticated, isInitializing } = useUser(); 
+  const { currentSurroundings  } = useSurroundings();
   const queryClient = useQueryClient(); 
 
   const { data: itemChoicesResponse, isLoading, isError } = useQuery<ItemChoicesResponse | null>({
-    queryKey: ['itemChoices'],
+    queryKey: ['itemChoices', currentSurroundings?.explore_location?.id ?? null, currentSurroundings?.twin_location?.id ?? null],
     queryFn: getItemChoices,
-    enabled: !!isAuthenticated && !isInitializing,
+    enabled: !!isAuthenticated && !isInitializing && (!!currentSurroundings?.explore_location?.id || !!currentSurroundings?.twin_location?.id), 
     onError: (err) => {
       console.error('Error fetching location data:', err);
     },
@@ -111,9 +113,37 @@ export const InteractiveElementsProvider: React.FC<InteractiveElementsProviderPr
     : [];
 
   const triggerItemChoicesRefetch = () => {
-    queryClient.invalidateQueries({ queryKey: ['itemChoices'] });
-    queryClient.refetchQueries({ queryKey: ['itemChoices'] });
+    console.log('invalidating item choices query');
+    queryClient.invalidateQueries({
+      queryKey: ['itemChoices', currentSurroundings?.explore_location?.id ?? null, currentSurroundings?.twin_location?.id ?? null],
+      // Include currentSurroundings.id
+    });
+    console.log('refetching item choices query');
+    queryClient.refetchQueries({
+      queryKey: ['itemChoices', currentSurroundings?.explore_location?.id ?? null, currentSurroundings?.twin_location?.id ?? null],
+    
+    });
   };
+
+  useEffect(() => {
+    const unsubscribe = queryClient.getQueryCache().subscribe((event) => {
+      if (event.query.queryKey[0] === 'itemChoices') {
+        console.log(
+          'itemChoices cache updated.',
+          // queryClient.getQueryData([
+          //   'itemChoices',
+          //   currentSurroundings?.explore_location?.id ?? null,
+          //   currentSurroundings?.twin_location?.id ?? null,
+          // ]),
+        );
+      }
+    });
+  
+    return () => {
+      unsubscribe(); // Unsubscribe when the component unmounts
+    };
+  }, [(currentSurroundings?.explore_location?.id, currentSurroundings?.twin_location?.id)]); //passing in queryClient will trigger useEffect any time ANY query key is updated
+  
 
   return (
     <InteractiveElementsContext.Provider 

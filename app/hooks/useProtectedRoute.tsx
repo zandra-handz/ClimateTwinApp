@@ -46,6 +46,7 @@ const useProtectedRoute = (isAuthenticated: boolean, isLoading: boolean) => {
     //   console.log(segments[0]);
     // } 
     const isOnSignIn = segments[0] === "signin";
+    const isOnExploreTabs = segments[0] === "(drawer)/(exploretabs)";
     const isOnRootPage = segments.length === 0 || segments[0] === "" || segments[0] === "secondindex" ; 
 
     // console.log(isNavigationReady);
@@ -59,9 +60,9 @@ const useProtectedRoute = (isAuthenticated: boolean, isLoading: boolean) => {
       //or not using a loading state to prevent things from running while user is in the process if reinitializing
       //uh but this has been a long debug session and i don't want to touch anything right now 
       //since it finally seems to work
-      //router.push("/");
+      //router.replace("/");
       goToRoot();
-    } else if (isAuthenticated && (isOnSignIn || isOnRootPage)) {
+    } else if (isAuthenticated && !isOnExploreTabs && (isOnSignIn || isOnRootPage)) {
       // console.log('Protected route redirecting to (main)');
       router.push("(drawer)/(exploretabs)");
     }

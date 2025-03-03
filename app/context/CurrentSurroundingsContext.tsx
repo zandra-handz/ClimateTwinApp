@@ -21,6 +21,8 @@ interface CurrentSurroundings {
   expired: boolean; 
 }
 
+ 
+
 interface PortalSurroundings {
   name: string;
   id: number;
@@ -147,7 +149,7 @@ useEffect(() => {
     setRuinsSurroundings(null);
     setHomeSurroundings(null);
   }
-}, [isAuthenticated, isInitializing, queryClient]);
+}, [isInitializing, queryClient]);
 
   useEffect(() => {
     if (manualSurroundingsRefresh) { 
@@ -402,7 +404,7 @@ useEffect(() => {
   });
 
   const triggerRefetch = () => {
-   // console.log("Triggering immediate refetch");
+    console.log("Triggering explore locationrefetch");
     queryClient.invalidateQueries({ queryKey: ["currentSurroundings"] });
     queryClient.refetchQueries({ queryKey: ["currentSurroundings"] }); // Force refetch
   };
@@ -415,6 +417,7 @@ useEffect(() => {
         homeSurroundings,
         ruinsSurroundings,
         handlePickNewSurroundings,
+        pickNewSurroundingsMutation,
         triggerRefetch,
       }}
     >

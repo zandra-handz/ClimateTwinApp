@@ -71,7 +71,7 @@ const ExploreTabsHeader = () => {
 
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <>
-            {currentSurroundings?.id && !currentSurroundings.expired && lastLocationName && (
+            {(currentSurroundings?.explore_location?.id || currentSurroundings?.twin_location?.id) && !currentSurroundings.expired && lastLocationName && (
               
               <CountDowner />
               

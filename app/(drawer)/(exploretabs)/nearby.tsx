@@ -7,22 +7,19 @@ import { useNearbyLocations } from "../../context/NearbyLocationsContext";
  
 import { useRouter } from "expo-router";
 import DataList from "../../components/DataList";
-import { useFocusEffect } from "expo-router";
-import { useInteractiveElements } from "@/app/context/InteractiveElementsContext"; 
+import { useFocusEffect } from "expo-router"; 
 import { useSurroundings } from "@/app/context/CurrentSurroundingsContext";
  
 
 const nearby = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { triggerRefetch, nearbyLocations } = useNearbyLocations();
-  const { currentSurroundings, handlePickNewSurroundings } = useSurroundings();
+  const { handlePickNewSurroundings, pickNewSurroundingsMutation } = useSurroundings();
   const router = useRouter();
-
-  const { triggerItemChoicesRefetch } = useInteractiveElements();
-
+ 
   useFocusEffect(
     useCallback(() => {
-      console.log("triggering neary locations refetch");
+      console.log("triggering nearby locations refetch");
       triggerRefetch();
       return () => {
         console.log("nearby location screen is unfocused");
@@ -34,6 +31,15 @@ const nearby = () => {
   //   console.log('triggering neary locations refetch');
   //   triggerRefetch();
   // }, []);
+
+
+  useEffect(() => {
+    if (pickNewSurroundingsMutation.isSuccess) {
+      router.push("(drawer)/(exploretabs)");
+
+    }
+
+  }, [pickNewSurroundingsMutation.isSuccess]);
 
   //wtf
 
@@ -47,9 +53,11 @@ const nearby = () => {
     //console.log('handle explore location pressed!', data);
 
     await handlePickNewSurroundings(data);
-    setTimeout(() => {
-      router.push("(drawer)/(exploretabs)");
-    }, 0);
+    // setTimeout(() => {
+    //   router.push("(drawer)/(exploretabs)");
+    // }, 0);
+
+
     
 
     //   if (data && data.explore_type) {
@@ -61,13 +69,13 @@ const nearby = () => {
   };
 
  
-  
-  useEffect(() => {
-    if (currentSurroundings) {
-      console.log('nearby screen triggered item choices refetch!');
-      triggerItemChoicesRefetch();
-    }
-  }, [currentSurroundings]);
+  //Moved to component displaying the items:
+  // useEffect(() => {
+  //   if (currentSurroundings) {
+  //     console.log('nearby screen triggered item choices refetch!');
+  //     triggerItemChoicesRefetch();
+  //   }
+  // }, [currentSurroundings]);
 
   return (
     <>

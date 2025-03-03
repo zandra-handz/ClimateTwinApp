@@ -163,64 +163,83 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 //     console.log('use loading --> false', authenticated);
 
 // };
+let isReinitializing = false;
 
 const reInitialize = async () => {
-  console.log('reinitializing!!!!');
-  showAppMessage(true, null, 'Initializing...');
-  setLoading(true);
-  console.log('use loading --> true');
+  if (isReinitializing) {
+    showAppMessage(true, null, 'Reinitializing already in progress, new attempt returned');
+    console.log('reInitialize already in progress');
+    return;
+  }
 
-  const token = await SecureStore.getItemAsync(TOKEN_KEY);
+  isReinitializing = true;
+  try {
+    console.log('reinitializing!!!!');
+    showAppMessage(true, null, 'Initializing...');
+    setLoading(true);
+    console.log('use loading --> true');
 
-  if (token) {
+    const token = await SecureStore.getItemAsync(TOKEN_KEY);
+
+    if (token) {
       let userData = null;
 
       try {
-          userData = await getCurrentUser();
-          console.log(`REINIT USER DATA ON OTHER SIDE OF INTERCEPTOR: `, userData);
+        userData = await getCurrentUser();
+        console.log(
+          'REINIT USER DATA ON OTHER SIDE OF INTERCEPTOR: ',
+          userData,
+        );
       } catch (error) {
-          console.error('Error fetching current user:', error);
-          showAppMessage(true, null, 'Token detected but cannot fetch user');
-          await onSignOut();
-          return;
+        console.error('Error fetching current user:', error);
+        showAppMessage(true, null, 'Token detected but cannot fetch user');
+        await onSignOut();
+        return;
       }
 
       try {
-          // Fetch user settings using React Query's fetchQuery
-          const userSettingsData = await queryClient.fetchQuery({
-              queryKey: ['userSettings', userData?.id],
-              queryFn: getUserSettings,
-          });
+        // Fetch user settings using React Query's fetchQuery
+        const userSettingsData = await queryClient.fetchQuery({
+          queryKey: ['userSettings', userData?.id],
+          queryFn: getUserSettings,
+        });
 
-          if (userSettingsData) {
-              setAppSettings((prev) => ({ ...prev, ...userSettingsData }));
-              setUserNotificationSettings({
-                  receive_notifications: userSettingsData?.receive_notifications || false,
-              });
-          }
+        if (userSettingsData) {
+          setAppSettings((prev) => ({ ...prev, ...userSettingsData }));
+          setUserNotificationSettings({
+            receive_notifications:
+              userSettingsData?.receive_notifications || false,
+          });
+        }
       } catch (error) {
-          console.error('Error fetching user settings:', error);
+        console.error('Error fetching user settings:', error);
       }
 
       if (userData) {
-          setUser(userData);
-          setAuthenticated(true);
+        setUser((prev) => ({ ...prev, userData }));
+        setAuthenticated(true);
 
-          // ✅ Ensure loading is only stopped after `authenticated` updates
-          setTimeout(() => {
-              setLoading(false);
-              console.log('use loading --> false', authenticated); // Might still log old state but UI will update correctly
-          }, 0);
-      } else {
-          showAppMessage(true, null, 'Oh no :( Could not initialize user.');
-          setAuthenticated(false);
+        // ✅ Ensure loading is only stopped after authenticated updates
+        setTimeout(() => {
           setLoading(false);
+          console.log(
+            'use loading --> false',
+            authenticated,
+          ); // Might still log old state but UI will update correctly
+        }, 0);
+      } else {
+        showAppMessage(true, null, 'Oh no :( Could not initialize user.');
+        setAuthenticated(false);
+        setLoading(false);
       }
-  } else {
+    } else {
       showAppMessage(true, null, 'Not signed in.');
       setUser(null);
       setAuthenticated(false);
       setLoading(false);
+    }
+  } finally {
+    isReinitializing = false;
   }
 };
 
@@ -288,7 +307,7 @@ const reInitialize = async () => {
 
 
 useEffect(() => {
-  if (appSettings && Object.keys(appSettings).length > 0) {
+  if (authenticated && !loading && appSettings && Object.keys(appSettings).length > 0) {
     console.log('!!!!!!!!!!!!!!!!!!!!!!!APP SETTINGS', appSettings);
   }
 
@@ -310,7 +329,7 @@ useEffect(() => {
     if (appStateVisible === 'active' && !isOnSignIn) { //authenticated &&
          
     console.log('APP IN FOREGROUND, REINITTING IN USER CONTEXT!!!!!!!!!!!!!!!!!!!!!!!!');
-   
+   console.log(authenticated);
     reInitialize();
     }
   }, [appStateVisible]); 

@@ -75,7 +75,7 @@ const WebSocketCurrentLocation: React.FC = () => {
   useEffect(() => {
     console.log('last location name: ', lastLocationName);
     if (!lastLocationName) {
-      setUpdate(" "); // If no location name, reset the state
+      setUpdate("Error, no location name!"); // If no location name, reset the state
     } else if (lastLocationName === "null") {
       setUpdate("You are home"); // If lastLocationName is the string "null"
     } else if (lastLocationName !== update) {
@@ -84,7 +84,7 @@ const WebSocketCurrentLocation: React.FC = () => {
         setUpdate(lastLocationName); 
       } else {
         refreshSurroundingsManually(); 
-        triggerItemChoicesRefetch();  
+       // triggerItemChoicesRefetch();  
         console.log('setting last location name');
         setUpdate(lastLocationName);  
       }

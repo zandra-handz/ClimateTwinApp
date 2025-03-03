@@ -1,10 +1,7 @@
-import {
-  AppMessageContextProvider,
-  useAppMessage,
-} from "./context/AppMessageContext";
+import { AppMessageContextProvider } from "./context/AppMessageContext";
 import { GlobalStylesProvider } from "./context/GlobalStylesContext";
-import { UserProvider, useUser } from "./context/UserContext";
-import { useEffect, useRef, useState } from "react";
+import { UserProvider } from "./context/UserContext";
+import { useRef, useState } from "react";
 import { AppState } from "react-native";
 import { AppStateProvider } from "./context/AppStateContext";
 import { CurrentSurroundingsProvider } from "./context/CurrentSurroundingsContext";
@@ -13,21 +10,13 @@ import { ActiveSearchProvider } from "./context/ActiveSearchContext";
 import { InteractiveElementsProvider } from "./context/InteractiveElementsContext";
 import { SurroundingsWSProvider } from "./context/SurroundingsWSContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import {
-  notifyManager,
-  QueryClient,
-  QueryClientProvider,
-} from "@tanstack/react-query";
-import { Stack } from "expo-router"; // Expo Router's Stack component
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Stack } from "expo-router";
 import AppMessage from "./components/AppMessage";
-import NotificationNotifier from "./components/NotificationNotifier";
-import Header from "./components/Header";
-import { StatusBar } from 'react-native';
 import CustomStatusBar from "./components/CustomStatusBar";
 
 export default function Layout() {
   const queryClient = new QueryClient();
-  // const { user, reInitialize } = useUser();
 
   const appState = useRef(AppState.currentState);
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
@@ -59,8 +48,6 @@ export default function Layout() {
           <UserProvider>
             <AppStateProvider>
               <GlobalStylesProvider>
-                {/* Wrap Stack in TopLevelRouter to handle authentication checks */}
-
                 <AppMessage />
                 <CustomStatusBar />
                 <ActiveSearchProvider>
@@ -68,11 +55,7 @@ export default function Layout() {
                     <NearbyLocationsProvider>
                       <InteractiveElementsProvider>
                         <SurroundingsWSProvider>
-                             
-                          {/* <NotificationNotifier /> */}
                           <Stack screenOptions={{ headerShown: false }}>
-                            {/* {user?.authenticated ? ( */}
-
                             <Stack.Screen
                               name="(drawer)"
                               options={{
@@ -81,7 +64,6 @@ export default function Layout() {
                               }}
                             />
 
-                            {/* ) : (  */}
                             <>
                               <Stack.Screen
                                 name="index"
@@ -93,7 +75,7 @@ export default function Layout() {
                                   },
                                   gestureEnabled: false,
                                 }}
-                              /> 
+                              />
                               <Stack.Screen
                                 name="signin"
                                 options={{
@@ -106,7 +88,6 @@ export default function Layout() {
                                 }}
                               />
                             </>
-                            {/* )} */}
                           </Stack>
                         </SurroundingsWSProvider>
                       </InteractiveElementsProvider>

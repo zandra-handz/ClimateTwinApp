@@ -1,32 +1,31 @@
 import { View, Text, FlatList, StyleSheet } from "react-native";
-import React, { useEffect, useState } from "react";
-import { useGlobalStyles } from "../context/GlobalStylesContext";
-import CurrentSurroundingsUICard from "./CurrentSurroundingsUICard";
-import ItemChoiceUICard from "./ItemChoiceUICard";
-import { useSurroundings } from "../context/CurrentSurroundingsContext";
+import React, { useEffect, useState } from "react"; 
+import ItemChoiceUICard from "./ItemChoiceUICard"; 
 import { useInteractiveElements } from "@/app/context/InteractiveElementsContext";
 import CardAnimationWrapper from "./CardAnimationWrapper";
 import { useRouter } from "expo-router";
 
 
-const CurrentSurroundingsView = ( {height}) => {
- const { currentSurroundings } =
-    useSurroundings();
+const CurrentSurroundingsView = ( {height}) => { 
 
-  const router = useRouter();
-
-
- 
-  const { itemChoices  } = useInteractiveElements();
+  const router = useRouter(); 
+  const { itemChoices, triggerItemChoicesRefetch } = useInteractiveElements();
 
   // Combine both portalLocation and ruinsLocation into one array of key-value pairs
   const [combinedData, setCombinedData] = useState([]);
 
+    
+    // useEffect(() => {
+    //   if (currentSurroundings?.id) {
+    //     console.log('item choices fetching via useEffect in CurrentSurroundingsView!');
+    //     triggerItemChoicesRefetch();
+    //   }
+    // }, [currentSurroundings]);
+
   useEffect(() => {
     const getCombinedData = () => {
-      if (!itemChoices || !currentSurroundings || currentSurroundings.id === null) return [];
-
-      //console.log(itemChoices);
+      if (!itemChoices) return [];
+ 
       
       return Object.entries(itemChoices)
         .filter(([_, value]) => value) // Filter out empty values
