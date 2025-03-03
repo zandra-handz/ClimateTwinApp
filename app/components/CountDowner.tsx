@@ -1,21 +1,18 @@
-import { View, TextInput, AppState } from "react-native";
-import React, { useEffect, useState, useRef } from "react";
+import { View, TextInput } from "react-native";
+import React, { useEffect, useRef } from "react";
 import { useGlobalStyles } from "../context/GlobalStylesContext";
 import { useSurroundings } from "../context/CurrentSurroundingsContext";
 import { useAppMessage } from "../context/AppMessageContext"; 
 import Animated, { useSharedValue, useAnimatedProps } from "react-native-reanimated";
 import { useSurroundingsWS } from "../context/SurroundingsWSContext";
-import useDateTimeFunctions from '../hooks/useDateTimeFunctions';
-import { useAppState } from "../context/AppStateContext";
-import { useActiveSearch } from "../context/ActiveSearchContext";  
+import useDateTimeFunctions from '../hooks/useDateTimeFunctions'; 
 
 const CountDowner = () => {
-  const { sendMessage, lastMessage, lastLocationName } = useSurroundingsWS();
+  const { lastLocationName } = useSurroundingsWS();
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
   const { currentSurroundings, locationId } = useSurroundings(); 
   const { showAppMessage} = useAppMessage();
-  const { getTimeDifferenceInSeconds } = useDateTimeFunctions();
-  const { appStateVisible } = useAppState(); 
+  const { getTimeDifferenceInSeconds } = useDateTimeFunctions(); 
 
   const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
   const timeSharedValue = useSharedValue(0);

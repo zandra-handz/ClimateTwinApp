@@ -2,12 +2,13 @@ import { View, Text } from "react-native";
 import React from "react";
 import { useGlobalStyles } from "../context/GlobalStylesContext";  
 import PortalPixellySvg from "../assets/svgs/portal-pixelly.svg";
-import { useSurroundings } from "../context/CurrentSurroundingsContext";
-import GoButton from "./GoButton";
+import { useSurroundings } from "../context/CurrentSurroundingsContext"; 
+import GoHomeButton from './GoHomeButton';
 
-const PortalBanner = ({ address }) => { 
+// Only meant to be visible when currently exploring a location; no longer has go button
+const PortalBanner = () => { 
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
-  const { portalSurroundings, homeSurroundings } = useSurroundings();
+  const { locationId, isExploring, portalSurroundings, homeSurroundings } = useSurroundings();
 
  
   return (
@@ -68,7 +69,8 @@ const PortalBanner = ({ address }) => {
         </View>
       )} 
       
-      <GoButton address={address}/>
+      {/* <GoButton address={address}/> */}
+      <GoHomeButton />
     </View>
   );
 };

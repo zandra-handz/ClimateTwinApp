@@ -9,17 +9,27 @@ export default () => {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <Drawer drawerContent={(props) => <DrawerCustomizer {...props} />}>
+      <Drawer.Screen
+          name="(homedashboard)"
+          options={{
+            header: () => <ExploreTabsHeader />,
+            drawerLabel: "Home",
+            title: "home",
+          }}
+        /> 
+
         <Drawer.Screen
           name="(exploretabs)"
           options={{
             header: () => <ExploreTabsHeader />,
             drawerLabel: "Explore",
-            title: "home",
+            title: "explore",
           }}
-        />
+        />  
+
 
         <Drawer.Screen
-          name="friends"
+          name="(friends)"
           options={{ header: () => null, drawerLabel: "Friends" }}
         />
         <Drawer.Screen
@@ -31,7 +41,7 @@ export default () => {
           options={{ header: () => null, drawerLabel: "Treasures" }}
         />
         <Drawer.Screen
-          name="history"
+          name="(history)"
           options={{ header: () => null, drawerLabel: "History" }}
         />
       </Drawer>

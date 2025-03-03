@@ -8,7 +8,7 @@ import React, {
 } from "react";
 import { useUser } from "./UserContext";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { go, getRemainingGoes } from "../apicalls";
+import { go, getRemainingGoes, expireSurroundings } from "../apicalls";
 
 interface ActiveSearch {
   id: string;
@@ -132,6 +132,40 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
     },
   });
 
+
+
+  
+  const handleGoHome = () => { 
+      sendGoHomeMutation.mutate();
+   
+  };
+
+  const sendGoHomeMutation = useMutation({
+    mutationFn: expireSurroundings,
+    onMutate: () => { 
+      console.log('go home mutation activated');
+    },
+    onError: (error) => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        sendGoHomeMutation.reset();
+      }, 2000);
+    },
+    onSuccess: (data) => { 
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        sendGoHomeMutation.reset();
+      }, 2000);
+    },
+  });
+
   const gettingExploreLocations = () => {
     setExploreLocationsAreReady(false);
   };
@@ -179,6 +213,7 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
         handleLocationUpdateWSIsClosed,
         manualSurroundingsRefresh,
         remainingGoes,
+        handleGoHome,
       }}
     >
       {children}

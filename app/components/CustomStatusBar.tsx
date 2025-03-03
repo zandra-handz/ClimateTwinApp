@@ -34,16 +34,14 @@ const CustomStatusBar = () => {
  
    
   return (
-    <>   
-    {appSettings && (
+    <>    
        
     <StatusBar
       style={color} 
       translucent={true}
-    //   backgroundColor="pink" 
+     backgroundColor="transparent"
     /> 
-     
-)}
+      
     </>
   );
 };

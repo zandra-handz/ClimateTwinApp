@@ -9,7 +9,7 @@ import React, {
 import { useUser } from "./UserContext";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { getExploreLocation, pickNewSurroundings } from "../apicalls";
-
+import useExploreRoute from "../hooks/useExploreRoute";
 import { useActiveSearch } from "./ActiveSearchContext";
  
 interface CurrentSurroundings {
@@ -111,6 +111,7 @@ interface CurrentSurroundingsProviderProps {
 export const CurrentSurroundingsProvider: React.FC<
   CurrentSurroundingsProviderProps
 > = ({ children }) => {
+  
   const { user, isAuthenticated, isInitializing } = useUser();
   const queryClient = useQueryClient();
   const timeoutRef = useRef(null);
@@ -124,6 +125,8 @@ export const CurrentSurroundingsProvider: React.FC<
     useState<HomeSurroundings | null>(null);
 
     const [locationId, setLocationId] = useState<number | null>(null);
+    const [isExploring, setIsExploring] = useState<boolean>(false);
+    const [isInitializingLocation, setIsInitializingLocation] = useState<boolean>(true);
 
   const {
     data: currentSurroundings,
@@ -134,6 +137,7 @@ export const CurrentSurroundingsProvider: React.FC<
     queryKey: ["currentSurroundings"],
     queryFn: getExploreLocation,
     enabled: !!isAuthenticated && !isInitializing,
+    staleTime: 0,
     onError: (err) => {
       console.error("Error fetching location data:", err);
     },
@@ -145,13 +149,19 @@ export const CurrentSurroundingsProvider: React.FC<
 
 
 useEffect(() => {
-  if (!isAuthenticated && !isInitializing) {
+  if (!isAuthenticated) {
     queryClient.removeQueries(["currentSurroundings"]);
     setPortalSurroundings(null);
     setRuinsSurroundings(null);
     setHomeSurroundings(null);
+    setLocationId(null);
+    setIsExploring(false);
   }
-}, [isInitializing]);
+}, [isAuthenticated]);
+
+
+useExploreRoute(isExploring, isInitializingLocation, isAuthenticated);
+
 
   useEffect(() => {
     if (manualSurroundingsRefresh) { 
@@ -162,6 +172,7 @@ useEffect(() => {
   }, [manualSurroundingsRefresh]);
 
   useEffect(() => {
+    setIsInitializingLocation(true);
     let portalSurroundingsData: PortalSurroundings | null = null;
     let ruinsSurroundingsData: RuinsSurroundings | null = null;
     let homeSurroundingsData: HomeSurroundings | null = null;
@@ -171,12 +182,14 @@ useEffect(() => {
       setPortalSurroundings(null);
       setRuinsSurroundings(null);
       setHomeSurroundings(null);
+      setLocationId(null);
+      setIsExploring(false);
     }
 
     if (currentSurroundings) { 
       const { twin_location, explore_location } = currentSurroundings;
 
-      if (twin_location) {
+      if (twin_location && twin_location?.id) {
         const { home_location } = twin_location;
         portalSurroundingsData = {
           name: twin_location.name || "N/A",
@@ -239,8 +252,9 @@ useEffect(() => {
           streetViewImage: "",
         };
         setLocationId(twin_location.id);
+        setIsExploring(!!twin_location.id);
 
-      } else if (explore_location) {
+      } else if (explore_location && explore_location?.id) {
         const { origin_location } = explore_location;
         const { home_location } = origin_location;
 
@@ -306,8 +320,11 @@ useEffect(() => {
           windHarmony: explore_location.wind_harmony || false,
           streetViewImage: explore_location.street_view_image || "",
         };
+
+        setLocationId(explore_location.id);
+        setIsExploring(!!explore_location.id);
       }
-      setLocationId(explore_location.id);
+     
     } else {
       // Reset both data objects if currentSurroundings is null or undefined
       portalSurroundingsData = {
@@ -372,11 +389,13 @@ useEffect(() => {
         streetViewImage: "",
       };
       setLocationId(null);
+      setIsExploring(false);
     }
 
     setPortalSurroundings(portalSurroundingsData);
     setRuinsSurroundings(ruinsSurroundingsData);
     setHomeSurroundings(homeSurroundingsData); 
+    setIsInitializingLocation(false);
   }, [currentSurroundings]); 
 
   const handlePickNewSurroundings = async (data) => { 
@@ -411,7 +430,8 @@ useEffect(() => {
 
   const triggerRefetch = () => {
     console.log("Triggering explore locationrefetch");
-    queryClient.invalidateQueries({ queryKey: ["currentSurroundings"] });
+    //queryClient.invalidateQueries({ queryKey: ["currentSurroundings"] });
+   queryClient.removeQueries(["currentSurroundings"]);
     queryClient.refetchQueries({ queryKey: ["currentSurroundings"] }); // Force refetch
   };
 
@@ -420,12 +440,14 @@ useEffect(() => {
       value={{
         currentSurroundings,
         locationId,
+        isExploring,
         portalSurroundings,
         homeSurroundings,
         ruinsSurroundings,
         handlePickNewSurroundings,
         pickNewSurroundingsMutation,
         triggerRefetch,
+        isInitializingLocation,
       }}
     >
       {children}

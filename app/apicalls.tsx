@@ -772,4 +772,23 @@ export const pickNewSurroundings = async (locationId) => {
         throw error;
     }
 };
+
+
+
+
+export const expireSurroundings = async () => {
+    
+    try {   const response = await axios.patch('/climatevisitor/go-home/'); 
+        console.log('API PATCH Call expireSurroundings');  
+        console.log(response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /climatevisitor/explore/v2/', error.response.data);
+        } else {
+            console.error('Error message for /climatevisitor/explore/v2/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
  

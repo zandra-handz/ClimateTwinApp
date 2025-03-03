@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { DrawerToggleButton } from "@react-navigation/drawer";
-import { StatusBar } from "expo-status-bar";
+import { DrawerToggleButton } from "@react-navigation/drawer"; 
 
-import { useGlobalStyles } from "../context/GlobalStylesContext";
-import { useColorScheme } from "react-native";
-import { useUser } from "../context/UserContext";
-import CustomStatusBar from "./CustomStatusBar";
-import { useActiveSearch } from "../context/ActiveSearchContext";
+import { useGlobalStyles } from "../context/GlobalStylesContext"; 
 import { useSurroundings } from "../context/CurrentSurroundingsContext";
 import { useSurroundingsWS } from "../context/SurroundingsWSContext";
 
@@ -71,7 +66,7 @@ const ExploreTabsHeader = () => {
 
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <>
-            {locationId && !currentSurroundings.expired && lastLocationName && (
+            {locationId && currentSurroundings && !currentSurroundings.expired && lastLocationName && (
               
               <CountDowner />
               

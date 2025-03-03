@@ -6,8 +6,7 @@ import useHomeLocation from "../../hooks/useHomeLocation";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import { useUser } from "../../context/UserContext";
 import { useSurroundings } from "../../context/CurrentSurroundingsContext"; 
-import WebSocketSearchingLocations from "../../components/WebSocketSearchingLocations";
-
+ 
 import CurrentSurroundingsView from "@/app/components/CurrentSurroundingsView"; 
  
 import PortalSurroundingsView from "@/app/components/PortalSurroundingsView";
@@ -20,7 +19,7 @@ import NotificationNotifier from "@/app/components/NotificationNotifier";
 import PortalBanner from "@/app/components/PortalBanner";
  
 
-const home = () => {
+const index = () => {
   useGeolocationWatcher();
   const { isAuthenticated } = useUser(); 
 
@@ -36,13 +35,13 @@ const home = () => {
 
  
   useEffect(() => {
-    if (ruinsSurroundings?.id) {
+    if (ruinsSurroundings && ruinsSurroundings?.id) {
       setSurroundingsViews([
         { id: "1", component: <PortalSurroundingsView height={ITEM_HEIGHT} /> },
         { id: "2", component: <RuinsSurroundingsView height={ITEM_HEIGHT} /> },
         { id: "3", component: <CurrentSurroundingsView height={ITEM_HEIGHT} /> }
       ]);
-    } else {
+    } else if (portalSurroundings && portalSurroundings?.id) {
       setSurroundingsViews([
         { id: "1", component: <PortalSurroundingsView height={ITEM_HEIGHT} /> },
         { id: "3", component: <CurrentSurroundingsView height={ITEM_HEIGHT} /> }
@@ -79,8 +78,7 @@ const home = () => {
   
 
   return (
-    <>  
-      {isAuthenticated && (
+    <>   
        
         <View
           style={[
@@ -90,9 +88,9 @@ const home = () => {
         >
            <NotificationNotifier />
           <View style={appContainerStyles.innerFlexStartContainer}>
-            <PortalBanner address={homeLocation?.address || "Manchester, NH"} />
+            <PortalBanner  />
 
-            {portalSurroundings && !searchIsActive && surroundingsViews && (
+            {portalSurroundings?.id && surroundingsViews && (
               
               <Animated.FlatList
                 ref={flatListRef}
@@ -115,7 +113,7 @@ const home = () => {
               />
             )} 
 
-            {isAuthenticated && searchIsActive && (
+            {/* {searchIsActive && (
               <View
                 style={[
                   appContainerStyles.defaultScreenElementContainer,
@@ -130,12 +128,11 @@ const home = () => {
                   reconnectOnUserButtonPress={searchIsActive}
                 />
               </View>
-            )}
+            )} */}
           </View>
-        </View>
-      )}
+        </View> 
     </>
   );
 };
 
-export default home;
+export default index;
