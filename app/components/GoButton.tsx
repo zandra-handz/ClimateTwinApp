@@ -9,7 +9,7 @@ const GoButton = ({ address }) => {
   const { portalSurroundings } = useSurroundings();
 
   const handleButtonPress = () => {
-    handleGo(address);
+    handleGo(address); //this will set search to active in the onMutate function
   };
   return (
     <>

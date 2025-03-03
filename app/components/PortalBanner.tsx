@@ -13,8 +13,9 @@ const PortalBanner = () => {
  
   return (
     <View
-      style={portalSurroundings?.id != null ? appContainerStyles.portalBannerContainer : appContainerStyles.emptyBannerContainer} > 
-      {portalSurroundings?.id != null && (
+      style={portalSurroundings?.id !== null ? appContainerStyles.portalBannerContainer : appContainerStyles.emptyBannerContainer} > 
+      {portalSurroundings?.id !== null && locationId !== null && (
+        <>
         <View style={appContainerStyles.portalTempsAndSvgContainer}>
           <View style={appContainerStyles.startingPointTempContainer}>
             {homeSurroundings?.temperature && (
@@ -66,11 +67,15 @@ const PortalBanner = () => {
               </Text>
             )}
           </View>  
-        </View>
+          
+   
+        </View> 
+        <GoHomeButton />
+        </>
       )} 
       
       {/* <GoButton address={address}/> */}
-      <GoHomeButton />
+      {/* <GoHomeButton /> */}
     </View>
   );
 };

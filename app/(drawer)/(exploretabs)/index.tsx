@@ -2,9 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { Animated, View  } from "react-native";
 import { useFocusEffect } from "expo-router";
 import { useGeolocationWatcher } from "../../hooks/useCurrentLocationWatcher";
-import useHomeLocation from "../../hooks/useHomeLocation";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
-import { useUser } from "../../context/UserContext";
+
+import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
 import { useSurroundings } from "../../context/CurrentSurroundingsContext"; 
  
 import CurrentSurroundingsView from "@/app/components/CurrentSurroundingsView"; 
@@ -12,22 +11,17 @@ import CurrentSurroundingsView from "@/app/components/CurrentSurroundingsView";
 import PortalSurroundingsView from "@/app/components/PortalSurroundingsView";
 import RuinsSurroundingsView from "@/app/components/RuinsSurroundingsView";
  
-
-import { useActiveSearch } from "../../context/ActiveSearchContext";
+ 
 import NotificationNotifier from "@/app/components/NotificationNotifier";
 
 import PortalBanner from "@/app/components/PortalBanner";
  
 
 const index = () => {
-  useGeolocationWatcher();
-  const { isAuthenticated } = useUser(); 
-
-  const { portalSurroundings, ruinsSurroundings } =
+  useGeolocationWatcher(); 
+  const { portalSurroundings, ruinsSurroundings, locationId, isInitializingLocation } =
     useSurroundings();
-  const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { homeLocation } = useHomeLocation(); 
-  const { searchIsActive } = useActiveSearch(); 
+  const { themeStyles, appContainerStyles } = useGlobalStyles(); 
   const [surroundingsViews, setSurroundingsViews ] = useState({});
 
   const ITEM_HEIGHT = 700;
@@ -35,7 +29,7 @@ const index = () => {
 
  
   useEffect(() => {
-    if (ruinsSurroundings && ruinsSurroundings?.id) {
+    if (ruinsSurroundings?.id) {
       setSurroundingsViews([
         { id: "1", component: <PortalSurroundingsView height={ITEM_HEIGHT} /> },
         { id: "2", component: <RuinsSurroundingsView height={ITEM_HEIGHT} /> },
@@ -88,9 +82,11 @@ const index = () => {
         >
            <NotificationNotifier />
           <View style={appContainerStyles.innerFlexStartContainer}>
+            {locationId && !isInitializingLocation && portalSurroundings?.id && surroundingsViews && (
+              <>
             <PortalBanner  />
-
-            {portalSurroundings?.id && surroundingsViews && (
+{/* 
+            {portalSurroundings?.id && surroundingsViews && ( */}
               
               <Animated.FlatList
                 ref={flatListRef}
@@ -111,7 +107,7 @@ const index = () => {
                 decelerationRate="fast"
                 keyboardDismissMode="on-drag" 
               />
-            )} 
+            {/* )}  */}
 
             {/* {searchIsActive && (
               <View
@@ -129,6 +125,9 @@ const index = () => {
                 />
               </View>
             )} */}
+             </>
+             
+            )}
           </View>
         </View> 
     </>

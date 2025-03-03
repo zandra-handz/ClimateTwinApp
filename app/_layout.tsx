@@ -51,10 +51,10 @@ export default function Layout() {
                 <AppMessage />
                 <CustomStatusBar />
                 <ActiveSearchProvider>
+                <SurroundingsWSProvider>
                   <CurrentSurroundingsProvider>
                     <NearbyLocationsProvider>
                       <InteractiveElementsProvider>
-                        <SurroundingsWSProvider>
                           <Stack screenOptions={{ headerShown: false }}>
                             <Stack.Screen
                               name="(drawer)"
@@ -63,8 +63,7 @@ export default function Layout() {
                                 gestureEnabled: false,
                               }}
                             />
-
-                            <>
+ 
                               <Stack.Screen
                                 name="index"
                                 options={{
@@ -86,13 +85,13 @@ export default function Layout() {
                                   },
                                   gestureEnabled: false,
                                 }}
-                              />
-                            </>
+                              /> 
                           </Stack>
-                        </SurroundingsWSProvider>
+                       
                       </InteractiveElementsProvider>
                     </NearbyLocationsProvider>
                   </CurrentSurroundingsProvider>
+                  </SurroundingsWSProvider>
                 </ActiveSearchProvider>
               </GlobalStylesProvider>
             </AppStateProvider>

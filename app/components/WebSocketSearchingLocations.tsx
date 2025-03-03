@@ -71,14 +71,14 @@ const useWebSocket = ({
     }, [])
   );
 
-  useEffect(() => {
-    if (!reconnectOnUserButtonPress || !isAuthenticated) {
-      return;
-    }
-    fetchToken();
-    setTriggerReconnectAfterFetch(false);
-    setTriggerReconnectAfterFetch(true);
-  }, [reconnectOnUserButtonPress]);
+  // useEffect(() => {
+  //   if (!reconnectOnUserButtonPress || !isAuthenticated) {
+  //     return;
+  //   }
+  //   fetchToken();
+  //   setTriggerReconnectAfterFetch(false);
+  //   setTriggerReconnectAfterFetch(true);
+  // }, [reconnectOnUserButtonPress]);
 
   const fetchToken = async () => {
     

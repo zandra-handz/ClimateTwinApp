@@ -33,13 +33,13 @@ const nearby = () => {
   // }, []);
 
 
-  useEffect(() => {
-    if (pickNewSurroundingsMutation.isSuccess) {
-      router.push("(drawer)/(exploretabs)");
+  // useEffect(() => {
+  //   if (pickNewSurroundingsMutation.isSuccess) {
+  //     router.push("(drawer)/(exploretabs)");
 
-    }
+  //   }
 
-  }, [pickNewSurroundingsMutation.isSuccess]);
+  // }, [pickNewSurroundingsMutation.isSuccess]);
 
   //wtf
 
@@ -50,22 +50,9 @@ const nearby = () => {
   // originally, twin location couldn't be an explore location (?)
   //this will move to the surroundings context so that i can control behaviors based on mutations
   const handleExploreLocation = async (data) => {
-    //console.log('handle explore location pressed!', data);
-
+ 
     await handlePickNewSurroundings(data);
-    // setTimeout(() => {
-    //   router.push("(drawer)/(exploretabs)");
-    // }, 0);
-
-
-    
-
-    //   if (data && data.explore_type) {
-    //     const locationType = data.explore_type === 'discovery_location' ? 'explore_location' : 'twin_location';
-    // //MOVE TO HOOK AND USE A MUTATION TO TRIGGER THE REFRESH
-    //     pickNewSurroundings({ [locationType]: data.id });
-    //     //refreshSurroundingsManually();
-    //   }
+ 
   };
 
  

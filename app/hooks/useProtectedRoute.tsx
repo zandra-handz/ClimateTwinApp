@@ -64,7 +64,7 @@ const useProtectedRoute = (isAuthenticated: boolean, isLoading: boolean) => {
       goToRoot();
     } else if (isAuthenticated && !isOnExploreTabs && (isOnSignIn || isOnRootPage)) {
       // console.log('Protected route redirecting to (main)');
-      router.push("(drawer)/(exploretabs)");
+      router.push("(drawer)");
     }
   }, [isAuthenticated, isLoading, segments, isNavigationReady]);
 };

@@ -4,7 +4,7 @@ import { useGlobalStyles } from "../context/GlobalStylesContext";
 import { useActiveSearch } from "../context/ActiveSearchContext";
 import { useSurroundings } from "../context/CurrentSurroundingsContext";
 const GoHomeButton = ({ address }) => {
-  const { handleGo, handleGoHome, remainingGoes, searchIsActive } = useActiveSearch();
+  const { handleGoHome, remainingGoes, searchIsActive } = useActiveSearch();
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const { isExploring, portalSurroundings } = useSurroundings();
 
@@ -28,7 +28,7 @@ const GoHomeButton = ({ address }) => {
               <Text
                 style={[themeStyles.primaryText, appFontStyles.goButtonText]}
               >
-                GO
+                go home
               </Text>
               {remainingGoes != "No limit" && (
                 <Text

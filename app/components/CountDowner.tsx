@@ -10,7 +10,7 @@ import useDateTimeFunctions from '../hooks/useDateTimeFunctions';
 const CountDowner = () => {
   const { lastLocationName } = useSurroundingsWS();
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
-  const { currentSurroundings, locationId } = useSurroundings(); 
+  const { lastAccessed, isInitializingLocation } = useSurroundings(); 
   const { showAppMessage} = useAppMessage();
   const { getTimeDifferenceInSeconds } = useDateTimeFunctions(); 
 
@@ -35,16 +35,16 @@ const CountDowner = () => {
  
 
   useEffect(() => {  
-    if (lastLocationName) { 
+    if (lastAccessed) { 
       console.log('resetting countdown'); 
       resetCountdown();
     }
-  }, [lastLocationName, currentSurroundings?.explore_location, currentSurroundings?.twin_location]);  
+  }, [lastAccessed]);  
 
   const resetCountdown = () => { 
-    if (currentSurroundings && !currentSurroundings.expired && locationId) {
+    if (lastAccessed) {
  
-      const timeDifference = getTimeDifferenceInSeconds(currentSurroundings.last_accessed);
+      const timeDifference = getTimeDifferenceInSeconds(lastAccessed);
       timeSharedValue.value = timeDifference > 0 ? timeDifference : 0;
       // showAppMessage(true, null, `${currentSurroundings.last_accessed} ${timeDifference} ${timeSharedValue.value}`);
       // console.log(`${currentSurroundings.last_accessed} ${timeDifference} ${timeSharedValue.value}`);

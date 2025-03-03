@@ -12,8 +12,7 @@ import { go, getRemainingGoes, expireSurroundings } from "../apicalls";
 
 interface ActiveSearch {
   id: string;
-  name: string;
-  // Add other fields as needed
+  name: string; 
 }
 
 interface ActiveSearchContextType {
@@ -108,7 +107,7 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
       }, 2000);
     },
     onSuccess: (data) => {
-      refetchRemainingGoes();
+     // refetchRemainingGoes();  if the search errors and no location is created, this will be the same, so maybe don't bother fetching it here
 
       const dataWithTimestamp = {
         ...data,
@@ -177,7 +176,7 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
   // search status is updated by current location websocket (component WebSocketCurrentLocation)
   const closeSearchExternally = () => {
     setSearchIsActive(false);
-    refetchRemainingGoes();
+   refetchRemainingGoes();
   };
 
   const refreshSurroundingsManually = () => {

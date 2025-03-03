@@ -5,19 +5,17 @@ import { useActiveSearch } from "../context/ActiveSearchContext";
 import { useSurroundingsWS } from "../context/SurroundingsWSContext";
 import { useAppMessage } from "../context/AppMessageContext";
 import { useNearbyLocations } from "../context/NearbyLocationsContext";
-import { useInteractiveElements } from "../context/InteractiveElementsContext";
-
-import { useUser } from "../context/UserContext";
+import { useSurroundings } from "../context/CurrentSurroundingsContext";
 
 const WebSocketCurrentLocation: React.FC = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles(); 
   const [update, setUpdate] = useState<string>(' ');
   const { searchIsActive, locationUpdateWSIsOpen, closeSearchExternally, refreshSurroundingsManually, gettingExploreLocations, foundExploreLocations } = useActiveSearch();
   const { showAppMessage} = useAppMessage();
-  const { triggerRefetch } = useNearbyLocations();
-  const { triggerItemChoicesRefetch} = useInteractiveElements();
+  const { triggerRefetch } = useNearbyLocations(); 
+  const { locationId } = useSurroundings();
   
-  const { sendMessage, lastMessage, lastNotification, lastLocationName } = useSurroundingsWS();
+  const { sendMessage, lastMessage, lastLocationName } = useSurroundingsWS();
  
 
    
@@ -28,26 +26,29 @@ const WebSocketCurrentLocation: React.FC = () => {
           closeSearchExternally();
         }
         setUpdate("You are home");
+        if (locationId) { //if user did just return home from a location versus if app was just opened
+        
         refreshSurroundingsManually();
         
-        triggerRefetch(); //do i need to reset the items?
+      }
+         
         showAppMessage(true, null, 'You have returned home');
       }
      if (lastMessage === 'Searching for ruins!') {
-        closeSearchExternally(); 
+        
         gettingExploreLocations();
         showAppMessage(true, null, 'Searching for ruins!');
-      } else if (lastMessage === 'No ruins found') {
-        if (searchIsActive) {
-          closeSearchExternally();
-        }
-        showAppMessage(true, null, 'No ruins found nearby');
+      // }  else if (lastMessage === 'No ruins found') {
+      //   if (searchIsActive) {
+      //     closeSearchExternally();
+      //   }
+      //   showAppMessage(true, null, 'No ruins found nearby');
       } else if (lastMessage === 'Search complete!') {
         if (searchIsActive) {
           closeSearchExternally();
         }
         foundExploreLocations();
-        triggerRefetch();
+        triggerRefetch(); // nearby locations
         showAppMessage(true, null, 'Search complete!');
       } else if (lastMessage === 'Clear') {
         if (searchIsActive) {
@@ -76,15 +77,13 @@ const WebSocketCurrentLocation: React.FC = () => {
     console.log('last location name: ', lastLocationName);
     if (!lastLocationName) {
       setUpdate("Error, no location name!"); // If no location name, reset the state
-    } else if (lastLocationName === "null") {
+    } else if (lastLocationName === "null" || null) {
       setUpdate("You are home"); // If lastLocationName is the string "null"
-    } else if (lastLocationName !== update) {
-     // console.log(`update:`, update);
+    } else if (lastLocationName !== update) { 
       if (update === ' ') {
         setUpdate(lastLocationName); 
       } else {
-        refreshSurroundingsManually(); 
-       // triggerItemChoicesRefetch();  
+       // refreshSurroundingsManually(); 
         console.log('setting last location name');
         setUpdate(lastLocationName);  
       }

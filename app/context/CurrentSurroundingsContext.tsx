@@ -8,9 +8,11 @@ import React, {
 } from "react";
 import { useUser } from "./UserContext";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { getExploreLocation, pickNewSurroundings } from "../apicalls";
+import { useRouter } from "expo-router";
+import { getExploreLocation, pickNewSurroundings, getRemainingGoes } from "../apicalls";
 import useExploreRoute from "../hooks/useExploreRoute";
-import { useActiveSearch } from "./ActiveSearchContext";
+import { useActiveSearch } from "./ActiveSearchContext"; 
+import { useSurroundingsWS } from "./SurroundingsWSContext";
  
 interface CurrentSurroundings {
   id: number;
@@ -114,6 +116,7 @@ export const CurrentSurroundingsProvider: React.FC<
   
   const { user, isAuthenticated, isInitializing } = useUser();
   const queryClient = useQueryClient();
+  const { lastLocationName } = useSurroundingsWS();
   const timeoutRef = useRef(null);
   const { manualSurroundingsRefresh, resetRefreshSurroundingsManually } =
     useActiveSearch();
@@ -125,19 +128,27 @@ export const CurrentSurroundingsProvider: React.FC<
     useState<HomeSurroundings | null>(null);
 
     const [locationId, setLocationId] = useState<number | null>(null);
+    
+    const [lastAccessed, setLastAccessed] = useState<number | null>(null);
     const [isExploring, setIsExploring] = useState<boolean>(false);
+    const [wasPrevExploring, setWasPrevExploring] = useState<boolean>(false);
     const [isInitializingLocation, setIsInitializingLocation] = useState<boolean>(true);
+
+    const router = useRouter();
+
+ 
 
   const {
     data: currentSurroundings,
     isLoading,
+    isFetching,
     isError,
     isSuccess,
   } = useQuery<CurrentSurroundings | null>({
-    queryKey: ["currentSurroundings"],
+    queryKey: ["currentSurroundings", lastLocationName],
     queryFn: getExploreLocation,
     enabled: !!isAuthenticated && !isInitializing,
-    staleTime: 0,
+   // staleTime: 0,
     onError: (err) => {
       console.error("Error fetching location data:", err);
     },
@@ -146,16 +157,27 @@ export const CurrentSurroundingsProvider: React.FC<
       }
     },
   });
-
+  useEffect(() => {
+    if (isFetching) {
+      if (!setIsInitializingLocation) {
+      
+      setIsInitializingLocation(true);
+      
+    }
+      console.log('SETTING INITIALIZING LOCATINOOOO');
+    }
+  }, [isFetching]);
 
 useEffect(() => {
   if (!isAuthenticated) {
-    queryClient.removeQueries(["currentSurroundings"]);
+    queryClient.removeQueries(["currentSurroundings", lastLocationName]);
     setPortalSurroundings(null);
     setRuinsSurroundings(null);
     setHomeSurroundings(null);
     setLocationId(null);
+    setLastAccessed(null);
     setIsExploring(false);
+    setWasPrevExploring(false);
   }
 }, [isAuthenticated]);
 
@@ -163,30 +185,41 @@ useEffect(() => {
 useExploreRoute(isExploring, isInitializingLocation, isAuthenticated);
 
 
-  useEffect(() => {
-    if (manualSurroundingsRefresh) { 
-      console.log('manualSurroundingsRefresh triggered currentSurroundings to refetch');
-      triggerRefetch();
+useEffect(() => {
+  console.log('surroundings reset use effect triggered');
+  if (manualSurroundingsRefresh) { 
+    console.log('manualSurroundingsRefresh triggered currentSurroundings to refetch');
+    triggerSurroundingsRefetch();
+
+    const timeout = setTimeout(() => {
       resetRefreshSurroundingsManually();
-    }
-  }, [manualSurroundingsRefresh]);
+    }, 500); // Adjust the delay as needed
+
+    return () => clearTimeout(timeout); // Cleanup in case of re-renders
+  }
+}, [manualSurroundingsRefresh]);
+
 
   useEffect(() => {
-    setIsInitializingLocation(true);
+    console.log('main initializer use effect in surroundings triggered');
+  
+    //setIsInitializingLocation(true); moved this to a useEffect that tracks isFetching
     let portalSurroundingsData: PortalSurroundings | null = null;
     let ruinsSurroundingsData: RuinsSurroundings | null = null;
     let homeSurroundingsData: HomeSurroundings | null = null;
 
     // I don't think this is working
-    if (currentSurroundings?.expired === true) {
-      setPortalSurroundings(null);
-      setRuinsSurroundings(null);
-      setHomeSurroundings(null);
-      setLocationId(null);
-      setIsExploring(false);
-    }
+    // if (currentSurroundings?.expired === true) {
+    //   setPortalSurroundings(null);
+    //   setRuinsSurroundings(null);
+    //   setHomeSurroundings(null);
+    //   setLocationId(null);
+    //   setLastAccessed(null);
+    //   setIsExploring(false);
+    // }
 
-    if (currentSurroundings) { 
+    if (currentSurroundings && currentSurroundings?.last_accessed && !currentSurroundings.is_expired) { 
+      setLastAccessed(currentSurroundings.last_accessed);
       const { twin_location, explore_location } = currentSurroundings;
 
       if (twin_location && twin_location?.id) {
@@ -389,7 +422,15 @@ useExploreRoute(isExploring, isInitializingLocation, isAuthenticated);
         streetViewImage: "",
       };
       setLocationId(null);
-      setIsExploring(false);
+      setLastAccessed(null);
+      console.log('RESETTING IS EXPLORING TO FALSE');
+      if (!wasPrevExploring) {
+        setIsExploring(false);
+      } else {
+        setWasPrevExploring(false); //reset; will get toggled again if picking new location. this is here bc frontend pings endpoint faster than backend is ready with new loc, I THINK
+      }
+     
+      console.log('no surroundings found in main initializer use effect in surroundings');
     }
 
     setPortalSurroundings(portalSurroundingsData);
@@ -399,11 +440,14 @@ useExploreRoute(isExploring, isInitializingLocation, isAuthenticated);
   }, [currentSurroundings]); 
 
   const handlePickNewSurroundings = async (data) => { 
+
     let locationType;
     if (data && data.explore_type) {
       try {
         locationType = data.explore_type === 'discovery_location' ? 'explore_location' : 'twin_location';
         await pickNewSurroundingsMutation.mutateAsync({[locationType]: data.id });
+        //setIsInitializingLocation(true);
+       // setLastAccessed(null);
       } catch (error) {
         console.error("Error updating location:", error);
       }
@@ -412,7 +456,18 @@ useExploreRoute(isExploring, isInitializingLocation, isAuthenticated);
 
   const pickNewSurroundingsMutation = useMutation({
     mutationFn: (locationData) => pickNewSurroundings(locationData),
+    onMutate: () => {
+      setWasPrevExploring(true);
+      setIsInitializingLocation(true); 
+      setLocationId(null);
+      setLastAccessed(null);
+
+    },
     onSuccess: (data) => {
+      // setLocationId(null);
+      // setLastAccessed(null);
+      
+      router.replace("(drawer)/(exploretabs)");
      // triggerRefetch(); //active state + websocket
     },
     onError: (error) => {
@@ -428,12 +483,28 @@ useExploreRoute(isExploring, isInitializingLocation, isAuthenticated);
     },
   });
 
-  const triggerRefetch = () => {
+  const triggerSurroundingsRefetch = () => {
     console.log("Triggering explore locationrefetch");
-    //queryClient.invalidateQueries({ queryKey: ["currentSurroundings"] });
-   queryClient.removeQueries(["currentSurroundings"]);
-    queryClient.refetchQueries({ queryKey: ["currentSurroundings"] }); // Force refetch
+    queryClient.invalidateQueries({ queryKey: ["currentSurroundings", lastLocationName] });
+  // queryClient.removeQueries(["currentSurroundings"]);
+    queryClient.refetchQueries({ queryKey: ["currentSurroundings", lastLocationName] }); // Force refetch
   };
+
+    // const {
+    //   data: remainingGoes,
+      
+    // } = useQuery({
+    //   queryKey: ["remainingGoes"],
+    //   queryFn: () => getRemainingGoes(),
+    //   enabled: !!isAuthenticated && !isInitializing,
+    //   onSuccess: (data) => {},
+    // });
+  
+    // const refetchRemainingGoes = () => {
+    //   queryClient.invalidateQueries({ queryKey: ["remainingGoes"] });
+    //   queryClient.refetchQueries({ queryKey: ["remainingGoes"] });
+    // };
+  
 
   return (
     <CurrentSurroundingsContext.Provider
@@ -444,9 +515,11 @@ useExploreRoute(isExploring, isInitializingLocation, isAuthenticated);
         portalSurroundings,
         homeSurroundings,
         ruinsSurroundings,
+        lastAccessed,
+        //remainingGoes, considerin moving this here, it is in ActiveSearchContext right now
         handlePickNewSurroundings,
         pickNewSurroundingsMutation,
-        triggerRefetch,
+        triggerSurroundingsRefetch,
         isInitializingLocation,
       }}
     >

@@ -27,22 +27,21 @@ const useExploreRoute = (isExploring: boolean, isInitializingLocation: boolean, 
       return;
     }  
     const isOnSignIn = segments[0] === "signin";
-    const isOnExploreTabs = segments[1] === "(exploretabs)";
-    const isOnNearbyTab = segments[1] === "(exploretabs)/nearby";
+    const isOnExploreTabs = segments[1] === "(exploretabs)"; 
     const isOnDashboard = segments[1] === "(homedashboard)";
     console.log(segments[0]);
    
     // console.log(isNavigationReady);
     console.log(segments[1]);
 
-    if (!isExploring && isOnExploreTabs && isAuthenticated) {
+    if (!isExploring && !isInitializingLocation && isOnExploreTabs && isAuthenticated) {
         console.log('going to dashboard!!!'); 
       router.replace("(homedashboard)")
     } else if (isExploring && isOnDashboard && isAuthenticated) { 
       router.replace("(exploretabs)");
     }
-    console.log(`IS EPXLORING?`, isExploring);
-  }, [isInitializingLocation, isExploring, segments, isNavigationReady]);
+    console.log(`IS EXPLORING?`, isExploring);
+  }, [ isInitializingLocation, isExploring, segments, isNavigationReady]);
 };
 
 export default useExploreRoute;
