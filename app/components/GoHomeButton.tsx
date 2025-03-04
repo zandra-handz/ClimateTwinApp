@@ -15,18 +15,58 @@ const GoHomeButton = ({ address }) => {
   return (
     <>
       {remainingGoes && remainingGoes !== "0" ? (
-        !portalSurroundings || portalSurroundings?.id === null ? (
-          <TouchableOpacity
-            onPress={!searchIsActive ? handleButtonPress : () => {}}
-            style={[
-              appContainerStyles.goButtonContainer,
-              themeStyles.primaryOverlayBackground,
-              { borderColor: themeStyles.tabBarHighlightedText.color },
-            ]}
-          >
-            <>
+        // !portalSurroundings || portalSurroundings?.id === null ? (
+        //   <TouchableOpacity
+        //     onPress={!searchIsActive ? handleButtonPress : () => {}}
+        //     style={[
+        //       appContainerStyles.goButtonContainer,
+        //       themeStyles.primaryOverlayBackground,
+        //       { borderColor: themeStyles.tabBarHighlightedText.color },
+        //     ]}
+        //   >
+        //     <>
+        //       <Text
+        //         style={[themeStyles.primaryText, appFontStyles.goButtonText]}
+        //       >
+        //         go home
+        //       </Text>
+        //       {remainingGoes != "No limit" && (
+        //         <Text
+        //           style={[
+        //             themeStyles.primaryText,
+        //             appFontStyles.remainingTripsText,
+        //           ]}
+        //         >
+        //           {`${remainingGoes} left`}
+        //         </Text>
+        //       )}
+        //       {remainingGoes === "No limit" && (
+        //         <Text
+        //           style={[
+        //             themeStyles.primaryText,
+        //             appFontStyles.remainingTripsText,
+        //           ]}
+        //         >
+        //           {`${remainingGoes}`}
+        //         </Text>
+        //       )}
+        //     </>
+        //   </TouchableOpacity>
+        // ) : (
+          <>
+            <TouchableOpacity
+              onPress={!searchIsActive ? handleButtonPress : () => {}}
+              style={[
+                appContainerStyles.goButtonContainer,
+                themeStyles.primaryOverlayBackground,
+                { borderColor: themeStyles.tabBarHighlightedText.color },
+              ]}
+            >
               <Text
-                style={[themeStyles.primaryText, appFontStyles.goButtonText]}
+                style={[
+                  themeStyles.primaryText,
+                  appFontStyles.goHomeButtonText,
+                ]}
               >
                 go home
               </Text>
@@ -50,49 +90,8 @@ const GoHomeButton = ({ address }) => {
                   {`${remainingGoes}`}
                 </Text>
               )}
-            </>
-          </TouchableOpacity>
-        ) : (
-          <>
-            <TouchableOpacity
-              onPress={!searchIsActive ? handleButtonPress : () => {}}
-              style={[
-                appContainerStyles.goButtonContainer,
-                themeStyles.primaryOverlayBackground,
-                { borderColor: themeStyles.tabBarHighlightedText.color },
-              ]}
-            >
-              <Text
-                style={[
-                  themeStyles.primaryText,
-                  appFontStyles.smallGoButtonText,
-                ]}
-              >
-                GO
-              </Text>
-              {remainingGoes != "No limit" && (
-                <Text
-                  style={[
-                    themeStyles.primaryText,
-                    appFontStyles.remainingTripsText,
-                  ]}
-                >
-                  {`${remainingGoes} left`}
-                </Text>
-              )}
-              {remainingGoes === "No limit" && (
-                <Text
-                  style={[
-                    themeStyles.primaryText,
-                    appFontStyles.remainingTripsText,
-                  ]}
-                >
-                  {`${remainingGoes}`}
-                </Text>
-              )}
             </TouchableOpacity>
-          </>
-        )
+          </> 
       ) : (
         <View
           style={[

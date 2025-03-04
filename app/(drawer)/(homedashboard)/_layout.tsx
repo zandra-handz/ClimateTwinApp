@@ -1,5 +1,5 @@
 import { Tabs } from "expo-router";
-import ExploreTabBar from '../../components/ExploreTabBar';
+import ExploreTabBar from '../../components/ExploreTabsComponents/ExploreTabBar';
 import CustomStatusBar from "../../components/CustomStatusBar";
 
 

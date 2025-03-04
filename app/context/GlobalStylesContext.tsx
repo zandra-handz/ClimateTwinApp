@@ -566,14 +566,15 @@ const containerStyles = StyleSheet.create({
   surroundingsCardContainer: { 
     borderRadius: 10,
     padding: 10,
-    paddingTop: 40,
+    paddingTop: 10,
+    paddingLeft: 26,
     marginBottom: 10,
-    width: '30%',  
+    width: '31%',  
     alignItems: 'center',
     justifyContent: 'center', 
     margin: 4,
     flexGrow: 1,
-    height: 70,
+    height: 50,
     overflow: 'hidden',
 
   },
@@ -699,6 +700,10 @@ const fontStyles = StyleSheet.create({
   },
   smallGoButtonText: {
     fontSize: 26,
+
+  },
+  goHomeButtonText: {
+    fontSize: 16,
 
   },
   notifierText: {

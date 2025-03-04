@@ -1,8 +1,8 @@
 import { Drawer } from "expo-router/drawer";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
-import ExploreTabsHeader from "../components/ExploreTabsHeader";
+import ExploreTabsHeader from "../components/HeaderComponents/ExploreTabsHeader";
 
-import DrawerCustomizer from "../components/DrawerCustomizer";
+import DrawerCustomizer from "../components/DrawerNavComponents/DrawerCustomizer";
 
 export default () => {
   // export default function Layout() {

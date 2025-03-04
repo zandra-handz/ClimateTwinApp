@@ -9,7 +9,7 @@ import useFriends from "../../hooks/useFriends";
 
 import { StatusBar } from "expo-status-bar";
 
-import DataList from "../../components/DataList";
+import DataList from "../../components/Scaffolding/DataList";
 import { useFocusEffect } from "expo-router";
   
 const index = () => {

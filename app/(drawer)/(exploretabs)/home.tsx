@@ -6,7 +6,7 @@ import useHomeLocation from "../../hooks/useHomeLocation";
 import { useActiveSearch } from "../../context/ActiveSearchContext";
 import PortalBanner from "@/app/components/PortalBanner";
  
-import HomeSurroundingsView from "@/app/components/HomeSurroundingsView";
+import HomeSurroundingsView from "@/app/components/HomeSurroundingsComponents/HomeSurroundingsView";
  
 import { useSurroundings } from "../../context/CurrentSurroundingsContext";
 

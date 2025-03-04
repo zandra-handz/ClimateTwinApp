@@ -10,7 +10,7 @@ import useHistory from "../../hooks/useHistory";
 
 import { StatusBar } from "expo-status-bar";
 
-import DataList from "../../components/DataList"; 
+import DataList from "../../components/Scaffolding/DataList"; 
   
 const index = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles(); 

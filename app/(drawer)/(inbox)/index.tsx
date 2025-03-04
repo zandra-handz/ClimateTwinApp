@@ -4,8 +4,8 @@ import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import { useAppMessage } from "../../context/AppMessageContext";
 import useInbox from "../../hooks/useInbox"; 
 import { StatusBar } from "expo-status-bar"; 
-import DataList from "../../components/DataList"; 
-import InboxView from "@/app/components/InboxView";
+import DataList from "../../components/Scaffolding/DataList"; 
+import InboxView from "@/app/components/InboxComponents/InboxView";
 import { useRouter } from "expo-router";
 
 import ActionsFooter from "@/app/components/ActionsFooter";

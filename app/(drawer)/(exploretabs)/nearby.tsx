@@ -5,10 +5,10 @@ import {
 import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
 import { useNearbyLocations } from "../../context/NearbyLocationsContext";
  
-import { useRouter } from "expo-router";
-import DataList from "../../components/DataList";
+import { useRouter } from "expo-router"; 
 import { useFocusEffect } from "expo-router"; 
 import { useSurroundings } from "@/app/context/CurrentSurroundingsContext";
+import NearbyView from "../../components/NearbyComponents/NearbyView";
  
 
 const nearby = () => {
@@ -55,22 +55,9 @@ const nearby = () => {
  
   };
 
- 
-  //Moved to component displaying the items:
-  // useEffect(() => {
-  //   if (currentSurroundings) {
-  //     console.log('nearby screen triggered item choices refetch!');
-  //     triggerItemChoicesRefetch();
-  //   }
-  // }, [currentSurroundings]);
+  
 
-  return (
-    <>
-      {/* <StatusBar
-        barStyle={themeStyles.primaryBackground.backgroundColor}
-        translucent={true}
-        backgroundColor="transparent"
-      /> */}
+  return ( 
       <View
         style={[
           appContainerStyles.screenContainer,
@@ -80,14 +67,13 @@ const nearby = () => {
       >
         <View style={appContainerStyles.innerFlexStartContainer}>
           {nearbyLocations && (
-            <DataList
+            <NearbyView
               listData={nearbyLocations}
               onCardButtonPress={handleExploreLocation}
             />
           )}
         </View>
-      </View>
-    </>
+      </View> 
   );
 };
 

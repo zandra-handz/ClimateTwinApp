@@ -5,7 +5,7 @@ import { useGlobalStyles } from "../../context/GlobalStylesContext";
 
 import { useAppMessage } from "../../context/AppMessageContext"; 
 import { StatusBar } from "expo-status-bar"; 
-import DataList from "../../components/DataList"; 
+import DataList from "../../components/Scaffolding/DataList"; 
 
 import ActionsFooter from "@/app/components/ActionsFooter";
 import useTreasures from "@/app/hooks/useTreasures";

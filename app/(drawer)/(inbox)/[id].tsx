@@ -10,7 +10,7 @@ import useTreasures from "@/app/hooks/useTreasures";
 
 import { StatusBar } from "expo-status-bar";
 
-import DataList from "../../components/DataList";
+import DataList from "../../components/Scaffolding/DataList";
 import { useFocusEffect } from "expo-router";
 import { getInboxItem, getMessage } from "../../apicalls";
 

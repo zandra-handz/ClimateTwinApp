@@ -7,8 +7,8 @@ import { useGlobalStyles } from "../../context/GlobalStylesContext";
  
 import useTreasures from "../../hooks/useTreasures";
 import { StatusBar } from "expo-status-bar";
-import DataList from "../../components/DataList"; 
-import TreasuresView from '../../components/TreasuresView';
+import DataList from "../../components/Scaffolding/DataList"; 
+import TreasuresView from '../../components/TreasuresComponents/TreasuresView';
 
 import ActionsFooter from "@/app/components/ActionsFooter";
   

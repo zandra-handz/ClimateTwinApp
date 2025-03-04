@@ -6,10 +6,10 @@ import { useGeolocationWatcher } from "../../hooks/useCurrentLocationWatcher";
 import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
 import { useSurroundings } from "../../context/CurrentSurroundingsContext"; 
  
-import CurrentSurroundingsView from "@/app/components/CurrentSurroundingsView"; 
+import CurrentSurroundingsView from "@/app/components/SurroundingsComponents/CurrentSurroundingsView"; 
  
-import PortalSurroundingsView from "@/app/components/PortalSurroundingsView";
-import RuinsSurroundingsView from "@/app/components/RuinsSurroundingsView";
+import PortalSurroundingsView from "@/app/components/SurroundingsComponents/PortalSurroundingsView";
+import RuinsSurroundingsView from "@/app/components/SurroundingsComponents/RuinsSurroundingsView";
  
  
 import NotificationNotifier from "@/app/components/NotificationNotifier";

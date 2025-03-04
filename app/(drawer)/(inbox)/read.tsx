@@ -11,7 +11,7 @@ import useInbox from "../../hooks/useInbox";
 
 import { StatusBar } from "expo-status-bar";
 
-import DataList from "../../components/DataList";
+import DataList from "../../components/Scaffolding/DataList";
 import { useFocusEffect } from "expo-router";
   
 const read = () => {
