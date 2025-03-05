@@ -15,6 +15,9 @@ import RuinsSurroundingsView from "@/app/components/SurroundingsComponents/Ruins
 import NotificationNotifier from "@/app/components/NotificationNotifier";
 
 import PortalBanner from "@/app/components/PortalBanner";
+
+import Groq from "@/app/components/Groq";
+import useLLMScripts from "@/app/llm/useLLMScripts";
  
 
 const index = () => {
@@ -23,9 +26,16 @@ const index = () => {
     useSurroundings();
   const { themeStyles, appContainerStyles } = useGlobalStyles(); 
   const [surroundingsViews, setSurroundingsViews ] = useState({});
+  const { yourRoleIsFriendlyDiligentHistorian, tellMeRecentHistoryOf } = useLLMScripts();
 
-  const ITEM_HEIGHT = 700;
+  const ITEM_HEIGHT = 968;
   const ITEM_BOTTOM_MARGIN = 0; //Add to value for snapToInterval
+
+  const [ prompt, setPrompt ] = useState(null);
+  const [ role, setRole ] = useState(null);
+
+
+
 
  
   useEffect(() => {
@@ -35,12 +45,20 @@ const index = () => {
         { id: "2", component: <RuinsSurroundingsView height={ITEM_HEIGHT} /> },
         { id: "3", component: <CurrentSurroundingsView height={ITEM_HEIGHT} /> }
       ]);
+      let promptData = (tellMeRecentHistoryOf(ruinsSurroundings?.latitude, ruinsSurroundings?.longitude, ruinsSurroundings?.name))
+      let roleData = yourRoleIsFriendlyDiligentHistorian();
+      setPrompt(promptData);
+      setRole(roleData);
     } else if (portalSurroundings && portalSurroundings?.id) {
       setSurroundingsViews([
         { id: "1", component: <PortalSurroundingsView height={ITEM_HEIGHT} /> },
         { id: "3", component: <CurrentSurroundingsView height={ITEM_HEIGHT} /> }
       ]);
-    }
+      let promptData = (tellMeRecentHistoryOf(portalSurroundings?.latitude, portalSurroundings?.longitude, portalSurroundings?.name))
+      let roleData = yourRoleIsFriendlyDiligentHistorian();
+      setPrompt(promptData);
+      setRole(roleData);
+    } 
   }, [portalSurroundings, ruinsSurroundings]);
   
 
@@ -106,29 +124,19 @@ const index = () => {
                 snapToAlignment="start" 
                 decelerationRate="fast"
                 keyboardDismissMode="on-drag" 
-              />
-            {/* )}  */}
-
-            {/* {searchIsActive && (
-              <View
-                style={[
-                  appContainerStyles.defaultScreenElementContainer,
-                  {
-                    borderColor: themeStyles.primaryText.color,
-                    height: 300,
-                    marginVertical: "1%",
-                  },
-                ]}
-              >
-                <WebSocketSearchingLocations
-                  reconnectOnUserButtonPress={searchIsActive}
-                />
-              </View>
-            )} */}
+              /> 
+          {prompt && role && locationId && (
+                
+                <Groq givenRole={role} prompt={prompt} title={'history from Groq'} />
+          
+              )}
              </>
+             
              
             )}
           </View>
+
+       
         </View> 
     </>
   );

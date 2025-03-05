@@ -578,6 +578,17 @@ const containerStyles = StyleSheet.create({
     overflow: 'hidden',
 
   },
+  groqHeaderRow: {
+    width: '100%',
+    textAlign: 'left',
+    alignItems: 'center',
+    alignContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+      
+    paddingBottom: 10,
+
+  },
   windFriendsCardContainer: { 
     borderRadius: 20,
     padding: 10, 
@@ -585,8 +596,20 @@ const containerStyles = StyleSheet.create({
     width: '100%',  
     alignItems: 'center',
     justifyContent: 'center', 
-    flexGrow: 1,
-    height: 160,
+    //flexGrow: 1,
+    height: 190,
+    overflow: 'hidden',
+
+  },
+  ruinsHarmonyCardContainer: { 
+    borderRadius: 20,
+    padding: 10, 
+    marginBottom: 10,
+    width: '100%',  
+    alignItems: 'center',
+    justifyContent: 'center', 
+ 
+    height: 166,
     overflow: 'hidden',
 
   },
@@ -647,7 +670,23 @@ const containerStyles = StyleSheet.create({
  
     height: 'auto',
     overflow: 'hidden',
+  
 
+  },
+  scrollDetailPanelContainer: {
+    borderRadius: 20, 
+    padding: 10,  
+    width: '100%', 
+    alignSelf: 'center', 
+    alignItems: 'center',
+    justifyContent: 'center', 
+ 
+    height: 180,
+    overflow: 'hidden', 
+    zIndex: 100,
+    position: 'absolute',
+    bottom: 78,
+    borderWidth: StyleSheet.hairlineWidth
   },
   twoButtonFooterContainer: {
     // zIndex: 100,
@@ -706,6 +745,10 @@ const fontStyles = StyleSheet.create({
     fontSize: 16,
 
   },
+  windCompassText: {
+    fontSize: 12, 
+
+  },
   notifierText: {
 
     fontSize: 20,
@@ -741,6 +784,17 @@ const fontStyles = StyleSheet.create({
   },
   goButtonPortalSize: {
     fontSize: 60,
+  },
+  groqHeaderText: {
+
+    fontSize: 15,
+    lineHeight: 20,
+    fontWeight: 'bold',
+  },
+  groqResponseText: {
+    fontSize: 14,
+    lineHeight: 19,
+
   },
   solitaryHeaderMessageText: {
     fontSize: 20,

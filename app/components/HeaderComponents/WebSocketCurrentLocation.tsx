@@ -47,8 +47,8 @@ const WebSocketCurrentLocation: React.FC = () => {
         if (searchIsActive) {
           closeSearchExternally();
         }
-        foundExploreLocations();
-        triggerRefetch(); // nearby locations
+       // foundExploreLocations(); MOVED TO NEARBY LOCATION CONTEXT ON SUCCESS METHOD
+       // triggerRefetch(); // nearby locations REMOVED BECAUSE NEARBY CONTEXT IS NOW DIRECTLY TRIGGERED BY LAST MESSAGE
         showAppMessage(true, null, 'Search complete!');
       } else if (lastMessage === 'Clear') {
         if (searchIsActive) {

@@ -9,6 +9,7 @@ import { useRouter } from "expo-router";
 import { useFocusEffect } from "expo-router"; 
 import { useSurroundings } from "@/app/context/CurrentSurroundingsContext";
 import NearbyView from "../../components/NearbyComponents/NearbyView";
+
  
 
 const nearby = () => {

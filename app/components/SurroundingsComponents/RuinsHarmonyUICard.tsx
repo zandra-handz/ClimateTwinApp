@@ -20,7 +20,7 @@ const RuinsHarmonyUICard = ({
 
     <View
       style={[
-        appContainerStyles.windFriendsCardContainer,
+        appContainerStyles.ruinsHarmonyCardContainer,
         themeStyles.darkestBackground,
       ]}
     >
@@ -38,7 +38,14 @@ const RuinsHarmonyUICard = ({
           {name}
         </Text>
         <Text style={[themeStyles.primaryText]}>{milesAway} miles {direction.toLowerCase()} of portal</Text>
+        <View style={{width: 210, paddingTop: 20, height: 50, flexWrap: 'flex'}}>
+          
+        <Text style={[themeStyles.primaryText, appFontStyles.windCompassText]}>{windCompass}</Text>
+        
+        </View>
+     
       </View>
+      
 
       <View
         style={{

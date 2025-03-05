@@ -3,14 +3,22 @@ import { View } from "react-native";
 import { useSurroundings } from "../../context/CurrentSurroundingsContext";
 import SingleDetailPanel from "@/app/components/SingleDetailPanel";
 import SingleImagePanel from "@/app/components/SingleImagePanel";  
+import Groq from "@/app/components/Groq";
+
+import useLLMScripts from "@/app/llm/useLLMScripts";
 
 import RuinsHarmonyView from "./RuinsHarmonyView";
 
 const RuinsSurroundingsView = ({ height }) => {
   const { ruinsSurroundings } = useSurroundings();
- 
+  const { yourRoleIsFriendlyDiligentHistorian, tellMeRecentHistoryOf } = useLLMScripts();
 
-  return (
+ 
+  
+  const prompt = (tellMeRecentHistoryOf(ruinsSurroundings?.latitude, ruinsSurroundings?.longitude, ruinsSurroundings?.name))
+ const role = yourRoleIsFriendlyDiligentHistorian();
+
+  return ( 
     <View style={{ flex: 1, height: height }}>
       {ruinsSurroundings?.id && (
         <>
@@ -23,10 +31,11 @@ const RuinsSurroundingsView = ({ height }) => {
             directionDegree={ruinsSurroundings.directionDegree}
           />
 
-          <SingleDetailPanel
+        
+          {/* <SingleDetailPanel
             label={"Wind compass"}
             value={ruinsSurroundings.windCompass}
-          />
+          /> */}
           {ruinsSurroundings.streetViewImage && (
             <SingleImagePanel
               label={"Image"}
@@ -38,10 +47,12 @@ const RuinsSurroundingsView = ({ height }) => {
             label={"Wind harmony"}
             value={ruinsSurroundings.windHarmony}
           /> */}
-          <SingleDetailPanel
+          {/* <SingleDetailPanel
             label={"Wind agreement score"}
             value={ruinsSurroundings.windAgreementScore}
-          />
+          /> */}
+              {/* <Groq givenRole={role} prompt={prompt} title={'history from Groq'} /> */}
+
           {ruinsSurroundings.tags && ruinsSurroundings.tags.historic && (
             <SingleDetailPanel
               label={"#"}
@@ -57,7 +68,7 @@ const RuinsSurroundingsView = ({ height }) => {
           )}
         </>
       )}
-    </View>
+    </View> 
   );
 };
 

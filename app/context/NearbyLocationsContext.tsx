@@ -2,6 +2,9 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { useUser } from './UserContext';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getNearbyLocations } from '../apicalls'; 
+import { useSurroundingsWS } from './SurroundingsWSContext';
+
+import { ActiveSearchProvider, useActiveSearch } from "@/app/context/ActiveSearchContext";
 
 interface NearbyLocation {
   id: number;
@@ -37,19 +40,26 @@ interface NearbyLocationsProviderProps {
 }
 
 export const NearbyLocationsProvider: React.FC<NearbyLocationsProviderProps> = ({ children }) => {
-  const { user, isAuthenticated, isInitializing } = useUser();
+  const { user, isAuthenticated, isInitializing } = useUser(); 
+  const { lastMessage } = useSurroundingsWS();
+  const { foundExploreLocations } = useActiveSearch();
   const queryClient = useQueryClient();  
 
+
+  const searchComplete = lastMessage === 'Search complete!' || lastMessage === 'Clear' || lastMessage === '';
+
+
   const { data: nearbyLocations, isLoading, isError, isSuccess } = useQuery<NearbyLocation[]>({
-    queryKey: ['nearbyLocations'],
+    queryKey: ['nearbyLocations', lastMessage],
     queryFn: getNearbyLocations,
-    enabled: !!isAuthenticated && !isInitializing,
+    enabled: !!isAuthenticated && !isInitializing,// && searchComplete,
     onError: (err) => {
       console.error('Error fetching location data:', err);
     },
     onSuccess: (data) => {
       if (data) {
         console.log('getTwinLocation query success:', data);
+        foundExploreLocations(); //will stop animation in NearbyButton and allow button to be pressed
         // Data is already in the correct structure, no mapping needed here
       }
     },
@@ -57,7 +67,7 @@ export const NearbyLocationsProvider: React.FC<NearbyLocationsProviderProps> = (
 
   
   const triggerRefetch = () => {
-    queryClient.invalidateQueries({ queryKey: ['nearbyLocations'] });
+    queryClient.invalidateQueries({ queryKey: ['nearbyLocations', lastMessage] });
   };
  
    
