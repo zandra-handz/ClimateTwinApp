@@ -127,7 +127,7 @@ const index = () => {
               /> 
           {prompt && role && locationId && (
                 
-                <Groq givenRole={role} prompt={prompt} title={'history from Groq'} />
+                <Groq givenRole={role} prompt={prompt} title={'history from Groq'} additionalTrigger={locationId}/>
           
               )}
              </>
