@@ -8,7 +8,7 @@ import { useSurroundingsWS } from "../../context/SurroundingsWSContext";
 import useDateTimeFunctions from '../../hooks/useDateTimeFunctions'; 
 
 const CountDowner = () => {
-  const { lastLocationName } = useSurroundingsWS();
+  const { lastLocationAccessTime } = useSurroundingsWS();
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
   const { lastAccessed, isInitializingLocation } = useSurroundings(); 
   const { showAppMessage} = useAppMessage();
@@ -35,16 +35,16 @@ const CountDowner = () => {
  
 
   useEffect(() => {  
-    if (lastAccessed) { 
+    if (lastLocationAccessTime) { 
       console.log('resetting countdown'); 
       resetCountdown();
     }
-  }, [lastAccessed]);  
+  }, [lastLocationAccessTime]);  
 
   const resetCountdown = () => { 
-    if (lastAccessed) {
+    if (lastLocationAccessTime) {
  
-      const timeDifference = getTimeDifferenceInSeconds(lastAccessed);
+      const timeDifference = getTimeDifferenceInSeconds(lastLocationAccessTime);
       timeSharedValue.value = timeDifference > 0 ? timeDifference : 0;
       // showAppMessage(true, null, `${currentSurroundings.last_accessed} ${timeDifference} ${timeSharedValue.value}`);
       // console.log(`${currentSurroundings.last_accessed} ${timeDifference} ${timeSharedValue.value}`);
@@ -71,14 +71,16 @@ const CountDowner = () => {
   return (
     <> 
       <View style={[appContainerStyles.countDownerContainer, themeStyles.primaryBackground]}>
-        {/* {!searchIsActive && ( */}
+        {lastLocationAccessTime !== null && (
+
+       
           <AnimatedTextInput
             style={[appFontStyles.countDownText, themeStyles.primaryText]}
             animatedProps={animatedTime}
             editable={false}
             defaultValue={"    "}
           /> 
-        {/* // )} */}
+        )}
       </View> 
     </>
   );

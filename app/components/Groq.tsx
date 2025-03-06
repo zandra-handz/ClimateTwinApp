@@ -1,43 +1,47 @@
 import { useEffect, useState } from 'react';
 import Constants from 'expo-constants';
 import ScrollDetailPanel from './ScrollDetailPanel';
-import { useSurroundings } from '../context/CurrentSurroundingsContext';
+//import { useSurroundings } from '../context/CurrentSurroundingsContext';
+import { useSurroundingsWS } from '../context/SurroundingsWSContext';
 import useAsyncStorageCache from '../hooks/useAsyncStorageCache';
+
 
 const API_KEY = Constants.expoConfig?.extra?.GROQ_API_KEY;
 
-const Groq = ({ givenRole, prompt, title, userId }) => {
-  const { locationId } = useSurroundings();
-  const { storedValue, setCache, getCache } = useAsyncStorageCache(userId, locationId);
+const Groq = ({ givenRole, prompt, title, cacheKey, userId }) => {
+  //const { locationId } = useSurroundings();
+  const { lastLocationId } = useSurroundingsWS();
+  const { storedValue, setCache, getCache } = useAsyncStorageCache(userId, lastLocationId);
   const [responseMessage, setResponseMessage] = useState('');
   useEffect(() => {
     const fetchData = async () => {
-      if (!locationId) {
+      if (!lastLocationId) {
         console.log('no locationId, not running groq chat');
         return;
       }
-      console.log('LOCATION ID TRIGGERED IN GROQ: ', locationId);
+      console.log('LOCATION ID TRIGGERED IN GROQ: ', lastLocationId);
   
       // Check if there's cached data specific to this locationId
       const cachedData = await getCache();
-      if (cachedData) {
-        console.log('Using cached data:', cachedData);
-        setResponseMessage(cachedData.history); // Use cached response
+      if (cachedData && cachedData.hasOwnProperty(cacheKey)) {
+        console.log('Using cached data for key:', cacheKey);
+        setResponseMessage(cachedData[cacheKey]); // Use cached response
       } else {
-        console.log('No cached data found, calling createChatCompletion...');
+        console.log('No cached data found for key:', cacheKey);
         await createChatCompletion(); // Fetch new data
       }
     };
   
     fetchData();
-  }, [locationId, prompt, givenRole]); // Runs when locationId, prompt, or givenRole changes
+  }, [lastLocationId, prompt, givenRole, cacheKey]); // Add cacheKey to dependencies
+   // Runs when locationId, prompt, or givenRole changes
   
   useEffect(() => {
-    if (locationId) {
-      console.log('LOCATION ID TRIGGERED IN GROQ: ', locationId);
+    if (lastLocationId) {
+      console.log('LOCATION ID TRIGGERED IN GROQ: ', lastLocationId);
     }
 
-  }, [locationId]);
+  }, [lastLocationId]);
 
   const createChatCompletion = async () => {
     const requestBody = {
@@ -63,7 +67,9 @@ const Groq = ({ givenRole, prompt, title, userId }) => {
       const chatResponse = data.choices[0]?.message?.content || 'No response available';
 
       setResponseMessage(chatResponse);
-      await setCache({ location_id: locationId, history: chatResponse }); // Cache response
+      const existingCache = await getCache(); // Retrieve existing cache
+      await setCache({ ...existingCache, location_id: lastLocationId, [cacheKey]: chatResponse });
+    
     } catch (error) {
       console.error('Error fetching chat completion:', error);
     }

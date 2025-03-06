@@ -67,11 +67,10 @@ const ExploreTabsHeader = () => {
 
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <>
-            {locationId && (
+            
               
               <CountDowner />
-              
-            )}
+               
               <DrawerToggleButton tintColor={themeStyles.primaryText.color} />
               </>
             </View>

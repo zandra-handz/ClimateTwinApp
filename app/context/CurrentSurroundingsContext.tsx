@@ -116,7 +116,7 @@ export const CurrentSurroundingsProvider: React.FC<
   
   const { user, isAuthenticated, isInitializing } = useUser();
   const queryClient = useQueryClient();
-  const { lastLocationName } = useSurroundingsWS();
+  const { lastLocationName, lastLocationId } = useSurroundingsWS();
   const timeoutRef = useRef(null);
   const { manualSurroundingsRefresh, resetRefreshSurroundingsManually } =
     useActiveSearch();
@@ -145,7 +145,7 @@ export const CurrentSurroundingsProvider: React.FC<
     isError,
     isSuccess,
   } = useQuery<CurrentSurroundings | null>({
-    queryKey: ["currentSurroundings", lastLocationName],
+    queryKey: ["currentSurroundings", lastLocationId],
     queryFn: getExploreLocation,
     enabled: !!isAuthenticated && !isInitializing,
    staleTime: 0,
@@ -170,7 +170,7 @@ export const CurrentSurroundingsProvider: React.FC<
 
 useEffect(() => {
   if (!isAuthenticated) {
-    queryClient.removeQueries(["currentSurroundings", lastLocationName]);
+    queryClient.removeQueries(["currentSurroundings", lastLocationId]);
     setPortalSurroundings(null);
     setRuinsSurroundings(null);
     setHomeSurroundings(null);
@@ -182,7 +182,7 @@ useEffect(() => {
 }, [isAuthenticated]);
 
 
-useExploreRoute(isExploring, isInitializingLocation, isAuthenticated);
+// useExploreRoute(isExploring, isInitializingLocation, isAuthenticated);
 
 
 useEffect(() => {
@@ -485,9 +485,9 @@ useEffect(() => {
 
   const triggerSurroundingsRefetch = () => {
     console.log("Triggering explore locationrefetch");
-    queryClient.invalidateQueries({ queryKey: ["currentSurroundings", lastLocationName] });
+    queryClient.invalidateQueries({ queryKey: ["currentSurroundings", lastLocationId] });
   // queryClient.removeQueries(["currentSurroundings"]);
-    queryClient.refetchQueries({ queryKey: ["currentSurroundings", lastLocationName] }); // Force refetch
+    queryClient.refetchQueries({ queryKey: ["currentSurroundings", lastLocationId] }); // Force refetch
   };
 
     // const {

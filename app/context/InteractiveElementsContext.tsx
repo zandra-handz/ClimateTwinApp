@@ -3,6 +3,7 @@ import { useUser } from './UserContext';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getItemChoices } from '../apicalls';  
 import { useSurroundings } from './CurrentSurroundingsContext';
+import { useSurroundingsWS } from './SurroundingsWSContext';
 
 interface LocationDetails {
   id: number | null;
@@ -90,12 +91,13 @@ interface InteractiveElementsProviderProps {
 export const InteractiveElementsProvider: React.FC<InteractiveElementsProviderProps> = ({ children }) => {
   const { user, isAuthenticated, isInitializing } = useUser(); 
   const { currentSurroundings, locationId  } = useSurroundings();
+  const { lastLocationId } = useSurroundingsWS();
   const queryClient = useQueryClient(); 
 
   const { data: itemChoicesResponse, isLoading, isError } = useQuery<ItemChoicesResponse | null>({
-    queryKey: ['itemChoices', locationId],
+    queryKey: ['itemChoices', lastLocationId],
     queryFn: getItemChoices,
-    enabled: !!isAuthenticated && !isInitializing && !!locationId, 
+    enabled: !!isAuthenticated && !isInitializing && !!lastLocationId, 
     onError: (err) => {
       console.error('Error fetching location data:', err);
     },
@@ -115,12 +117,12 @@ export const InteractiveElementsProvider: React.FC<InteractiveElementsProviderPr
   const triggerItemChoicesRefetch = () => {
     console.log('invalidating item choices query');
     queryClient.invalidateQueries({
-      queryKey: ['itemChoices', locationId],
+      queryKey: ['itemChoices', lastLocationId],
       // Include currentSurroundings.id
     });
     console.log('refetching item choices query');
     queryClient.refetchQueries({
-      queryKey: ['itemChoices', locationId],
+      queryKey: ['itemChoices', lastLocationId],
     
     });
   };
@@ -142,7 +144,7 @@ export const InteractiveElementsProvider: React.FC<InteractiveElementsProviderPr
     return () => {
       unsubscribe(); // Unsubscribe when the component unmounts
     };
-  }, [locationId]); //passing in queryClient will trigger useEffect any time ANY query key is updated
+  }, [lastLocationId]); //passing in queryClient will trigger useEffect any time ANY query key is updated
   
 
   return (

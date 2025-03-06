@@ -11,6 +11,7 @@ import { useUser } from "../context/UserContext";
 import { useAppState } from "../context/AppStateContext";
 import { useAppMessage } from "../context/AppMessageContext";
 import { useActiveSearch } from "./ActiveSearchContext";
+import useExploreRoute from "../hooks/useExploreRoute";
 
 interface SurroundingsWSContextType {
   sendMessage: (message: any) => void;
@@ -41,7 +42,16 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
  
   const [lastMessage, setLastMessage] = useState<any>(null);
   const [lastLocationName, setLastLocationName] = useState<any>(null);
+  const [lastLocationId, setLastLocationId] = useState<any>(null);
+  const [lastLocationAccessTime, setLastLocationAccessTime] = useState<any>(null);
   const [lastNotification, setLastNotification] = useState<any>(null);
+  const [lastLatAndLong, setLastLatAndLong] = useState<[number, number] | null>(null);
+
+
+
+
+
+  useExploreRoute(!!lastLocationId, false, isAuthenticated);
  
   const [reconnectAttempt, setReconnectAttempt] = useState(0);
  
@@ -66,6 +76,9 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       setLastNotification(null);
       console.log('setting last location name to null in context');
       setLastLocationName(null); 
+      setLastLocationAccessTime(null);
+      setLastLocationId(null);
+      setLastLatAndLong(null);
       handleLocationUpdateWSIsClosed();
       console.log("Closing existing Location Update WebSocket connection");
       socketRef.current.close();
@@ -138,18 +151,32 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       // Update state so that consumers can receive the update.
       // setLastMessage(update);
 
-      if (update.message) {
-        setLastMessage(update.message); // Update the message state
+      if ('message' in update) {
+        setLastMessage(update.message);
+      }
+      
+      if ('notification' in update) {
+        setLastNotification(update.notification);
+      }
+      
+      if ('name' in update) { 
+        setLastLocationName(update.name);
+      }
+      
+
+      if ('location_id' in update) {
+        console.log('update location id!', update.location_id);
+        setLastLocationId(update.location_id);
+      }
+      
+      if ('last_accessed' in update) {
+        setLastLocationAccessTime(update.last_accessed);
       }
 
-      if (update.notification) {
-        setLastNotification(update.notification); // Update the message state
+      if ('latitude' in update && 'longitude' in update) {
+        setLastLatAndLong([update.latitude, update.longitude]);
       }
-
-
-      if (update.name) { 
-        setLastLocationName(update.name); // Update the name state
-      }
+      
     };
 
     socket.onerror = (event: Event) => {
@@ -239,32 +266,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
         console.log("WebSocket is already open, skipping reconnection.");
       }
     }
-  };
- 
-  //triggered by Reinit
-  //is the main trigger for socket to connect
-  // useEffect(() => {
-  //   if (
-  //     isAuthenticated &&
-  //     !isInitializing 
-  //     // &&
-  //     // (!socketRef.current || socketRef.current.readyState !== WebSocket.OPEN)
-  //   ) {
-  //     //fetchToken();
-  //     console.log('connectWebSocket triggered');
-  //     connectWebSocket();
-  //   } else if (!isAuthenticated && !isInitializing) {
-  //    // setToken(null);  //triggers useEffect to connect socket 
-  //     console.log('user not signed in');
-
-  //   }
-  //   return () => {
-  //     setLastMessage(null);
-  //     setLastNotification(null);
-  //     setLastLocationName(null);
-  //     closeSocket();
-  //   };
-  // }, [isAuthenticated, isInitializing]);
+  }; 
 
 
   useEffect(() => {
@@ -277,11 +279,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     return () => {
       console.log('isAuthenticated === false --> running CloseSocket()');
       closeSocket(); // Always close socket in cleanup
-
-      //moved these inside closeSocket:
-      // setLastMessage(null);
-      // setLastNotification(null);
-      // setLastLocationName(null);
+ 
       
       setReconnectAttempt(0);
       setReconnectionDelay(1000); 
@@ -336,7 +334,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
   return (
     <SurroundingsWSContext.Provider
-      value={{ sendMessage, lastMessage, lastNotification, lastLocationName }}
+      value={{ sendMessage, lastMessage, lastNotification, lastLocationName, lastLocationId, lastLocationAccessTime, lastLatAndLong }}
     >
       {children}
     </SurroundingsWSContext.Provider>

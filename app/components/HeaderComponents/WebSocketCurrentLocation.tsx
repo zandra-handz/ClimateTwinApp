@@ -15,7 +15,7 @@ const WebSocketCurrentLocation: React.FC = () => {
   const { triggerRefetch } = useNearbyLocations(); 
   const { locationId } = useSurroundings();
   
-  const { sendMessage, lastMessage, lastLocationName } = useSurroundingsWS();
+  const { sendMessage, lastMessage, lastLocationName, lastLocationId } = useSurroundingsWS();
  
 
    
@@ -76,17 +76,15 @@ const WebSocketCurrentLocation: React.FC = () => {
   useEffect(() => {
     console.log('last location name: ', lastLocationName);
     if (!lastLocationName) {
-      setUpdate("Error, no location name!"); // If no location name, reset the state
-    } else if (lastLocationName === "null" || null) {
+      setUpdate("You are home"); // If no location name, reset the state
+    } else if (lastLocationName === "You are home" || null) {
       setUpdate("You are home"); // If lastLocationName is the string "null"
     } else if (lastLocationName !== update) { 
-      if (update === ' ') {
-        setUpdate(lastLocationName); 
-      } else {
+ 
        // refreshSurroundingsManually(); 
         console.log('setting last location name');
         setUpdate(lastLocationName);  
-      }
+    
     }
  
   }, [lastLocationName]);
