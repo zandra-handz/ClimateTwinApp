@@ -464,7 +464,7 @@ export const getExploreLocation = async () => {
     try {
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/climatevisitor/currently-exploring/v2/');
-        console.log('API GET Call getExploreLocation', response.data);//, response.data);
+        console.log('API GET Call getExploreLocation');//, response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
@@ -482,7 +482,7 @@ export const getItemChoices = async () => {
     try {
        // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/climatevisitor/item-choices/');
-        console.log('API GET Call getItemChoices: '); //, response.data);
+        console.log('API GET Call getItemChoices: ', response.data); //, response.data);
         return response.data;
     } catch (error) {
         if (error.response) {

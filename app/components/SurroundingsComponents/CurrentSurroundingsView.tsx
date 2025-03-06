@@ -25,6 +25,9 @@ const CurrentSurroundingsView = ( {height}) => {
   useEffect(() => {
     const getCombinedData = () => {
       if (!itemChoices) return [];
+
+
+      console.log(itemChoices);
  
       
       return Object.entries(itemChoices)

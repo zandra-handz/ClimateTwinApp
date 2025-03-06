@@ -148,7 +148,7 @@ export const CurrentSurroundingsProvider: React.FC<
     queryKey: ["currentSurroundings", lastLocationName],
     queryFn: getExploreLocation,
     enabled: !!isAuthenticated && !isInitializing,
-   // staleTime: 0,
+   staleTime: 0,
     onError: (err) => {
       console.error("Error fetching location data:", err);
     },

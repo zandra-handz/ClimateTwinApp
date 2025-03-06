@@ -10,7 +10,8 @@ import CurrentSurroundingsView from "@/app/components/SurroundingsComponents/Cur
  
 import PortalSurroundingsView from "@/app/components/SurroundingsComponents/PortalSurroundingsView";
 import RuinsSurroundingsView from "@/app/components/SurroundingsComponents/RuinsSurroundingsView";
- 
+
+import { useUser } from "@/app/context/UserContext";
  
 import NotificationNotifier from "@/app/components/NotificationNotifier";
 
@@ -21,6 +22,7 @@ import useLLMScripts from "@/app/llm/useLLMScripts";
  
 
 const index = () => {
+  const { user } = useUser();
   useGeolocationWatcher(); 
   const { portalSurroundings, ruinsSurroundings, locationId, isInitializingLocation } =
     useSurroundings();
@@ -127,7 +129,7 @@ const index = () => {
               /> 
           {prompt && role && locationId && (
                 
-                <Groq givenRole={role} prompt={prompt} title={'history from Groq'} additionalTrigger={locationId}/>
+                <Groq givenRole={role} prompt={prompt} title={'history from Groq'} userId={user.id} locationId={locationId}/>
           
               )}
              </>
