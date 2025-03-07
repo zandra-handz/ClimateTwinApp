@@ -57,7 +57,7 @@ import { useGlobalStyles } from "../context/GlobalStylesContext";
       }, [mountingText]);
   
       const handleTextInputChange = (text) => {
-        console.log(text);
+       // console.log(text);
         setEditedMessage(text);
         onTextChange(text);
       };

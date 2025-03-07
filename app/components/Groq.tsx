@@ -16,7 +16,7 @@ const Groq = ({ givenRole, prompt, title, cacheKey, userId }) => {
   useEffect(() => {
     const fetchData = async () => {
       if (!lastLocationId) {
-        console.log('no locationId, not running groq chat');
+        isOnDashboardg('no locationId, not running groq chat');
         return;
       }
       console.log('LOCATION ID TRIGGERED IN GROQ: ', lastLocationId);

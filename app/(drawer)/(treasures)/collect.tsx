@@ -37,6 +37,7 @@ const collect = () => {
   const { width, height } = Dimensions.get("window");
 
   const descriptorTextRef = useRef(null);
+  const additionalTextRef = useRef(null);
 
   const editedTextRef = useRef(null);
 
@@ -105,7 +106,15 @@ const collect = () => {
   const updateDescriptorString = (text) => {
     if (descriptorTextRef && descriptorTextRef.current) {
       descriptorTextRef.current.setText(text);
-      console.log("in parent", descriptorTextRef.current.getText());
+    //  console.log("in parent", descriptorTextRef.current.getText());
+    }
+  };
+
+
+  const updateAdditionalString = (text) => {
+    if (additionalTextRef && additionalTextRef.current) {
+      additionalTextRef.current.setText(text);
+    //  console.log("in parent", additionalTextRef.current.getText());
     }
   };
 
@@ -125,8 +134,13 @@ const collect = () => {
         firstString,
         descriptorTextRef.current.getText(),
         editedTextRef.current.getText(),
-        null
+        additionalTextRef.current.getText(),
+       
       );
+      descriptorTextRef.current.clearText();
+      editedTextRef.current.clearText();
+      additionalTextRef.current.clearText();
+
     }
   };
 
@@ -156,9 +170,9 @@ const collect = () => {
             <View style={{marginBottom: 10}}>
               <TextInputLine
                 width={"100%"}
-                height={100}
+                height={90}
                 ref={descriptorTextRef}
-                autoFocus={false}
+                autoFocus={true}
                 title={"Treasure name"}
                 //helperText={!isKeyboardVisible ? null : "Press enter to exit"}
                 // iconColor={
@@ -171,10 +185,12 @@ const collect = () => {
               
               
             </View>
-            
+            <View style={{marginBottom: 10}}>
             <TextInputBlock
               width={"100%"}
-              height={!isKeyboardVisible ? oneThirdHeight : oneHalfHeight}
+             // height={!isKeyboardVisible ? oneThirdHeight : oneHalfHeight}
+             height={!isKeyboardVisible ? 200 : 120}
+              //height={120}
               ref={editedTextRef}
               autoFocus={false}
               title={"Description of treasure"}
@@ -186,6 +202,23 @@ const collect = () => {
               onTextChange={updateNoteEditString}
               multiline={false}
             />
+            </View>
+            <View style={{marginBottom: 10}}>
+                        <TextInputBlock
+              width={"100%"}
+              height={!isKeyboardVisible ? 180 : 120}
+              ref={additionalTextRef}
+              autoFocus={false}
+              title={"Additional data"}
+              helperText={!isKeyboardVisible ? null : "Press enter to exit"}
+              iconColor={
+                !isKeyboardVisible ? themeStyles.primaryText.color : "red"
+              }
+              mountingText={""}
+              onTextChange={updateAdditionalString}
+              multiline={false}
+            />
+            </View>
           </View>
           
           </View>

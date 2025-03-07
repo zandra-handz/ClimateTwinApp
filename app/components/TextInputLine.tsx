@@ -113,14 +113,13 @@ import { useGlobalStyles } from "../context/GlobalStylesContext";
   );
   
   const styles = StyleSheet.create({
-    outerContainer: {
-      flex: 1,
-      padding: "4%",
-    },
+
     container: {
       borderRadius: 30,
       alignSelf: "center",
-      padding: 20,
+      padding: 10,
+      paddingHorizontal: 20,
+      paddingVertical: 20,
     },
     title: {
       fontSize: 15,
@@ -137,7 +136,7 @@ import { useGlobalStyles } from "../context/GlobalStylesContext";
     textInput: {
       textAlignVertical: "top",
       borderRadius: 20,
-      paddingVertical: 10,
+      paddingVertical: 0,
       flex: 1,
     },
   });

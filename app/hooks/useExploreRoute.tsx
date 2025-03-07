@@ -34,7 +34,7 @@ const useExploreRoute = (isExploring: boolean, isInitializingLocation: boolean, 
     // console.log(isNavigationReady);
     console.log(segments[1]);
 
-    if (!isExploring && !isInitializingLocation && isOnExploreTabs && isAuthenticated) {
+    if (!isExploring && !isInitializingLocation && !isOnDashboard && isAuthenticated) {
         console.log('going to dashboard!!!'); 
       router.replace("(homedashboard)")
     } else if (isExploring && isOnDashboard && isAuthenticated) { 
