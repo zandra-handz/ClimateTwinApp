@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { View } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { DrawerToggleButton } from "@react-navigation/drawer"; 
+import { DrawerToggleButton } from "@react-navigation/drawer";
 
-import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
-import { useSurroundings } from "../../context/CurrentSurroundingsContext";
+import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import { useSurroundingsWS } from "../../context/SurroundingsWSContext";
+
+import RefreshSocketButton from "../Scaffolding/RefreshSocketButton";
 
 //IMPORTANT: these both depend on SurroundingsWSContext to render appropriately
 import WebSocketCurrentLocation from "./WebSocketCurrentLocation";
@@ -16,8 +17,8 @@ import CountDowner from "./CountDowner"; //needs: lastLocationName
 //This is on homedashboard tabs as well as explore tabs
 const ExploreTabsHeader = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { locationId, isExploring } = useSurroundings();
-   const { lastLocationName, lastLocationAccessTime } = useSurroundingsWS();
+  const { sendMessage, lastLocationName, lastLocationAccessTime } =
+    useSurroundingsWS();
   // const { isAuthenticated, appSettings } = useUser();
   // const colorScheme = useColorScheme();
   // const { searchIsActive } = useActiveSearch();
@@ -39,10 +40,14 @@ const ExploreTabsHeader = () => {
   //   }
   // }, [appSettings]);
 
-    useEffect(() => {
-      console.log('exploretabheader rerendered');
-  
-    }, []);
+  useEffect(() => {
+    console.log("exploretabheader rerendered");
+  }, []);
+
+  const handleRefreshDataFromSocket = () => {
+    console.log("sending refresh message to socket");
+    sendMessage({ action: "refresh" });
+  };
 
   return (
     <>
@@ -67,11 +72,13 @@ const ExploreTabsHeader = () => {
 
             <View style={{ flexDirection: "row", alignItems: "center" }}>
               <>
-            
-              
-              <CountDowner  />
-               
-              <DrawerToggleButton tintColor={themeStyles.primaryText.color} />
+                <CountDowner />
+
+                
+                <View style={{ marginHorizontal: 4 }}>
+                  <RefreshSocketButton />
+                </View>
+                <DrawerToggleButton tintColor={themeStyles.primaryText.color} />
               </>
             </View>
           </View>

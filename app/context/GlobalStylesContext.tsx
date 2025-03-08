@@ -844,6 +844,10 @@ const fontStyles = StyleSheet.create({
     height: 22,
     width: 22,
   },
+  tinyIcon: {
+    height: 14,
+    width: 14,
+  },
   countDownText: {
     fontSize: 13,
     fontWeight: 'bold',

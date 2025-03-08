@@ -16,12 +16,15 @@ import useDateTimeFunctions from '../hooks/useDateTimeFunctions';
 
 interface SurroundingsWSContextType {
   sendMessage: (message: any) => void;
+  handleRefreshDataFromSocket: () => void; 
   lastMessage: any; // You can specify a more strict type if you know the structure
   lastLocationName: any;
   lastNotification: any;
   lastLocationId: any;
   lastLocationAccessTime: any;
   lastLatAndLong: any;
+  isLocationSocketOpen: boolean;
+  locationSocketColor: any;
 }
 
 const SurroundingsWSContext = createContext<
@@ -52,8 +55,8 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   const [lastLocationAccessTime, setLastLocationAccessTime] = useState<any>(null);
   const [lastNotification, setLastNotification] = useState<any>(null);
   const [lastLatAndLong, setLastLatAndLong] = useState<[number, number] | null>(null);
-
-
+  const [isLocationSocketOpen, setIsLocationSocketOpen] = useState<boolean>(false);
+  const [locationSocketColor, setLocationSocketColor] = useState<any>(null);
 
 
 
@@ -137,7 +140,10 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
       handleLocationUpdateWSIsOpen(true);
-      showAppMessage(true, null, "Websocket still connected!");
+      setIsLocationSocketOpen(true);
+      setLocationSocketColor('limegreen');
+      // using color instead
+      // showAppMessage(true, null, "Websocket still connected!");
       setIsReconnecting(false);
       setReconnectionDelay(3000); 
       console.log("WebSocket is already open, closing existing connection and reopening.");
@@ -163,7 +169,10 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     socket.onopen = () => {
       console.log("Location Update WebSocket connection opened");
       handleLocationUpdateWSIsOpen(true); 
-      showAppMessage(true, null, "Websocket connected!");
+      setIsLocationSocketOpen(true);
+      setLocationSocketColor('lightgreen');
+      // using button color now
+      // showAppMessage(true, null, "Websocket connected!");
       setIsReconnecting(false);
       setReconnectionDelay(3000); // Reset delay to 10 seconds
     };
@@ -205,12 +214,16 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
     socket.onerror = (event: Event) => {
       console.log("WebSocket error:", event);
-      showAppMessage(true, null, "Websocket error on trying to connect."); 
+      setLocationSocketColor('black');
+      // showAppMessage(true, null, "Websocket error on trying to connect."); 
     };
 
     socket.onclose = (event) => {
      
-      logWebSocketClosure(event);
+      // logWebSocketClosure(event);
+      setIsLocationSocketOpen(false);
+      setLocationSocketColor('red');
+    
       const tokenLastTen = confirmedToken ? confirmedToken.slice(-10) : null;
       showAppMessage(
         true,
@@ -222,21 +235,25 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
       switch (event.code) {
         case 1000:
+          setLocationSocketColor('yellow');
           console.log("WebSocket closed manually by the client.");
           break;
         case 1006:
+          setLocationSocketColor('orange');
           console.error(
             `Abnormal WebSocket closure ${isAuthenticated} ${tokenLastTen} (possibly lost connection).`
           );
           attemptReconnect();
           break;
         case 4001:
+          setLocationSocketColor('blue');
           console.error(
             "Server closed connection due to authentication issues."
           );
           // reInitialize();
           break;
         case 4403:
+          setLocationSocketColor('blue');
           console.error("Forbidden: Authentication token expired or invalid.");
           break;
         default:
@@ -361,9 +378,35 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     }
   };
 
+
+  const handleRefreshDataFromSocket = () => {
+    console.log('sending refresh message to socket');
+    sendMessage({ action: "refresh" });
+  };
+
+
+// backend for temporary reference:
+  // def receive(self, text_data=None, bytes_data=None):
+  // """
+  // Keeps the connection alive and listens for incoming messages.
+  // Can be expanded to handle specific commands from the client.
+  // """
+  // if text_data:
+  //     logger.debug(f"Received WebSocket message: {text_data}")
+  //     message = json.loads(text_data)
+      
+  //     # Handle incoming messages (optional, modify as needed)
+  //     if message.get("action") == "refresh":
+
+  //         self.send_message_from_cache()
+  //         self.send_notif_from_cache()
+  //         self.send_current_location_from_cache_or_endpoint()
+           
+          
+
   return (
     <SurroundingsWSContext.Provider
-      value={{ sendMessage, lastMessage, lastNotification, lastLocationName, lastLocationId, lastLocationAccessTime, lastLatAndLong }}
+      value={{ sendMessage, handleRefreshDataFromSocket, lastMessage, lastNotification, lastLocationName, lastLocationId, lastLocationAccessTime, lastLatAndLong, isLocationSocketOpen, locationSocketColor }}
     >
       {children}
     </SurroundingsWSContext.Provider>

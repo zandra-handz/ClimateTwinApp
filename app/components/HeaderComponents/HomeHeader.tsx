@@ -3,6 +3,8 @@ import { View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { DrawerToggleButton } from "@react-navigation/drawer"; 
 
+import RefreshSocketButton from "../Scaffolding/RefreshSocketButton";
+
 import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
   
 const HomeHeader = () => {
@@ -27,7 +29,7 @@ const HomeHeader = () => {
 
             <View style={{ flexDirection: "row", width: '100%', alignItems: "center", justifyContent: "flex-end" }}>
           
-             
+             <RefreshSocketButton />
                
               <DrawerToggleButton tintColor={themeStyles.primaryText.color} />
          

@@ -8,7 +8,7 @@ import GoHomeButton from './GoHomeButton';
 // Only meant to be visible when currently exploring a location; no longer has go button
 const PortalBanner = () => { 
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
-  const { locationId, isExploring, portalSurroundings, homeSurroundings } = useSurroundings();
+  const { locationId, portalSurroundings, homeSurroundings } = useSurroundings();
 
  
   return (
