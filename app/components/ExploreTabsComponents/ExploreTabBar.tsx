@@ -6,6 +6,7 @@ import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
 import NearbyButton from "./NearbyButton";
 import { useActiveSearch } from "../../context/ActiveSearchContext";
 
+
 function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled }) {
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
   const { buildHref } = useLinkBuilder();

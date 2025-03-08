@@ -35,7 +35,7 @@ const CountDowner = () => {
  
 
   useEffect(() => {  
-    if (lastLocationAccessTime) { 
+    if (lastLocationAccessTime !== null) { 
       console.log('resetting countdown'); 
       resetCountdown();
     }

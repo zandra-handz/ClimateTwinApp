@@ -1,6 +1,7 @@
 import { Drawer } from "expo-router/drawer";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import ExploreTabsHeader from "../components/HeaderComponents/ExploreTabsHeader";
+import HomeHeader from "../components/HeaderComponents/HomeHeader";
 
 import DrawerCustomizer from "../components/DrawerNavComponents/DrawerCustomizer";
 
@@ -12,7 +13,7 @@ export default () => {
       <Drawer.Screen
           name="(homedashboard)"
           options={{
-            header: () => <ExploreTabsHeader />,
+           header: () => <HomeHeader />,
             drawerLabel: "Home",
             title: "home",
           }}

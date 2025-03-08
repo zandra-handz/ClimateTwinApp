@@ -144,7 +144,7 @@ const index = () => {
                     prompt={prompt}
                     title={"history from Groq"}
                     cacheKey={'history'}
-                    userId={user.id} 
+                    userId={user?.id} 
                   />
                 )}
               </>

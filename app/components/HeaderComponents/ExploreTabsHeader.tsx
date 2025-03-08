@@ -17,7 +17,7 @@ import CountDowner from "./CountDowner"; //needs: lastLocationName
 const ExploreTabsHeader = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { locationId, isExploring } = useSurroundings();
-   const { lastLocationName } = useSurroundingsWS();
+   const { lastLocationName, lastLocationAccessTime } = useSurroundingsWS();
   // const { isAuthenticated, appSettings } = useUser();
   // const colorScheme = useColorScheme();
   // const { searchIsActive } = useActiveSearch();
@@ -69,7 +69,7 @@ const ExploreTabsHeader = () => {
               <>
             
               
-              <CountDowner />
+              <CountDowner  />
                
               <DrawerToggleButton tintColor={themeStyles.primaryText.color} />
               </>

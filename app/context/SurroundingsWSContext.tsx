@@ -12,11 +12,16 @@ import { useAppState } from "../context/AppStateContext";
 import { useAppMessage } from "../context/AppMessageContext";
 import { useActiveSearch } from "./ActiveSearchContext";
 import useExploreRoute from "../hooks/useExploreRoute";
+import useDateTimeFunctions from '../hooks/useDateTimeFunctions'; 
 
 interface SurroundingsWSContextType {
   sendMessage: (message: any) => void;
   lastMessage: any; // You can specify a more strict type if you know the structure
   lastLocationName: any;
+  lastNotification: any;
+  lastLocationId: any;
+  lastLocationAccessTime: any;
+  lastLatAndLong: any;
 }
 
 const SurroundingsWSContext = createContext<
@@ -32,6 +37,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   const [isReconnecting, setIsReconnecting] = useState(false);
   const { handleLocationUpdateWSIsOpen, handleLocationUpdateWSIsClosed } = useActiveSearch();
   const { showAppMessage } = useAppMessage();
+  
 
   const appState = useRef(AppState.currentState);
   const [appVisible, setAppVisible] = useState(appState.current);
@@ -69,21 +75,23 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
   // Function to close the socket.
   const closeSocket = () => {
+    console.log('close socket running!');
 
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
       console.log('Location Socket open --> resetting variables and closing...');
       setLastMessage(null);
       setLastNotification(null);
-      console.log('setting last location name to null in context');
+      //console.log('setting last location name to null in context');
+      console.log('setting last location name to null in closeSocket');
       setLastLocationName(null); 
       setLastLocationAccessTime(null);
       setLastLocationId(null);
       setLastLatAndLong(null);
       handleLocationUpdateWSIsClosed();
-      console.log("Closing existing Location Update WebSocket connection");
+     // console.log("Closing existing Location Update WebSocket connection");
       socketRef.current.close();
       socketRef.current = null;
-      console.log('Location Socket closed');
+      //console.log('Location Socket closed');
     } else {
       console.log('Location Socket closed already --> CloseSocket() will do nothing')
     }
@@ -96,11 +104,15 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
     let confirmedToken;
 
-    if (!isAuthenticated || isInitializing ) {
+    // if (!isAuthenticated) {
+    //   return;
+    // }
+
+    if (isInitializing) {
       return;
     }
 
-    if (isAuthenticated && !isInitializing) {
+    if (isAuthenticated) {
       try {
         const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
         if (!storedToken) {
@@ -115,32 +127,43 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
         return;
       }
     } else {
+      if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+        closeSocket();
       return;
+      }
     }
 
     const socketUrl = `wss://climatetwin.com/ws/climate-twin/current/?user_token=${confirmedToken}`;
-    if (socketRef.current) {
-      if (socketRef.current.readyState === WebSocket.OPEN) {
-        console.log("WebSocket is already open, closing existing connection and reopening.");
-        socketRef.current.close(); 
-        // console.log("WebSocket is already open, skipping connection.");
-        // return;
-      } else if (socketRef.current.readyState === WebSocket.CLOSING) {
-        console.log("WebSocket is closing, closing existing WebSocket connection before reopening.");
-        socketRef.current.close();
-      } else if (socketRef.current.readyState === WebSocket.CLOSED) {
-        console.log("WebSocket is already closed, attempting to reconnect."); 
-      }
-    }
+    
+    if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+      handleLocationUpdateWSIsOpen(true);
+      showAppMessage(true, null, "Websocket still connected!");
+      setIsReconnecting(false);
+      setReconnectionDelay(3000); 
+      console.log("WebSocket is already open, closing existing connection and reopening.");
+      return;
+    };
+    
+    // if (socketRef.current) {
+    //   if (socketRef.current.readyState === WebSocket.OPEN) {
+    //     console.log("WebSocket is already open, closing existing connection and reopening.");
+    //     socketRef.current.close(); 
+    //     // console.log("WebSocket is already open, skipping connection.");
+    //     // return;
+    //   } else if (socketRef.current.readyState === WebSocket.CLOSING) {
+    //     console.log("WebSocket is closing, closing existing WebSocket connection before reopening.");
+    //     socketRef.current.close();
+    //   } else if (socketRef.current.readyState === WebSocket.CLOSED) {
+    //     console.log("WebSocket is already closed, attempting to reconnect."); 
+    //   }
+    // }
     const socket = new WebSocket(socketUrl);
     socketRef.current = socket;
 
     socket.onopen = () => {
       console.log("Location Update WebSocket connection opened");
-      handleLocationUpdateWSIsOpen(true);
-
+      handleLocationUpdateWSIsOpen(true); 
       showAppMessage(true, null, "Websocket connected!");
-
       setIsReconnecting(false);
       setReconnectionDelay(3000); // Reset delay to 10 seconds
     };
@@ -170,6 +193,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       }
       
       if ('last_accessed' in update) {
+
         setLastLocationAccessTime(update.last_accessed);
       }
 
@@ -273,12 +297,17 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     console.log('WS connection useEffect triggered');
     if (isAuthenticated && !isInitializing) {
       console.log('connectWebSocket triggered');
-      connectWebSocket(); // Reconnect when authenticated & done initializing
+      connectWebSocket(); // Check if connection/reconnection needed when authenticated & done initializing
     } 
   
     return () => {
       console.log('isAuthenticated === false --> running CloseSocket()');
+      
+      if (!isAuthenticated) {
+        
       closeSocket(); // Always close socket in cleanup
+     
+    }
  
       
       setReconnectAttempt(0);

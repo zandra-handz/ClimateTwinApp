@@ -27,7 +27,7 @@ const CurrentSurroundingsView = ( {height}) => {
       if (!itemChoices) return [];
 
 
-      console.log(itemChoices);
+      //console.log(itemChoices);
  
       
       return Object.entries(itemChoices)
