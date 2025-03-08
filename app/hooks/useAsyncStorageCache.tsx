@@ -1,21 +1,37 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect, useCallback } from 'react';
 
+
 const useAsyncStorageCache = (userId, locationId) => {
   const cacheKey = `cache_${userId}_${locationId}`;
   const [storedValue, setStoredValue] = useState(null);
 
   // Function to save data to cache
+  // const setCache = useCallback(async (value) => {
+  //   try {
+  //     const jsonValue = JSON.stringify(value);
+  //     await AsyncStorage.setItem(cacheKey, jsonValue);
+  //     setStoredValue(value);
+  //     console.log(`(NOBRIDGE) LOG  AsyncStorage Cache Updated:`, value.slice(0,100));
+  //   } catch (error) {
+  //     console.error('Error saving to cache:', error);
+  //   }
+  // }, [cacheKey]);
+
+
   const setCache = useCallback(async (value) => {
     try {
       const jsonValue = JSON.stringify(value);
       await AsyncStorage.setItem(cacheKey, jsonValue);
       setStoredValue(value);
-      console.log(`(NOBRIDGE) LOG  AsyncStorage Cache Updated:`, value);
+  
+      // Log the first 100 characters of the stringified cache value
+      console.log(`(NOBRIDGE) LOG  AsyncStorage Cache Updated:`, jsonValue.slice(0, 100));
     } catch (error) {
       console.error('Error saving to cache:', error);
     }
   }, [cacheKey]);
+  
 
   // Function to retrieve data from cache
   const getCache = useCallback(async () => {

@@ -218,8 +218,7 @@ const reInitialize = async () => {
       if (userData) {
         setUser(userData);
         setAuthenticated(true);
-
-        // ✅ Ensure loading is only stopped after authenticated updates
+ 
         setTimeout(() => {
           setLoading(false);
           console.log(

@@ -11,6 +11,7 @@ const RuinsHarmonyUICard = ({
   milesAway,
   direction,
   directionDegree, 
+  windHarmony,
 }) => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
 
@@ -21,7 +22,7 @@ const RuinsHarmonyUICard = ({
     <View
       style={[
         appContainerStyles.ruinsHarmonyCardContainer,
-        themeStyles.darkestBackground,
+        themeStyles.darkestBackground, {borderWidth: 3, borderColor: windHarmony === true ? 'limegreen' : 'transparent'}
       ]}
     >
       <View

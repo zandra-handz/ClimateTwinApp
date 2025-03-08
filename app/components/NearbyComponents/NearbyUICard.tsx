@@ -2,6 +2,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import { useSurroundings } from "../../context/CurrentSurroundingsContext";
+import DirectionSquare from "../SurroundingsComponents/DirectionSquare";
 
 const NearbyUICard = ({ data, onPress, onOpenPress, onOpenTreasurePress }) => {
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();

@@ -57,7 +57,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   const [lastLatAndLong, setLastLatAndLong] = useState<[number, number] | null>(null);
   const [isLocationSocketOpen, setIsLocationSocketOpen] = useState<boolean>(false);
   const [locationSocketColor, setLocationSocketColor] = useState<any>(null);
-
+  const [ alwaysReRender, setAlwaysReRender ] = useState<number>(1);
 
 
   useExploreRoute(!!lastLocationId, false, isAuthenticated);
@@ -141,12 +141,14 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
       handleLocationUpdateWSIsOpen(true);
       setIsLocationSocketOpen(true);
+    
       setLocationSocketColor('limegreen');
       // using color instead
       // showAppMessage(true, null, "Websocket still connected!");
       setIsReconnecting(false);
       setReconnectionDelay(3000); 
-      console.log("WebSocket is already open, closing existing connection and reopening.");
+      console.log("WebSocket is already open, sending request to refresh data");
+      handleRefreshDataFromSocket();
       return;
     };
     
@@ -203,7 +205,20 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       
       if ('last_accessed' in update) {
 
-        setLastLocationAccessTime(update.last_accessed);
+        console.log('update last accessed!', update.last_accessed);
+        console.log(`force rerender`, alwaysReRender);
+
+        //WHY SET TIMEOUT?
+        // 1. THIS ALLOWS THIS UPDATE TO OCCUR AFTER THE CURRENT EVENT LOOP 
+        //MANUAL OVERRIDE OF REACT'S OPTIMIZING BATCH UPDATE FEATURE
+        //NEEDED TO RETRIGGER COUNTDOWN
+        // 2. I AM A NOOB AND NOT SURE HOW ELSE TO FIX, THIS FEELS PRETTY BAD
+        //
+        setTimeout(() => {
+          setLastLocationAccessTime(update.last_accessed); // this will trigger state update even if the value is the same
+          setAlwaysReRender((prev) => prev + 1); // Update a dummy state to trigger a re-render
+        }, 0);
+       
       }
 
       if ('latitude' in update && 'longitude' in update) {
@@ -318,10 +333,11 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     } 
   
     return () => {
-      console.log('isAuthenticated === false --> running CloseSocket()');
-      
+     
       if (!isAuthenticated) {
         
+      console.log('isAuthenticated === false --> running CloseSocket()');
+      
       closeSocket(); // Always close socket in cleanup
      
     }
@@ -406,7 +422,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
   return (
     <SurroundingsWSContext.Provider
-      value={{ sendMessage, handleRefreshDataFromSocket, lastMessage, lastNotification, lastLocationName, lastLocationId, lastLocationAccessTime, lastLatAndLong, isLocationSocketOpen, locationSocketColor }}
+      value={{ sendMessage, handleRefreshDataFromSocket, lastMessage, lastNotification, lastLocationName, lastLocationId, lastLocationAccessTime, lastLatAndLong, isLocationSocketOpen, locationSocketColor, alwaysReRender }}
     >
       {children}
     </SurroundingsWSContext.Provider>

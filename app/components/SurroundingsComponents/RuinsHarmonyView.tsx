@@ -10,6 +10,7 @@ const RuinsHarmonyView = ({
   milesAway,
   direction,
   directionDegree,
+  windHarmony,
 }) => {
 
   const englishNameKey = `name:en`;
@@ -24,6 +25,7 @@ const RuinsHarmonyView = ({
       milesAway={milesAway}
       direction={direction}
       directionDegree={directionDegree} 
+      windHarmony={windHarmony}
     />
   );
 };

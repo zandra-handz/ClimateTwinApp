@@ -13,10 +13,10 @@ const PortalBanner = () => {
  
   return (
     <View
-      style={portalSurroundings?.id !== null ? appContainerStyles.portalBannerContainer : appContainerStyles.emptyBannerContainer} > 
+      style={[portalSurroundings?.id !== null ? appContainerStyles.portalBannerContainer : appContainerStyles.emptyBannerContainer, themeStyles.primaryBackground]} > 
       {portalSurroundings?.id !== null && locationId !== null && (
         <>
-        <View style={appContainerStyles.portalTempsAndSvgContainer}>
+        <View style={[appContainerStyles.portalTempsAndSvgContainer]}>
           <View style={appContainerStyles.startingPointTempContainer}>
             {homeSurroundings?.temperature && (
               <Text

@@ -613,6 +613,24 @@ const containerStyles = StyleSheet.create({
     overflow: 'hidden',
 
   },
+  smallImageContainer: {
+    position: 'absolute',
+    right: 0,  
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    padding: 10,
+    
+    //top: 30,
+    //left: -20,
+    //width: 110,
+    width: '60%',
+    overflow: 'hidden',  
+    alignItems: 'center',
+    height: '100%',
+    borderRadius: 10
+    
+    
+  },
   treasureCardContainer: { 
     borderRadius: 20,
     padding: 10, 
@@ -681,7 +699,7 @@ const containerStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center', 
  
-    height: 180,
+    height: 270,
     overflow: 'hidden', 
     zIndex: 100,
     position: 'absolute',

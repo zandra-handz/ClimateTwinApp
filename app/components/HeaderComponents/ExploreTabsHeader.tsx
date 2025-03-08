@@ -75,7 +75,7 @@ const ExploreTabsHeader = () => {
                 <CountDowner />
 
                 
-                <View style={{ marginHorizontal: 4 }}>
+                <View style={{ marginHorizontal: 6 }}>
                   <RefreshSocketButton />
                 </View>
                 <DrawerToggleButton tintColor={themeStyles.primaryText.color} />

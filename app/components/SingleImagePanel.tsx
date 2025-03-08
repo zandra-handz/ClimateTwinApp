@@ -29,7 +29,7 @@ const SingleImagePanel = ({ label, value }) => {
        {streetViewUrl && (
           <Image
             source={streetViewUrl}
-            style={{ width: '100%', height: 200, borderRadius: 30 }}
+            style={{ width: '100%', height: 190, borderRadius: 30 }}
             contentFit="contain"
           />
         )}

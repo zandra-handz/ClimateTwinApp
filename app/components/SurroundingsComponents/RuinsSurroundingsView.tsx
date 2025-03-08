@@ -1,9 +1,8 @@
 import React from "react";
-import { View } from "react-native"; 
+import { View } from "react-native";
 import { useSurroundings } from "../../context/CurrentSurroundingsContext";
 import SingleDetailPanel from "@/app/components/SingleDetailPanel";
-import SingleImagePanel from "@/app/components/SingleImagePanel";  
-import Groq from "@/app/components/Groq";
+import SingleImagePanel from "@/app/components/SingleImagePanel";
 
 import useLLMScripts from "@/app/llm/useLLMScripts";
 
@@ -11,17 +10,27 @@ import RuinsHarmonyView from "./RuinsHarmonyView";
 
 const RuinsSurroundingsView = ({ height }) => {
   const { ruinsSurroundings } = useSurroundings();
-  const { yourRoleIsFriendlyDiligentHistorian, tellMeRecentHistoryOf } = useLLMScripts();
+  const { yourRoleIsFriendlyDiligentHistorian, tellMeRecentHistoryOf } =
+    useLLMScripts();
 
- 
-  
-  const prompt = (tellMeRecentHistoryOf(ruinsSurroundings?.latitude, ruinsSurroundings?.longitude, ruinsSurroundings?.name))
- const role = yourRoleIsFriendlyDiligentHistorian();
+  const prompt = tellMeRecentHistoryOf(
+    ruinsSurroundings?.latitude,
+    ruinsSurroundings?.longitude,
+    ruinsSurroundings?.name
+  );
+  const role = yourRoleIsFriendlyDiligentHistorian();
 
-  return ( 
+  return (
     <View style={{ flex: 1, height: height }}>
+      <View style={{ height: 10, width: "100%" }}></View>
       {ruinsSurroundings?.id && (
         <>
+          {ruinsSurroundings.streetViewImage && (
+            <SingleImagePanel
+              label={"Image"}
+              value={ruinsSurroundings.streetViewImage}
+            />
+          )}
           <RuinsHarmonyView
             name={ruinsSurroundings.name}
             windCompass={ruinsSurroundings.windCompass}
@@ -29,19 +38,13 @@ const RuinsSurroundingsView = ({ height }) => {
             milesAway={ruinsSurroundings.milesAway}
             direction={ruinsSurroundings.direction}
             directionDegree={ruinsSurroundings.directionDegree}
+            windHarmony={ruinsSurroundings.windHarmony}
           />
 
-        
           {/* <SingleDetailPanel
             label={"Wind compass"}
             value={ruinsSurroundings.windCompass}
           /> */}
-          {ruinsSurroundings.streetViewImage && (
-            <SingleImagePanel
-              label={"Image"}
-              value={ruinsSurroundings.streetViewImage}
-            />
-          )}
 
           {/* <SingleDetailPanel
             label={"Wind harmony"}
@@ -51,7 +54,7 @@ const RuinsSurroundingsView = ({ height }) => {
             label={"Wind agreement score"}
             value={ruinsSurroundings.windAgreementScore}
           /> */}
-              {/* <Groq givenRole={role} prompt={prompt} title={'history from Groq'} /> */}
+          {/* <Groq givenRole={role} prompt={prompt} title={'history from Groq'} /> */}
 
           {ruinsSurroundings.tags && ruinsSurroundings.tags.historic && (
             <SingleDetailPanel
@@ -68,7 +71,7 @@ const RuinsSurroundingsView = ({ height }) => {
           )}
         </>
       )}
-    </View> 
+    </View>
   );
 };
 
