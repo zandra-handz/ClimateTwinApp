@@ -26,7 +26,7 @@ const collect = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { showAppMessage } = useAppMessage();
 
-  const { getCache } = useAsyncStorageCache(user.id, lastLocationId);
+  const { getCache } = useAsyncStorageCache(user?.id, lastLocationId);
 
   const [cachedHistory, setCachedHistory] = useState(null);
 
@@ -51,10 +51,10 @@ const collect = () => {
     const fetchCache = async () => {
       const cachedData = await getCache();
       if (cachedData && cachedData.history) {
-       // console.log("Fetched cached history:", cachedData.history);
+        // console.log("Fetched cached history:", cachedData.history);
         setCachedHistory(cachedData.history);
       } else {
-      //  console.log("No cached history found.");
+        //  console.log("No cached history found.");
       }
     };
 
@@ -106,15 +106,14 @@ const collect = () => {
   const updateDescriptorString = (text) => {
     if (descriptorTextRef && descriptorTextRef.current) {
       descriptorTextRef.current.setText(text);
-    //  console.log("in parent", descriptorTextRef.current.getText());
+      //  console.log("in parent", descriptorTextRef.current.getText());
     }
   };
-
 
   const updateAdditionalString = (text) => {
     if (additionalTextRef && additionalTextRef.current) {
       additionalTextRef.current.setText(text);
-    //  console.log("in parent", additionalTextRef.current.getText());
+      //  console.log("in parent", additionalTextRef.current.getText());
     }
   };
 
@@ -134,13 +133,11 @@ const collect = () => {
         firstString,
         descriptorTextRef.current.getText(),
         editedTextRef.current.getText(),
-        additionalTextRef.current.getText(),
-       
+        additionalTextRef.current.getText()
       );
       descriptorTextRef.current.clearText();
       editedTextRef.current.clearText();
       additionalTextRef.current.clearText();
-
     }
   };
 
@@ -165,14 +162,13 @@ const collect = () => {
               onSelect={handleFriendSelect} // Handling the selection
             />
           )} */}
-          <View style={{ flex: 1, flexGrow: 1}}>
-
-            <View style={{marginBottom: 10}}>
+          <View style={{ flex: 1, flexGrow: 1 }}>
+            <View style={{ marginBottom: 10 }}>
               <TextInputLine
                 width={"100%"}
                 height={90}
                 ref={descriptorTextRef}
-                autoFocus={true}
+                autoFocus={false}
                 title={"Treasure name"}
                 //helperText={!isKeyboardVisible ? null : "Press enter to exit"}
                 // iconColor={
@@ -181,48 +177,45 @@ const collect = () => {
                 mountingText={""}
                 onTextChange={updateDescriptorString}
                 multiline={false}
-              /> 
-              
-              
+              />
             </View>
-            <View style={{marginBottom: 10}}>
-            <TextInputBlock
-              width={"100%"}
-             // height={!isKeyboardVisible ? oneThirdHeight : oneHalfHeight}
-             height={!isKeyboardVisible ? 200 : 120}
-              //height={120}
-              ref={editedTextRef}
-              autoFocus={false}
-              title={"Description of treasure"}
-              helperText={!isKeyboardVisible ? null : "Press enter to exit"}
-              iconColor={
-                !isKeyboardVisible ? themeStyles.primaryText.color : "red"
-              }
-              mountingText={""}
-              onTextChange={updateNoteEditString}
-              multiline={false}
-            />
+            <View style={{ marginBottom: 10 }}>
+              <TextInputBlock
+                width={"100%"}
+                // height={!isKeyboardVisible ? oneThirdHeight : oneHalfHeight}
+                height={!isKeyboardVisible ? 200 : 120}
+                //height={120}
+                ref={editedTextRef}
+                autoFocus={false}
+                title={"Description of treasure"}
+                helperText={!isKeyboardVisible ? null : "Press enter to exit"}
+                iconColor={
+                  !isKeyboardVisible ? themeStyles.primaryText.color : "red"
+                }
+                mountingText={""}
+                onTextChange={updateNoteEditString}
+                multiline={false}
+              />
             </View>
-            <View style={{marginBottom: 10}}>
-                        <TextInputBlock
-              width={"100%"}
-              height={!isKeyboardVisible ? 180 : 120}
-              ref={additionalTextRef}
-              autoFocus={false}
-              title={"Additional data"}
-              helperText={!isKeyboardVisible ? null : "Press enter to exit"}
-              iconColor={
-                !isKeyboardVisible ? themeStyles.primaryText.color : "red"
-              }
-              mountingText={""}
-              onTextChange={updateAdditionalString}
-              multiline={false}
-            />
+            <View style={{ marginBottom: 10 }}>
+              <TextInputBlock
+                width={"100%"}
+                height={!isKeyboardVisible ? 180 : 120}
+                ref={additionalTextRef}
+                autoFocus={false}
+                title={"Additional data"}
+                helperText={!isKeyboardVisible ? null : "Press enter to exit"}
+                iconColor={
+                  !isKeyboardVisible ? themeStyles.primaryText.color : "red"
+                }
+                mountingText={""}
+                onTextChange={updateAdditionalString}
+                multiline={false}
+              />
             </View>
           </View>
-          
-          </View>
-     
+        </View>
+
         {prompt &&
           role &&
           lastLocationId &&
@@ -233,13 +226,13 @@ const collect = () => {
               prompt={prompt}
               title={"Treasure found by Groq"}
               cacheKey={base}
-              userId={user.id}
+              userId={user?.id}
             />
           )}
         {!isKeyboardVisible && (
           <ActionsFooter
             height={isKeyboardVisible ? 40 : 66}
-            onPressLeft={() => router.replace("(treasures)")}
+            onPressLeft={() => router.back()}
             labelLeft={"Cancel"}
             onPressRight={handleCollect}
             labelRight={"Send"}

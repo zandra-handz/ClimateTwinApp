@@ -1,57 +1,71 @@
-import { View, TextInput } from "react-native";
-import React, { useEffect, useRef } from "react";
+import { View, TextInput, AppState } from "react-native";
+import React, { useEffect, useRef, useCallback } from "react";
+import { useFocusEffect } from "@react-navigation/native";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
-import { useSurroundings } from "../../context/CurrentSurroundingsContext";
-import { useAppMessage } from "../../context/AppMessageContext"; 
-import Animated, { useSharedValue, useAnimatedProps } from "react-native-reanimated";
 import { useSurroundingsWS } from "../../context/SurroundingsWSContext";
-import useDateTimeFunctions from '../../hooks/useDateTimeFunctions'; 
+import { useAppMessage } from "../../context/AppMessageContext";
+import Animated, { useSharedValue, useAnimatedProps } from "react-native-reanimated";
+import useDateTimeFunctions from "../../hooks/useDateTimeFunctions";
 
 const CountDowner = () => {
-  const { lastLocationAccessTime } = useSurroundingsWS();
+  const { lastLocationAccessTime, lastLocationId } = useSurroundingsWS();
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
-  const { lastAccessed, isInitializingLocation } = useSurroundings(); 
-  const { showAppMessage} = useAppMessage();
-  const { getTimeDifferenceInSeconds } = useDateTimeFunctions(); 
+  const { getTimeDifferenceInSeconds } = useDateTimeFunctions();
 
   const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
   const timeSharedValue = useSharedValue(0);
-  const intervalRef = useRef(null); 
+  const intervalRef = useRef(null);
+  const isResetting = useRef(false);
 
   const animatedTime = useAnimatedProps(() => {
-    const time = Math.max(0, timeSharedValue.value); 
+    const time = Math.max(0, timeSharedValue.value);
     const hours = Math.floor(time / 3600);
     const minutes = Math.floor((time % 3600) / 60);
     const seconds = time % 60;
-    const formattedTime = `${hours > 0 ? `${hours}:` : ""}${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
-    return { text: formattedTime, defaultValue: formattedTime };
+    return { text: `${hours > 0 ? `${hours}:` : ""}${minutes}:${seconds < 10 ? "0" : ""}${seconds}` };
   });
 
-
-  useEffect(() => {
-    console.log('countdowner rerendered');
-
-  }, []);
- 
-
-  useEffect(() => {  
-    if (lastLocationAccessTime !== null) { 
-      console.log('resetting countdown'); 
-      resetCountdown();
-    }
-  }, [lastLocationAccessTime]);  
-
-  const resetCountdown = () => { 
-    if (lastLocationAccessTime) {
- 
+  // Function to reset countdown if not already resetting
+  const resetCountdown = useCallback(() => {
+    if (!isResetting.current && lastLocationAccessTime) {
+      isResetting.current = true;
+      console.log("Resetting countdown");
       const timeDifference = getTimeDifferenceInSeconds(lastLocationAccessTime);
       timeSharedValue.value = timeDifference > 0 ? timeDifference : 0;
-      // showAppMessage(true, null, `${currentSurroundings.last_accessed} ${timeDifference} ${timeSharedValue.value}`);
-      // console.log(`${currentSurroundings.last_accessed} ${timeDifference} ${timeSharedValue.value}`);
-    }
-  };
 
-  useEffect(() => { 
+      setTimeout(() => {
+        isResetting.current = false;
+      }, 1000); // Allow 1s buffer before allowing another reset
+    }
+  }, [lastLocationAccessTime, timeSharedValue]);
+
+  // Reset countdown when lastLocationAccessTime changes
+  useEffect(() => {
+    resetCountdown();
+  }, [lastLocationAccessTime, lastLocationId, resetCountdown]);
+
+  // Reset countdown when screen comes back into focus
+  useFocusEffect(
+    useCallback(() => {
+      resetCountdown();
+    }, [resetCountdown])
+  );
+
+  // Reset countdown when app comes back into the foreground
+  useEffect(() => {
+    const handleAppStateChange = (nextAppState) => {
+      if (nextAppState === "active") {
+        resetCountdown();
+      }
+    };
+
+    const appStateListener = AppState.addEventListener("change", handleAppStateChange);
+    
+    return () => appStateListener.remove();
+  }, [resetCountdown]);
+
+  // Countdown interval logic
+  useEffect(() => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
     }
@@ -64,25 +78,20 @@ const CountDowner = () => {
       }
     }, 1000);
 
-    return () => clearInterval(intervalRef.current); 
-    
+    return () => clearInterval(intervalRef.current);
   }, [timeSharedValue]);
 
   return (
-    <> 
-      <View style={[appContainerStyles.countDownerContainer, themeStyles.primaryBackground]}>
-        {lastLocationAccessTime !== null && (
-
-       
-          <AnimatedTextInput
-            style={[appFontStyles.countDownText, themeStyles.primaryText]}
-            animatedProps={animatedTime}
-            editable={false}
-            defaultValue={"    "}
-          /> 
-        )}
-      </View> 
-    </>
+    <View style={[appContainerStyles.countDownerContainer, themeStyles.primaryBackground]}>
+      {lastLocationAccessTime !== null && (
+        <AnimatedTextInput
+          style={[appFontStyles.countDownText, themeStyles.primaryText]}
+          animatedProps={animatedTime}
+          editable={false}
+          defaultValue={"    "}
+        />
+      )}
+    </View>
   );
 };
 
