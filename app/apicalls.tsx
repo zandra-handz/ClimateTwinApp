@@ -582,7 +582,8 @@ export const getHistory = async () => {
     try {
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/users/visited-places/'); //summary is an interesting endpoint too
-        console.log('API GET Call getUserVisits'); //, response.data);
+       
+        console.log('API GET Call getUserVisits', response.data); //, response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
@@ -595,6 +596,51 @@ export const getHistory = async () => {
         throw error;
     }
 };
+
+
+//pagination settings for getStats on backend:
+
+// class ClimateTwinStatsPagination(PageNumberPagination):
+//     page_size = 30  
+//     page_size_query_param = 'page_size'
+//     max_page_size = 100 
+
+// {
+//     "count": 150,  // Total number of results
+//     "next": "http://your-api-url/?page=2",
+//     "previous": null,
+//     "results": [
+//         {
+//             "id": 1,
+//             "home_temperature": 72.5,
+//             "home_address": "New York, NY",
+//             "climate_twin_temperature": 75.0,
+//             "climate_twin_address": "Los Angeles, CA",
+//             ...
+//         },
+//         ...
+//     ]
+// }
+
+
+export const getStats = async () => {
+    try {
+      //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.get('/climatevisitor/algo-stats-for-user/'); 
+        console.log('API GET Call getStats', response.data.results); //, response.data);
+        return response.data.results; //endpoint is paginated, use 'results'
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/visits/:', error.response.data);
+        } else if (error.request) {
+            console.error('Error request for /users/visits/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /users/visits/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
 
 
 

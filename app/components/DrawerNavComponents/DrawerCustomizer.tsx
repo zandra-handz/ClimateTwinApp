@@ -13,7 +13,7 @@ import { useUser } from "../../context/UserContext";
 import { Image } from "expo-image";
 import ClimateTwinLogo from "../../assets/images/logo.png";
 import DarkLightSwitch from "./DarkLightSwitch";
-import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
+import { AntDesign, Feather  } from "@expo/vector-icons";
 import CustomStatusBar from "../CustomStatusBar";
 import InboxWithNotifs from "./InboxWithNotifs";
 
@@ -176,6 +176,25 @@ const DrawerCustomizer = (props) => {
           ]}
           label="History"
           onPress={() => router.push("/(history)")}
+        />
+                <DrawerItem
+          icon={() => (
+            <Feather
+              name="activity" //activity
+              size={appFontStyles.exploreTabBarIcon.width}
+              color={themeStyles.exploreTabBarText.color}
+              {...props}
+            />
+          )}
+          labelStyle={[themeStyles.primaryText, appFontStyles.drawerLabelText]}
+          pressColor={"lightblue"}
+          style={[
+            themeStyles.darkerBackground,
+            appContainerStyles.drawerButtonContainer,
+            { borderBottomColor: themeStyles.primaryText.color },
+          ]}
+          label="Stats"
+          onPress={() => router.push("/(stats)")}
         />
         <DrawerItem
                   icon={() => (

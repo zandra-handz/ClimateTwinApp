@@ -2,16 +2,40 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import useDateTimeFunctions from "../../hooks/useDateTimeFunctions";
+import CuteDetailBox from "../CuteDetailBox";
+import SingleDetailPanel from "../SingleDetailPanel";
+import GoToItemButton from "../GoToItemButton";
+
+import useFriends from "@/app/hooks/useFriends";
 
 const TreasuresUICard = ({
-  data,
-  onPress,
-  onOpenPress,
+  data, 
   onOpenTreasurePress,
+  isFullView,
 }) => {
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
   const { formatUTCToMonthDayYear } = useDateTimeFunctions();
+  const { friends } = useFriends();
 
+  const renderFriendName = (id) => {
+    if (friends) {
+      
+    const friend = friends.find((friend) => friend.id === id);
+    return friend?.nickname || null;
+    
+  } else {
+    return null;
+  }
+  };
+
+  const handlePress = () => {
+    if (onOpenTreasurePress) {
+      onOpenTreasurePress(data.id, data.descriptor);
+
+    }
+  
+
+  };
   // Function to recursively render object fields
   const renderField = (key, value, level = 0) => {
     if (value && typeof value === "object" && !Array.isArray(value)) {
@@ -62,82 +86,183 @@ const TreasuresUICard = ({
     );
   };
 
+  const findDetails = (
+    <>
+      <Text
+        style={[
+          appFontStyles.treasureCollectionDetailsText,
+          themeStyles.primaryText,
+        ]}
+      >
+        Finder traveled
+      </Text>
+      <Text
+        style={[
+          appFontStyles.treasureCollectionDetailsBoldText,
+          themeStyles.primaryText,
+        ]}
+      >
+        {" "}
+        {data?.miles_traveled_to_collect || "0"} miles{" "}
+      </Text>
+      <Text
+        style={[
+          appFontStyles.treasureCollectionDetailsText,
+          themeStyles.primaryText,
+        ]}
+      >
+        to{" "}
+      </Text>
+      <Text
+        style={[
+          appFontStyles.treasureCollectionDetailsBoldText,
+          themeStyles.primaryText,
+        ]}
+      >
+        {data?.location_name || "unknown"}
+      </Text>
+      <Text
+        style={[
+          appFontStyles.treasureCollectionDetailsText,
+          themeStyles.primaryText,
+        ]}
+      >
+        {" "}
+        to collect on{" "}
+        {formatUTCToMonthDayYear(data?.created_on) || "unknown date"}.
+      </Text>
+    </>
+  );
+
+  const ownershipDetails = (
+    <>
+      <Text
+        style={[
+          appFontStyles.treasureCollectionDetailsText,
+          themeStyles.primaryText,
+        ]}
+      >
+        This was given to you by {renderFriendName(data.giver)} on{" "}
+        {formatUTCToMonthDayYear(data?.owned_since) ||
+          formatUTCToMonthDayYear(data?.created_on) ||
+          "unknown date"}
+        !
+      </Text>
+    </>
+  );
+
+  const originalOwnerDetails = (
+    <>
+      <Text
+        style={[
+          appFontStyles.treasureCollectionDetailsText,
+          themeStyles.primaryText,
+        ]}
+      >
+        You have owned this since{" "}
+        {formatUTCToMonthDayYear(data?.owned_since) ||
+          formatUTCToMonthDayYear(data?.created_on) ||
+          "unknown date"}.
+      </Text>
+    </>
+  );
+
   return (
-    <View
-      style={[
-        themeStyles.darkerBackground,
-        appContainerStyles.treasureCardContainer,
-        { borderColor: themeStyles.primaryBorder.color },
-      ]}
-    >
-      <View style={appContainerStyles.treasureHeaderRow}>
-        <Text
-          style={[appFontStyles.treasureHeaderText, themeStyles.primaryText]}
-        >
-          {data?.descriptor || "unnamed Item"}
-        </Text>
-      </View>
-      <View style={[appContainerStyles.treasureDescriptionContainer, themeStyles.darkestBackground]}>
-        <Text
-          style={[appFontStyles.treasureDescriptionText, themeStyles.primaryText]}
-        >
-          <Text style={{fontWeight: 'bold'}}>Description: </Text>
-           {data?.description || "No description given"}
-        </Text>
-      </View>
-      <View style={appContainerStyles.treasureHeaderRow}>
-        <Text
-          style={[appFontStyles.treasureDescriptionText, themeStyles.primaryText]}
-        >
-             <Text style={{fontWeight: 'bold'}}>Additional data: </Text>
-          {data?.add_data || "None recorded"}
-        </Text>
-      </View>
-      <View style={appContainerStyles.treasureCollectionDetailsSubheader}>
-        <Text
+    <>
+      {data?.pending != true && (
+        <View
           style={[
-            appFontStyles.treasureCollectionDetailsText,
-            themeStyles.primaryText,
+            themeStyles.darkerBackground,
+            appContainerStyles.treasureCardContainer,
+            { borderColor: themeStyles.primaryBorder.color },
           ]}
-        >Finder traveled{" "}
-          {data?.miles_traveled_to_collect || "0"}{" "}miles to{" "}
-          <Text          style={[
-            appFontStyles.treasureCollectionDetailsBoldText,
-            themeStyles.primaryText,
-          ]}>
-          {data?.location_name || "unknown"}
-            </Text>{" "}to collect on{" "}{formatUTCToMonthDayYear(data?.created_on) || "unknown date"} .
-        </Text>
-      </View>
-
-
-      {Object.entries(data).map(([key, value]) => renderField(key, value))}
-      <View style={appContainerStyles.treasureCollectionDetailsSubheader}>
-        <Text
-          style={[
-            appFontStyles.treasureCollectionDetailsText,
-            themeStyles.primaryText,
-          ]}
-        >You have owned this since{" "}{formatUTCToMonthDayYear(data?.owned_since) || formatUTCToMonthDayYear(data?.created_on) || "unknown date"} .
-        </Text>
-      </View>
-      <TouchableOpacity onPress={() => onPress(data)}>
-        <Text style={themeStyles.primaryText}>PRESS ME</Text>
-      </TouchableOpacity>
-
-      {onOpenPress && (
-        <TouchableOpacity onPress={() => onOpenPress(data.id, data.message)}>
-          <Text style={themeStyles.primaryText}>OPEN VIA DATA ID</Text>
-        </TouchableOpacity>
-      )}
-      {onOpenTreasurePress && (
-        <TouchableOpacity
-          onPress={() => onOpenTreasurePress(data.id, data.descriptor)}
         >
-          <Text style={themeStyles.primaryText}>OPEN VIA DATA ID</Text>
-        </TouchableOpacity>
+          <View style={appContainerStyles.treasureHeaderRow}>
+            <Text
+              style={[
+                appFontStyles.treasureHeaderText,
+                themeStyles.primaryText,
+              ]}
+            >
+              {data?.descriptor || "unnamed Item"}
+            </Text>
+          </View>
+          {isFullView && (
+            
+          <View
+            style={[
+              appContainerStyles.treasureDescriptionContainer,
+              themeStyles.darkestBackground,
+            ]}
+          >
+            <Text
+              style={[
+                appFontStyles.treasureDescriptionText,
+                themeStyles.primaryText,
+              ]}
+            >
+              <Text style={{ fontWeight: "bold" }}>Description: </Text>
+              {data?.description || "No description given"}
+            </Text>
+          </View>
+          
+        )}
+        {isFullView && (
+          
+          <View
+            style={[
+              appContainerStyles.treasureDescriptionContainer,
+              themeStyles.darkestBackground,
+            ]}
+          >
+            <Text
+              style={[
+                appFontStyles.treasureDescriptionText,
+                themeStyles.primaryText,
+              ]}
+            >
+              <Text style={{ fontWeight: "bold" }}>Additional data: </Text>
+              {data?.add_data || "None recorded"}
+            </Text>
+          </View>
+          
+        )}
+          <View style={[appContainerStyles.treasureCollectionDetailsSubheader]}>
+            <CuteDetailBox
+              iconOne={"heart"}
+              iconTwo={"map"}
+              message={findDetails}
+            /> 
+
+          {/* {Object.entries(data).map(([key, value]) => renderField(key, value))}
+           */}
+          {data && data.giver && isFullView && (
+               <CuteDetailBox
+                iconOne={"gift"}
+                iconTwo={"heart"}
+                message={ownershipDetails}
+                backgroundColor={themeStyles.primaryBackground.backgroundColor}
+              />
+          
+          )}
+            {data && !data.giver && isFullView && (
+              <CuteDetailBox 
+                iconTwo={"map"}
+                message={originalOwnerDetails}
+                backgroundColor={themeStyles.primaryBackground.backgroundColor}
+              /> 
+          )}
+          
+          </View> 
+
+         {onOpenTreasurePress && (
+          
+          <GoToItemButton onPress={() => handlePress()} label={'Go to treasure'}/>
+          
+         )}
+        </View>
       )}
-    </View>
+    </>
   );
 };
 

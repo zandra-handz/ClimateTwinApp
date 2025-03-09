@@ -1,9 +1,10 @@
-import { View, FlatList } from 'react-native'; 
-import TreasuresUICard from './TreasuresUICard';
+import { View, FlatList } from 'react-native';
+ 
+import StatsUICard from './StatsUICard';
 import React from 'react';
 import { useGlobalStyles } from '../../context/GlobalStylesContext';
 
-const TreasuresView = ({listData, onCardButtonPress, onOpenButtonPress, onOpenTreasurePress}) => {
+const StatsView = ({listData, onCardButtonPress, onOpenButtonPress, onOpenTreasurePress}) => {
  
 
     const {  appContainerStyles  } = useGlobalStyles();
@@ -18,7 +19,7 @@ const TreasuresView = ({listData, onCardButtonPress, onOpenButtonPress, onOpenTr
     }
     renderItem={({ item }) => (
       <View style={{ marginVertical: '2%' }}>
-        <TreasuresUICard data={item} onOpenTreasurePress={onOpenTreasurePress} />
+        <StatsUICard data={item} onPress={onCardButtonPress} onOpenPress={onOpenButtonPress} onOpenTreasurePress={onOpenTreasurePress} />
       </View>
     )}
     contentContainerStyle={{ paddingBottom: 60 }} 
@@ -29,4 +30,4 @@ const TreasuresView = ({listData, onCardButtonPress, onOpenButtonPress, onOpenTr
       );
     }
 
-export default TreasuresView;
+export default StatsView;

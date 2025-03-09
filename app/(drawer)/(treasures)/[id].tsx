@@ -1,5 +1,5 @@
 import React, {  useEffect  } from "react";
-import {   View } from "react-native";
+import {   View, ScrollView } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
 
@@ -9,6 +9,7 @@ import DataList from "../../components/Scaffolding/DataList";
 
 import ActionsFooter from "@/app/components/ActionsFooter";
 import useTreasures from "@/app/hooks/useTreasures";
+import TreasuresUICard from "@/app/components/TreasuresComponents/TreasuresUICard";
 
 const details = () => {
   const { id } = useLocalSearchParams<{ id: string }>(); 
@@ -59,15 +60,13 @@ const { treasures, handleGetTreasure, viewingTreasure } = useTreasures();
           { paddingTop: 10 },
         ]}
       >
-        <View style={appContainerStyles.innerFlexStartContainer}>
+        <ScrollView>
           {viewingTreasure && (
-            <DataList
-              listData={[viewingTreasure]}
-              onCardButtonPress={handlePress}
-            />
+           
+            <TreasuresUICard data={viewingTreasure} isFullView={true} />
           )}
  
-        </View>
+        </ScrollView>
         <ActionsFooter
         onPressLeft={() => router.replace('(treasures)')}
         labelLeft={"Back"}

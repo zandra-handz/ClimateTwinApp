@@ -23,10 +23,10 @@ const PortalSurroundingsView = ({ height }) => {
           homeWindDirection={homeSurroundings.windDirection}
         />
 
-        <SingleDetailPanel
+        {/* <SingleDetailPanel
           label={"Experience"}
           value={portalSurroundings.experience}
-        />
+        /> */}
 
         <SingleDetailPanel
           label={"Details"}
@@ -38,14 +38,14 @@ const PortalSurroundingsView = ({ height }) => {
           value={portalSurroundings.windSpeedInteraction}
         />
 
-        <SingleDetailPanel
+        {/* <SingleDetailPanel
           label={"Pressure interaction"}
           value={portalSurroundings.pressureInteraction}
         />
         <SingleDetailPanel
           label={"Humidity interaction"}
           value={portalSurroundings.humidityInteraction}
-        />
+        /> */}
       </>
     </View>
   );

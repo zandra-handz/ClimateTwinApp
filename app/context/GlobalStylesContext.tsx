@@ -8,6 +8,7 @@ import React, {
 import { StyleSheet, AccessibilityInfo } from "react-native";
 import { useColorScheme } from "react-native";
 import { useUser } from "./UserContext";
+import GoToItemButton from "../components/GoToItemButton";
 
 // Define the types for the global styles state
 interface GradientColors {
@@ -433,6 +434,32 @@ const containerStyles = StyleSheet.create({
     
 
   },
+  cuteDetailBox: { //use with primaryLightBackground color
+    padding: 20,
+    //paddingHorizontal: 20,
+    width: '100%',
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    borderRadius: 16, 
+    flexWrap: 'flex',
+    height: 'auto',
+    textAlign: 'left', 
+    overflow: 'hidden',
+    
+
+  },
+  cuteDetailIconPositioner: {
+    width: 'auto',
+    paddingHorizontal: 6,
+    marginHorizontal: 10,
+    height: '100%',
+    alignItems: 'center',
+    flexDirection: 'column',
+    justifyContent: 'flex-start',
+
+  },
   tabBarContainer: {
     position: "absolute",
     bottom: 0,
@@ -597,7 +624,7 @@ const containerStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center', 
     //flexGrow: 1,
-    height: 190,
+    height: 220,
     overflow: 'hidden',
 
   },
@@ -678,6 +705,7 @@ const containerStyles = StyleSheet.create({
     padding: 20,
 
   },
+
   singleDetailPanelContainer: {
     borderRadius: 20, 
     padding: 10, 
@@ -691,6 +719,7 @@ const containerStyles = StyleSheet.create({
   
 
   },
+    //groqHistory and Groq use this currently
   scrollDetailPanelContainer: {
     borderRadius: 20, 
     padding: 10,  
@@ -705,6 +734,36 @@ const containerStyles = StyleSheet.create({
     position: 'absolute',
     bottom: 78,
     borderWidth: StyleSheet.hairlineWidth
+  },
+  statRow: {
+    width: '100%',
+    textAlign: 'left',
+    alignItems: 'center',
+    alignContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+    height: 'auto', 
+   
+    flexWrap: 'wrap',
+    marginVertical: 4,
+
+
+  },
+  goToItemButtonContainer: {  
+    padding: 10, 
+    marginBottom: 10,
+    width: '100%',  
+    alignItems: 'center',
+    justifyContent: 'center',  
+
+    height: "auto",
+    padding: 30,
+    borderRadius: 16,
+    width: "100%",
+    flexDirection: "column",
+    flex: 1,
+    borderWidth: StyleSheet.hairlineWidth,
+
   },
   twoButtonFooterContainer: {
     // zIndex: 100,
@@ -862,9 +921,19 @@ const fontStyles = StyleSheet.create({
     height: 22,
     width: 22,
   },
+  cuteDetailIcon: {
+
+    height: 14,
+    width: 14,
+  },
   tinyIcon: {
     height: 14,
     width: 14,
+  },
+  cuteDetailText: {
+    fontSize: 13,
+    fontWeight: 'bold',
+
   },
   countDownText: {
     fontSize: 13,
@@ -876,9 +945,17 @@ const fontStyles = StyleSheet.create({
     fontWeight: 'bold',
     
   },
+  statText: {
+    fontSize: 14,
+    lineHeight: 20,
 
-  
+  },
+  GoToItemButtonText: {
+    fontSize: 17,
+    // fontWeight: 'bold',
 
+  },
+ 
   actionFooterLabel: {
     fontSize: 15,
     fontWeight: 'bold',

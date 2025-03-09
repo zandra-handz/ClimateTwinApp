@@ -6,16 +6,17 @@ import {
 import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
 
 import { useAppMessage } from "../../context/AppMessageContext";
-import useHistory from "../../hooks/useHistory";
-
-import { StatusBar } from "expo-status-bar";
+ 
+import useStats from "@/app/hooks/useStats";
+import StatsView from "@/app/components/StatsComponents/StatsView";
+ 
 
 import DataList from "../../components/Scaffolding/DataList"; 
   
 const index = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles(); 
   const { showAppMessage } = useAppMessage();
-  const { history } = useHistory();
+  const { stats } = useStats();
  
   // useFocusEffect(
   //   useCallback(() => {
@@ -29,7 +30,7 @@ const index = () => {
  
 
 const handlePress = () => {
-  console.log('History handlePress pressed!');
+  console.log('Stats handlePress pressed!');
 
 };
  
@@ -51,7 +52,7 @@ const handlePress = () => {
       >
         <View style={appContainerStyles.innerFlexStartContainer}>
         
-        {history && <DataList listData={history} onCardButtonPress={handlePress} />}
+        {stats && <StatsView listData={stats} onCardButtonPress={handlePress} />}
  
           </View>
       </View>

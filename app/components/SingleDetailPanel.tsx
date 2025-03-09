@@ -3,7 +3,7 @@ import React from "react";
 import { useGlobalStyles } from "../context/GlobalStylesContext";
 
 const SingleDetailPanel = ({ label, value }) => {
-  const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
+  const { themeStyles, appContainerStyles } = useGlobalStyles();
 
   return (
     <View

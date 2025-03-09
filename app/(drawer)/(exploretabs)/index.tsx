@@ -82,12 +82,10 @@ const index = () => {
       console.warn("Attempted to scroll to an invalid index:", index);
     }
   };
-
-  // Track scroll position to fade in/out the portal banner
+ 
   const onScroll = (event) => {
     const offsetY = event.nativeEvent.contentOffset.y;
-
-    // Set the fade effect for the banner based on scroll position
+ 
     const fadeValue = offsetY / ITEM_HEIGHT;
     opacity.setValue(Math.max(0, 1 - fadeValue)); // Ensure opacity doesn't go below 0
 
