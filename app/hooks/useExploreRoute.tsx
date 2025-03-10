@@ -34,7 +34,8 @@ const useExploreRoute = (isExploring: boolean, isInitializingLocation: boolean, 
     // console.log(isNavigationReady);
     console.log(segments[1]);
 
-    if (!isExploring && !isInitializingLocation && !isOnDashboard && isAuthenticated) {
+                                                  //was previously !isOnDashboard but couldn't open other drawer screens when not exploring
+    if (!isExploring && !isInitializingLocation && isOnExploreTabs && isAuthenticated) {
         console.log('going to dashboard!!!'); 
       router.replace("(homedashboard)")
     } else if (isExploring && isOnDashboard && isAuthenticated) { 
