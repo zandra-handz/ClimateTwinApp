@@ -4,11 +4,12 @@ import ScrollDetailPanel from './ScrollDetailPanel';
 import { useSurroundingsWS } from '../context/SurroundingsWSContext';
 import useAsyncStorageCache from '../hooks/useAsyncStorageCache';
 import useLLMScripts from '../llm/useLLMScripts';
+import { Animated } from 'react-native';
 
 
 const API_KEY = Constants.expoConfig?.extra?.GROQ_API_KEY;
 
-const GroqHistory = ({ title, cacheKey='history', userId }) => { 
+const GroqHistory = ({ title, cacheKey='history', userId, opacity }) => { 
   const { lastLocationId, lastLocationName, lastLatAndLong } = useSurroundingsWS();
   const [latitude, longitude] = Array.isArray(lastLatAndLong) ? lastLatAndLong : [null, null];
 
@@ -96,7 +97,7 @@ const GroqHistory = ({ title, cacheKey='history', userId }) => {
   };
   
 
-  return <ScrollDetailPanel label={title} value={responseMessage} />;
+  return <ScrollDetailPanel label={title} value={responseMessage} opacity={opacity} />;
 };
 
 export default GroqHistory;

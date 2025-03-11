@@ -8,11 +8,12 @@ import React, {
 } from "react";
 import { useUser } from "./UserContext";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { useRouter } from "expo-router";
+import { useRouter, useSegments } from "expo-router";
 import { getExploreLocation, pickNewSurroundings, getRemainingGoes } from "../apicalls";
 import useExploreRoute from "../hooks/useExploreRoute";
 import { useActiveSearch } from "./ActiveSearchContext"; 
 import { useSurroundingsWS } from "./SurroundingsWSContext";
+ 
  
 interface CurrentSurroundings {
   id: number;
@@ -115,6 +116,7 @@ export const CurrentSurroundingsProvider: React.FC<
 > = ({ children }) => {
   
   const { user, isAuthenticated, isInitializing } = useUser();
+  const segments = useSegments();
   const queryClient = useQueryClient();
   const { lastLocationName, lastLocationId } = useSurroundingsWS();
   const timeoutRef = useRef(null);
@@ -284,6 +286,10 @@ useEffect(() => {
           windHarmony: false,
           streetViewImage: "",
         };
+        setPortalSurroundings(portalSurroundingsData);
+        setRuinsSurroundings(ruinsSurroundingsData);
+        setHomeSurroundings(homeSurroundingsData); 
+        
         setLocationId(twin_location.id);
         setIsExploring(!!twin_location.id);
 
@@ -353,6 +359,9 @@ useEffect(() => {
           windHarmony: explore_location.wind_harmony || false,
           streetViewImage: explore_location.street_view_image || "",
         };
+        setPortalSurroundings(portalSurroundingsData);
+        setRuinsSurroundings(ruinsSurroundingsData);
+        setHomeSurroundings(homeSurroundingsData); 
 
         setLocationId(explore_location.id);
         setIsExploring(!!explore_location.id);
@@ -421,6 +430,11 @@ useEffect(() => {
         windHarmony: false,
         streetViewImage: "",
       };
+
+      setPortalSurroundings(portalSurroundingsData);
+      setRuinsSurroundings(ruinsSurroundingsData);
+      setHomeSurroundings(homeSurroundingsData); 
+
       setLocationId(null);
       setLastAccessed(null);
       console.log('RESETTING IS EXPLORING TO FALSE');
@@ -433,16 +447,16 @@ useEffect(() => {
       console.log('no surroundings found in main initializer use effect in surroundings');
     }
 
-    setPortalSurroundings(portalSurroundingsData);
-    setRuinsSurroundings(ruinsSurroundingsData);
-    setHomeSurroundings(homeSurroundingsData); 
+
     setIsInitializingLocation(false);
   }, [currentSurroundings]); 
 
   const handlePickNewSurroundings = async (data) => { 
+   
 
     let locationType;
     if (data && data.explore_type) {
+      console.log(data);
       try {
         locationType = data.explore_type === 'discovery_location' ? 'explore_location' : 'twin_location';
         await pickNewSurroundingsMutation.mutateAsync({[locationType]: data.id });
@@ -466,8 +480,12 @@ useEffect(() => {
     onSuccess: (data) => {
       // setLocationId(null);
       // setLastAccessed(null);
-      
+      const isOnNearbyScreen = segments[2] === "nearby"; 
+      if (isOnNearbyScreen) {
+        
       router.replace("(drawer)/(exploretabs)");
+      
+    }
      // triggerRefetch(); //active state + websocket
     },
     onError: (error) => {

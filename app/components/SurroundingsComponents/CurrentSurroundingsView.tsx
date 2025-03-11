@@ -24,11 +24,12 @@ const CurrentSurroundingsView = ( {height}) => {
 
   useEffect(() => {
     const getCombinedData = () => {
+      // console.log('not getting item choices');
       if (!itemChoices) return [];
 
 
-      //console.log(itemChoices);
- 
+//       //console.log(itemChoices);
+//  console.log('getting item choices');
       
       return Object.entries(itemChoices)
         .filter(([_, value]) => value) // Filter out empty values
@@ -82,18 +83,5 @@ const CurrentSurroundingsView = ( {height}) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    padding: 0,
-    width: "100%",
-    justifyContent: "space-between",
-    alignItems: "center",
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
-});
 
 export default CurrentSurroundingsView;

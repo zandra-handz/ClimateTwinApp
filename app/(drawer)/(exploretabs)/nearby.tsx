@@ -15,7 +15,7 @@ import NearbyView from "../../components/NearbyComponents/NearbyView";
 const nearby = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { triggerRefetch, nearbyLocations } = useNearbyLocations();
-  const { handlePickNewSurroundings, pickNewSurroundingsMutation } = useSurroundings();
+  const { handlePickNewSurroundings } = useSurroundings();
   const router = useRouter();
  
   useFocusEffect(

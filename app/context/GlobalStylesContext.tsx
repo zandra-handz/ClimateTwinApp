@@ -9,6 +9,7 @@ import { StyleSheet, AccessibilityInfo } from "react-native";
 import { useColorScheme } from "react-native";
 import { useUser } from "./UserContext";
 import GoToItemButton from "../components/GoToItemButton";
+import MagnifiedNavButton from "../components/MagnifiedNavButton";
 
 // Define the types for the global styles state
 interface GradientColors {
@@ -604,6 +605,43 @@ const containerStyles = StyleSheet.create({
     height: 50,
     overflow: 'hidden',
 
+  }, 
+  magNavButtonContainer: { 
+    padding: 0,
+    borderRadius: 20,
+    width: '100%',
+    overflow: 'hidden',
+    borderWidth: 3,
+
+  },
+  magNavTextContainer: {
+    width: '100%',
+     height: 'auto', 
+     flexWrap: 'wrap',
+     overflow: 'hidden',
+     textAlign: 'center',
+     alignItems: 'center',
+     justifyContent: 'center',
+     alignContent: 'center', //need this one to center horizontally
+
+  },
+
+  dimmer: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,  
+   // backgroundColor: pass in background color to element and 
+   //add these two digits to end of six digit for overlay color/opacity:
+   //FF (100%), E6 (90%), CC (80%), B3 (70%), 99 (60%), 80 (50%), 66 (40%), 4D (30%), 33 (20%), 1A (10%), 00 (0%)
+  
+    justifyContent: "center",
+    alignItems: "center",
+    zIndex: 1000, 
+    elevation: 1000,
+    borderRadius: 20,
+
   },
   groqHeaderRow: {
     width: '100%',
@@ -710,6 +748,18 @@ const containerStyles = StyleSheet.create({
     borderRadius: 20, 
     padding: 10, 
     marginBottom: 10,
+    width: '100%',  
+    alignItems: 'center',
+    justifyContent: 'center', 
+ 
+    height: 'auto',
+    overflow: 'hidden',
+  
+
+  },
+  navBoxContainer: {
+   // borderRadius: 20, controlled by parent container when used im MagnifiedNavButton  
+    padding: 10,  
     width: '100%',  
     alignItems: 'center',
     justifyContent: 'center', 
@@ -862,6 +912,11 @@ const fontStyles = StyleSheet.create({
   goButtonPortalSize: {
     fontSize: 60,
   },
+  magNavText: {
+    fontSize: 20,
+    lineHeight: 24, 
+
+  },
   groqHeaderText: {
 
     fontSize: 15,
@@ -925,6 +980,11 @@ const fontStyles = StyleSheet.create({
 
     height: 14,
     width: 14,
+  },
+  magNavArrowIcon: {
+    height: 26,
+    width: 26,
+
   },
   tinyIcon: {
     height: 14,

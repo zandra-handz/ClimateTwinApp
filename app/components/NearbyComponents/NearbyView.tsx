@@ -5,6 +5,7 @@ import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import RuinsHarmonyView from "../SurroundingsComponents/RuinsHarmonyView";
 import WindFriendsView from "../SurroundingsComponents/WindFriendsView";
 import NearbyRuinUICard from "./NearbyRuinUICard";
+import NearbyPortalUICard from "./NearbyPortalUICard";
  
 const NearbyView = ({
   listData,
@@ -25,7 +26,8 @@ const NearbyView = ({
         renderItem={({ item }) => (
           <View style={{ marginVertical: "2%" }}>
             {item.explore_type === "twin_location" && (
-              <WindFriendsView
+              <NearbyPortalUICard
+              data={item}
               name={item.name}
               description={item.description}
               windSpeed={item.wind_speed}
@@ -34,6 +36,7 @@ const NearbyView = ({
               homeDescription={item.home_location.description}
               homeWindSpeed={item.home_location.wind_speed}
               homeWindDirection={item.home_location.wind_direction}
+              onPress={onCardButtonPress}
               />
 
               // <NearbyUICard

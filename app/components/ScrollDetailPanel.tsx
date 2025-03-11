@@ -1,15 +1,15 @@
-import { View, Text, ScrollView } from "react-native";
+import { Animated, View, Text, ScrollView } from "react-native";
 import React from "react"; 
 import { useGlobalStyles } from "../context/GlobalStylesContext";
 
-const ScrollDetailPanel = ({ label, value, height }) => {
+const ScrollDetailPanel = ({ label, value, height, opacity }) => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
 
   return (
-    <View
+    <Animated.View
       style={[
         appContainerStyles.scrollDetailPanelContainer,
-        themeStyles.darkerBackground,
+        themeStyles.darkerBackground, { opacity: opacity || 1}
       ]}
     >
       <ScrollView
@@ -33,7 +33,7 @@ const ScrollDetailPanel = ({ label, value, height }) => {
         </View>
         <Text selectable={true} style={[themeStyles.primaryText, appFontStyles.groqResponseText]}>{value}</Text>
       </ScrollView>
-    </View>
+    </Animated.View>
   );
 };
 

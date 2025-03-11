@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text } from "react-native";
 import React from "react";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import WindSquare from "./WindSquare";
@@ -11,7 +11,7 @@ const WindFriendsUICard = ({
   windDirection,
   homeDescription,
   homeWindSpeed,
-  homeWindDirection,
+  homeWindDirection, 
 }) => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
 
@@ -76,15 +76,6 @@ const WindFriendsUICard = ({
     // </>
   );
 };
-
-const styles = StyleSheet.create({ 
-
-  desc: { 
-    fontWeight: "bold", 
-    position: "absolute", // Absolute position within the card
-    top: 10, // Distance from the top of the card
-    left: 10, // Distance from the left of the card
-  }, 
-});
+ 
 
 export default WindFriendsUICard;

@@ -20,7 +20,7 @@ const WindFriendsView = ({
   windSpeedInteraction,
   pressureInteraction,
   humidtyInteraction,
-  strongerWindInteraction,
+  strongerWindInteraction, 
 }) => {
   return (
     <WindFriendsUICard
@@ -31,7 +31,7 @@ const WindFriendsView = ({
       windDirection={windDirection}
       homeDescription={homeDescription}
       homeWindSpeed={homeWindSpeed}
-      homeWindDirection={homeWindDirection}
+      homeWindDirection={homeWindDirection} 
     />
   );
 };

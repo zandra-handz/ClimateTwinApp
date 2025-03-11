@@ -151,17 +151,7 @@ const NearbyRuinUICard = ({
           flexGrow: 1,
           flex: 1,
         }}
-      >
-        {/* {!image && (
-            
-            <DirectionSquare
-              locationDirection={directionDegree}
-              size={60}
-              opacity={0.94}
-              color={themeStyles.primaryText.color}
-            />
-            
-        )} */}
+      > 
       </View>
     </TouchableOpacity>
     

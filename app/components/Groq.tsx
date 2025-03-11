@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+
 import Constants from 'expo-constants';
 import ScrollDetailPanel from './ScrollDetailPanel';
 //import { useSurroundings } from '../context/CurrentSurroundingsContext';
