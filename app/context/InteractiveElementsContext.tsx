@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, ReactNode, useState } from 'react';
 import { useUser } from './UserContext';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getItemChoices } from '../apicalls';  
@@ -108,11 +108,83 @@ export const InteractiveElementsProvider: React.FC<InteractiveElementsProviderPr
     },
   });
 
+
+
   
   // Convert itemChoices.choices (object) into an array of key-value pairs
   const itemChoices = itemChoicesResponse?.choices
     ? Object.entries(itemChoicesResponse.choices)
     : [];
+
+    const itemChoicesAsObject = itemChoicesResponse?.choices
+    ? Object.entries(itemChoicesResponse.choices).reduce((acc, [key, value]) => {
+        acc[key] = value;
+        return acc;
+    }, {})
+    : {};
+
+//add twin_location__ back in whem saving the treasure
+    const itemChoicesAsObjectTwin = itemChoicesResponse?.choices && itemChoicesResponse.choices["twin_location"] !== "None"
+    ? Object.entries(itemChoicesResponse.choices).reduce((acc, [key, value]) => {
+        // Check if the key starts with "twin_location__" and strip it
+        const newKey = key.startsWith("twin_location__") ? key.replace("twin_location__", "") : key;
+        
+        acc[newKey] = value;
+        return acc;
+    }, {})
+    : {}; // Return an empty object if "twin_location" is "None"
+  
+
+    const itemChoicesAsObjectExplore = itemChoicesResponse?.choices && itemChoicesResponse.choices["explore_location"] !== "None"
+    ? Object.entries(itemChoicesResponse.choices).reduce((acc, [key, value]) => {
+
+
+      const newKey = key.startsWith("explore_location__") ? key.replace("explore_location__", "") : key;
+        
+        acc[newKey] = value;
+        return acc;
+    }, {})
+    : {}; // Return an empty object if "twin_location" is "None"
+  
+  
+  
+    // const [ itemChoicesAsObject, setItemChoicesAsObject ] = useState({});
+    // useEffect(() => {
+    //   // Create a new object to avoid mutating the state directly
+    //   const updatedObject = {};
+    
+    //   itemChoices.forEach(([key, value]) => {
+    //     updatedObject[key] = value;
+    //   });
+    
+    //   // Update state with the new object
+    //   setItemChoicesAsObject(updatedObject);
+    // }, []); // Only runs when itemChoices changes
+
+    // const itemChoicesAsObjects = itemChoicesResponse?.choices
+    // ? Object.entries(itemChoicesResponse.choices).reduce((acc, [key, value]) => {
+    //     // If the value is not an object or is null, skip it
+    //     if (typeof value !== "object" || value === null) {
+    //       console.warn(`Skipping invalid value for ${key}: `, value);
+    //       return acc;
+    //     }
+  
+    //     // Check if the key contains 'twin_location' or 'explore_location'
+    //     if (key.includes("twin_location")) {
+    //       // If 'twin_location' exists, add to twinLocation object
+    //       acc.twinLocation = acc.twinLocation || {};  // Initialize if not already
+    //       acc.twinLocation[key] = value;
+    //     } else if (key.includes("explore_location")) {
+    //       // If 'explore_location' exists, add to exploreLocation object
+    //       acc.exploreLocation = acc.exploreLocation || {};  // Initialize if not already
+    //       acc.exploreLocation[key] = value;
+    //     }
+  
+    //     return acc;
+    //   }, {})
+    // : {};
+  
+  
 
   const triggerItemChoicesRefetch = () => {
     console.log('invalidating item choices query');
@@ -149,7 +221,7 @@ export const InteractiveElementsProvider: React.FC<InteractiveElementsProviderPr
 
   return (
     <InteractiveElementsContext.Provider 
-      value={{ itemChoices, triggerItemChoicesRefetch }}
+      value={{ itemChoices, itemChoicesAsObject, itemChoicesAsObjectTwin, itemChoicesAsObjectExplore, triggerItemChoicesRefetch }}
     >
       {children}
     </InteractiveElementsContext.Provider>

@@ -114,7 +114,7 @@ export default () => {
             name="collect"
             options={({ route }) => ({
               headerShown: true,
-              headerTitle: route.params?.base || "Treasure", // Using `title` from params, fallback to "Treasure"
+              headerTitle: route.params?.topic || "Treasure", // Using `title` from params, fallback to "Treasure"
               headerTitleStyle: {
                 color: constantColorsStyles.v1LogoColor.color,
               },

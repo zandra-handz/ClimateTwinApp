@@ -7,7 +7,7 @@ import MagnifiedNavButton from "../MagnifiedNavButton";
 import { useGlobalStyles } from "@/app/context/GlobalStylesContext";
 import { useInteractiveElements } from "@/app/context/InteractiveElementsContext";
 
-const PortalSurroundingsView = ({ height }) => {
+const PortalSurroundingsView = ({ height, triggerParentAutoScroll }) => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { portalSurroundings, ruinsSurroundings, homeSurroundings, handlePickNewSurroundings } = useSurroundings();
   const { triggerItemChoicesRefetch } = useInteractiveElements();
@@ -19,7 +19,8 @@ const PortalSurroundingsView = ({ height }) => {
       id: portalSurroundings?.id,
     } 
     await handlePickNewSurroundings(formattedData);
-    triggerItemChoicesRefetch();
+    //triggerParentAutoScroll();
+    //triggerItemChoicesRefetch();
  
   };
 

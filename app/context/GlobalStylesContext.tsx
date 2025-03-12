@@ -594,15 +594,16 @@ const containerStyles = StyleSheet.create({
   surroundingsCardContainer: { 
     borderRadius: 10,
     padding: 10,
-    paddingTop: 10,
-    paddingLeft: 26,
-    marginBottom: 10,
-    width: '31%',  
+    paddingTop: 10, 
+    marginVertical: 10,
+    width: '28%',  
     alignItems: 'center',
     justifyContent: 'center', 
-    margin: 4,
+    marginEnd: 4,
+    marginStart: 4,
     flexGrow: 1,
-    height: 50,
+    height: 100,
+    textAlign: 'center',
     overflow: 'hidden',
 
   }, 
@@ -695,7 +696,7 @@ const containerStyles = StyleSheet.create({
     borderRadius: 10
     
     
-  },
+  }, 
   treasureCardContainer: { 
     borderRadius: 20,
     padding: 10, 

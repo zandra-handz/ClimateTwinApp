@@ -49,13 +49,14 @@ const index = () => {
   useEffect(() => {
     if (ruinsSurroundings?.id) {
       setSurroundingsViews([
-        { id: "1", component: <PortalSurroundingsView height={ITEM_HEIGHT} /> },
+        { id: "1", component: <PortalSurroundingsView height={ITEM_HEIGHT} triggerParentAutoScroll={handleAutoScroll} /> },
         { id: "2", component: <RuinsSurroundingsView height={ITEM_HEIGHT} /> },
         { id: "3", component: <CurrentSurroundingsView height={ITEM_HEIGHT} /> },
       ]);
-    } else if (portalSurroundings && portalSurroundings?.id) {
+    } else if (portalSurroundings?.id) {
       setSurroundingsViews([
-        { id: "1", component: <PortalSurroundingsView height={ITEM_HEIGHT} /> },
+        { id: "1", component: <PortalSurroundingsView height={ITEM_HEIGHT} triggerParentAutoScroll={handleAutoScroll}  /> },
+       
         { id: "3", component: <CurrentSurroundingsView height={ITEM_HEIGHT} /> },
       ]);
     }
@@ -63,45 +64,62 @@ const index = () => {
 
   const flatListRef = useRef(null);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      if (flatListRef.current && surroundingsViews.length > 0) {
-        if (ruinsSurroundings?.id) {
-          scrollToIndex(1); 
-          setGroqVisible(true);
-        } else {
-          scrollToIndex(0); 
-          setGroqVisible(true);
-        } 
-      }
-    }, [ruinsSurroundings, surroundingsViews])
-  );
 
-  useEffect(() => {
-    console.log(surroundingsViews.length);
-
-  }, [surroundingsViews]);
-
-  const scrollToIndex = (index) => {
-    if (flatListRef.current && surroundingsViews.length > index) {
-      flatListRef.current.scrollToIndex({ index, animated: true });
-      if (index === 1) {
-        setPortalBannerVisible(false);
+ const handleAutoScroll = () => { 
+        if (flatListRef.current && surroundingsViews.length > 0) {
           if (ruinsSurroundings?.id) {
+            console.log('yes ruins');
+            scrollToIndex(1); 
             setGroqVisible(true);
           } else {
-            setGroqVisible(false);
+            console.log('no ruins');
+            //scrollToIndex(0); 
+            setGroqVisible(true);
+            groqOpacity.setValue(1);
+            opacity.setValue(1);
           } 
       } else {
-          setPortalBannerVisible(true);
-          if (ruinsSurroundings?.id) {
-            setGroqVisible(true);
-          } else {
-            setGroqVisible(false);
-          }
+        console.log('surroundingsView not ready');
       }
+
+ };
+
+  useFocusEffect(
+    React.useCallback(() => {
+      handleAutoScroll(); 
+    }, [surroundingsViews])
+  );
+
+  // useEffect(() => {
+  //   handleAutoScroll();
+
+  // }, [surroundingsViews]);
+
+  const scrollToIndex = (index) => {
+    console.log('SCROLL TO INDEX!');
+    if (flatListRef.current && surroundingsViews.length > index) {
+      flatListRef.current.scrollToIndex({ index, animated: true });
+      handleVisibilityToggles(index);
     } else {
       console.warn("Attempted to scroll to an invalid index:", index);
+    }
+  };
+
+  const handleVisibilityToggles = (index) => {
+    if (index === 1) {
+      setPortalBannerVisible(false);
+        if (ruinsSurroundings?.id) {
+          setGroqVisible(true);
+        } else {
+          setGroqVisible(false);
+        } 
+    } else {
+        setPortalBannerVisible(true);
+        if (ruinsSurroundings?.id) {
+          setGroqVisible(true);
+        } else {
+          setGroqVisible(false);
+        }
     }
   };
  
@@ -149,7 +167,7 @@ const index = () => {
               </>
             )}
       <View style={appContainerStyles.innerFlexStartContainer}>
-        {!isInitializingLocation && itemChoices && portalSurroundings?.id && surroundingsViews && (
+        {!isInitializingLocation && surroundingsViews && (
           <>
 
                           

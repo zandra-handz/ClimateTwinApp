@@ -10,7 +10,7 @@ import useLLMScripts from '../llm/useLLMScripts';
 
 const API_KEY = Constants.expoConfig?.extra?.GROQ_API_KEY;
 
-const Groq = ({ givenRole, prompt, title, cacheKey, userId }) => {
+const Groq = ({ givenRole, prompt, title, cacheKey, topic, userId }) => {
   //const { locationId } = useSurroundings();
   const { lastLocationId, lastLocationName, lastLatAndLong } = useSurroundingsWS();
   const [ latitude, longitude ] = lastLatAndLong;

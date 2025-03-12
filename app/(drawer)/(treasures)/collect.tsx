@@ -17,7 +17,7 @@ import { useSurroundingsWS } from "@/app/context/SurroundingsWSContext";
 import { useUser } from "@/app/context/UserContext";
 
 const collect = () => {
-  const { id } = useLocalSearchParams<{ id: number }>();
+  const { topic } = useLocalSearchParams<{ topic: number }>();
   const { base } = useLocalSearchParams<{ base: string | null }>();
   const { user } = useUser();
   const { lastLocationId, lastLatAndLong } = useSurroundingsWS();
@@ -125,7 +125,7 @@ const collect = () => {
   };
 
   const handleCollect = () => {
-    if (base && id && editedTextRef.current) {
+    if (base && topic && editedTextRef.current) {
       const parsedValue = JSON.parse(base);
       const firstString = parsedValue[0];
       console.log("attempting to collect treasure", base);
@@ -226,7 +226,9 @@ const collect = () => {
               prompt={prompt}
               title={"Treasure found by Groq"}
               cacheKey={base}
+              topic={topic}
               userId={user?.id}
+              
             />
           )}
         {!isKeyboardVisible && (
