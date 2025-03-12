@@ -17,7 +17,11 @@ const Groq = ({ givenRole, prompt, title, cacheKey, topic, userId }) => {
 
   const { setCache, getCache } = useAsyncStorageCache(userId, lastLocationId);
   const [responseMessage, setResponseMessage] = useState('');
-  const { yourRoleIsFriendlyDiligentHistorian, tellMeRecentHistoryOf } =
+  const { yourRoleIsFriendlyDiligentHistorian, 
+    tellMeRecentHistoryOf,
+    yourRoleIsExpertBotanist,
+    findMeFiveLocalPlants,
+   } =
     useLLMScripts();
 
   useEffect(() => {

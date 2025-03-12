@@ -5,9 +5,7 @@ import { StatusBar } from "expo-status-bar";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import useTreasures from "@/app/hooks/useTreasures";
 import { useAppMessage } from "../../context/AppMessageContext";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import useFriends from "../../hooks/useFriends";
-import Picker from "@/app/components/Picker";
+import { useLocalSearchParams, useRouter } from "expo-router"; 
 import TextInputLine from "@/app/components/TextInputLine";
 import TextInputBlock from "@/app/components/TextInputBlock";
 import Groq from "@/app/components/Groq";
@@ -17,11 +15,14 @@ import { useSurroundingsWS } from "@/app/context/SurroundingsWSContext";
 import { useUser } from "@/app/context/UserContext";
 
 const collect = () => {
-  const { topic } = useLocalSearchParams<{ topic: number }>();
+  const { topic } = useLocalSearchParams<{ topic: string | null }>();
   const { base } = useLocalSearchParams<{ base: string | null }>();
   const { user } = useUser();
   const { lastLocationId, lastLatAndLong } = useSurroundingsWS();
-  const { yourRoleIsBrilliantNaturalistAndPainter, findMeAWindTreasure } =
+  const { yourRoleIsBrilliantNaturalistAndPainter, 
+    findMeAWindTreasure,
+  yourRoleIsExpertBotanist,
+findMeThreeLocalPlants } =
     useLLMScripts();
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { showAppMessage } = useAppMessage();
@@ -63,6 +64,18 @@ const collect = () => {
 
   useEffect(() => {
     if (cachedHistory) {
+    if (topic === 'plants') {
+      let roleData = yourRoleIsExpertBotanist();
+      let promptData = findMeThreeLocalPlants(
+        lastLatAndLong.latitude,
+        lastLatAndLong.longitude,
+        cachedHistory
+      );
+      setPrompt(promptData);
+      setRole(roleData);
+ 
+      } else  {
+        
       let roleData = yourRoleIsBrilliantNaturalistAndPainter();
       let promptData = findMeAWindTreasure(
         lastLatAndLong.latitude,
@@ -71,6 +84,8 @@ const collect = () => {
       );
       setPrompt(promptData);
       setRole(roleData);
+      
+    }
     }
   }, [cachedHistory]);
 

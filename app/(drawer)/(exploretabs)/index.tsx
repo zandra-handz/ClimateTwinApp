@@ -73,6 +73,7 @@ const index = () => {
             setGroqVisible(true);
           } else {
             console.log('no ruins');
+            scrollToIndex(0); 
             //scrollToIndex(0); 
             setGroqVisible(true);
             groqOpacity.setValue(1);
