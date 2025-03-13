@@ -1,22 +1,26 @@
 import { useEffect, useState } from 'react';
 
 import Constants from 'expo-constants';
-import ScrollDetailPanel from './ScrollDetailPanel';
+import ScrollDetailPanel from '../ScrollDetailPanel'; 
 //import { useSurroundings } from '../context/CurrentSurroundingsContext';
-import { useSurroundingsWS } from '../context/SurroundingsWSContext';
-import useAsyncStorageCache from '../hooks/useAsyncStorageCache';
-import useLLMScripts from '../llm/useLLMScripts';
+import { useSurroundingsWS } from '../../context/SurroundingsWSContext';
+import useAsyncStorageCache from '../../hooks/useAsyncStorageCache';
+import useLLMScripts from '../../llm/useLLMScripts'; 
+import GroqFullScreen from './GroqFullScreen';
 
 
 const API_KEY = Constants.expoConfig?.extra?.GROQ_API_KEY;
 
-const Groq = ({ givenRole, prompt, title, cacheKey, topic, userId }) => {
+const Groq = ({ lastLocationId, lastLatAndLong, givenRole, prompt, title, cacheKey, topic, userId }) => {
   //const { locationId } = useSurroundings();
-  const { lastLocationId, lastLocationName, lastLatAndLong } = useSurroundingsWS();
+  const {  lastLocationName} = useSurroundingsWS();
   const [ latitude, longitude ] = lastLatAndLong;
+
+  const [ imagesArray, setImagesArray ] = useState([]);
 
   const { setCache, getCache } = useAsyncStorageCache(userId, lastLocationId);
   const [responseMessage, setResponseMessage] = useState('');
+  const [isMinimized, setIsMinimized ] = useState(false);
   const { yourRoleIsFriendlyDiligentHistorian, 
     tellMeRecentHistoryOf,
     yourRoleIsExpertBotanist,
@@ -44,7 +48,7 @@ const Groq = ({ givenRole, prompt, title, cacheKey, topic, userId }) => {
     };
   
     fetchData();
-  }, [lastLocationId, cacheKey]); // Add cacheKey to dependencies
+  }, [lastLocationId, lastLatAndLong, topic, cacheKey]); // Add cacheKey to dependencies
    // Runs when locationId, prompt, or givenRole changes
   
   useEffect(() => {
@@ -76,12 +80,21 @@ const createChatCompletion = async () => {
 
     const data = await response.json();
     const chatResponse = data.choices[0]?.message?.content || 'No response available';
-    console.log(data.choices[0]?.message?.content.slice(0, 100));
-    console.log(chatResponse.slice(0,100));
+    //console.log(data.choices[0]?.message?.content.slice(0, 100));
+    //console.log(chatResponse.slice(0,100));
 
-    // Set the response message state
-    setResponseMessage(chatResponse);
-
+    const imageUrls = chatResponse
+    ? chatResponse
+        .split('\n')
+        .filter(line => typeof line === 'string' && line.trim().startsWith('IMAGELINK:'))
+        .map(line => line.replace('IMAGELINK:', '').trim())
+        .map(url => url.replace('/wiki/File:', '/wiki/Special:FilePath/')) // Convert to direct image URL
+        .filter(url => url.length > 0)
+    : [];
+  
+  setImagesArray(imageUrls.length > 0 ? imageUrls : []);
+  console.log('Corrected Image URLs:', imageUrls);
+  
     // Ensure necessary values are available and properly set
     if (lastLocationId && cacheKey && chatResponse) {
       // Retrieve existing cache
@@ -105,7 +118,24 @@ const createChatCompletion = async () => {
 };
 
 
-  return <ScrollDetailPanel label={title} value={responseMessage} />;
+const handleFullScreenToggle = () => {
+if (isMinimized) {
+  setIsMinimized(false);
+} else {
+  setIsMinimized(true);
+}
+
+};
+
+useEffect(() => {
+  if (imagesArray) {
+    console.log(`IMAGES ARRAY!`, imagesArray);
+  }
+
+}, [imagesArray]);
+
+
+  return <GroqFullScreen label={title} value={responseMessage} opacity={1} images={imagesArray} fullScreenToggle={handleFullScreenToggle} isMinimized={isMinimized}/>;
 };
 
 export default Groq;

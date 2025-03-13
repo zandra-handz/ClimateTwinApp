@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import Constants from 'expo-constants';
-import ScrollDetailPanel from './ScrollDetailPanel'; 
-import { useSurroundingsWS } from '../context/SurroundingsWSContext';
-import useAsyncStorageCache from '../hooks/useAsyncStorageCache';
-import useLLMScripts from '../llm/useLLMScripts';
+import ScrollDetailPanel from '../ScrollDetailPanel'; 
+import { useSurroundingsWS } from '../../context/SurroundingsWSContext';
+import useAsyncStorageCache from '../../hooks/useAsyncStorageCache';
+import useLLMScripts from '../../llm/useLLMScripts';
 import { Animated } from 'react-native';
 
 

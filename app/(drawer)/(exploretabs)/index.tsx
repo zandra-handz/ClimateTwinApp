@@ -18,7 +18,7 @@ import NotificationNotifier from "@/app/components/NotificationNotifier";
 
 import PortalBanner from "@/app/components/PortalBanner";
  
-import GroqHistory from "@/app/components/GroqHistory";
+import GroqHistory from "@/app/components/GroqComponents/GroqHistory";
 import useLLMScripts from "@/app/llm/useLLMScripts";
 
 const index = () => {

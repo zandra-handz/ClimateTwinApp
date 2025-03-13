@@ -758,6 +758,19 @@ const containerStyles = StyleSheet.create({
   
 
   },
+  groqImageContainer: {
+    borderRadius: 20, 
+    // padding: 10, 
+    // marginBottom: 10,
+    width: '100%',  
+    alignItems: 'center',
+    justifyContent: 'center', 
+ 
+    height: 'auto',
+    overflow: 'hidden',
+  
+
+  },
   navBoxContainer: {
    // borderRadius: 20, controlled by parent container when used im MagnifiedNavButton  
     padding: 10,  
@@ -780,6 +793,21 @@ const containerStyles = StyleSheet.create({
     justifyContent: 'center', 
  
     height: 270,
+    overflow: 'hidden', 
+    zIndex: 100,
+    position: 'absolute',
+    bottom: 78,
+    borderWidth: StyleSheet.hairlineWidth
+  },
+  groqScrollFullScreenContainer: {
+    borderRadius: 20, 
+    padding: 10,  
+    width: '100%', 
+    alignSelf: 'center', 
+    alignItems: 'center',
+    justifyContent: 'center', 
+ 
+   // height: 680,
     overflow: 'hidden', 
     zIndex: 100,
     position: 'absolute',

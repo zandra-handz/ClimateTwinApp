@@ -1,8 +1,10 @@
 import { Animated, View, Text, ScrollView } from "react-native";
 import React from "react"; 
 import { useGlobalStyles } from "../context/GlobalStylesContext";
+import SingleImagePanel from "./SingleImagePanel";
+import GroqImageCard from "./GroqComponents/GroqImageCard";
 
-const ScrollDetailPanel = ({ label, value, height, opacity }) => {
+const ScrollDetailPanel = ({ label, value, opacity, images }) => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
 
   return (
@@ -22,6 +24,12 @@ const ScrollDetailPanel = ({ label, value, height, opacity }) => {
           justifyContent: "flex-start",
         }}
       >
+                {images && (
+        <View style={{width: '100%', flex: 1, flexDirection: 'row', justifyContent: 'center', height: 'auto'}}>
+          
+        <GroqImageCard value={images[0]}/>
+        </View>
+      )}
         <View style={appContainerStyles.groqHeaderRow}>
         <Text style={[themeStyles.primaryText, appFontStyles.groqHeaderText]}>
             
@@ -29,9 +37,12 @@ const ScrollDetailPanel = ({ label, value, height, opacity }) => {
           {" "}
           {label}
         </Text>
+
         
         </View>
         <Text selectable={true} style={[themeStyles.primaryText, appFontStyles.groqResponseText]}>{value}</Text>
+
+      
       </ScrollView>
     </Animated.View>
   );

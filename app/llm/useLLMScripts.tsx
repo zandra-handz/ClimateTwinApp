@@ -51,23 +51,33 @@ const useLLMScripts = () => {
 
   };
 
-  const findMeThreeLocalPlants = (lat, long, historyResponse) => {
-    return `Hello, friend! I desperately need your help describing THREE plant lifeforms in my immediate surroundings -- my coordinates are 
+  const findMeAPlant = (
+    lat: number, 
+    long: number, 
+    historyResponse: string, 
+    numberOfPlants: string = 'ONE'  
+  ): string => {
+    numberOfPlants = String(numberOfPlants);  
+    const pluralizeOne = numberOfPlants.toLowerCase() === 'one' ? '' : 's';
+    const pluralizeTwo = numberOfPlants.toLowerCase() === 'one' ? 'the' : 'each';
+    const imageUrlKey = `IMAGELINK:`;
+  
+    return `Hello, friend! I desperately need your help describing ${numberOfPlants} plant lifeform${pluralizeOne} in my immediate surroundings -- my coordinates are 
     ${lat}, ${long}. Please get and state my current temperature (in Fahrenheit), humidity, and weather, you will need this data when describing
     the plants! (More info on my current location can be found in this summary: "${historyResponse}") Please use the common or 
     English name of the plant as the main title. Please be as truthful as possible, and consult multiple sources
     to validate your information. Your description should reflect how the plant looks in the current 
     season, at this exact moment in time. Your description should say whether the plant especially thrives in today's weather, 
-    or struggles in it. Please focus on the effects that the plant's current environment has on it. Please do not include too many
-    things in your description; focus on one or two points. Please reduce by 70% the amount of adjectives you use.
-    Please demonstrate a profound appreciation for the plants you
-    find. Please provide an image url for each plant. Please provide a source or link to where you got your information for each plant. Please add one sentence at the end of each plant description detailing what would happen if I ate this plant.
-    Please format your response as a single bolded line for the name of each plant (on its own line),
-    followed by a single concise paragraph or two with the info you found out. Please place the common name FIRST, and then the scientific name.
-    Please do NOT add any additional text. Here is the historical summary of the location, to get you started: ${historyResponse}`;
+    or struggles in it. Please focus on the effects that the plant's current environment has on it. Feel free to include details
+    about how the plant gives back to or integrates with its surroundings. Please do not include too many
+    things in your description; focus on one or two points. Please remove 90% of adjectives that you may have otherwise responded with.
+    Please demonstrate a profound appreciation for the plant${pluralizeOne} you
+    find. Please provide a direct image link for ${pluralizeTwo} plant if possible that I am able to display in my app, formatted on its own line and beginning with
+    the word ${imageUrlKey} in all caps. Please provide a source or link to where you got your information for each plant. Please add one sentence at the end of each plant description detailing what would happen if I ate this plant.
+    Please format your response as a single bolded line for the name of ${pluralizeTwo} plant (on its own line),
+    followed by a single concise paragraph or two with the info you found out.`
   };
-
-
+  
   const yourRoleIsAmbitiousEnvironmentalScientist = () => {
 
 
@@ -81,7 +91,7 @@ const useLLMScripts = () => {
     yourRoleIsBrilliantNaturalistAndPainter,
     findMeAWindTreasure,
     yourRoleIsExpertBotanist,
-    findMeThreeLocalPlants,
+    findMeAPlant,
 
 
   };
