@@ -11,9 +11,9 @@ import GroqFullScreen from './GroqFullScreen';
 
 const API_KEY = Constants.expoConfig?.extra?.GROQ_API_KEY;
 
-const Groq = ({ lastLocationId, lastLatAndLong, givenRole, prompt, title, cacheKey, topic, userId }) => {
+const Groq = ({ name, givenRole, prompt, title, cacheKey, userId }) => {
   //const { locationId } = useSurroundings();
-  const {  lastLocationName} = useSurroundingsWS();
+  const { lastLocationId, lastLocationName, lastLatAndLong } = useSurroundingsWS();
   const [ latitude, longitude ] = lastLatAndLong;
 
   const [ imagesArray, setImagesArray ] = useState([]);
@@ -48,7 +48,7 @@ const Groq = ({ lastLocationId, lastLatAndLong, givenRole, prompt, title, cacheK
     };
   
     fetchData();
-  }, [lastLocationId, lastLatAndLong, topic, cacheKey]); // Add cacheKey to dependencies
+  }, [lastLocationId, cacheKey]); // Add cacheKey to dependencies
    // Runs when locationId, prompt, or givenRole changes
   
   useEffect(() => {

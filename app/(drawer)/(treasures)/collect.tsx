@@ -1,5 +1,5 @@
 import { View, Text, Keyboard, Dimensions } from "react-native";
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import ActionsFooter from "@/app/components/ActionsFooter";
 import { StatusBar } from "expo-status-bar";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
@@ -13,7 +13,6 @@ import useLLMScripts from "@/app/llm/useLLMScripts";
 import useAsyncStorageCache from "../../hooks/useAsyncStorageCache";
 import { useSurroundingsWS } from "@/app/context/SurroundingsWSContext";
 import { useUser } from "@/app/context/UserContext";
-import { useFocusEffect } from "expo-router";
 
 const collect = () => {
   const { name } = useLocalSearchParams<{ topic: string | null }>();
@@ -50,83 +49,46 @@ findMeAPlant } =
   const [prompt, setPrompt] = useState(null);
   const [role, setRole] = useState(null);
 
-  // useEffect(() => {
-  //   const fetchCache = async () => {
-  //     const cachedData = await getCache();
-  //     if (cachedData && cachedData.history) {
-  //       // console.log("Fetched cached history:", cachedData.history);
-  //       setCachedHistory(cachedData.history);
-  //     } else {
-  //       //  console.log("No cached history found.");
-  //     }
-  //   };
+  useEffect(() => {
+    const fetchCache = async () => {
+      const cachedData = await getCache();
+      if (cachedData && cachedData.history) {
+        // console.log("Fetched cached history:", cachedData.history);
+        setCachedHistory(cachedData.history);
+      } else {
+        //  console.log("No cached history found.");
+      }
+    };
 
-  //   fetchCache();
-  // }, [getCache, base, topic, lastLocationId]);
+    fetchCache();
+  }, [getCache, base]);
 
- 
-  const fetchCache = async () => {
-    const cachedData = await getCache();
-    if (cachedData && cachedData.history) {
-      setCachedHistory(cachedData.history);
-    } else {
-      console.log("No cached history found.");
-    }
-  };
-
-  const updatePromptAndRole = () => {
-    if (!cachedHistory) return;
-
-    if (!topic) return;
-
-    if (topic === "plants") {
-      const roleData = yourRoleIsExpertBotanist();
-      const promptData = findMeAPlant(lastLatAndLong.latitude, lastLatAndLong.longitude, cachedHistory);
+  useEffect(() => {
+    if (cachedHistory) {
+    if (topic === 'plants') {
+      let roleData = yourRoleIsExpertBotanist();
+      let promptData = findMeAPlant(
+        lastLatAndLong.latitude,
+        lastLatAndLong.longitude,
+        cachedHistory
+      );
       setPrompt(promptData);
       setRole(roleData);
-    } else {
-      const roleData = yourRoleIsBrilliantNaturalistAndPainter();
-      const promptData = findMeAWindTreasure(lastLatAndLong.latitude, lastLatAndLong.longitude, cachedHistory);
-      setPrompt(promptData);
-      setRole(roleData);
-    }
-  };
-
-  useFocusEffect(
-    React.useCallback(() => {
-      console.log('focus effect!!00');
-      fetchCache(); 
-      updatePromptAndRole(); // Call the update function after cache is fetched
-    }, [cachedHistory, topic, lastLatAndLong]) // Dependencies to watch for changes
-  );
-
-
-  // useEffect(() => {
-  //   if (cachedHistory) {
-  //   if (topic === 'plants') {
-  //     let roleData = yourRoleIsExpertBotanist();
-  //     let promptData = findMeAPlant(
-  //       lastLatAndLong.latitude,
-  //       lastLatAndLong.longitude,
-  //       cachedHistory
-  //     );
-  //     setPrompt(promptData);
-  //     setRole(roleData);
  
-  //     } else  {
+      } else  {
         
-  //     let roleData = yourRoleIsBrilliantNaturalistAndPainter();
-  //     let promptData = findMeAWindTreasure(
-  //       lastLatAndLong.latitude,
-  //       lastLatAndLong.longitude,
-  //       cachedHistory
-  //     );
-  //     setPrompt(promptData);
-  //     setRole(roleData);
+      let roleData = yourRoleIsBrilliantNaturalistAndPainter();
+      let promptData = findMeAWindTreasure(
+        lastLatAndLong.latitude,
+        lastLatAndLong.longitude,
+        cachedHistory
+      );
+      setPrompt(promptData);
+      setRole(roleData);
       
-  //   }
-  //   }
-  // }, [cachedHistory, topic, lastLocationId]);
+    }
+    }
+  }, [cachedHistory]);
 
   useEffect(() => {
     if (collectTreasureMutation.isSuccess) {
@@ -273,11 +235,10 @@ findMeAPlant } =
         {prompt &&
           role &&
           lastLocationId &&
-          lastLatAndLong && //!isKeyboardVisible && 
-          (
+          lastLatAndLong &&
+          !isKeyboardVisible && (
             <Groq
-            lastLocationId={lastLocationId}
-            lastLatAndLong={lastLatAndLong}
+            name={name}
               givenRole={role}
               prompt={prompt}
               title={"Treasure found by Groq"}
