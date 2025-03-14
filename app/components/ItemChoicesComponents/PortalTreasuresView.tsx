@@ -5,6 +5,7 @@ import { useInteractiveElements } from "@/app/context/InteractiveElementsContext
 import CardAnimationWrapper from "../CardAnimationWrapper";
 import { useRouter } from "expo-router";
 import TreasureUICard from "../ItemChoicesComponents/TreasureUICard";
+import { useSurroundingsWS } from "@/app/context/SurroundingsWSContext";
 
 
 
@@ -12,6 +13,7 @@ const PortalTreasuresView = () => {
     
       const router = useRouter(); 
       const { itemChoicesAsObjectTwin } = useInteractiveElements();
+      const { lastLocationName } = useSurroundingsWS();
      
     
         
@@ -21,7 +23,7 @@ const handleCollectTreasure = (topic, base) => {
     if (topic) {
         router.push({
             pathname: "(treasures)/collect",
-            params: { topic: topic, base: base},
+            params: { name: lastLocationName, topic: topic, base: base},
         })
     }
 

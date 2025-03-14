@@ -1,6 +1,7 @@
 import React, {
     useState,
     useEffect,
+    useLayoutEffect,
     useRef,
     useImperativeHandle,
     forwardRef,
@@ -20,7 +21,7 @@ import { useGlobalStyles } from "../context/GlobalStylesContext";
         width = "90%",
         height = "60%",
         multiline = true,
-        iconColor = 'red',
+        onSubmitEditing,
       },
       ref
     ) => {
@@ -28,7 +29,7 @@ import { useGlobalStyles } from "../context/GlobalStylesContext";
       const [editedMessage, setEditedMessage] = useState(mountingText); // Use the starting text passed as prop
       const textInputRef = useRef();
   
-      useEffect(() => {
+      useLayoutEffect(() => {
         if (textInputRef.current) {
           textInputRef.current.setNativeProps({ text: mountingText });
           setEditedMessage(mountingText);
@@ -49,10 +50,16 @@ import { useGlobalStyles } from "../context/GlobalStylesContext";
             setEditedMessage("");
           }
         },
+        focusText: () => {
+          if (textInputRef.current) {
+            textInputRef.current.focus();
+          //  setEditedMessage("");
+          }
+        },
         getText: () => editedMessage,
       }));
   
-      useEffect(() => {
+      useLayoutEffect(() => {
         setEditedMessage(mountingText); // Reset to starting text if it changes
       }, [mountingText]);
   
@@ -105,6 +112,7 @@ import { useGlobalStyles } from "../context/GlobalStylesContext";
               value={editedMessage}
               onChangeText={handleTextInputChange} // Update local state
               multiline={multiline}
+              onSubmitEditing={onSubmitEditing}
             />
           </View>
         </View>

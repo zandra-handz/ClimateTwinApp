@@ -18,9 +18,12 @@ const GroqHistory = ({ title, cacheKey='history', userId, opacity }) => {
   const [responseMessage, setResponseMessage] = useState('');
   const { yourRoleIsFriendlyDiligentHistorian, tellMeRecentHistoryOf } =
     useLLMScripts(); 
+
+    const [ showSpinner, setShowSpinner ] = useState(true);
     
   useEffect(() => {
     const fetchData = async () => {
+      setShowSpinner(true);
       if (!lastLatAndLong) {
         console.log('no location lat and long, not running groq chat');
         return;
@@ -37,6 +40,7 @@ const GroqHistory = ({ title, cacheKey='history', userId, opacity }) => {
 
         await createChatCompletion();  
       }
+      setShowSpinner(false);
     };
   
     fetchData();
@@ -97,7 +101,7 @@ const GroqHistory = ({ title, cacheKey='history', userId, opacity }) => {
   };
   
 
-  return <ScrollDetailPanel label={title} value={responseMessage} opacity={opacity} />;
+  return <ScrollDetailPanel label={title} value={responseMessage} opacity={opacity} isLoading={showSpinner} />;
 };
 
 export default GroqHistory;

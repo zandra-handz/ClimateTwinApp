@@ -856,9 +856,28 @@ const containerStyles = StyleSheet.create({
 
   },
   footerButton: {
-    width: '50%',
+    width: '30%', //50%',
     height: '100%', 
     flexGrow: 1,
+    textAlign: 'center',
+    alignItems: 'center', 
+    justifyContent: 'center',
+
+  },
+  keyboardOpenFooterContainer: {
+    flexDirection: "row",
+    //flex: 1,
+    width: "100%",
+    alignContent: "center",
+    alignItems: "center",
+    justifyContent: "space-between", 
+    height: 40,
+
+  },
+  keyboardFooterButton: {
+    width: '33%',
+    height: '100%', 
+   // flexGrow: 1,
     textAlign: 'center',
     alignItems: 'center', 
     justifyContent: 'center',

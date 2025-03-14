@@ -8,6 +8,8 @@ const ActionsFooter = ({
   onPressRight,
   labelLeft = "Left button",
   labelRight = "Right button",
+  onPressCenter,
+  labelCenter = "Center button",
 }) => { 
 
 
@@ -33,6 +35,21 @@ const ActionsFooter = ({
               ]}
             >
               {labelLeft}
+            </Text>
+          </TouchableOpacity>
+        )}
+                {onPressCenter && (
+          <TouchableOpacity
+            style={appContainerStyles.footerButton}
+            onPress={onPressCenter}
+          >
+            <Text
+              style={[
+                appFontStyles.actionFooterLabel,
+                { color: constantColorsStyles.v1LogoColor.color },
+              ]}
+            >
+              {labelCenter}
             </Text>
           </TouchableOpacity>
         )}
