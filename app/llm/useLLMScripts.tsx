@@ -64,7 +64,7 @@ const useLLMScripts = () => {
   
     return `Hello, friend! I desperately need your help describing ${numberOfPlants} plant lifeform${pluralizeOne} in my immediate surroundings -- my coordinates are 
     ${lat}, ${long}. Please get and state my current temperature (in Fahrenheit), humidity, and weather, you will need this data when describing
-    the plants! (More info on my current location can be found in this summary: "${historyResponse}") Please use the common or 
+    the plant${pluralizeOne}! (More info on my current location can be found in this summary: "${historyResponse}") Please use the common or 
     English name of the plant as the main title. Please be as truthful as possible, and consult multiple sources
     to validate your information. Your description should reflect how the plant looks in the current 
     season, at this exact moment in time. Your description should say whether the plant especially thrives in today's weather, 
@@ -73,11 +73,52 @@ const useLLMScripts = () => {
     things in your description; focus on one or two points. Please remove 90% of adjectives that you may have otherwise responded with.
     Please demonstrate a profound appreciation for the plant${pluralizeOne} you
     find. Please provide a direct image link for ${pluralizeTwo} plant if possible that I am able to display in my app, formatted on its own line and beginning with
-    the word ${imageUrlKey} in all caps. Please provide a source or link to where you got your information for each plant. Please add one sentence at the end of each plant description detailing what would happen if I ate this plant.
+    the word ${imageUrlKey} in all caps. PLEASE make sure that the image file exists BEFORE giving it to mE!
+    You have been linking me to non-existing files A LOT. Please provide a source or link to where you got your information for each plant. Please add one sentence at the end of each plant description detailing what would happen if I ate this plant.
     Please format your response as a single bolded line for the name of ${pluralizeTwo} plant (on its own line),
     followed by a single concise paragraph or two with the info you found out.`
   };
   
+  const yourRoleIsImmortalBirdWatcher = () => { 
+      return `YOU REALLY LOVE BIRDS!!! You think they are the bestest and bravest of creatures.
+       You have a expertise knowledge regarding what bird species live in which parts of the world,
+       and you have thoroughly researched many many migration patterns. You are always learning more
+       about BIRDS! You have been watching birds for a long time. You may be immortal. 
+       You think each bird has a personality, feelings, dreams, and life goals.
+       You are always excited to share what you know about birds.`
+
+
+  };
+
+
+  const findMeABird = (
+    lat: number, 
+    long: number, 
+    historyResponse: string, 
+    numberOfBirds: string = 'ONE'  
+  ): string => {
+    numberOfBirds = String(numberOfBirds);  
+    const pluralizeOne = numberOfBirds.toLowerCase() === 'one' ? '' : 's';
+    const pluralizeTwo = numberOfBirds.toLowerCase() === 'one' ? 'the' : 'each';
+    const imageUrlKey = `IMAGELINK:`;
+  
+    return `Hello, friend! I desperately need your help describing ${numberOfBirds} bird${pluralizeOne} in my immediate surroundings -- my coordinates are 
+    ${lat}, ${long}. Please get and state my current temperature (in Fahrenheit), humidity, and weather, you will need this data when describing
+    the bird${pluralizeOne}! (More info on my current location can be found in this summary: "${historyResponse}") Please use the common or 
+    English name of the bird as the main title. Please be as truthful as possible, and consult multiple sources
+    to validate your information. Your description should reflect how the bird looks in the current 
+    season, at this exact moment in time. Your description should say whether the bird especially thrives in today's weather, 
+    or struggles in it. Please focus on the effects that the bird's current environment has on it. Feel free to include details
+    about how the bird gives back to or integrates with its surroundings. Please do not include too many
+    things in your description; focus on one or two points. Please remove 90% of adjectives that you may have otherwise responded with.
+    Please demonstrate a profound appreciation for the bird${pluralizeOne} you
+    find. Please provide a direct image link for ${pluralizeTwo} bird if possible that I am able to display in my app (actual images, not search results), formatted on its own line and beginning with
+    the word ${imageUrlKey} in all caps. Please provide a source or link to where you got your information for each bird. Please add one sentence at the end of ${pluralizeTwo} bird description detailing what would happen if this bird saw a human.
+    Please format your response as a single bolded line for the name of ${pluralizeTwo} bird (on its own line),
+    followed by a single concise paragraph or two with the info you found out.`
+  };
+  
+
   const yourRoleIsAmbitiousEnvironmentalScientist = () => {
 
 
@@ -92,6 +133,8 @@ const useLLMScripts = () => {
     findMeAWindTreasure,
     yourRoleIsExpertBotanist,
     findMeAPlant,
+    yourRoleIsImmortalBirdWatcher,
+    findMeABird,
 
 
   };

@@ -16,6 +16,7 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import TextInputLine from "@/app/components/TextInputLine";
 import TextInputBlock from "@/app/components/TextInputBlock";
 import Groq from "@/app/components/GroqComponents/Groq";
+import GroqItem from "@/app/components/GroqComponents/GroqItem";
 import useLLMScripts from "@/app/llm/useLLMScripts";
 import useAsyncStorageCache from "../../hooks/useAsyncStorageCache";
 import { useSurroundingsWS } from "@/app/context/SurroundingsWSContext";
@@ -61,10 +62,10 @@ const collect = () => {
     }
   };
 
-  const [prompt, setPrompt] = useState(null);
-  const [role, setRole] = useState(null);
+  // const [prompt, setPrompt] = useState(null);
+  // const [role, setRole] = useState(null);
 
-  const [cacheChecked, setCacheChecked ] = useState(false);
+  // const [cacheChecked, setCacheChecked ] = useState(false);
 
   const handleFullScreenToggle = () => {
     if (isMinimized) {
@@ -78,59 +79,59 @@ const collect = () => {
   };
 
   useEffect(() => {
-    setPrompt(null);
-    setRole(null);
+    // setPrompt(null);
+    // setRole(null);
     setIsMinimized(false);
 
   }, []);
 
-  useFocusEffect(
-    useCallback(() => {
-      setPrompt(null);
-      setIsMinimized(false);
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     setPrompt(null);
+  //     setIsMinimized(false);
    
-      setRole(null);
+  //     setRole(null);
 
-      const fetchCache = async () => {
-        const cachedData = await getCache();
-        if (cachedData?.history) {
-          setCachedHistory(cachedData.history);
-        }
-        setCacheChecked(true);
-      };
+  //     const fetchCache = async () => {
+  //       const cachedData = await getCache();
+  //       if (cachedData?.history) {
+  //         setCachedHistory(cachedData.history);
+  //       }
+  //       setCacheChecked(true);
+  //     };
 
       
 
-      fetchCache();
-    }, [getCache, base])
-  );
+  //     fetchCache();
+  //   }, [getCache, base])
+  // );
 
-  useEffect(() => {
-    if (cacheChecked && cachedHistory && topic && lastLatAndLong) {
-      console.log(lastLatAndLong);
-      if (topic === "plants") {
-        console.log('setting prompt for plants!');
-        let roleData = yourRoleIsExpertBotanist();
-        let promptData = findMeAPlant(
-          lastLatAndLong[0],
-          lastLatAndLong[1],
-          cachedHistory
-        );
-        setPrompt(promptData);
-        console.log(`prompt in parent:`, promptData);
-        setRole(roleData);
-      } else {
-        let roleData = yourRoleIsBrilliantNaturalistAndPainter();
-        let promptData = findMeAWindTreasure(
-          lastLatAndLong[0],
-          lastLatAndLong[1],
-          cachedHistory
-        );
-        setPrompt(promptData);
-        setRole(roleData);
-      }
-    }
-  }, [cacheChecked, cachedHistory, topic, lastLatAndLong]);
+  // useEffect(() => {
+  //   if (cacheChecked && cachedHistory && topic && lastLatAndLong) {
+  //     console.log(lastLatAndLong);
+  //     if (topic === "plants") {
+  //       console.log('setting prompt for plants!');
+  //       let roleData = yourRoleIsExpertBotanist();
+  //       let promptData = findMeAPlant(
+  //         lastLatAndLong[0],
+  //         lastLatAndLong[1],
+  //         cachedHistory
+  //       );
+  //       setPrompt(promptData);
+  //       console.log(`prompt in parent:`, promptData);
+  //       setRole(roleData);
+  //     } else {
+  //       let roleData = yourRoleIsBrilliantNaturalistAndPainter();
+  //       let promptData = findMeAWindTreasure(
+  //         lastLatAndLong[0],
+  //         lastLatAndLong[1],
+  //         cachedHistory
+  //       );
+  //       setPrompt(promptData);
+  //       setRole(roleData);
+  //     }
+  //   }
+  // }, [cacheChecked, cachedHistory, topic, lastLatAndLong]);
 
   useEffect(() => {
     if (collectTreasureMutation.isSuccess) {
@@ -163,7 +164,7 @@ const collect = () => {
 
   const updateDescriptorString = (text) => {
     if (descriptorTextRef && descriptorTextRef.current) {
-      console.log(text);
+     // console.log(text);
       descriptorTextRef.current.setText(text);
     }
   };
@@ -231,10 +232,8 @@ const collect = () => {
 
   const handleStart = () => {
     flatListRef.current?.scrollToIndex({ index: 0, animated: true });
-   
-    console.log("should be focusing text input of the first field here");
-    if (descriptorTextRef.current) {
-      console.log("should be focusing text input of the first field heeeere");
+    
+    if (descriptorTextRef.current) { 
       descriptorTextRef.current.focusText();
     }
     setFocusedIndex(0);
@@ -286,11 +285,9 @@ const collect = () => {
       flatListRef.current?.scrollToIndex({ index: nextIndex, animated: true });
      
 
-      if (nextIndex === 1 && editedTextRef.current) {
-        console.log("editedTextRef.current is available");
+      if (nextIndex === 1 && editedTextRef.current) { 
         editedTextRef.current.focusText();
       } else if (nextIndex === 2 && additionalTextRef.current) {
-        console.log("additionalTextRef.current is available");
         additionalTextRef.current.focusText();
       } else {
         console.log("Refs not ready yet");
@@ -348,16 +345,13 @@ const collect = () => {
         />
       </View>
 
-      {cacheChecked && prompt && base && lastLocationId && (
+      { base && topic && (
  
-        <Groq
-          name={name}
-          givenRole={role}
-          prompt={prompt}
+        <GroqItem
+          name={name} 
           title={"Treasure found by Groq"}
-          cacheKey={base}
-          topic={topic}
-          userId={user?.id}
+          base={base}
+          topic={topic} 
           isMinimized={isMinimized}
           fullScreenToggle={handleFullScreenToggle}
           isKeyboardVisible={isKeyboardVisible}

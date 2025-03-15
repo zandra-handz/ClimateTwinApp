@@ -14,7 +14,7 @@ const useAsyncStorageCache = (userId, locationId) => {
       await AsyncStorage.setItem(cacheKey, jsonValue);
       setStoredValue(value);
    
-      console.log(`(NOBRIDGE) LOG  AsyncStorage Cache Updated:`, jsonValue);//.slice(0, 100));
+     // console.log(`(NOBRIDGE) LOG  AsyncStorage Cache Updated:`, jsonValue);//.slice(0, 100));
     } catch (error) {
       console.error('Error saving to cache:', error);
     }

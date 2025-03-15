@@ -1,0 +1,28 @@
+import React, { useMemo, useRef } from "react";
+import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+
+import { useUser } from "../context/UserContext";
+import { getHistory } from "../apicalls";
+
+const useGroq = () => {
+  const { isAuthenticated, isInitializing } = useUser();
+
+  const {
+    data: history,
+    isLoading,
+    isFetching,
+    isSuccess,
+    isError,
+  } = useQuery({
+    queryKey: ["history"],
+    queryFn: () => getHistory(),
+    enabled: !!isAuthenticated && !isInitializing, //initializing may not be necessary
+    onSuccess: (data) => {},
+  });
+
+  return {
+    history,
+  };
+};
+
+export default useGroq;
