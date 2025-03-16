@@ -32,9 +32,10 @@ const GroqImageCard = ({  value }) => {
        
        {value && (
           <Image
-            source={value}
+            key={value}
+            source={{ uri: value, cache: 'reload' }}  // Force image reload
             style={{ width: 500, height: 300, borderRadius: 30 }}
-            contentFit="cover"  //contain
+            contentFit="cover"   
           />
         )}
       </View>

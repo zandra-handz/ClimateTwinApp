@@ -6,45 +6,26 @@ import React, {
   useState,
   useCallback,
 } from "react";
-import { useFocusEffect } from "expo-router";
 import ActionsFooter from "@/app/components/ActionsFooter";
-import { StatusBar } from "expo-status-bar";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import useTreasures from "@/app/hooks/useTreasures";
 import { useAppMessage } from "../../context/AppMessageContext";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import TextInputLine from "@/app/components/TextInputLine";
 import TextInputBlock from "@/app/components/TextInputBlock";
-import Groq from "@/app/components/GroqComponents/Groq";
 import GroqItem from "@/app/components/GroqComponents/GroqItem";
-import useLLMScripts from "@/app/llm/useLLMScripts";
-import useAsyncStorageCache from "../../hooks/useAsyncStorageCache";
-import { useSurroundingsWS } from "@/app/context/SurroundingsWSContext";
-import { useUser } from "@/app/context/UserContext";
-import KeyboardOpenFooter from "@/app/components/Scaffolding/KeyboardOpenFooter";
+import { useFocusEffect } from "expo-router";
 
 const collect = () => {
-  const { name, topic, base } = useLocalSearchParams<{ 
-    name: string | null; 
-    topic: string | null; 
-    base: string | null; 
+  const { name, topic, base } = useLocalSearchParams<{
+    name: string | null;
+    topic: string | null;
+    base: string | null;
   }>();
-  const { user } = useUser();
-  const { lastLocationId, lastLatAndLong } = useSurroundingsWS();
-  const {latitude, longitude} = lastLatAndLong;
-  const {
-    yourRoleIsBrilliantNaturalistAndPainter,
-    findMeAWindTreasure,
-    yourRoleIsExpertBotanist,
-    findMeAPlant,
-  } = useLLMScripts();
+
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const [isMinimized, setIsMinimized] = useState(false);
   const { showAppMessage } = useAppMessage();
-
-  const { getCache } = useAsyncStorageCache(user?.id, lastLocationId);
-
-  const [cachedHistory, setCachedHistory] = useState(null);
 
   const { handleCollectTreasure, collectTreasureMutation } = useTreasures();
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
@@ -56,16 +37,20 @@ const collect = () => {
 
   const [viewableIndex, setViewableIndex] = useState(null);
 
+  useFocusEffect(
+    React.useCallback(() => {
+      return () => {
+        setIsMinimized(false);
+        resetFields();
+      };
+    }, [])
+  );
+
   const openKeyboard = () => {
     if (descriptorTextRef.current) {
       descriptorTextRef.current.focusText();
     }
   };
-
-  // const [prompt, setPrompt] = useState(null);
-  // const [role, setRole] = useState(null);
-
-  // const [cacheChecked, setCacheChecked ] = useState(false);
 
   const handleFullScreenToggle = () => {
     if (isMinimized) {
@@ -77,61 +62,6 @@ const collect = () => {
       handleStart();
     }
   };
-
-  useEffect(() => {
-    // setPrompt(null);
-    // setRole(null);
-    setIsMinimized(false);
-
-  }, []);
-
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     setPrompt(null);
-  //     setIsMinimized(false);
-   
-  //     setRole(null);
-
-  //     const fetchCache = async () => {
-  //       const cachedData = await getCache();
-  //       if (cachedData?.history) {
-  //         setCachedHistory(cachedData.history);
-  //       }
-  //       setCacheChecked(true);
-  //     };
-
-      
-
-  //     fetchCache();
-  //   }, [getCache, base])
-  // );
-
-  // useEffect(() => {
-  //   if (cacheChecked && cachedHistory && topic && lastLatAndLong) {
-  //     console.log(lastLatAndLong);
-  //     if (topic === "plants") {
-  //       console.log('setting prompt for plants!');
-  //       let roleData = yourRoleIsExpertBotanist();
-  //       let promptData = findMeAPlant(
-  //         lastLatAndLong[0],
-  //         lastLatAndLong[1],
-  //         cachedHistory
-  //       );
-  //       setPrompt(promptData);
-  //       console.log(`prompt in parent:`, promptData);
-  //       setRole(roleData);
-  //     } else {
-  //       let roleData = yourRoleIsBrilliantNaturalistAndPainter();
-  //       let promptData = findMeAWindTreasure(
-  //         lastLatAndLong[0],
-  //         lastLatAndLong[1],
-  //         cachedHistory
-  //       );
-  //       setPrompt(promptData);
-  //       setRole(roleData);
-  //     }
-  //   }
-  // }, [cacheChecked, cachedHistory, topic, lastLatAndLong]);
 
   useEffect(() => {
     if (collectTreasureMutation.isSuccess) {
@@ -164,23 +94,23 @@ const collect = () => {
 
   const updateDescriptorString = (text) => {
     if (descriptorTextRef && descriptorTextRef.current) {
-     // console.log(text);
+      // console.log(text);
       descriptorTextRef.current.setText(text);
     }
   };
 
   const updateAdditionalString = (text) => {
     if (additionalTextRef && additionalTextRef.current) {
-    //  console.log(text);
+      //  console.log(text);
       additionalTextRef.current.setText(text);
     }
   };
 
   const updateNoteEditString = (text) => {
     if (editedTextRef && editedTextRef.current) {
-    //  console.log(text);
+      //  console.log(text);
       editedTextRef.current.setText(text);
-   //   console.log("in parent", editedTextRef.current.getText());
+      //   console.log("in parent", editedTextRef.current.getText());
     }
   };
 
@@ -219,7 +149,9 @@ const collect = () => {
   const snapOffsets = inputData.map((item, index) =>
     index === 0
       ? 0
-      : inputData.slice(0, index).reduce((acc, cur) => acc + cur.height + SPACER, 0)
+      : inputData
+          .slice(0, index)
+          .reduce((acc, cur) => acc + cur.height + SPACER, 0)
   );
   const flatListRef = useRef(null);
   const [focusedIndex, setFocusedIndex] = useState(0);
@@ -232,12 +164,11 @@ const collect = () => {
 
   const handleStart = () => {
     flatListRef.current?.scrollToIndex({ index: 0, animated: true });
-    
-    if (descriptorTextRef.current) { 
+
+    if (descriptorTextRef.current) {
       descriptorTextRef.current.focusText();
     }
     setFocusedIndex(0);
-  
   };
 
   const renderItem = ({ item, index }) => {
@@ -248,8 +179,8 @@ const collect = () => {
         ? editedTextRef
         : additionalTextRef;
 
-    return item.component === "TextInputLine" ? ( 
-      <View style={{marginBottom: SPACER}}>
+    return item.component === "TextInputLine" ? (
+      <View style={{ marginBottom: SPACER }}>
         <TextInputLine
           ref={inputRef}
           title={item.title}
@@ -257,11 +188,10 @@ const collect = () => {
           mountingText={""}
           height={ITEM_HEIGHT}
           onSubmitEditing={() => handleNext(index)}
-        /> 
-        </View>
-         
-    ) : ( 
-      <View style={{marginBottom: SPACER}}>
+        />
+      </View>
+    ) : (
+      <View style={{ marginBottom: SPACER }}>
         <TextInputBlock
           ref={inputRef}
           title={item.title}
@@ -271,10 +201,30 @@ const collect = () => {
           multiline={false}
           height={ITEM_HEIGHT}
           onSubmitEditing={() => handleNext(index)}
-        />  
-        </View>
+        />
+      </View>
     );
   };
+
+  // const handleNext = (index) => {
+  //   const currentItem = inputData[index];
+  //   currentItem.onSubmitEditing();
+
+  //   const nextIndex = index + 1;
+  //   if (nextIndex < inputData.length) {
+  //     flatListRef.current?.scrollToIndex({ index: nextIndex, animated: true });
+
+  //     if (nextIndex === 1 && editedTextRef.current) {
+  //       editedTextRef.current.focusText();
+  //     } else if (nextIndex === 2 && additionalTextRef.current) {
+  //       additionalTextRef.current.focusText();
+  //     } else {
+  //       console.log("Refs not ready yet");
+  //     }
+
+  //     setFocusedIndex(nextIndex);
+  //   }
+  // };
 
   const handleNext = (index) => {
     const currentItem = inputData[index];
@@ -282,18 +232,41 @@ const collect = () => {
 
     const nextIndex = index + 1;
     if (nextIndex < inputData.length) {
-      flatListRef.current?.scrollToIndex({ index: nextIndex, animated: true });
-     
+      flatListRef.current?.scrollToIndex({
+        index: nextIndex,
+        animated: true,
+        // Using the callback to focus after scrolling
+        onScrollToIndexFailed: (error) => {
+          // Handle failure (if any) by logging or retrying
+          console.error("Scroll failed:", error);
+        },
+      });
 
-      if (nextIndex === 1 && editedTextRef.current) { 
-        editedTextRef.current.focusText();
-      } else if (nextIndex === 2 && additionalTextRef.current) {
-        additionalTextRef.current.focusText();
-      } else {
-        console.log("Refs not ready yet");
-      }
+      // Delay focusing to ensure scrolling has completed
+      setTimeout(() => {
+        if (nextIndex === 1 && editedTextRef.current) {
+          editedTextRef.current.focusText();
+        } else if (nextIndex === 2 && additionalTextRef.current) {
+          additionalTextRef.current.focusText();
+        } else {
+          console.log("Refs not ready yet");
+        }
+      }, 300); // Adjust the timeout if necessary
+    }
 
-      setFocusedIndex(nextIndex);
+    setFocusedIndex(nextIndex);
+  };
+
+  const resetFields = () => {
+    console.log("resetting fields in collect treasure");
+    if (descriptorTextRef && descriptorTextRef.current) {
+      descriptorTextRef.current.clearText();
+    }
+    if (editedTextRef && editedTextRef.current) {
+      editedTextRef.current.clearText();
+    }
+    if (additionalTextRef && additionalTextRef.current) {
+      additionalTextRef.current.clearText();
     }
   };
 
@@ -309,9 +282,7 @@ const collect = () => {
         editedTextRef.current.getText(),
         additionalTextRef.current.getText()
       );
-      descriptorTextRef.current.clearText();
-      editedTextRef.current.clearText();
-      additionalTextRef.current.clearText();
+      resetFields();
     }
   };
 
@@ -324,16 +295,16 @@ const collect = () => {
       ]}
     >
       <View style={appContainerStyles.innerFlexStartContainer}>
-
         <FlatList
           ref={flatListRef}
           data={inputData}
+          showsVerticalScrollIndicator={false}
           renderItem={renderItem}
           keyExtractor={(item) => item.key}
           scrollEnabled={true}
           snapToOffsets={snapOffsets}
           snapToAlignment="start"
-          decelerationRate="fast"  
+          decelerationRate="fast"
           onViewableItemsChanged={onViewableItemsChanged}
           viewabilityConfig={{ viewAreaCoveragePercentThreshold: 60 }}
           ListFooterComponent={<View style={{ height: 700 }}></View>}
@@ -345,19 +316,17 @@ const collect = () => {
         />
       </View>
 
-      { base && topic && (
- 
+      {base && topic && (
         <GroqItem
-          name={name} 
+          name={name}
           title={"Treasure found by Groq"}
           base={base}
-          topic={topic} 
+          topic={topic}
           isMinimized={isMinimized}
           fullScreenToggle={handleFullScreenToggle}
           isKeyboardVisible={isKeyboardVisible}
         />
       )}
-      {/* {!isKeyboardVisible && ( */}
       <ActionsFooter
         height={isKeyboardVisible ? 40 : 66}
         onPressLeft={() => router.back()}

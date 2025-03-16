@@ -973,7 +973,7 @@ const fontStyles = StyleSheet.create({
   },
   groqResponseText: {
     fontSize: 14,
-    lineHeight: 19,
+    lineHeight: 20,
 
   },
   solitaryHeaderMessageText: {

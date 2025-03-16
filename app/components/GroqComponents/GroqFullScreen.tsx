@@ -5,6 +5,7 @@ import GroqImageCard from "./GroqImageCard";
 import GoToItemButton from "../GoToItemButton";
 
 import ComponentSpinner from "../Scaffolding/ComponentSpinner";
+import { useFocusEffect } from "expo-router"; 
 
 const GroqFullScreen = ({
   label,

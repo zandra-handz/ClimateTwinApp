@@ -7,8 +7,8 @@ const GoToItemButton = ({label, onPress}) => {
   
   
     return (
-    <TouchableOpacity onPress={onPress} style={appContainerStyles.goToItemButtonContainer}>
-      <Text style={appFontStyles.GoToItemButtonText}>{label}</Text>
+    <TouchableOpacity onPress={onPress} style={[appContainerStyles.goToItemButtonContainer, {borderColor: themeStyles.primaryText.color}]}>
+      <Text style={[appFontStyles.GoToItemButtonText, themeStyles.primaryText]}>{label}</Text>
    
     </TouchableOpacity>
 
