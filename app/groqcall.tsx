@@ -42,9 +42,14 @@ export const setRequestBody = ({ model = "llama-3.1-8b-instant", role, prompt })
     };
 };
 
+export const modelOptionOne =  "llama-3.1-8b-instant"
+export const modelOptionTwo = "llama3-8b-8192"
+export const modelOptionThree = "gemma2-9b-it"
+export const modelOptionFour = "llama-3.2-90b-vision-preview" //dev model not recommended for production
 
 
-export const talkToGroq = async ({ model = "llama-3.1-8b-instant", role, prompt }) => {
+
+export const talkToGroq = async ({ model = modelOptionFour, role, prompt }) => {
     const requestBody = setRequestBody({ model, role, prompt });
 
     if (!requestBody) {

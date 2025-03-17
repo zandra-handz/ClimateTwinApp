@@ -31,7 +31,13 @@ const useGroq = () => {
     findMeAPlant,
     yourRoleIsImmortalBirdWatcher,
     findMeABird,
+    yourRoleIsEsteemedAndCompassionateArchaeologist,
+    findMeAWeapon,
   } = useLLMScripts();
+
+
+  const locationCacheExpiration = 1000 * 60 * 60; // 1 hour to match backend 
+
 
   const roleHistory = yourRoleIsFriendlyDiligentHistorian();
   const promptHistory = tellMeRecentHistoryOf(
@@ -46,6 +52,12 @@ const useGroq = () => {
   const roleBird = yourRoleIsImmortalBirdWatcher();
   const promptBird = findMeABird(latitude, longitude, groqHistory, "ONE");
 
+  const roleWeapon = yourRoleIsEsteemedAndCompassionateArchaeologist();
+  const promptWeapon = findMeAWeapon(latitude, longitude, groqHistory, "ONE");
+
+
+  
+
   const {
     data: groqHistory,
     isLoading,
@@ -57,16 +69,20 @@ const useGroq = () => {
     queryKey: ["groq", lastLocationId, "history"],
     queryFn: () => talkToGroq({ role: roleHistory, prompt: promptHistory }),
     enabled: !!isAuthenticated && !!lastLocationId && !isInitializing,
-    staleTime: 1000 * 60 * 5,
-    cacheTime: 1000 * 60 * 60,
+    staleTime: locationCacheExpiration, //data is marked stale and refetched 
+    gcTime: locationCacheExpiration, //data stays in cache even if unused
     onSuccess: (data) => {},
   });
+
+
 
   const getRoleAndPrompt = (keyword: string) => {
     if (keyword === "plants") {
       return { role: rolePlant, prompt: promptPlant };
     } else if (keyword === "birds") {
       return { role: roleBird, prompt: promptBird };
+    } else if (keyword === "travel") {
+      return { role: roleWeapon, prompt: promptWeapon };
     }
     return { role: rolePlant, prompt: promptPlant };
   };
@@ -95,7 +111,7 @@ const useGroq = () => {
           `Unexpected response from Groq API: ${JSON.stringify(data)}`
         );
         console.log("Retrying due to invalid data...");
-        throw new Error("Invalid response from API"); // ✅ Triggers retry
+        throw new Error("Invalid response from API");  
    
       }
 
@@ -118,6 +134,12 @@ const useGroq = () => {
       };
 
       queryClient.setQueryData(queryKey, formattedData);
+
+      //not sure if this works
+      queryClient.setQueryDefaults(queryKey, {
+        staleTime: locationCacheExpiration,
+        gcTime: locationCacheExpiration,
+      });
     },
 
     onError: (error) => {
@@ -130,8 +152,7 @@ const useGroq = () => {
       }, 2000);
     },
   });
-
-  const groqItemIsFetching = groqItemMutation.isFetching;
+ 
 
   const handleGetGroqItem = (keyword: string, base: string) => {
     if (!lastLocationId) {
@@ -142,6 +163,25 @@ const useGroq = () => {
     groqItemMutation.mutate({ keyword, base });
   };
 
+//calling this in handlePickNewSurroundings mutation onSuccess,
+// to reset stale time every time a ruin/portal location is visited or revisited,
+// since this is what is also happening on backend 
+  const extendGroqStaleTime = () => {
+    console.log('extending stale time for groq portal location summary', lastLocationId);
+    queryClient.setQueryDefaults(["groq", lastLocationId], {
+      staleTime: locationCacheExpiration,
+      gcTime: locationCacheExpiration,
+    });
+  };
+
+ 
+  const logGroqState = () => {
+    const queryKey = ["groq", lastLocationId];
+    const queryState = queryClient.getQueryState(queryKey); 
+      console.log("Last Updated At:", new Date(queryState?.dataUpdatedAt || 0)); 
+ 
+  };
+  
   return {
     groqHistory,
     isLoading,
@@ -151,6 +191,8 @@ const useGroq = () => {
     isError,
     handleGetGroqItem,
     groqItemMutation,
+    extendGroqStaleTime,
+    logGroqState,
   };
 };
 

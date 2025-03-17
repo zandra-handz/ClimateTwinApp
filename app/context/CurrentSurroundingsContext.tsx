@@ -13,6 +13,8 @@ import { getExploreLocation, pickNewSurroundings, getRemainingGoes } from "../ap
 import useExploreRoute from "../hooks/useExploreRoute";
 import { useActiveSearch } from "./ActiveSearchContext"; 
 import { useSurroundingsWS } from "./SurroundingsWSContext";
+
+import useGroq from "../hooks/useGroq";
  
  
 interface CurrentSurroundings {
@@ -116,6 +118,7 @@ export const CurrentSurroundingsProvider: React.FC<
 > = ({ children }) => {
   
   const { user, isAuthenticated, isInitializing } = useUser();
+  const { extendGroqStaleTime, logGroqState } = useGroq();
   const segments = useSegments();
   const queryClient = useQueryClient();
   const { lastLocationName, lastLocationId } = useSurroundingsWS();
@@ -460,6 +463,7 @@ useEffect(() => {
       try {
         locationType = data.explore_type === 'discovery_location' ? 'explore_location' : 'twin_location';
         await pickNewSurroundingsMutation.mutateAsync({[locationType]: data.id });
+       
         //setIsInitializingLocation(true);
        // setLastAccessed(null);
       } catch (error) {
@@ -480,6 +484,9 @@ useEffect(() => {
     onSuccess: (data) => {
       // setLocationId(null);
       // setLastAccessed(null);
+      logGroqState();
+      extendGroqStaleTime(); // reset staleTime for portal location history script
+      logGroqState();
       const isOnNearbyScreen = segments[2] === "nearby"; 
       if (isOnNearbyScreen) {
         

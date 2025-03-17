@@ -1,4 +1,29 @@
 const useLLMScripts = () => {
+
+  const oneWayWarning = `(PLEASE BE AWARE: THIS IS A ONE-DIRECTIONAL REQUEST, NOT A CHAT. PLEASE GIVE ALL 
+    YOUR ANSWERS TO MY QUESTION IN YOUR FIRST (AND ONLY) MESSAGE.)`
+
+  const imageInstructions = ({pluralizeTwo, item, imageUrlKey}) => {
+    return `Please provide a direct image link from Wikipedia commons for ${pluralizeTwo} ${item} if possible that I am 
+    able to display in my app, formatted on its own line and beginning with the word ${imageUrlKey} in all caps. PLEASE 
+    make sure that the image file exists and let me know if you are not able to confirm that it exists. You have been 
+    linking me to non-existing files A LOT. `
+  }
+
+  const imageOfWeaponInstructions = ({pluralizeTwo, item, imageUrlKey}) => {
+    return `Please provide a direct image link for ${pluralizeTwo} ${item} if possible that I am 
+    able to display in my app, formatted on its own line and beginning with the word ${imageUrlKey} in all caps. PLEASE 
+    make sure that the image file exists. You have been 
+    linking me to non-existing files A LOT. `
+  }
+  const formatAndSourceInstructions = ({pluralizeTwo, item}) => {
+    return `Please provide a source or link to where you got your information for each ${item}. Please add one sentence at the end 
+    of each ${item} description detailing what would happen if I ate this ${item}. Please format your response as a single bolded 
+    line for the name of ${pluralizeTwo} ${item} (on its own line), followed by a single concise paragraph or two with the info 
+    you found out.`
+  }
+
+
   const yourRoleIsFriendlyDiligentHistorian = () => {
     return `You are a passionate historian and explorer, who values 
     truth and facts above all other things. As such, you are diligent
@@ -55,28 +80,31 @@ const useLLMScripts = () => {
     lat: number, 
     long: number, 
     historyResponse: string, 
-    numberOfPlants: string = 'ONE'  
+    numberOfItems: string = 'ONE'  
   ): string => {
-    numberOfPlants = String(numberOfPlants);  
-    const pluralizeOne = numberOfPlants.toLowerCase() === 'one' ? '' : 's';
-    const pluralizeTwo = numberOfPlants.toLowerCase() === 'one' ? 'the' : 'each';
+    numberOfItems = String(numberOfItems);  
+    const item = 'plant';
+    const pluralizeOne = numberOfItems.toLowerCase() === 'one' ? '' : 's';
+    const pluralizeTwo = numberOfItems.toLowerCase() === 'one' ? 'the' : 'each';
     const imageUrlKey = `IMAGELINK:`;
   
-    return `Hello, friend! I desperately need your help describing ${numberOfPlants} plant lifeform${pluralizeOne} in my immediate surroundings -- my coordinates are 
-    ${lat}, ${long}. Please get and state my current temperature (in Fahrenheit), humidity, and weather, you will need this data when describing
-    the plant${pluralizeOne}! (More info on my current location can be found in this summary: "${historyResponse}") Please use the common or 
-    English name of the plant as the main title. Please be as truthful as possible, and consult multiple sources
-    to validate your information. Your description should reflect how the plant looks in the current 
-    season, at this exact moment in time. Your description should say whether the plant especially thrives in today's weather, 
-    or struggles in it. Please focus on the effects that the plant's current environment has on it. Feel free to include details
-    about how the plant gives back to or integrates with its surroundings. Please do not include too many
-    things in your description; focus on one or two points. Please remove 90% of adjectives that you may have otherwise responded with.
-    Please demonstrate a profound appreciation for the plant${pluralizeOne} you
-    find. Please provide a direct image link for ${pluralizeTwo} plant if possible that I am able to display in my app, formatted on its own line and beginning with
-    the word ${imageUrlKey} in all caps. PLEASE make sure that the image file exists BEFORE giving it to mE!
-    You have been linking me to non-existing files A LOT. Please provide a source or link to where you got your information for each plant. Please add one sentence at the end of each plant description detailing what would happen if I ate this plant.
-    Please format your response as a single bolded line for the name of ${pluralizeTwo} plant (on its own line),
-    followed by a single concise paragraph or two with the info you found out.`
+    return `${oneWayWarning}
+    
+    Hello, friend! I desperately need your help describing ${numberOfItems} ${item} lifeform${pluralizeOne} in my immediate surroundings -- my coordinates are 
+    ${lat}, ${long}. Please get and state my current temperature (in Fahrenheit), humidity, and weather from OpenWeatherMap API. You will need this data when describing
+    the ${item}${pluralizeOne}! (More info on my current location can be found in this summary: "${historyResponse}") Please use the common or 
+    English name of the ${item} as the main title. Please be as truthful as possible, and consult multiple sources
+    to validate your information. 
+    
+    Your description should reflect how the ${item} looks in the current season, at this exact moment in time. Your description should say whether the ${item} especially thrives in today's weather, or struggles in it. Please focus on the effects 
+    that the ${item}'s current environment has on it. Feel free to include details about how the ${item} gives back to or integrates with 
+    its surroundings. Please do not include too many things in your description; focus on one or two points. Please remove 90% of adjectives 
+    that you may have otherwise responded with. Please demonstrate a profound appreciation for the ${item}${pluralizeOne} you find. 
+
+    ${imageInstructions({pluralizeTwo, item, imageUrlKey})}
+
+    ${formatAndSourceInstructions({pluralizeTwo, item})}`
+
   };
   
   const yourRoleIsImmortalBirdWatcher = () => { 
@@ -95,27 +123,33 @@ const useLLMScripts = () => {
     lat: number, 
     long: number, 
     historyResponse: string, 
-    numberOfBirds: string = 'ONE'  
+    numberOfItems: string = 'ONE'  
   ): string => {
-    numberOfBirds = String(numberOfBirds);  
-    const pluralizeOne = numberOfBirds.toLowerCase() === 'one' ? '' : 's';
-    const pluralizeTwo = numberOfBirds.toLowerCase() === 'one' ? 'the' : 'each';
+    numberOfItems = String(numberOfItems);  
+    const pluralizeOne = numberOfItems.toLowerCase() === 'one' ? '' : 's';
+    const pluralizeTwo = numberOfItems.toLowerCase() === 'one' ? 'the' : 'each';
     const imageUrlKey = `IMAGELINK:`;
+    const item = 'bird';
   
-    return `Hello, friend! I desperately need your help describing ${numberOfBirds} bird${pluralizeOne} in my immediate surroundings -- my coordinates are 
-    ${lat}, ${long}. Please get and state my current temperature (in Fahrenheit), humidity, and weather, you will need this data when describing
-    the bird${pluralizeOne}! (More info on my current location can be found in this summary: "${historyResponse}") Please use the common or 
-    English name of the bird as the main title. Please be as truthful as possible, and consult multiple sources
-    to validate your information. Your description should reflect how the bird looks in the current 
-    season, at this exact moment in time. Your description should say whether the bird especially thrives in today's weather, 
-    or struggles in it. Please focus on the effects that the bird's current environment has on it. Feel free to include details
-    about how the bird gives back to or integrates with its surroundings. Please do not include too many
+    return `Hello, friend! I desperately need your help describing ${numberOfItems} ${item}${pluralizeOne} in my immediate surroundings -- my coordinates are 
+    ${lat}, ${long}. Please get and state my current temperature (in Fahrenheit), humidity, and weather from OpenWeatherMap API. You will need this data when describing
+    the ${item}${pluralizeOne}! (More info on my current location can be found in this summary: "${historyResponse}") Please use the common or 
+    English name of the ${item} as the main title. Please be as truthful as possible, and consult multiple sources
+    to validate your information. 
+    
+    Your description should reflect how the ${item} looks in the current 
+    season, at this exact moment in time. Your description should say whether the ${item} especially thrives in today's weather, 
+    or struggles in it. Please focus on the effects that the ${item}'s current environment has on it. Feel free to include details
+    about how the ${item} gives back to or integrates with its surroundings. 
+    
+    Please do not include too many
     things in your description; focus on one or two points. Please remove 90% of adjectives that you may have otherwise responded with.
-    Please demonstrate a profound appreciation for the bird${pluralizeOne} you
-    find. Please provide a direct image link for ${pluralizeTwo} bird if possible that I am able to display in my app (actual images, not search results), formatted on its own line and beginning with
-    the word ${imageUrlKey} in all caps. Please provide a source or link to where you got your information for each bird. Please add one sentence at the end of ${pluralizeTwo} bird description detailing what would happen if this bird saw a human.
-    Please format your response as a single bolded line for the name of ${pluralizeTwo} bird (on its own line),
-    followed by a single concise paragraph or two with the info you found out.`
+    Please demonstrate a profound appreciation for the ${item}${pluralizeOne} you
+    find. 
+    
+    ${imageInstructions({pluralizeTwo, item, imageUrlKey})}
+
+    ${formatAndSourceInstructions({pluralizeTwo, item})}`
   };
   
 
@@ -123,6 +157,51 @@ const useLLMScripts = () => {
 
 
   };
+
+  const yourRoleIsEsteemedAndCompassionateArchaeologist = () => {
+
+    return `You are an esteemed professional in the areas of history, archaeology and ancient artifacts. You specialize in ancient weapons,
+    particularly metal work, knives and swords, and you are an avid fan of beatiful blade-forging craftsmanship and always provide lush 
+    descriptions of these. You have studied many wars throughout history. You also know a lot about assassins, spies,
+    and mysterious high profile murders. You have a soft spot for minority groups and under dogs, and are deeply curious about the weapons
+    such groups may have needed in the past to defend themselves.`
+
+  };
+
+
+  const findMeAWeapon = (
+    lat: number, 
+    long: number, 
+    historyResponse: string, 
+    numberOfItems: string = 'ONE'  
+  ): string => {
+    numberOfItems = String(numberOfItems);  
+    const pluralizeOne = numberOfItems.toLowerCase() === 'one' ? '' : 's';
+    const pluralizeTwo = numberOfItems.toLowerCase() === 'one' ? 'the' : 'each';
+    const imageUrlKey = `IMAGELINK:`;
+    const item = 'sword or knife';
+  
+    return `Hello, friend! I desperately need your help describing ${numberOfItems} ${item}${pluralizeOne}, ancient or contemporary, that 
+    I might find at my current location -- my coordinates are 
+    ${lat}, ${long}. Please get and state my current temperature (in Fahrenheit), humidity, and weather from OpenWeatherMap API. You will need this data when describing
+    the ${item}${pluralizeOne}! (More info on my current location can be found in this summary: "${historyResponse}") Please use the common or 
+    English name of the ${item} as the main title. Please be as truthful as possible, and consult multiple sources
+    to validate your information. 
+    
+    Your description should say whether the ${item} might get damaged in the current weather. Please focus on the effects that 
+    the ${item}'s current environment has on it. Feel free to include details
+    about how the ${item} gives back to or integrates with its surroundings. 
+    
+    Please do not include too many
+    things in your description; focus on one or two points. Please remove 90% of adjectives that you may have otherwise responded with.
+    Please demonstrate a profound appreciation for the ${item}${pluralizeOne} you
+    find. 
+    
+    ${imageOfWeaponInstructions({pluralizeTwo, item, imageUrlKey})}
+
+    ${formatAndSourceInstructions({pluralizeTwo, item})}`
+  };
+  
 
 
 
@@ -135,6 +214,8 @@ const useLLMScripts = () => {
     findMeAPlant,
     yourRoleIsImmortalBirdWatcher,
     findMeABird,
+    yourRoleIsEsteemedAndCompassionateArchaeologist,
+    findMeAWeapon,
 
 
   };
