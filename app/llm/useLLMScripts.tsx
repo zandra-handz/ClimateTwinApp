@@ -3,6 +3,15 @@ const useLLMScripts = () => {
   const oneWayWarning = `(PLEASE BE AWARE: THIS IS A ONE-DIRECTIONAL REQUEST, NOT A CHAT. PLEASE GIVE ALL 
     YOUR ANSWERS TO MY QUESTION IN YOUR FIRST (AND ONLY) MESSAGE.)`
 
+    const titleKey = `NAME:`;
+
+  const titleInstructions = ({item}) => {
+    `The first line of your response to me MUST be the name of the ${item} you find, formatted
+    like this: 'NAME: [${item}']. DO NOT RETURN ANYTHING AT ALL IF YOU ARE NOT ABLE TO FOLLOW
+    THESE VERY SIMPLE INSTRUCTIONS.`
+
+  };
+
   const imageInstructions = ({pluralizeTwo, item, imageUrlKey}) => {
     return `Please provide a direct image link from Wikipedia commons for ${pluralizeTwo} ${item} if possible that I am 
     able to display in my app, formatted on its own line and beginning with the word ${imageUrlKey} in all caps. PLEASE 
@@ -16,13 +25,22 @@ const useLLMScripts = () => {
     make sure that the image file exists. You have been 
     linking me to non-existing files A LOT. `
   }
+
+
+  //the title instructions only worked when I added them to the end (??)
   const formatAndSourceInstructions = ({pluralizeTwo, item}) => {
     return `Please provide a source or link to where you got your information for each ${item}. Please add one sentence at the end 
-    of each ${item} description detailing what would happen if I ate this ${item}. Please format your response as a single bolded 
-    line for the name of ${pluralizeTwo} ${item} (on its own line), followed by a single concise paragraph or two with the info 
-    you found out.`
+    of each ${item} description detailing what would happen if I ate this ${item}.
+    
+    The first line of your response to me MUST be the name of the ${item} you find, formatted
+    like this: 'NAME: [${item}']. DO NOT RETURN ANYTHING AT ALL IF YOU ARE NOT ABLE TO FOLLOW
+    THESE VERY SIMPLE INSTRUCTIONS.`
   }
 
+  
+  // Please format your response as a single bolded 
+  // line for the name of ${pluralizeTwo} ${item} (on its own line), followed by a single concise paragraph or two with the info 
+  // you found out.`
 
   const yourRoleIsFriendlyDiligentHistorian = () => {
     return `You are a passionate historian and explorer, who values 
@@ -91,10 +109,13 @@ const useLLMScripts = () => {
     return `${oneWayWarning}
     
     Hello, friend! I desperately need your help describing ${numberOfItems} ${item} lifeform${pluralizeOne} in my immediate surroundings -- my coordinates are 
-    ${lat}, ${long}. Please get and state my current temperature (in Fahrenheit), humidity, and weather from OpenWeatherMap API. You will need this data when describing
-    the ${item}${pluralizeOne}! (More info on my current location can be found in this summary: "${historyResponse}") Please use the common or 
-    English name of the ${item} as the main title. Please be as truthful as possible, and consult multiple sources
-    to validate your information. 
+    ${lat}, ${long}. ${titleInstructions({item})} 
+    
+    Please get and state my current temperature (in Fahrenheit), humidity, and weather from OpenWeatherMap API. You will need this data when describing
+    the ${item}${pluralizeOne}! (More info on my current location can be found in this summary: "${historyResponse}") 
+     
+    
+    Please be as truthful as possible, and consult multiple sources to validate your information. 
     
     Your description should reflect how the ${item} looks in the current season, at this exact moment in time. Your description should say whether the ${item} especially thrives in today's weather, or struggles in it. Please focus on the effects 
     that the ${item}'s current environment has on it. Feel free to include details about how the ${item} gives back to or integrates with 
@@ -133,9 +154,11 @@ const useLLMScripts = () => {
   
     return `Hello, friend! I desperately need your help describing ${numberOfItems} ${item}${pluralizeOne} in my immediate surroundings -- my coordinates are 
     ${lat}, ${long}. Please get and state my current temperature (in Fahrenheit), humidity, and weather from OpenWeatherMap API. You will need this data when describing
-    the ${item}${pluralizeOne}! (More info on my current location can be found in this summary: "${historyResponse}") Please use the common or 
-    English name of the ${item} as the main title. Please be as truthful as possible, and consult multiple sources
-    to validate your information. 
+    the ${item}${pluralizeOne}! (More info on my current location can be found in this summary: "${historyResponse}") 
+    
+    ${titleInstructions({item})} 
+    
+    Please be as truthful as possible, and consult multiple sources to validate your information. 
     
     Your description should reflect how the ${item} looks in the current 
     season, at this exact moment in time. Your description should say whether the ${item} especially thrives in today's weather, 

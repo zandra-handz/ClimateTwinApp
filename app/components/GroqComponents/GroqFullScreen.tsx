@@ -1,16 +1,17 @@
 import { Animated, View, Text, ScrollView } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
 import GroqImageCard from "./GroqImageCard"; 
 import GoToItemButton from "../GoToItemButton";
+ 
 
-import ComponentSpinner from "../Scaffolding/ComponentSpinner";
-import { useFocusEffect } from "expo-router"; 
+import ComponentSpinner from "../Scaffolding/ComponentSpinner"; 
 
 const GroqFullScreen = ({
   label,
   value,
   opacity,
+  pexelImages,
   images,
   fullScreenToggle,
   isMinimized,
@@ -18,6 +19,14 @@ const GroqFullScreen = ({
   isKeyboardVisible,
 }) => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
+ 
+
+  useEffect(() => {
+    if (pexelImages) {
+      console.log('pexel images in groq full screen: ', pexelImages);
+    }
+
+  }, [pexelImages]);
 
   return (
     <>
@@ -60,7 +69,24 @@ const GroqFullScreen = ({
           }}
         > 
 
-        {!isMinimized && images && (
+{!isMinimized && pexelImages && pexelImages !== undefined && (
+
+<View
+  style={{
+    width: "100%",
+   
+    marginBottom: 10,
+    flexDirection: "row",
+    justifyContent: "center",
+    height: 'auto', 
+  }}
+>
+  <GroqImageCard value={pexelImages || null} />
+</View> 
+
+)} 
+
+        {!isMinimized && images && !pexelImages && (
 
             <View
               style={{

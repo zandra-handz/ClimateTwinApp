@@ -3,6 +3,7 @@
     "extra": {
       "GOOGLE_API_KEY": "AIzaSyA7TtagaCz61SLn1M1HhNKabA_qj93V7QM",
       "GROQ_API_KEY": "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",
+      "PEXELS_API_KEY": "TlPJj4bgAFac69WjqNajQXvjfD8zlNQ8joz4GLmh2pUIipUwL4bIFYHN",
       "router": {
         "origin": false
       },

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Alert } from "react-native";
 import {
   useQuery,
@@ -10,6 +10,8 @@ import { useUser } from "../context/UserContext";
 import { useSurroundingsWS } from "../context/SurroundingsWSContext";
 import useLLMScripts from "../llm/useLLMScripts";
 import { talkToGroq } from "../groqcall";
+import usePexels from "./usePexels";
+ 
 
 interface GroqHistoryData {
   [key: string]: any;
@@ -17,6 +19,7 @@ interface GroqHistoryData {
 
 const useGroq = () => {
   const { isAuthenticated, isInitializing } = useUser();
+  const { pexels, handleGetPexels } = usePexels();
   const { lastLocationName, lastLocationId, lastLatAndLong } =
     useSurroundingsWS();
   const [latitude, longitude] = Array.isArray(lastLatAndLong)
@@ -54,6 +57,13 @@ const useGroq = () => {
 
   const roleWeapon = yourRoleIsEsteemedAndCompassionateArchaeologist();
   const promptWeapon = findMeAWeapon(latitude, longitude, groqHistory, "ONE");
+
+
+  const [ currentGroqQueryKey, setCurrentGroqQueryKey ] = useState(null);
+  const [currentGroqItemName, setCurrentGroqItemName] = useState<string | null>(null);
+
+
+
 
 
   
@@ -102,7 +112,9 @@ const useGroq = () => {
     onMutate: ({ keyword, base }) => {
       const queryKey = ["groq", lastLocationId, keyword, base];
       console.log("Mutation key:", queryKey);
+      setCurrentGroqQueryKey(queryKey);
     },
+    gcTime: locationCacheExpiration,
     retry: 1,
     onSuccess: (data, variables) => {
       if (!data || typeof data !== "string") {
@@ -118,6 +130,12 @@ const useGroq = () => {
       const { keyword, base } = variables;
       const queryKey = ["groq", lastLocationId, keyword, base];
 
+      const name = data
+      .split("\n")
+      .find((line) => line.trim().startsWith("NAME:"))
+      ?.replace("NAME: ", "")
+      .trim() || null;
+
       const imageUrls = data
         .split("\n")
         .filter(
@@ -129,9 +147,16 @@ const useGroq = () => {
         .filter((url) => url.length > 0);
 
       const formattedData = {
+        name: name,
         text: data,
         images: imageUrls.length > 0 ? imageUrls : [],
       };
+
+
+      console.log(`SETTING CURRENT GROQ ITEM NAME TO:`, name);
+     // handleGetPexels({searchKeyword: name, locale: 'en-US'});
+      setCurrentGroqItemName(name);
+
 
       queryClient.setQueryData(queryKey, formattedData);
 
@@ -152,11 +177,37 @@ const useGroq = () => {
       }, 2000);
     },
   });
+
+
+  // const handlePexels = async ({searchKeyword}) => {
+  //    await searchPexels({searchKeyword: currentGroqItemName});
+
+  // };
+
+
+  // useEffect(() => {
+  //   console.log("Current Groq Item Name:", currentGroqItemName);
+  //   if (currentGroqItemName) {
+  //     handlePexels({searchKeyword: currentGroqItemName});
+  //   }
+  // }, [currentGroqItemName]);
  
 
   const handleGetGroqItem = (keyword: string, base: string) => {
     if (!lastLocationId) {
       console.error("no lastLocationId found to get groq item with");
+    }
+
+    const queryKey = ["groq", lastLocationId, keyword, base];
+
+    // Check if the data is already in the cache
+    const cachedData = queryClient.getQueryData(queryKey);
+    //setCurrentGroqQueryKey(queryKey); //not (yet) using pexel for history section of portal location
+  
+    if (cachedData) {
+      console.log("Using cached data:", cachedData);
+      console.log(queryClient.getQueryDefaults(queryKey));
+      return; // Don't run the mutation if data exists
     }
 
     // Pass the parameters as an object
@@ -193,6 +244,8 @@ const useGroq = () => {
     groqItemMutation,
     extendGroqStaleTime,
     logGroqState,
+    currentGroqQueryKey, //to pass to pexels
+    currentGroqItemName, //to pass to pexels
   };
 };
 
