@@ -10,25 +10,39 @@ const RuinsTreasuresView = () => {
   const { itemChoicesAsObjectExplore } = useInteractiveElements();
   const { lastLocationName } = useSurroundingsWS();
 
+  // const handleCollectTreasure = (topic, base) => {
+  //   if (topic) {
+  //     router.push({
+  //       pathname: "(treasures)/collect",
+  //       params: { name: lastLocationName, topic: topic, base: base },
+  //     });
+  //   }
+  // };
+
   const handleCollectTreasure = (topic, base) => {
     if (topic) {
       router.push({
         pathname: "(treasures)/collect",
-        params: { name: lastLocationName, topic: topic, base: base },
+        params: {
+          name: lastLocationName, // Pass `name` directly, not wrapped in locationData
+          topic,
+          base,
+        },
       });
     }
   };
+  
 
  
   //'street_view_image',
   const treasuresList = [
-    ["name", "travel"],
+    ["name", "ancient knife"],
     ["direction", "mountains"],
     ["direction_degree", "plants"],
-    ["miles_away", "foods"],
+    ["miles_away", "trees"],
     ["wind_compass", "wind"],
-    ["wind_agreement_score", "birds"],
-    ["wind_harmony", "wind"],
+    ["wind_agreement_score", "weapons"],
+    ["wind_harmony", "birds"],
   ];
 
   const formatValue = (value) => {

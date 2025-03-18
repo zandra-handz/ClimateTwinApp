@@ -11,7 +11,7 @@ import { useFriends } from "../../context/FriendsContext";
 import { Stack } from "expo-router"; // Expo Router's Stack component
 
 export default () => {
-  const { themeStyles, constantColorsStyles, appFontStyles } =
+  const { themeStyles, constantColorsStyles, appFontStyles, avgPhotoColor } =
     useGlobalStyles();
   const router = useRouter();
   return (
@@ -122,7 +122,8 @@ export default () => {
                 color: constantColorsStyles.v1LogoColor.color,
               },
               headerStyle: {
-                backgroundColor:
+                backgroundColor: 
+                // avgPhotoColor ? avgPhotoColor :
                   constantColorsStyles.v1LogoColor.backgroundColor,
               },
               headerLeft: () => (

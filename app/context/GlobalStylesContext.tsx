@@ -156,11 +156,24 @@ export const GlobalStylesProvider: React.FC<GlobalStylesProviderProps> = ({
   // Define theme styles for dark and light modes
   const lightOrDark = styles.theme;
 
-  const themeStyles =
-    styles.theme === "dark" ? darkThemeStyles : lightThemeStyles;
+  const themeStyles = styles.theme === "dark" ? darkThemeStyles : lightThemeStyles;
   const constantColorsStyles = constantColors;
   const appFontStyles = fontStyles;
   const appContainerStyles = containerStyles;
+
+  const [ avgPhotoColor, setAvgPhotoColor ] = useState(null);
+
+  const handleAvgPhotoColor = (color) => {
+    setAvgPhotoColor((prevColor) => {
+      if (prevColor === color) {
+        console.log("handleAvgPhotoColor skipped: Color is the same.");
+        return prevColor; // Don't update if the color is the same
+      }
+      console.log("handleAvgPhotoColor triggered!!!!!!!", color);
+      return color; // Update only if different
+    });
+  };
+  
 
   const themeStyleSpinners = {
     homeScreen: "flow",
@@ -178,6 +191,8 @@ export const GlobalStylesProvider: React.FC<GlobalStylesProviderProps> = ({
         themeStyleSpinners,
         nonCustomHeaderPage,
         setNonCustomHeaderPage,
+        avgPhotoColor,
+        handleAvgPhotoColor,
       }}
     >
       {children}
@@ -200,7 +215,7 @@ const containerStyles = StyleSheet.create({
     justifyContent: "space-between",
     flexDirection: "column",
     // paddingVertical: "0%",
-    zIndex: 1,
+    zIndex: 10,
   },
   portalBannerContainer: {
     paddingHorizontal: 10,
@@ -836,7 +851,7 @@ const containerStyles = StyleSheet.create({
     justifyContent: 'center',  
 
     height: "auto",
-    padding: 30,
+    padding: 20,
     borderRadius: 16,
     width: "100%",
     flexDirection: "column",
@@ -846,7 +861,8 @@ const containerStyles = StyleSheet.create({
   },
   twoButtonFooterContainer: {
     // zIndex: 100,
-    // position: 'absolute',
+    position: 'absolute',
+    zIndex: 100,
     bottom: 0, 
     //height: 80,  managed in Footer component because it changes if keyboard is visible
     width: '100%',

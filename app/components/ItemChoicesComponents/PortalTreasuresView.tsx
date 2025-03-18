@@ -16,30 +16,42 @@ const PortalTreasuresView = () => {
       const { lastLocationName } = useSurroundingsWS();
      
     
-        
-
-
-const handleCollectTreasure = (topic, base) => {
-    if (topic) {
-        router.push({
+      const handleCollectTreasure = (topic, base) => {
+        if (topic) {
+          router.push({
             pathname: "(treasures)/collect",
-            params: { name: lastLocationName, topic: topic, base: base},
-        })
-    }
+            params: {
+              name: lastLocationName, // Pass `name` directly, not wrapped in locationData
+              topic,
+              base,
+            },
+          });
+        }
+      };
+      
 
-}
+
+// const handleCollectTreasure = (topic, base) => {
+//     if (topic) {
+//         router.push({
+//             pathname: "(treasures)/collect",
+//             params: { name: lastLocationName, topic: topic, base: base},
+//         })
+//     }
+
+// }
 
 
 const treasuresList = [
     ['name', 'travel'], 
     ['temperature', 'storms'], 
     ['description', 'weather'], 
-    ['wind_direction', 'wind'], 
+    ['wind_direction', 'ancient knife'], 
     ['wind_speed', 'birds'], 
-    ['wind_friends', 'navigation'], 
+    ['wind_friends', 'weapons'], 
     ['special_harmony', 'plants'], 
     ['sunrise_timestamp', 'breakfast'], 
-    ['sunset_timestamp', 'alcohol']
+    ['sunset_timestamp', 'trees']
   ];
   
   const formatValue = (value) => {

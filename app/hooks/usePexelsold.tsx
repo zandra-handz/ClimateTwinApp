@@ -9,16 +9,14 @@ import {
 import { useUser } from "../context/UserContext";
 import { useSurroundingsWS } from "../context/SurroundingsWSContext"; 
 import { searchPexels } from "../pexelscall";
-import { useGlobalStyles } from "../context/GlobalStylesContext";
 
 
 interface pexelsImageData {
   [key: string]: any;
 }
 
-const usePexels = ({queryString, base}) => {
+const usePexels = () => {
   const { isAuthenticated, isInitializing } = useUser();
- 
 
   const { lastLocationId } = useSurroundingsWS();
   const queryClient = useQueryClient();
@@ -26,32 +24,30 @@ const usePexels = ({queryString, base}) => {
   const locationCacheExpiration = 1000 * 60 * 60; // 1 hour
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  //const [pexels, setPexels ] = useState('');
+  const [pexels, setPexels ] = useState('');
 
-  const safeQueryString = queryString?.trim() || "";
-  const safeBase = base?.trim() || "";
-  
-  const {
-    data: pexels,
-    isLoading,
-    isFetching,
-    isPending,
-    isSuccess,
-    isError,
-  } = useQuery({
-    queryKey: ["pexels", lastLocationId, safeQueryString, safeBase],
-    queryFn: () => searchPexels({ searchKeyword: safeQueryString, locale: "en-US", base: base }),
-    
-    enabled: !!isAuthenticated && !!lastLocationId && !isInitializing && !!queryString,
-    staleTime: locationCacheExpiration,
-    gcTime: locationCacheExpiration,
-    onSuccess: (data) => {
-      console.log('PEXELS!: ', data.response);
-    },
-    onError: (error) => {
-      console.log(`Pexels error: `, error);
-    }
-  });
+//   const {
+//     data: pexels,
+//     isLoading,
+//     isFetching,
+//     isSuccess,
+//     isError,
+//   }: UseQueryResult<pexelsImageData, Error> = useQuery({
+//     queryKey: ["pexels", lastLocationId, currentGroqItemName],
+//     queryFn: () => {
+//       console.log('Calling searchPexels with:', { searchKeyword: currentGroqItemName, locale: 'en-US' });
+//       return searchPexels({ searchKeyword: currentGroqItemName, locale: 'en-US' });
+//     },
+//     enabled: !!isAuthenticated && !!lastLocationId && !isInitializing && !!currentGroqItemName,
+//     staleTime: locationCacheExpiration,
+//     gcTime: locationCacheExpiration,
+//     onSuccess: (data) => {
+//       console.log('PEXELS!: ', data.response);
+//     },
+//     onError: (error) => {
+//       console.log(`Pexels error: `, error);
+//     }
+//   });
 
 
     const pexelsMutation = useMutation({
@@ -72,7 +68,7 @@ const usePexels = ({queryString, base}) => {
         setPexels(photos[0]?.landscape);
     
         const { searchKeyword } = variables;
-        console.log("Base in onSuccess:", searchKeyword, base);  
+        console.log("Base in onSuccess:", searchKeyword, base); // ✅ Now base will be available
     
         const queryKey = ["pexels", lastLocationId, searchKeyword, base];
     
@@ -120,18 +116,15 @@ const usePexels = ({queryString, base}) => {
       
 
 
-    // useEffect(() => {
-    //     if (pexels) {
-    //         console.log(`pexels updated: `, pexels);
-    //             }
+    useEffect(() => {
+        if (pexels) {
+            console.log(`pexels updated: `, pexels);
+                }
 
-    // }, [pexels]);
+    }, [pexels]);
 
   return { 
     pexels,
-    isFetching,
-    isPending,
-    isSuccess,
     handleGetPexels,
     pexelsMutation,
   };

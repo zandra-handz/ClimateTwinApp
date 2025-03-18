@@ -9,8 +9,7 @@ import {
 import { useUser } from "../context/UserContext";
 import { useSurroundingsWS } from "../context/SurroundingsWSContext";
 import useLLMScripts from "../llm/useLLMScripts";
-import { talkToGroq } from "../groqcall";
-import usePexels from "./usePexels";
+import { talkToGroq } from "../groqcall"; 
  
 
 interface GroqHistoryData {
@@ -18,8 +17,7 @@ interface GroqHistoryData {
 }
 
 const useGroq = () => {
-  const { isAuthenticated, isInitializing } = useUser();
-  const { pexels, handleGetPexels } = usePexels();
+  const { isAuthenticated, isInitializing } = useUser(); 
   const { lastLocationName, lastLocationId, lastLatAndLong } =
     useSurroundingsWS();
   const [latitude, longitude] = Array.isArray(lastLatAndLong)
@@ -87,11 +85,11 @@ const useGroq = () => {
 
 
   const getRoleAndPrompt = (keyword: string) => {
-    if (keyword === "plants") {
+    if (keyword === "plants" || keyword === "trees") {
       return { role: rolePlant, prompt: promptPlant };
     } else if (keyword === "birds") {
       return { role: roleBird, prompt: promptBird };
-    } else if (keyword === "travel") {
+    } else if (keyword === "weapons" || keyword === "ancient knife") {
       return { role: roleWeapon, prompt: promptWeapon };
     }
     return { role: rolePlant, prompt: promptPlant };

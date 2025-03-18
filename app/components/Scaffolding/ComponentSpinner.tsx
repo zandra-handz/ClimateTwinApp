@@ -40,7 +40,7 @@ const ComponentSpinner = (
   return (
     <View
       style={[
-        styles.container, themeStyles.darkerBackground
+        styles.container, //themeStyles.darkerBackground
       ]}
     >
       {showSpinner ? (

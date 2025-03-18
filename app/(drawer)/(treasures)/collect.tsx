@@ -1,7 +1,8 @@
-import { View, Text, Keyboard, Dimensions, FlatList } from "react-native";
+import { View, Text, Keyboard, Dimensions, FlatList,   Animated } from "react-native";
 import React, {
   useEffect,
   useLayoutEffect,
+
   useRef,
   useState,
   useCallback,
@@ -14,7 +15,8 @@ import { useLocalSearchParams, useRouter } from "expo-router";
 import TextInputLine from "@/app/components/TextInputLine";
 import TextInputBlock from "@/app/components/TextInputBlock";
 import GroqItem from "@/app/components/GroqComponents/GroqItem";
-import { useFocusEffect } from "expo-router";
+import { useFocusEffect } from "expo-router"; 
+
 
 const collect = () => {
   const { name, topic, base } = useLocalSearchParams<{
@@ -23,7 +25,14 @@ const collect = () => {
     base: string | null;
   }>();
 
-  const { themeStyles, appContainerStyles } = useGlobalStyles();
+  const locationData = { name, topic, base };
+
+    const [fadeAnim] = useState(new Animated.Value(0));  
+
+  
+  
+
+  const { themeStyles, appContainerStyles, avgPhotoColor, handleAvgPhotoColor } = useGlobalStyles();
   const [isMinimized, setIsMinimized] = useState(false);
   const { showAppMessage } = useAppMessage();
 
@@ -39,13 +48,27 @@ const collect = () => {
 
   useFocusEffect(
     React.useCallback(() => {
+      handleAvgPhotoColor(null);
+
       return () => {
+        handleAvgPhotoColor(null);
         setIsMinimized(false);
         resetFields();
       };
     }, [])
   );
-
+ 
+  
+  useEffect(() => {
+    console.log('collect screen color animation triggered');
+    
+    Animated.timing(fadeAnim, {
+      toValue: avgPhotoColor ? 1 : 0,  
+      duration: 1000,                 
+      useNativeDriver: false,       
+    }).start();
+  }, [avgPhotoColor]);
+ 
   const openKeyboard = () => {
     if (descriptorTextRef.current) {
       descriptorTextRef.current.focusText();
@@ -272,10 +295,10 @@ const collect = () => {
 
   const handleCollect = () => {
     console.log("handle collect");
-    if (base && topic && editedTextRef.current) {
-      const parsedValue = JSON.parse(base);
+    if (locationData && editedTextRef.current) {
+      const parsedValue = JSON.parse(locationData?.base);
       const firstString = parsedValue[0];
-      console.log("attempting to collect treasure", base);
+      console.log("attempting to collect treasure", locationData?.base);
       handleCollectTreasure(
         firstString,
         descriptorTextRef.current.getText(),
@@ -287,14 +310,25 @@ const collect = () => {
   };
 
   return (
-    <View
+    <> 
+    <Animated.View
       style={[
         appContainerStyles.screenContainer,
-        themeStyles.primaryBackground,
-        { paddingTop: 10 },
+      //  themeStyles.primaryBackground,
+       
+      
+      { 
+        // backgroundColor: avgPhotoColor ? avgPhotoColor :  themeStyles.primaryBackground.backgroundColor
+        backgroundColor: fadeAnim.interpolate({
+          inputRange: [0, 1],
+          outputRange: [themeStyles.primaryBackground.backgroundColor, avgPhotoColor ? avgPhotoColor : themeStyles.primaryBackground.backgroundColor], 
+        }),
+      },
       ]}
-    >
+    > 
+     
       <View style={appContainerStyles.innerFlexStartContainer}>
+     
         <FlatList
           ref={flatListRef}
           data={inputData}
@@ -315,9 +349,9 @@ const collect = () => {
           })}
         />
       </View>
-
-      {base && topic && (
+ 
         <GroqItem
+        locationParamsData={locationData}
           name={name}
           title={"Treasure found by Groq"}
           base={base}
@@ -325,18 +359,19 @@ const collect = () => {
           isMinimized={isMinimized}
           fullScreenToggle={handleFullScreenToggle}
           isKeyboardVisible={isKeyboardVisible}
-        />
-      )}
+        /> 
       <ActionsFooter
         height={isKeyboardVisible ? 40 : 66}
-        onPressLeft={() => router.back()}
+        onPressLeft={isMinimized ? handleFullScreenToggle : () => router.back()}
         labelLeft={"Back"}
         onPressRight={handleCollect}
         labelRight={"Collect"}
-        onPressCenter={isMinimized ? handleFullScreenToggle : null}
-        labelCenter={"Groq"}
+        // onPressCenter={isMinimized ? handleFullScreenToggle : null}
+        // labelCenter={"Groq"}
       />
-    </View>
+    </Animated.View>
+    
+    </>
   );
 };
 
