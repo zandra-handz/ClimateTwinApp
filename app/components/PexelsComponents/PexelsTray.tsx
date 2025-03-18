@@ -8,7 +8,7 @@ import { useFocusEffect } from "expo-router";
 
 const PexelsTray = ({ queryString, base, photoNumber }) => {
   const { pexels, isPending, isFetching, pexelsMutation } = usePexels({ queryString, base });
-  const { handleAvgPhotoColor } = useGlobalStyles(); 
+  const { handleAvgPhotoColor, avgPhotoColor } = useGlobalStyles(); 
   const [indexNumber, setindexNumber ] = useState(0);
 
   //console.log(queryString); // "nature"
@@ -48,9 +48,10 @@ const PexelsTray = ({ queryString, base, photoNumber }) => {
     //     pexels.photos[photoNumber].photographer_url
     //   );
 console.log('setting pic color in Pexelstray');
-       handleAvgPhotoColor(pexels.photos[photoNumber].avg_color);
+ 
+       handleAvgPhotoColor(pexels.photos[photoNumber].avg_color); //this checks if same value and won't set again if it is.
     }
-  }, [pexels, isFetching, isPending]);
+  }, [pexels, isFetching, isPending, avgPhotoColor]); //added avgPhotoColor to make this reset when reponened to same item since other components null this
 
   useEffect(() => {
     if (queryString && debug) {

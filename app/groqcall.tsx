@@ -46,10 +46,10 @@ export const modelOptionOne =  "llama-3.1-8b-instant"
 export const modelOptionTwo = "llama3-8b-8192"
 export const modelOptionThree = "gemma2-9b-it"
 export const modelOptionFour = "llama-3.2-90b-vision-preview" //dev model not recommended for production
+//this randomly stopped working 3/18 around 6pm, switched to option one and was fine
 
 
-
-export const talkToGroq = async ({ model = modelOptionFour, role, prompt }) => {
+export const talkToGroq = async ({ model = modelOptionOne, role, prompt }) => {
     const requestBody = setRequestBody({ model, role, prompt });
 
     if (!requestBody) {
