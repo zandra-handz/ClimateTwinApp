@@ -46,9 +46,9 @@ const treasuresList = [
     ['name', 'travel'], 
     ['temperature', 'storms'], 
     ['description', 'weather'], 
-    ['wind_direction', 'ancient knife'], 
+    ['wind_direction', 'ancient sword'], 
     ['wind_speed', 'birds'], 
-    ['wind_friends', 'weapons'], 
+    ['wind_friends', 'ancient dagger'], 
     ['special_harmony', 'plants'], 
     ['sunrise_timestamp', 'breakfast'], 
     ['sunset_timestamp', 'trees']

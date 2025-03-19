@@ -36,7 +36,7 @@ const RuinsTreasuresView = () => {
  
   //'street_view_image',
   const treasuresList = [
-    ["name", "ancient knife"],
+    ["name", "ancient sword"],
     ["direction", "mountains"],
     ["direction_degree", "plants"],
     ["miles_away", "trees"],

@@ -116,7 +116,7 @@ const GroqItem = ({
         textBodyImagesArray: cachedData?.images,
         base: base,
         topic: topic,
-        altImageSearchQuery: `${cachedData?.name} ${topic} in ${name}`, 
+        altImageSearchQuery: `${cachedData?.name} ${topic} ${name}`, 
       });
 
       setResponseMessage(cachedData);

@@ -7,7 +7,7 @@ const useLLMScripts = () => {
 
   const titleInstructions = ({item}) => {
     `The first line of your response to me MUST be the name of the ${item} you find, formatted
-    like this: 'NAME: [${item} name] ${item}'. Please use the COMMON or english name, not the scientific name. 
+    like this: 'NAME: [${item} name] ${item}'. Please use the COMMON name, not the scientific name. 
      DO NOT RETURN ANYTHING AT ALL IF YOU ARE NOT ABLE TO FOLLOW
     THESE VERY SIMPLE INSTRUCTIONS.`
 

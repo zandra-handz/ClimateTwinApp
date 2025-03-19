@@ -89,7 +89,7 @@ const useGroq = () => {
       return { role: rolePlant, prompt: promptPlant };
     } else if (keyword === "birds") {
       return { role: roleBird, prompt: promptBird };
-    } else if (keyword === "weapons" || keyword === "ancient knife") {
+    } else if (keyword === "weapons" || keyword === "ancient sword" || keyword === "ancient dagger") {
       return { role: roleWeapon, prompt: promptWeapon };
     }
     return { role: rolePlant, prompt: promptPlant };

@@ -4,6 +4,7 @@ import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import GroqImageCard from "./GroqImageCard";
 import GoToItemButton from "../GoToItemButton";
 import PexelsTray from "../PexelsComponents/PexelsTray";
+import UnsplashTray from "../UnsplashComponents/UnsplashTray";
 
 import ComponentSpinner from "../Scaffolding/ComponentSpinner"; 
 import { useFocusEffect } from "expo-router";
@@ -101,10 +102,41 @@ const GroqFullScreen = ({
                 width: "100%",
                 justifyContent: "flex-start",
               }}
-            >
-              {!isMinimized && dataObject?.altImageSearchQuery && (
-                <PexelsTray queryString={dataObject?.altImageSearchQuery} base={dataObject?.base || null} photoNumber={2} />
-              )}
+            > 
+<ScrollView horizontal showsHorizontalScrollIndicator={false}>
+{!isMinimized && dataObject?.altImageSearchQuery && (
+    <View style={{width: '16%', marginRight: 20}}>
+      
+    <UnsplashTray queryString={dataObject?.altImageSearchQuery} base={dataObject?.base || null} photoNumber={1} />
+  
+    </View>
+  )}
+    {!isMinimized && dataObject?.altImageSearchQuery && (
+    <View style={{width: '16%', marginRight: 20}}>
+      
+    <UnsplashTray queryString={dataObject?.altImageSearchQuery} base={dataObject?.base || null} photoNumber={2} />
+  
+    </View>
+  )}
+  {!isMinimized && dataObject?.altImageSearchQuery && (
+    <View style={{width: '16%', marginRight: 20}}>
+      
+    <PexelsTray queryString={dataObject?.altImageSearchQuery} base={dataObject?.base || null} photoNumber={2} />
+  
+    </View>
+  )}
+
+{!isMinimized && dataObject?.altImageSearchQuery && (
+    <View style={{width: '16%', marginRight: 20}}>
+      
+    <PexelsTray queryString={dataObject?.altImageSearchQuery} base={dataObject?.base || null} photoNumber={3} />
+  
+    </View>
+  )}
+  
+
+</ScrollView>
+
               {/* 
                 {!isMinimized && images && !pexelImages && (
 
