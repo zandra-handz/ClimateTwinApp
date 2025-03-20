@@ -104,24 +104,25 @@ const GroqFullScreen = ({
               }}
             > 
 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+  {/* just change the -Tray prefix to change hook to an unsplash image */}
 {!isMinimized && dataObject?.altImageSearchQuery && (
     <View style={{width: '16%', marginRight: 20}}>
       
-    <UnsplashTray queryString={dataObject?.altImageSearchQuery} base={dataObject?.base || null} photoNumber={1} />
+    <PexelsTray queryString={dataObject?.altImageSearchQuery} base={dataObject?.base || null} photoNumber={1} />
   
     </View>
   )}
     {!isMinimized && dataObject?.altImageSearchQuery && (
     <View style={{width: '16%', marginRight: 20}}>
       
-    <UnsplashTray queryString={dataObject?.altImageSearchQuery} base={dataObject?.base || null} photoNumber={2} />
+    <PexelsTray queryString={dataObject?.altImageSearchQuery} base={dataObject?.base || null} photoNumber={2} />
   
     </View>
   )}
   {!isMinimized && dataObject?.altImageSearchQuery && (
     <View style={{width: '16%', marginRight: 20}}>
       
-    <PexelsTray queryString={dataObject?.altImageSearchQuery} base={dataObject?.base || null} photoNumber={2} />
+    <PexelsTray queryString={dataObject?.altImageSearchQuery} base={dataObject?.base || null} photoNumber={3} />
   
     </View>
   )}
@@ -129,7 +130,7 @@ const GroqFullScreen = ({
 {!isMinimized && dataObject?.altImageSearchQuery && (
     <View style={{width: '16%', marginRight: 20}}>
       
-    <PexelsTray queryString={dataObject?.altImageSearchQuery} base={dataObject?.base || null} photoNumber={3} />
+    <PexelsTray queryString={dataObject?.altImageSearchQuery} base={dataObject?.base || null} photoNumber={4} />
   
     </View>
   )}
