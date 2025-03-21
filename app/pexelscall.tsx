@@ -35,7 +35,7 @@ export const searchPexels = async ({ searchKeyword, locale = "en-US", base }) =>
 
     if (!searchKeyword) {
         console.error("Invalid request. Search keyword is required.");
-        return { photos: [], base }; // ✅ Ensure base is always returned
+        return { photos: [], base }; 
     }
 
     const url = `${API_URL}?query=${encodeURIComponent(searchKeyword)}&locale=${locale}&orientation=landscape&size=medium&per_page=5`;
@@ -53,7 +53,7 @@ export const searchPexels = async ({ searchKeyword, locale = "en-US", base }) =>
         }
 
         const data = await response.json();
-        console.log(data.photos);
+        //console.log(data.photos);
         return { photos: data.photos || [], base };  
     } catch (error) {
         console.error("Error calling Pexels API:", error);

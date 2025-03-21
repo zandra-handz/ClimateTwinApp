@@ -5,6 +5,7 @@ import GroqImageCard from "./GroqImageCard";
 import GoToItemButton from "../GoToItemButton";
 import PexelsTray from "../PexelsComponents/PexelsTray";
 import UnsplashTray from "../UnsplashComponents/UnsplashTray";
+import SmithsonianTray from "../SmithsonianComponents/SmithsonianTray";
 
 import ComponentSpinner from "../Scaffolding/ComponentSpinner"; 
 import { useFocusEffect } from "expo-router";
@@ -134,7 +135,15 @@ const GroqFullScreen = ({
   
     </View>
   )}
+
+{/* {!isMinimized && dataObject?.altImageSearchQuery && (
+    <View style={{width: '16%', marginRight: 20}}>
+      
+    <SmithsonianTray queryString={dataObject?.altImageSearchQuery} base={dataObject?.base || null} photoNumber={1} />
   
+    </View>
+  )}
+   */}
 
 </ScrollView>
 

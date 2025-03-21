@@ -28,7 +28,7 @@ export const searchUnsplash = async ({ searchKeyword, locale = "en-US", base }) 
         }
 
         const data = await response.json();
-        console.log(data.results);
+        //console.log(data.results);
         return { photos: data.results || [], base };  // `results` is the key for images in Unsplash
     } catch (error) {
         console.error("Error calling Unsplash API:", error);
