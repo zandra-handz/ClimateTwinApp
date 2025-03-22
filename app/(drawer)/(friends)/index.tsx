@@ -1,59 +1,53 @@
 import React from "react";
-import { 
-  View, 
-} from "react-native"; 
-import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
+import { View, TouchableOpacity, Text } from "react-native";
+import { useGlobalStyles } from "../../context/GlobalStylesContext";
 
 import { useAppMessage } from "../../context/AppMessageContext";
 import useFriends from "../../hooks/useFriends";
-
-import { StatusBar } from "expo-status-bar";
+import GoToItemButton from "@/app/components/GoToItemButton";
 
 import DataList from "../../components/Scaffolding/DataList";
-import { useFocusEffect } from "expo-router";
-  
 const index = () => {
-  const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles(); 
+  const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const { showAppMessage } = useAppMessage();
-  const { friends } = useFriends();
- 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     console.log("Nearby location screen is focused");
-  //     triggerRefetch();
-  //     return () => {
-  //       console.log("nearby location screen is unfocused"); 
-  //     };
-  //   }, [])
-  // );
- 
+  const { friends, handleSearchUsers, userSearchResults, handleSendFriendRequest } = useFriends();
 
-const handlePress = () => {
-  console.log('Friend handlePress pressed!');
+  const handlePress = () => {
+    console.log("Friend handlePress pressed!");
+  };
 
-};
- 
- 
-  
+  const handleFriendRequest = (friendObject) => {
+    if (friendObject) {
+      console.log("attempting to send friend request", friendObject);
+      handleSendFriendRequest(friendObject.id, 'Friend request message placeholder!');
+    }
+  };
+
   return (
     <>
-      {/* <StatusBar
-        barStyle={themeStyles.primaryBackground.backgroundColor}
-        translucent={true}
-        backgroundColor="transparent"
-      /> */}
       <View
         style={[
           appContainerStyles.screenContainer,
           themeStyles.primaryBackground,
-          { paddingTop: 90 },
+          { paddingTop: 10 },
         ]}
       >
+        <View style={{ height: 80, paddingHorizontal: 20, width: "100%" }}>
+          <GoToItemButton
+            label="Show all users"
+            onPress={handleSearchUsers}
+          />
+        </View>
         <View style={appContainerStyles.innerFlexStartContainer}>
-        
-        {friends && <DataList listData={friends} onCardButtonPress={handlePress} />}
- 
-          </View>
+        {userSearchResults && (
+            <DataList listData={userSearchResults} onCardButtonPress={handleFriendRequest} />
+          )}
+
+          {friends && (
+            <DataList listData={friends} onCardButtonPress={handlePress} />
+          )}
+
+        </View>
       </View>
     </>
   );

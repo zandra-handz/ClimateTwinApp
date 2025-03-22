@@ -6,15 +6,24 @@ import { DrawerToggleButton } from "@react-navigation/drawer";
 import RefreshSocketButton from "../Scaffolding/RefreshSocketButton";
 
 import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
+import ProgressBar from "../Scaffolding/ProgressBar";
+import { useSurroundingsWS } from "@/app/context/SurroundingsWSContext";
+import ProgressCircle from "../Scaffolding/ProgressCircle";
   
 const HomeHeader = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();  
+  const { lastMessage } = useSurroundingsWS();
  
 
     useEffect(() => {
-      console.log('exploretabheader rerendered');
+      console.log('homeheader rerendered');
   
     }, []);
+
+    // useEffect(() => {
+    //   console.log('LASTMESSAGE TRIGGERED IN HOME HEADER')
+
+    // }, [lastMessage]);
 
   return (
     <> 
@@ -33,7 +42,7 @@ const HomeHeader = () => {
                
               <DrawerToggleButton tintColor={themeStyles.primaryText.color} />
          
-            </View>
+            </View> 
           </View>
         </View>
       </SafeAreaView>

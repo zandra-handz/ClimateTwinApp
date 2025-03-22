@@ -12,6 +12,7 @@ import { useUser } from "../context/UserContext";
 import { useAppMessage } from "../context/AppMessageContext"; 
 import { useActiveSearch } from "../context/ActiveSearchContext";
 
+import ProgressCircle from "./Scaffolding/ProgressCircle";
 import WorldMapSvg from "../assets/svgs/worldmap.svg";
 
 import Dot from "../animations/Dot";
@@ -225,17 +226,9 @@ const WebSocketSearchingLocations: React.FC<{
       text: `${countrySharedValue.value}`,
       defaultValue: `${countrySharedValue.value}`,
     };
-  });
+  }); 
 
-  // const animatedCoords = useAnimatedProps(() => ({
-  //   latitude: latitude.value, // Directly using the shared value
-  //   longitude: longitude.value
-  // }));
-
-  const animatedStyle = useAnimatedStyle(() => {
-    // prevLatitude.value = latitude.value;
-    // prevLongitude.value = longitude.value;
-    // Normalize coordinates based on the mapContainer's dimensions
+  const animatedStyle = useAnimatedStyle(() => { 
     const normalizedLeft =
       (longitude.value + 180) * (mapDimensions.width / 360);
     const normalizedTop = (90 - latitude.value) * (mapDimensions.height / 180); // Invert the vertical axis
@@ -380,6 +373,11 @@ const WebSocketSearchingLocations: React.FC<{
       <View style={appContainerStyles.defaultElementRow}>
         <View style={styles.updatesContainer}>
           <View style={styles.infoContainer}>
+            <View style={{position: 'absolute', top: -30, left: '38.4%', zIndex: 100}}>
+              
+          <ProgressCircle height={'60'} width={'60'} />
+          
+          </View>
             <View
               style={[
                 themeStyles.primaryBackground,
@@ -394,7 +392,7 @@ const WebSocketSearchingLocations: React.FC<{
                   justifyContent: "center",
                 },
               ]}
-            >
+            > 
               <AnimatedTextInput
                 style={[styles.tempText, themeStyles.primaryText]}
                 animatedProps={animatedTemp}

@@ -5,12 +5,9 @@ import {
 import { useRouter } from "expo-router";
 import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
  
-import useTreasures from "../../hooks/useTreasures";
-import { StatusBar } from "expo-status-bar";
-import DataList from "../../components/Scaffolding/DataList"; 
+import useTreasures from "../../hooks/useTreasures"; 
 import TreasuresView from '../../components/TreasuresComponents/TreasuresView';
-
-import ActionsFooter from "@/app/components/ActionsFooter";
+ 
   
 const index = () => {
   const { themeStyles,  appContainerStyles } = useGlobalStyles();  
@@ -37,12 +34,7 @@ const handleViewTreasure = (id, descriptor) => {
  
   
   return (
-    <>
-      {/* <StatusBar
-        barStyle={themeStyles.primaryBackground.backgroundColor}
-        translucent={true}
-        backgroundColor="transparent"
-      /> */}
+    <> 
       <View
         style={[
           appContainerStyles.screenContainer,

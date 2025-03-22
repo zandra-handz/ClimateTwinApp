@@ -11,8 +11,7 @@ import {
 import { useUser } from "./context/UserContext";
 import { useGlobalStyles } from "./context/GlobalStylesContext";
 import { useAppMessage } from "./context/AppMessageContext"; 
-import { useFonts } from "expo-font"; 
-import { useNavigation } from "@react-navigation/native";
+import { useFonts } from "expo-font";  
 import { LinearGradient } from "expo-linear-gradient"; 
 
 import * as SecureStore from 'expo-secure-store';
@@ -21,6 +20,7 @@ import { useRouter, Link } from "expo-router";
 
 
 import { SafeAreaView } from "react-native-safe-area-context";
+import { signup } from "./apicalls";
  
 import { StatusBar } from 'react-native';
 import SimpleBottomButton from "./components/SimpleBottomButton";
@@ -63,7 +63,7 @@ const router = useRouter();
   const [usernameInputVisible, setUsernameInputVisible] = useState(true);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isEmailFocused, setIsEmailFocused] = useState(false);
-  const navigation = useNavigation();
+ 
 
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
@@ -197,45 +197,37 @@ const router = useRouter();
   };
 
   const handleAuthentication = async () => {
-    console.log('handleAuth pressed!');
-    try {
+    let result;
+    if (isSignInScreen) {
+      try {
+       showAppMessage(true, null, "Signing you in...");
+
         onSignin(username, password);
-
-    } catch (error) {
+      } catch (error) {
         console.error(error);
+        showAppMessage(true, null, `Error! Not signed in.`);
+      }
+    } else {
+      if (password !== verifyPassword) {
+        //alert("Passwords do not match!");
+        showAppMessage(true, null, "Oops! Passwords do not match");
+        return;
+      }
+      console.log("passwords match, sending data...");
+      result = await onSignUp(username, email, password);
+      if (result && result.status === 201) {
+        alert("Sign up was successful!");
+        setSignUpSuccess(true);
+        setLoading(false);
+       // router.replace('signin');
+      } else if (result && result.error) {
+        alert("Error: " + result.error);
+      }
     }
-    // let result;
-    // if (isSignInScreen) {
-    //   try {
-    //     showAppMessage(true, null, "Signing you in...");
-
-    //     onSignin(username, password);
-    //   } catch (error) {
-    //     console.error(error);
-    //     showAppMessage(true, null, `Error! Not signed in.`);
-    //   }
-    // } else {
-    //   if (password !== verifyPassword) {
-    //     //alert("Passwords do not match!");
-    //     showAppMessage(true, null, "Oops! Passwords do not match");
-    //     return;
-    //   }
-    //   console.log("passwords match, sending data...");
-    //   result = await onSignUp(username, email, password);
-    //   if (result && result.status === 201) {
-    //     alert("Sign up was successful!");
-    //     setSignUpSuccess(true);
-    //     setLoading(false);
-    //     navigation.navigate("Auth");
-    //   } else if (result && result.error) {
-    //     alert("Error: " + result.error);
-    //   }
-    // }
-    // setLoading(false);
+    setLoading(false);
   };
-
   const handleNavigateBackToWelcomeScreen = () => {
-    navigation.goBack();
+    router.back();
   };
 
   const handleUsernameSubmit = () => {

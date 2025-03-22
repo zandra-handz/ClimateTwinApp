@@ -690,7 +690,7 @@ const containerStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center', 
  
-    height: 166,
+    height: 152,
     overflow: 'hidden',
 
   },
@@ -862,7 +862,8 @@ const containerStyles = StyleSheet.create({
   twoButtonFooterContainer: {
     // zIndex: 100,
     position: 'absolute',
-    zIndex: 100,
+    zIndex: 10000,
+    elevation: 10000,
     bottom: 0, 
     //height: 80,  managed in Footer component because it changes if keyboard is visible
     width: '100%',

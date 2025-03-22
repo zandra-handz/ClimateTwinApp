@@ -5,6 +5,7 @@ import SingleDetailPanel from "@/app/components/SingleDetailPanel";
 import SingleImagePanel from "@/app/components/SingleImagePanel";
 
 import useLLMScripts from "@/app/llm/useLLMScripts";
+import SurroundingsTray from "./SurroundingsTray";
 
 import RuinsHarmonyView from "./RuinsHarmonyView";
 
@@ -26,10 +27,13 @@ const RuinsSurroundingsView = ({ height }) => {
       {ruinsSurroundings?.id && (
         <>
           {ruinsSurroundings.streetViewImage && (
-            <SingleImagePanel
-              label={"Image"}
-              value={ruinsSurroundings.streetViewImage}
-            />
+
+
+            <SurroundingsTray value={ruinsSurroundings.streetViewImage} />
+            // <SingleImagePanel
+            //   label={"Image"}
+            //   value={ruinsSurroundings.streetViewImage}
+            // />
           )}
           <RuinsHarmonyView
             name={ruinsSurroundings.name}

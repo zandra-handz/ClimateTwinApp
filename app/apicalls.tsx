@@ -231,6 +231,8 @@ export const signinWithoutRefresh = async ({ username, password }) => {
     }
 };
 
+
+
 //code for auth token i think you need to change 'access'
 // export const signinWithoutRefresh = async ({ username, password }) => {
 //     try {
@@ -262,6 +264,8 @@ export const signinWithoutRefresh = async ({ username, password }) => {
 
 
 export const signup = async ({username, email, password}) => {
+    console.log(username);
+    console.log(email);
   
     try {
         return await axios.post('/users/sign-up/', { username, email, password });
@@ -344,6 +348,26 @@ export const getCurrentUser = async () => {
         throw error;
     }
 };
+
+
+export const getAllUsers = async () => {
+    try {
+       console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.get('/users/get-all/');
+        console.log('API GET Call getAllUsers'); //, response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/get-all/:', error.response.data);
+        } else if (error.request) {
+            console.error('Error request for /users/get-all/, , add console logging in api file for more details');
+        } else {
+            console.error('Error message for /users/get-all/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
 
 
 
@@ -780,6 +804,70 @@ export const getFriends = async () => {
         throw error;
     }
 };
+
+
+export const requestToAddFriend = async (data) => {
+    try {
+        console.log(data);
+      //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.post(`/users/send-friend-request/`, data);
+        console.log('API GET Call requestToAddFriend'); //, response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/send-friend-request/:', error.response.data);
+        } else if (error.request) {
+            console.error('Error request for /users/send-friend-request/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /users/send-friend-request/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
+export const acceptFriendship = async (itemViewId) => {
+    try { 
+      //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.put(`/users/inbox/accept-friend-request/${itemViewId}/`, {
+            "is_accepted": true,
+            "message": "Thank you!"  // Optional message
+          });
+        console.log('API PUT Call acceptFriendship'); //, response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/inbox/accept-friend-request/:', error.response);
+        } else if (error.request) {
+            console.error('Error request for /users/inbox/accept-friend-request/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /users/inbox/accept-friend-request/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
+export const declineFriendship = async (itemViewId) => {
+    try { 
+      //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.put(`/users/inbox/accept-friend-request/${itemViewId}/`, {
+            "is_accepted": false,
+          //  "message": "Thank you!"  // Optional message
+          });
+        console.log('API PUT Call declineFriendship'); //, response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/inbox/accept-gift-request/:', );
+        } else if (error.request) {
+            console.error('Error request for /users/inbox/accept-gift-request/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /users/inbox/accept-gift-request/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
+
 
 export const getNearbyLocations = async () => {
     try {

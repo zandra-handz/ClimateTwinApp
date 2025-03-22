@@ -8,6 +8,8 @@ import { useSurroundingsWS } from "../../context/SurroundingsWSContext";
 
 import RefreshSocketButton from "../Scaffolding/RefreshSocketButton";
 
+import ProgressBar from "../Scaffolding/ProgressBar";
+
 //IMPORTANT: these both depend on SurroundingsWSContext to render appropriately
 import WebSocketCurrentLocation from "./WebSocketCurrentLocation";
 //(This also needs currentSurroundings from CurrentSurroundingsContext)
@@ -82,6 +84,7 @@ const ExploreTabsHeader = () => {
               </>
             </View>
           </View>
+          <ProgressBar />
         </View>
       </SafeAreaView>
     </>

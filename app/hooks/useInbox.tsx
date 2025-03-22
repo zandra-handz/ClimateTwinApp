@@ -74,6 +74,7 @@ const useInbox = () => {
       if (inboxItem) {
         setViewingInboxItem(inboxItem);
         setViewingMessage(inboxItem.message); // Extract and store the message separately
+        console.log(`SPECIAL TYPE:`, inboxItem.message.content_object.special_type)
       }
     } catch (error) {
       console.error("Error fetching inbox item:", error);

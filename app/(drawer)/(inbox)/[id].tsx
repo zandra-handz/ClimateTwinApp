@@ -7,6 +7,7 @@ import { useRouter } from "expo-router";
 import { useAppMessage } from "../../context/AppMessageContext";
 import useInbox from "../../hooks/useInbox";
 import useTreasures from "@/app/hooks/useTreasures";
+import useFriends from "@/app/hooks/useFriends";
 
 import { StatusBar } from "expo-status-bar";
 
@@ -21,6 +22,7 @@ const read = () => {
   const { messageId } = useLocalSearchParams<{ messageId: string }>();
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { handleAcceptTreasureGift, acceptTreasureGiftMutation } = useTreasures();
+  const { handleAcceptFriendship, acceptFriendshipMutation } = useFriends();
   const { showAppMessage } = useAppMessage();
   const { handleGetInboxItem, viewingInboxItem, viewingMessage, triggerInboxItemsRefetch } =
     useInbox();
@@ -32,9 +34,15 @@ const read = () => {
   };
 
   const handleAccept = () => {
-    if (viewingMessage) {
+    console.log('handle accept pressed!');
+    if (viewingMessage?.content_object.special_type === 'gift request') {
     handleAcceptTreasureGift(viewingMessage?.content_object.id);
     triggerInboxItemsRefetch(); 
+    }
+    if (viewingMessage?.content_object.special_type === 'friend request') {
+      handleAcceptFriendship(viewingMessage?.content_object.id);
+      triggerInboxItemsRefetch(); 
+
     
   }  };
 
@@ -57,6 +65,27 @@ const read = () => {
   }, [ acceptTreasureGiftMutation.isError ]);
 
 
+  
+
+  useEffect(() => {
+    if ( acceptFriendshipMutation.isSuccess) {
+      showAppMessage(true, null, 'Friendship accepted!');
+      router.back();
+    }
+
+  }, [ acceptFriendshipMutation.isSuccess ]);
+
+
+  useEffect(() => {
+    if ( acceptFriendshipMutation.isError) {
+      showAppMessage(true, null, 'Oops! Friendship was not accepted.');
+      router.back();
+    }
+
+  }, [ acceptFriendshipMutation.isError ]);
+
+
+
 
   useEffect(() => {
     if (id) {
@@ -69,12 +98,7 @@ const read = () => {
   };
 
   return (
-    <>
-      {/* <StatusBar
-        barStyle={themeStyles.primaryBackground.backgroundColor}
-        translucent={true}
-        backgroundColor="transparent"
-      /> */}
+    <> 
       <View
         style={[
           appContainerStyles.screenContainer,

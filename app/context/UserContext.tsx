@@ -391,29 +391,30 @@ useEffect(() => {
        
       
 
-  const signupMutation = useMutation({
-    mutationFn: signup,
-    onSuccess: async (result) => {
-      if (result.data) {
-        await SecureStore.setItemAsync(TOKEN_KEY, result.data.token);
-        await reInitialize();
-      }
-    },
-  });
+      const signupMutation = useMutation({
+        mutationFn: signup,
+        onSuccess: async (result) => {
+            // if (result.data) {
+            //     await SecureStore.setItemAsync(TOKEN_KEY, result.data.token);
+            //     await reInitialize(); // Refetch user data after sign-up
+            // }
+        }
+    });
 
-  const onSignUp = async (
-    username: string,
-    email: string,
-    password: string
-  ) => {
+  const onSignUp = async (username, email, password) => {
     try {
-      await signupMutation.mutateAsync({ username, email, password });
-      await onSignin(username, password);
-    } catch (error) {
-      console.error("Sign up error", error);
-    }
-  };
+        
+        const credentials = { username, email, password };
 
+         console.log('Signing in with credentials:', credentials);
+        
+ 
+        await signupMutation.mutateAsync( credentials );
+        onSignin(username, password);
+    } catch (error) {
+        console.error('Sign up error', error); 
+    }
+};
   const onSignOut = async () => {
     await signout();  
 
