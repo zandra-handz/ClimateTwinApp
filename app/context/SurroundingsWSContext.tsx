@@ -9,8 +9,7 @@ import * as SecureStore from "expo-secure-store";
 import { AppState } from "react-native";
 import { useUser } from "../context/UserContext";
 import { useAppState } from "../context/AppStateContext";
-import { useAppMessage } from "../context/AppMessageContext";
-import { useActiveSearch } from "./ActiveSearchContext";
+import { useAppMessage } from "../context/AppMessageContext"; 
 import useExploreRoute from "../hooks/useExploreRoute";
 import useDateTimeFunctions from '../hooks/useDateTimeFunctions'; 
 
@@ -37,9 +36,11 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   const { user, reInitialize, isAuthenticated, isInitializing } = useUser();
   const { appStateVisible } = useAppState();
   const [token, setToken] = useState<string | null>(null);
-  const [isReconnecting, setIsReconnecting] = useState(false);
-  const { handleLocationUpdateWSIsOpen, handleLocationUpdateWSIsClosed } = useActiveSearch();
+  const [isReconnecting, setIsReconnecting] = useState(false); 
   const { showAppMessage } = useAppMessage();
+
+    const [locationUpdateWSIsOpen, setlocationUpdateWSIsOpen] =
+      useState<boolean>(false);
   
 
   const appState = useRef(AppState.currentState);
@@ -92,7 +93,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       setLastLocationAccessTime(null);
       setLastLocationId(null);
       setLastLatAndLong(null);
-      handleLocationUpdateWSIsClosed();
+      setlocationUpdateWSIsOpen(false);
      // console.log("Closing existing Location Update WebSocket connection");
       socketRef.current.close();
       socketRef.current = null;
@@ -141,7 +142,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     const socketUrl = `wss://climatetwin.com/ws/climate-twin/current/?user_token=${confirmedToken}`;
     
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
-      handleLocationUpdateWSIsOpen(true);
+      setlocationUpdateWSIsOpen(true);
       setIsLocationSocketOpen(true);
     
       setLocationSocketColor('limegreen');
@@ -172,7 +173,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
     socket.onopen = () => {
       console.log("Location Update WebSocket connection opened");
-      handleLocationUpdateWSIsOpen(true); 
+      setlocationUpdateWSIsOpen(true);
       setIsLocationSocketOpen(true);
       setLocationSocketColor('lightgreen');
       // using button color now
@@ -428,7 +429,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
   return (
     <SurroundingsWSContext.Provider
-      value={{ sendMessage, handleRefreshDataFromSocket, lastMessage, lastNotification, lastSearchProgress, lastLocationName, lastLocationId, lastLocationAccessTime, lastLatAndLong, isLocationSocketOpen, locationSocketColor, alwaysReRender }}
+      value={{ locationUpdateWSIsOpen, sendMessage, handleRefreshDataFromSocket, lastMessage, lastNotification, lastSearchProgress, lastLocationName, lastLocationId, lastLocationAccessTime, lastLatAndLong, isLocationSocketOpen, locationSocketColor, alwaysReRender }}
     >
       {children}
     </SurroundingsWSContext.Provider>

@@ -10,7 +10,7 @@ import { useSurroundings } from "../../context/CurrentSurroundingsContext";
 const WebSocketCurrentLocation: React.FC = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles(); 
   const [update, setUpdate] = useState<string>(' ');
-  const { searchIsActive, locationUpdateWSIsOpen, closeSearchExternally, refreshSurroundingsManually, gettingExploreLocations, foundExploreLocations } = useActiveSearch();
+  const { searchIsActive, setSearchIsActive, locationUpdateWSIsOpen, closeSearchExternally, refreshSurroundingsManually, gettingExploreLocations, foundExploreLocations } = useActiveSearch();
   const { showAppMessage} = useAppMessage();
   const { triggerRefetch } = useNearbyLocations(); 
   const { locationId } = useSurroundings();
@@ -32,29 +32,13 @@ const WebSocketCurrentLocation: React.FC = () => {
          
         showAppMessage(true, null, 'You have returned home');
       }
-     if (lastMessage === 'Searching for ruins!') {
-        
-        gettingExploreLocations();
-        showAppMessage(true, null, 'Searching for ruins!'); 
-      } else if (lastMessage === 'Search complete!') {
-        if (searchIsActive) {
-          closeSearchExternally();
-        }  showAppMessage(true, null, 'Search complete!');
-      } else if (lastMessage === 'Clear') {
-        if (searchIsActive) {
-          closeSearchExternally();
-        }
-        foundExploreLocations();
-      }
+ 
+ 
     }
   }, [lastMessage]);
 
 
-  useEffect(() => {
-    if (lastLocationName) { 
-       console.log(`Last location: ${lastLocationName}`);
-    }
-  }, [lastLocationName]);
+ 
 
 
   // useEffect(() => {
@@ -67,12 +51,13 @@ const WebSocketCurrentLocation: React.FC = () => {
     console.log('last location name: ', lastLocationName);
     if (!lastLocationName) {
       setUpdate("You are home"); // If no location name, reset the state
-    } else if (lastLocationName === "You are home" || null) {
-      setUpdate("You are home"); // If lastLocationName is the string "null"
+    } else if (lastLocationName === null) {
+      setUpdate("You are home");  
+    } else if (lastLocationName === `You are searching`) {
+      setSearchIsActive(true); 
+      setUpdate(`You are searching`);
     } else if (lastLocationName !== update) { 
- 
-       // refreshSurroundingsManually(); 
-        console.log('setting last location name');
+  
         setUpdate(lastLocationName);  
     
     }

@@ -9,9 +9,8 @@ import React, {
 import { useUser } from "./UserContext";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useRouter, useSegments } from "expo-router";
-import { getExploreLocation, pickNewSurroundings, getRemainingGoes } from "../apicalls";
-import useExploreRoute from "../hooks/useExploreRoute";
-import { useActiveSearch } from "./ActiveSearchContext"; 
+import { getExploreLocation, pickNewSurroundings } from "../apicalls";
+ 
 import { useSurroundingsWS } from "./SurroundingsWSContext";
 
 import useGroq from "../hooks/useGroq";
@@ -122,9 +121,7 @@ export const CurrentSurroundingsProvider: React.FC<
   const segments = useSegments();
   const queryClient = useQueryClient();
   const { lastLocationName, lastLocationId } = useSurroundingsWS();
-  const timeoutRef = useRef(null);
-  const { manualSurroundingsRefresh, resetRefreshSurroundingsManually } =
-    useActiveSearch();
+  const timeoutRef = useRef(null); 
   const [portalSurroundings, setPortalSurroundings] =
     useState<PortalSurroundings | null>(null);
   const [ruinsSurroundings, setRuinsSurroundings] =
@@ -190,19 +187,19 @@ useEffect(() => {
 // useExploreRoute(isExploring, isInitializingLocation, isAuthenticated);
 
 
-useEffect(() => {
-  console.log('surroundings reset use effect triggered');
-  if (manualSurroundingsRefresh) { 
-    console.log('manualSurroundingsRefresh triggered currentSurroundings to refetch');
-    triggerSurroundingsRefetch();
+// useEffect(() => {
+//   console.log('surroundings reset use effect triggered');
+//   if (manualSurroundingsRefresh) { 
+//     console.log('manualSurroundingsRefresh triggered currentSurroundings to refetch');
+//     triggerSurroundingsRefetch();
 
-    const timeout = setTimeout(() => {
-      resetRefreshSurroundingsManually();
-    }, 500); // Adjust the delay as needed
+//     const timeout = setTimeout(() => {
+//       resetRefreshSurroundingsManually();
+//     }, 500); // Adjust the delay as needed
 
-    return () => clearTimeout(timeout); // Cleanup in case of re-renders
-  }
-}, [manualSurroundingsRefresh]);
+//     return () => clearTimeout(timeout); // Cleanup in case of re-renders
+//   }
+// }, [manualSurroundingsRefresh]);
 
 
   useEffect(() => {

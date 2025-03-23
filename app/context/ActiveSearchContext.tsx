@@ -10,9 +10,12 @@ import { useUser } from "./UserContext";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { go, getRemainingGoes, expireSurroundings } from "../apicalls";
 
+import { useSurroundingsWS } from "./SurroundingsWSContext";
+import { useAppMessage } from "./AppMessageContext";
+
 interface ActiveSearch {
   id: string;
-  name: string; 
+  name: string;
 }
 
 interface ActiveSearchContextType {
@@ -43,13 +46,14 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
   children,
 }) => {
   const { user, isAuthenticated, isInitializing } = useUser();
+  const { showAppMessage } = useAppMessage();
   const queryClient = useQueryClient();
   const timeoutRef = useRef(null);
   const [activeSearch, setActiveSearch] = useState<ActiveSearch | null>(null);
   const [searchIsActive, setSearchIsActive] = useState<boolean>(false);
   const [userIsHome, setUserIsHome] = useState<boolean>(false);
-  const [locationUpdateWSIsOpen, setlocationUpdateWSIsOpen] =
-    useState<boolean>(false);
+  const { locationUpdateWSIsOpen, lastMessage, lastLocationName } =
+    useSurroundingsWS();
   const [exploreLocationsAreReady, setExploreLocationsAreReady] =
     useState<boolean>(true);
   const [manualSurroundingsRefresh, setManualSurroundingsRefresh] =
@@ -57,7 +61,9 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
 
   useEffect(() => {
     if (!isAuthenticated) {
-      console.log("isAuthenticated === false --> resetting ActiveSearch context");
+      console.log(
+        "isAuthenticated === false --> resetting ActiveSearch context"
+      );
       setActiveSearch(null);
       setSearchIsActive(false);
       //setExploreLocationsAreReady(true);
@@ -107,7 +113,7 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
       }, 2000);
     },
     onSuccess: (data) => {
-     // refetchRemainingGoes();  if the search errors and no location is created, this will be the same, so maybe don't bother fetching it here
+      // refetchRemainingGoes();  if the search errors and no location is created, this will be the same, so maybe don't bother fetching it here
 
       const dataWithTimestamp = {
         ...data,
@@ -131,18 +137,14 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
     },
   });
 
-
-
-  
-  const handleGoHome = () => { 
-      sendGoHomeMutation.mutate();
-   
+  const handleGoHome = () => {
+    sendGoHomeMutation.mutate();
   };
 
   const sendGoHomeMutation = useMutation({
     mutationFn: expireSurroundings,
-    onMutate: () => { 
-      console.log('go home mutation activated');
+    onMutate: () => {
+      console.log("go home mutation activated");
     },
     onError: (error) => {
       if (timeoutRef.current) {
@@ -153,8 +155,7 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
         sendGoHomeMutation.reset();
       }, 2000);
     },
-    onSuccess: (data) => { 
-
+    onSuccess: (data) => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -176,7 +177,7 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
   // search status is updated by current location websocket (component WebSocketCurrentLocation)
   const closeSearchExternally = () => {
     setSearchIsActive(false);
-   refetchRemainingGoes();
+    refetchRemainingGoes();
   };
 
   const refreshSurroundingsManually = () => {
@@ -187,19 +188,55 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
     setManualSurroundingsRefresh(false);
   };
 
-  const handleLocationUpdateWSIsOpen = () => {
-    setlocationUpdateWSIsOpen(true);
-  };
+  useEffect(() => {
+    if (lastMessage) {
+      // if (lastMessage === 'User has returned home.') {
+      //   if (searchIsActive) {
+      //     closeSearchExternally();
+      //   }
 
-  const handleLocationUpdateWSIsClosed = () => {
-    setlocationUpdateWSIsOpen(false);
-  };
+      //   showAppMessage(true, null, 'You have returned home');
+      // }
+      if (lastMessage === "Searching for ruins!") {
+        gettingExploreLocations();
+        showAppMessage(true, null, "Searching for ruins!");
+      } else if (lastMessage === "Search complete!") {
+        if (searchIsActive) {
+          closeSearchExternally();
+        }
+        showAppMessage(true, null, "Search complete!");
+        foundExploreLocations();
+      } else if (lastMessage === "Clear") {
+        if (searchIsActive) {
+          closeSearchExternally();
+        }
+        foundExploreLocations();
+      }
+    }
+  }, [lastMessage]);
+
+  useEffect(() => {
+    if ((lastLocationName && lastLocationName === `You are home`) || null) {
+      if (searchIsActive) {
+
+        //sets search to false and also refetches remaining goes
+        closeSearchExternally();
+      }
+      if (!exploreLocationsAreReady) {
+        foundExploreLocations();
+      }
+ 
+    } else if (lastLocationName && lastLocationName === `You are searching`) {
+      setSearchIsActive(true);
+    }
+  }, [lastLocationName]);
 
   return (
     <ActiveSearchContext.Provider
       value={{
         activeSearch,
         searchIsActive,
+        setSearchIsActive,
         exploreLocationsAreReady,
         gettingExploreLocations,
         foundExploreLocations,
@@ -208,8 +245,6 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
         refreshSurroundingsManually,
         resetRefreshSurroundingsManually,
         locationUpdateWSIsOpen,
-        handleLocationUpdateWSIsOpen,
-        handleLocationUpdateWSIsClosed,
         manualSurroundingsRefresh,
         remainingGoes,
         handleGoHome,

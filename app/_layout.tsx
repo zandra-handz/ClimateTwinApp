@@ -50,11 +50,12 @@ export default function Layout() {
               <GlobalStylesProvider>
                 <AppMessage />
                 <CustomStatusBar />
-                <ActiveSearchProvider>
+
                 <SurroundingsWSProvider>
-                  <CurrentSurroundingsProvider>
-                    <NearbyLocationsProvider>
-                      <InteractiveElementsProvider>
+                <CurrentSurroundingsProvider>
+                  <ActiveSearchProvider> 
+                      <NearbyLocationsProvider>
+                        <InteractiveElementsProvider>
                           <Stack screenOptions={{ headerShown: false }}>
                             <Stack.Screen
                               name="(drawer)"
@@ -63,36 +64,35 @@ export default function Layout() {
                                 gestureEnabled: false,
                               }}
                             />
- 
-                              <Stack.Screen
-                                name="index"
-                                options={{
-                                  headerShown: false,
-                                  headerTitle: "Welcome",
-                                  headerStyle: {
-                                    backgroundColor: "teal",
-                                  },
-                                  gestureEnabled: false,
-                                }}
-                              />
-                              <Stack.Screen
-                                name="signin"
-                                options={{
-                                  headerShown: false,
-                                  headerTitle: "Sign in",
-                                  headerStyle: {
-                                    backgroundColor: "teal",
-                                  },
-                                  gestureEnabled: false,
-                                }}
-                              /> 
+
+                            <Stack.Screen
+                              name="index"
+                              options={{
+                                headerShown: false,
+                                headerTitle: "Welcome",
+                                headerStyle: {
+                                  backgroundColor: "teal",
+                                },
+                                gestureEnabled: false,
+                              }}
+                            />
+                            <Stack.Screen
+                              name="signin"
+                              options={{
+                                headerShown: false,
+                                headerTitle: "Sign in",
+                                headerStyle: {
+                                  backgroundColor: "teal",
+                                },
+                                gestureEnabled: false,
+                              }}
+                            />
                           </Stack>
-                       
-                      </InteractiveElementsProvider>
-                    </NearbyLocationsProvider>
+                        </InteractiveElementsProvider>
+                      </NearbyLocationsProvider> 
+                  </ActiveSearchProvider>
                   </CurrentSurroundingsProvider>
-                  </SurroundingsWSProvider>
-                </ActiveSearchProvider>
+                </SurroundingsWSProvider>
               </GlobalStylesProvider>
             </AppStateProvider>
           </UserProvider>
