@@ -3,10 +3,11 @@ import React from "react";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import CurrentSurroundingsUICard from "../SurroundingsComponents/CurrentSurroundingsUICard";
 import { useSurroundings } from "../../context/CurrentSurroundingsContext";
+import ThreeJS from "../ThreeJS";
 
 const HomeSurroundingsView = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
-  const {  homeSurroundings } = useSurroundings();
+  const { homeSurroundings } = useSurroundings();
 
   // Combine both portalLocation and ruinsLocation into one array of key-value pairs
   const combinedData = [
@@ -17,10 +18,8 @@ const HomeSurroundingsView = () => {
             label: key,
             value: value,
           }))
-      : []), 
+      : []),
   ];
-  
-  
 
   // Helper function to convert objects or arrays to strings
   const formatValue = (value) => {
@@ -32,10 +31,12 @@ const HomeSurroundingsView = () => {
 
   return (
     <View style={styles.container}>
-      {/* <Text style={[styles.title, appFontStyles.text]}>
-        Current Surroundings
-      </Text> */}
-      <FlatList
+      <View style={{ backgroundColor: 'red', height: 300, width: 300, borderWidth: 2, borderColor: 'blue' }}>
+        <ThreeJS />
+      </View>
+      {/* Uncomment other components once ThreeJS is working */}
+      {/* <Text style={[styles.title, appFontStyles.text]}>Current Surroundings</Text> */}
+          {/* <FlatList
         data={combinedData}
         renderItem={({ item }) => (  
             <CurrentSurroundingsUICard
@@ -46,17 +47,17 @@ const HomeSurroundingsView = () => {
         keyExtractor={(item, index) => index.toString()}
         numColumns={3} // Three cards per row
         ListFooterComponent={<View style={{height: 200}}></View>}
-      />
+      /> */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    padding: 0, 
+    padding: 0,
     width: "100%",
-    justifyContent: 'space-between', 
-    alignItems: "center", 
+    justifyContent: 'space-between',
+    alignItems: "center",
   },
   title: {
     fontSize: 24,
