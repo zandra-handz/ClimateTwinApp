@@ -373,26 +373,28 @@ const WebSocketSearchingLocations: React.FC<{
       <View style={appContainerStyles.defaultElementRow}>
         <View style={styles.updatesContainer}>
           <View style={styles.infoContainer}>
-            <View style={{position: 'absolute', top: -30, left: '38.4%', zIndex: 100}}>
+            <View style={{position: 'absolute', top: -20, left: '38.4%', zIndex: 100}}>
               
           <ProgressCircle height={'60'} width={'60'} />
           
           </View>
             <View
               style={[
-                themeStyles.primaryBackground,
+                // themeStyles.primaryBackground,
                 {
-                  borderWidth: StyleSheet.hairlineWidth,
-                  borderColor: themeStyles.primaryText.color,
-                  width: 52,
-                  height: 52,
-                  borderRadius: 52 / 2,
+                  // borderWidth: StyleSheet.hairlineWidth,
+                  // borderColor: themeStyles.primaryText.color,
+                  // width: 52,
+                  // height: 52,
+                  // borderRadius: 52 / 2,
                   textAlign: "center",
                   alignItems: "center",
                   justifyContent: "center",
                 },
               ]}
             > 
+                
+          {/* <ProgressCircle height={'60'} width={'60'} /> */}
               <AnimatedTextInput
                 style={[styles.tempText, themeStyles.primaryText]}
                 animatedProps={animatedTemp}

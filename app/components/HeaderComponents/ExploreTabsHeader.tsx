@@ -7,8 +7,7 @@ import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import { useSurroundingsWS } from "../../context/SurroundingsWSContext";
 
 import RefreshSocketButton from "../Scaffolding/RefreshSocketButton";
-
-import ProgressBar from "../Scaffolding/ProgressBar";
+ 
 
 //IMPORTANT: these both depend on SurroundingsWSContext to render appropriately
 import WebSocketCurrentLocation from "./WebSocketCurrentLocation";
@@ -83,8 +82,7 @@ const ExploreTabsHeader = () => {
                 <DrawerToggleButton tintColor={themeStyles.primaryText.color} />
               </>
             </View>
-          </View>
-          <ProgressBar />
+          </View> 
         </View>
       </SafeAreaView>
     </>

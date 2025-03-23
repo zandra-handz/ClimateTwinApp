@@ -27,9 +27,7 @@ const WebSocketCurrentLocation: React.FC = () => {
         }
         setUpdate("You are home");
         if (locationId) { //if user did just return home from a location versus if app was just opened
-        
         refreshSurroundingsManually();
-        
       }
          
         showAppMessage(true, null, 'You have returned home');
@@ -37,19 +35,11 @@ const WebSocketCurrentLocation: React.FC = () => {
      if (lastMessage === 'Searching for ruins!') {
         
         gettingExploreLocations();
-        showAppMessage(true, null, 'Searching for ruins!');
-      // }  else if (lastMessage === 'No ruins found') {
-      //   if (searchIsActive) {
-      //     closeSearchExternally();
-      //   }
-      //   showAppMessage(true, null, 'No ruins found nearby');
+        showAppMessage(true, null, 'Searching for ruins!'); 
       } else if (lastMessage === 'Search complete!') {
         if (searchIsActive) {
           closeSearchExternally();
-        }
-       // foundExploreLocations(); MOVED TO NEARBY LOCATION CONTEXT ON SUCCESS METHOD
-       // triggerRefetch(); // nearby locations REMOVED BECAUSE NEARBY CONTEXT IS NOW DIRECTLY TRIGGERED BY LAST MESSAGE
-        showAppMessage(true, null, 'Search complete!');
+        }  showAppMessage(true, null, 'Search complete!');
       } else if (lastMessage === 'Clear') {
         if (searchIsActive) {
           closeSearchExternally();

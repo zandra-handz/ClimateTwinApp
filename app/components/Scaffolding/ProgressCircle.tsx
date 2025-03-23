@@ -15,7 +15,7 @@ const AnimatedCircle = Animated.createAnimatedComponent(Circle); // Create an an
 const AnimatedText = Animated.createAnimatedComponent(Text); // Create an animated Text component
 
 const ProgressCircle = ({height = 52, width = 52}) => {
-  const { lastMessage } = useSurroundingsWS();
+  const { lastSearchProgress } = useSurroundingsWS();
   const { themeStyles, constantColorsStyles } = useGlobalStyles();
 
   const progressPercentage = useSharedValue(0);
@@ -28,10 +28,9 @@ const ProgressCircle = ({height = 52, width = 52}) => {
 
   // Use useDerivedValue to reactively update the progressPercentage
   useDerivedValue(() => {
-    if (lastMessage && lastMessage.startsWith("Progress: ")) {
-      const progressValue = Math.ceil(
-        parseInt(lastMessage.slice("Progress: ".length), 10)
-      );
+    if (lastSearchProgress) {
+      const progressValue = Math.ceil(parseInt(lastSearchProgress, 10));
+
 
       if (!isNaN(progressValue)) {
         //console.log(progressValue);
@@ -48,7 +47,7 @@ const ProgressCircle = ({height = 52, width = 52}) => {
       // Reset progress to 0 if the message doesn't start with "Progress: "
       progressPercentage.value = 0;
     }
-  }, [lastMessage]);
+  }, [lastSearchProgress]);
 
   // Animate the text displaying the percentage
   const animatedTextProps = useAnimatedProps(() => {
