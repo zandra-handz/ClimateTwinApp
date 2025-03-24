@@ -13,7 +13,7 @@ const WebSocketCurrentLocation: React.FC = () => {
   const { searchIsActive, setSearchIsActive, locationUpdateWSIsOpen, closeSearchExternally, refreshSurroundingsManually, gettingExploreLocations, foundExploreLocations } = useActiveSearch();
   const { showAppMessage} = useAppMessage();
   const { triggerRefetch } = useNearbyLocations(); 
-  const { locationId } = useSurroundings();
+  const { locationId, triggerSurroundingsRefetch } = useSurroundings();
   
   const { sendMessage, lastMessage, lastLocationName, lastLocationId } = useSurroundingsWS();
  
@@ -57,6 +57,8 @@ const WebSocketCurrentLocation: React.FC = () => {
       setSearchIsActive(true); 
       setUpdate(`You are searching`);
     } else if (lastLocationName !== update) { 
+      // triggerSurroundingsRefetch();
+      
   
         setUpdate(lastLocationName);  
     

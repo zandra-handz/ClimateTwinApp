@@ -53,13 +53,29 @@ const useLLMScripts = () => {
   };
 
 
-  const tellMeRecentHistoryOf = (lat, long, name) => {
-    return `Can you please provide a short summary of the recent 
+  // Please repeat the 
+  // data I sent you so I can confirm it is getting to you successfully.
+
+  const tellMeRecentHistoryOf = (lat, long, name, liveWeather) => {
+
+    return `Can you please look at this data from OpenWeatherMap about my current location,
+     and then describe to me how the weather feels and how the wind feels and 
+     what nature/the outdoors aronud me look like? Data: ${liveWeather}.(THE TEMPERATURE IN THIS DATA IS IN FAHRENHEIT!!!) 
+     Please print out this data I sent you
+    so that I can review it for testing purposes.
+     (Please do NOT explicity
+     mention that I sent you OpenWeatherMap data, but please DO print out the data I sent you so
+     that I can review for testing purposes.) Make your answer CONCISE and remove 90%
+     of your adjectives.
+   
+    Please include the name of my location, and what country I am in,
+    and then describe my environment rather than just listing facts. 
+    Can you also please provide a short summary of the recent 
     history of the location that has, or is near to, the following 
     coordinates? ${lat}, ${long}. Its name is ${name}. Please make 
     sure your sources are reputable. If you are unable to find the 
     history, then please return some other information about this location. 
-    Thank you so much! I love your work!`;
+    Thank you so much!`;
   };
 
 
@@ -109,12 +125,13 @@ const useLLMScripts = () => {
   
     return `${oneWayWarning}
     
-    Hello, friend! I desperately need your help describing ${numberOfItems} ${item} lifeform${pluralizeOne} in my immediate surroundings -- my coordinates are 
-    ${lat}, ${long}. ${titleInstructions({item})} 
-    
-    Please get and state my current temperature (in Fahrenheit), humidity, and weather from OpenWeatherMap API. You will need this data when describing
-    the ${item}${pluralizeOne}! (More info on my current location can be found in this summary: "${historyResponse}") 
-     
+    Hello, friend! I desperately need your help describing ${numberOfItems} bird${pluralizeOne} in my immediate surroundings -- my coordinates are 
+    ${lat}, ${long}. To contextualize, you can find the weather data for my current location 
+    data in this summary: "${historyResponse}". (THE TEMPERATURE IN THIS DATA IS IN FAHRENHEIT!!!) Please print out this data I sent you
+    so that I can review it for testing purposes. Please state the name of my location.
+    Please use this data when describing the ${item}${pluralizeOne}!
+  
+    ${titleInstructions({item})} 
     
     Please be as truthful as possible, and consult multiple sources to validate your information. 
     
@@ -145,18 +162,22 @@ const useLLMScripts = () => {
     lat: number, 
     long: number, 
     historyResponse: string, 
-    numberOfItems: string = 'ONE'  
+    numberOfItems: string = 'ONE',  
   ): string => {
     numberOfItems = String(numberOfItems);  
     const pluralizeOne = numberOfItems.toLowerCase() === 'one' ? '' : 's';
     const pluralizeTwo = numberOfItems.toLowerCase() === 'one' ? 'the' : 'each';
     const imageUrlKey = `IMAGELINK:`;
     const item = 'bird';
-  
-    return `Hello, friend! I desperately need your help describing ${numberOfItems} ${item}${pluralizeOne} in my immediate surroundings -- my coordinates are 
-    ${lat}, ${long}. Please get and state my current temperature (in Fahrenheit), humidity, and weather from OpenWeatherMap API. You will need this data when describing
-    the ${item}${pluralizeOne}! (More info on my current location can be found in this summary: "${historyResponse}") 
     
+     
+  
+    return `${oneWayWarning}
+    
+    Hello, friend! I desperately need your help describing ${numberOfItems} bird${pluralizeOne} in my immediate surroundings -- my coordinates are 
+    ${lat}, ${long}. To contextualize, you can find the weather data for my current location 
+    data here: "${historyResponse}".  (THE TEMPERATURE IS IN FAHRENHEIT!!! Your response MUST be as well.) Please use this data when describing the ${item}${pluralizeOne}!
+  
     ${titleInstructions({item})} 
     
     Please be as truthful as possible, and consult multiple sources to validate your information. 
@@ -208,8 +229,11 @@ const useLLMScripts = () => {
     return `Hello, friend! I desperately need your help describing ${numberOfItems} ${item}${pluralizeOne}, ancient or contemporary, that 
     I might find at my current location -- my coordinates are 
     ${lat}, ${long}. Please get and state my current temperature (in Fahrenheit), humidity, and weather from OpenWeatherMap API. You will need this data when describing
-    the ${item}${pluralizeOne}! (More info on my current location can be found in this summary: "${historyResponse}") Please use the common or 
-    English name of the ${item} as the main title. Please be as truthful as possible, and consult multiple sources
+    the ${item}${pluralizeOne}! (More info on my current location can be found in this summary: "${historyResponse}") (THE TEMPERATURE IN THIS DATA IS IN FAHRENHEIT!!!) Please print out this data I sent you
+    so that I can review it for testing purposes. Please use the common or 
+    English name of the ${item} as the main title. 
+    
+    Please be as truthful as possible, and consult multiple sources
     to validate your information. 
     
     Your description should say whether the ${item} might get damaged in the current weather. Please focus on the effects that 

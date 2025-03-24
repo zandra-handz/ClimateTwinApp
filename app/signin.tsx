@@ -187,7 +187,12 @@ const router = useRouter();
 
 
   const navigateToRecoverCredentials = () => {
-    router.push('/screen-recover-credentials'); // Navigate to the /recover-credentials screen
+    console.log('routing to recover credentials screen');
+    router.push({
+      pathname:'/recover-credentials',
+    params: { createNewAccount: false},
+  });
+
   };
 
 

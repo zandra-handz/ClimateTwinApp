@@ -11,7 +11,7 @@ import { useUser } from "../context/UserContext";
 import { useAppState } from "../context/AppStateContext";
 import { useAppMessage } from "../context/AppMessageContext"; 
 import useExploreRoute from "../hooks/useExploreRoute";
-import useDateTimeFunctions from '../hooks/useDateTimeFunctions'; 
+import useDateTimeFunctions from '../hooks/useDateTimeFunctions';  
 
 interface SurroundingsWSContextType {
   sendMessage: (message: any) => void;
@@ -36,7 +36,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   const { user, reInitialize, isAuthenticated, isInitializing } = useUser();
   const { appStateVisible } = useAppState();
   const [token, setToken] = useState<string | null>(null);
-  const [isReconnecting, setIsReconnecting] = useState(false); 
+  const [isReconnecting, setIsReconnecting] = useState(false);  
   const { showAppMessage } = useAppMessage();
 
     const [locationUpdateWSIsOpen, setlocationUpdateWSIsOpen] =

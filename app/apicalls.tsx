@@ -232,35 +232,55 @@ export const signinWithoutRefresh = async ({ username, password }) => {
 };
 
 
+export const sendResetCodeEmail = async (email) => {
+  
+    try {
+        return await axios.post('/users/send-reset-code/', { 'email': email });
+    } catch (e) {
+        console.log('error sending email:', e);
+        return { error: true, msg: e.response.data.msg };
+    }
+};
 
-//code for auth token i think you need to change 'access'
-// export const signinWithoutRefresh = async ({ username, password }) => {
-//     try {
-//         const result = await axios.post('/auth/token/login/', { username, password });
-//         console.log(`API POST CALL signinWithoutRefresh`, result);
 
-//         if (result.data) {
-//             console.log("Access token received:", result.data.auth_token);
-//             setAuthHeader(result.data.auth_token); // Store the token for later use
-//             return result; // Successful response
-//         } else {
-//             throw new Error("Unexpected response format");
-//         }
-//     } catch (e) {
-//         console.error("Error during signinWithoutRefresh:", e);
+export const verifyResetCodeEmail = async ({email, resetCode}) => {
+    console.log(email);
+    console.log(resetCode);
+  
+    try {
+        response = await axios.post('/users/verify-reset-code/', { 'email': email, 'reset_code': resetCode });
+        console.log(response);
+        return response;
+    } catch (e) {
+        console.log('error checking reset code:', e);
+        return { error: true, msg: e.response.data.msg };
+    }
+};
 
-//         if (e.response) {
-//             console.log("Server responded with:", e.response.data);
-//             throw new Error(e.response.data.msg || 'Invalid credentials'); // Explicit error for invalid credentials
-//         } else if (e.request) {
-//             console.log("No response from server:", e.request);
-//             throw new Error('No response from server, please check your network');
-//         } else {
-//             console.log("Unexpected error:", e.message);
-//             throw new Error('Unexpected error occurred during signin');
-//         }
-//     }
-// };
+export const resetPassword = async ({email, resetCode, newPassword }) => {
+    console.log(email);
+    console.log(resetCode);
+  
+    try {
+        response = await axios.post('/users/reset-password/', { 'email': email, 'reset_code': resetCode, 'new_password' : newPassword});
+        console.log(response);
+        return response;
+    } catch (e) {
+        console.log('error resetting password:', e);
+        return { error: true, msg: e.response.data.msg };
+    }
+};
+
+export const sendEmail = async (email) => {
+  
+    try {
+        return await axios.post('/users/send-email/', { 'email': email });
+    } catch (e) {
+        console.log('error sending email:', e);
+        return { error: true, msg: e.response.data.msg };
+    }
+};
+
 
 
 export const signup = async ({username, email, password}) => {

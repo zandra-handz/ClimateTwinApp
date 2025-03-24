@@ -46,13 +46,14 @@ const useProtectedRoute = (isAuthenticated: boolean, isLoading: boolean) => {
     //   console.log(segments[0]);
     // } 
     const isOnSignIn = segments[0] === "signin";
+    const isOnRecoverCreds = segments[0] === "recover-credentials";
     const isOnExploreTabs = segments[0] === "(drawer)/(exploretabs)";
     const isOnRootPage = segments.length === 0 || segments[0] === "" || segments[0] === "secondindex" ; 
 
     // console.log(isNavigationReady);
     // console.log(segments[0]);
 
-    if (!isAuthenticated && !isOnSignIn) {
+    if (!isAuthenticated && !isOnSignIn && !isOnRecoverCreds) {
       // console.log('Protected route redirecting to index');
 
       //I may be able to get rid of secondindex and go back to using goToRoot

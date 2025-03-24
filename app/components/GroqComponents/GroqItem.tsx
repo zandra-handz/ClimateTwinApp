@@ -3,6 +3,7 @@ import { useSurroundingsWS } from "../../context/SurroundingsWSContext";
 import GroqFullScreen from "./GroqFullScreen";
 import { useQueryClient } from "@tanstack/react-query";
 import { useFocusEffect } from "expo-router";
+import useLiveWeather from '@/app/hooks/useLiveWeather';
 import useGroq from "@/app/hooks/useGroq";
 // import usePexels from "@/app/hooks/usePexels";
 

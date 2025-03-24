@@ -10,6 +10,7 @@ import { useUser } from "../context/UserContext";
 import { useSurroundingsWS } from "../context/SurroundingsWSContext";
 import useLLMScripts from "../llm/useLLMScripts";
 import { talkToGroq } from "../groqcall"; 
+import useLiveWeather from "./useLiveWeather";
  
 
 interface GroqHistoryData {
@@ -18,6 +19,7 @@ interface GroqHistoryData {
 
 const useGroq = () => {
   const { isAuthenticated, isInitializing } = useUser(); 
+  const { liveWeather, liveTemperature, liveWeatherId, liveWeatherString } = useLiveWeather();
   const { lastLocationName, lastLocationId, lastLatAndLong } =
     useSurroundingsWS();
   const [latitude, longitude] = Array.isArray(lastLatAndLong)
@@ -35,7 +37,7 @@ const useGroq = () => {
     yourRoleIsEsteemedAndCompassionateArchaeologist,
     findMeAWeapon,
   } = useLLMScripts();
-
+ 
 
   const locationCacheExpiration = 1000 * 60 * 60; // 1 hour to match backend 
 
@@ -44,7 +46,8 @@ const useGroq = () => {
   const promptHistory = tellMeRecentHistoryOf(
     latitude,
     longitude,
-    lastLocationName || "Unknown"
+    lastLocationName || "Unknown",
+    liveWeatherString,
   );
 
   const rolePlant = yourRoleIsExpertBotanist();
@@ -74,9 +77,10 @@ const useGroq = () => {
     isSuccess,
     isError,
   }: UseQueryResult<GroqHistoryData, Error> = useQuery({
-    queryKey: ["groq", lastLocationId, "history"],
+    queryKey: ["groq", lastLocationId, "history", liveWeatherId, liveWeatherString],
     queryFn: () => talkToGroq({ role: roleHistory, prompt: promptHistory }),
-    enabled: !!isAuthenticated && !!lastLocationId && !isInitializing,
+    enabled: !!isAuthenticated && !!lastLocationId && !!liveWeatherId && !!liveWeatherString && !isInitializing,
+  
     staleTime: locationCacheExpiration, //data is marked stale and refetched 
     gcTime: locationCacheExpiration, //data stays in cache even if unused
     onSuccess: (data) => {},

@@ -13,6 +13,8 @@ import { getExploreLocation, pickNewSurroundings } from "../apicalls";
  
 import { useSurroundingsWS } from "./SurroundingsWSContext";
 
+import useLiveWeather from "../hooks/useLiveWeather";
+
 import useGroq from "../hooks/useGroq";
  
  
@@ -117,6 +119,7 @@ export const CurrentSurroundingsProvider: React.FC<
 > = ({ children }) => {
   
   const { user, isAuthenticated, isInitializing } = useUser();
+  const { liveWeather } = useLiveWeather();
   const { extendGroqStaleTime, logGroqState } = useGroq();
   const segments = useSegments();
   const queryClient = useQueryClient();
@@ -188,19 +191,6 @@ useEffect(() => {
 // useExploreRoute(isExploring, isInitializingLocation, isAuthenticated);
 
 
-// useEffect(() => {
-//   console.log('surroundings reset use effect triggered');
-//   if (manualSurroundingsRefresh) { 
-//     console.log('manualSurroundingsRefresh triggered currentSurroundings to refetch');
-//     triggerSurroundingsRefetch();
-
-//     const timeout = setTimeout(() => {
-//       resetRefreshSurroundingsManually();
-//     }, 500); // Adjust the delay as needed
-
-//     return () => clearTimeout(timeout); // Cleanup in case of re-renders
-//   }
-// }, [manualSurroundingsRefresh]);
 
 
   useEffect(() => {
@@ -450,6 +440,7 @@ useEffect(() => {
 
 
     setIsInitializingLocation(false);
+    
   }, [currentSurroundings]); 
 
   const handlePickNewSurroundings = async (data) => { 
@@ -506,11 +497,27 @@ useEffect(() => {
     },
   });
 
+
+  
+// useEffect(() => {
+//   console.log('surroundings reset use effect triggered');
+//   if (manualSurroundingsRefresh) { 
+//     console.log('manualSurroundingsRefresh triggered currentSurroundings to refetch');
+//     triggerSurroundingsRefetch();
+
+//     const timeout = setTimeout(() => {
+//       resetRefreshSurroundingsManually();
+//     }, 500); // Adjust the delay as needed
+
+//     return () => clearTimeout(timeout); // Cleanup in case of re-renders
+//   }
+// }, [manualSurroundingsRefresh]);
+
   const triggerSurroundingsRefetch = () => {
     console.log("Triggering explore locationrefetch");
-    queryClient.invalidateQueries({ queryKey: ["currentSurroundings", lastLocationId] });
+    queryClient.invalidateQueries({ queryKey: ["currentSurroundings", lastLocationId, lastLocationName] });
   // queryClient.removeQueries(["currentSurroundings"]);
-    queryClient.refetchQueries({ queryKey: ["currentSurroundings", lastLocationId] }); // Force refetch
+    queryClient.refetchQueries({ queryKey: ["currentSurroundings", lastLocationId, lastLocationName] }); // Force refetch
   };
 
     // const {

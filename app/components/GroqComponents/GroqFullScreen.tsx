@@ -8,7 +8,7 @@ import UnsplashTray from "../UnsplashComponents/UnsplashTray";
 import SmithsonianTray from "../SmithsonianComponents/SmithsonianTray";
 
 import ComponentSpinner from "../Scaffolding/ComponentSpinner"; 
-import { useFocusEffect } from "expo-router";
+import { useFocusEffect } from "expo-router"; 
 
 const GroqFullScreen = ({
   dataObject = {},

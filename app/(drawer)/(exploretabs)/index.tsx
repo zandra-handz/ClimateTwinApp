@@ -14,6 +14,8 @@ import RuinsSurroundingsView from "@/app/components/SurroundingsComponents/Ruins
 
 import { useUser } from "@/app/context/UserContext";
 
+import useLiveWeather from "@/app/hooks/useLiveWeather";
+
 import NotificationNotifier from "@/app/components/NotificationNotifier";
 
 import PortalBanner from "@/app/components/PortalBanner";
@@ -32,6 +34,7 @@ const index = () => {
   } = useSurroundings();
   const { itemChoices } = useInteractiveElements();
   const { lastLocationId } = useSurroundingsWS();
+  const { liveWeather } = useLiveWeather();
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const [surroundingsViews, setSurroundingsViews] = useState({});
   const { yourRoleIsFriendlyDiligentHistorian, tellMeRecentHistoryOf } =
@@ -193,10 +196,10 @@ const index = () => {
             extraData={surroundingsViews} // This tells FlatList to re-render when surroundingsViews changes
           />
 
-            {groqVisible && (
+            {groqVisible &&  (
               // <Animated.View style={{ opacity: groqOpacity, width: '100%', zIndex: 1000, bottom: 20, right: 0, left: 0, position: 'absolute' }}>
               
-            <GroqHistory
+            <GroqHistory 
               title={"history from Groq"}
               cacheKey={"history"}
               userId={user?.id}
