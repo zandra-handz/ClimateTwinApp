@@ -45,7 +45,7 @@ import Constants from "expo-constants";
  
 
          const data = await response.json(); 
-         console.log(data);
+         //console.log(`OWM api call to get live weather data: `, data);
        
          return data;
      } catch (error) { 
