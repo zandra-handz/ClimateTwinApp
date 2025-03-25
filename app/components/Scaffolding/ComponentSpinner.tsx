@@ -28,7 +28,7 @@ const spinners = {
 };
 
 const ComponentSpinner = (
-  { spinnerSize = 90, spinnerType = "flow", showSpinner = false },
+  { spinnerSize = 90, spinnerType = "flow", showSpinner = false, backgroundColor='transparent' },
  
 ) => {
   const { themeStyles, constantColorsStyles } = useGlobalStyles();
@@ -40,7 +40,7 @@ const ComponentSpinner = (
   return (
     <View
       style={[
-        styles.container, //themeStyles.darkerBackground
+        styles.container, {backgroundColor: backgroundColor}//themeStyles.darkerBackground
       ]}
     >
       {showSpinner ? (

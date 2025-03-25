@@ -8,6 +8,7 @@ import { CurrentSurroundingsProvider } from "./context/CurrentSurroundingsContex
 import { NearbyLocationsProvider } from "./context/NearbyLocationsContext";
 import { ActiveSearchProvider } from "./context/ActiveSearchContext";
 import { InteractiveElementsProvider } from "./context/InteractiveElementsContext";
+import { GroqProvider } from "./context/GroqContext";
 import { SurroundingsWSProvider } from "./context/SurroundingsWSContext";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -52,46 +53,48 @@ export default function Layout() {
                 <CustomStatusBar />
 
                 <SurroundingsWSProvider>
-                <CurrentSurroundingsProvider>
-                  <ActiveSearchProvider> 
-                      <NearbyLocationsProvider>
-                        <InteractiveElementsProvider>
-                          <Stack screenOptions={{ headerShown: false }}>
-                            <Stack.Screen
-                              name="(drawer)"
-                              options={{
-                                headerShown: false,
-                                gestureEnabled: false,
-                              }}
-                            />
+                  <GroqProvider>
+                    <CurrentSurroundingsProvider>
+                      <ActiveSearchProvider>
+                        <NearbyLocationsProvider>
+                          <InteractiveElementsProvider>
+                            <Stack screenOptions={{ headerShown: false }}>
+                              <Stack.Screen
+                                name="(drawer)"
+                                options={{
+                                  headerShown: false,
+                                  gestureEnabled: false,
+                                }}
+                              />
 
-                            <Stack.Screen
-                              name="index"
-                              options={{
-                                headerShown: false,
-                                headerTitle: "Welcome",
-                                headerStyle: {
-                                  backgroundColor: "teal",
-                                },
-                                gestureEnabled: false,
-                              }}
-                            />
-                            <Stack.Screen
-                              name="signin"
-                              options={{
-                                headerShown: false,
-                                headerTitle: "Sign in",
-                                headerStyle: {
-                                  backgroundColor: "teal",
-                                },
-                                gestureEnabled: false,
-                              }}
-                            />
-                          </Stack>
-                        </InteractiveElementsProvider>
-                      </NearbyLocationsProvider> 
-                  </ActiveSearchProvider>
-                  </CurrentSurroundingsProvider>
+                              <Stack.Screen
+                                name="index"
+                                options={{
+                                  headerShown: false,
+                                  headerTitle: "Welcome",
+                                  headerStyle: {
+                                    backgroundColor: "teal",
+                                  },
+                                  gestureEnabled: false,
+                                }}
+                              />
+                              <Stack.Screen
+                                name="signin"
+                                options={{
+                                  headerShown: false,
+                                  headerTitle: "Sign in",
+                                  headerStyle: {
+                                    backgroundColor: "teal",
+                                  },
+                                  gestureEnabled: false,
+                                }}
+                              />
+                            </Stack>
+                          </InteractiveElementsProvider>
+                        </NearbyLocationsProvider>
+                      </ActiveSearchProvider>
+                    </CurrentSurroundingsProvider>
+                  </GroqProvider>
                 </SurroundingsWSProvider>
               </GlobalStylesProvider>
             </AppStateProvider>

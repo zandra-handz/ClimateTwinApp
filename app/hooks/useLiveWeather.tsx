@@ -63,11 +63,15 @@ const useLiveWeather = () => {
 
   useEffect(() => {
     if (liveWeatherData) {
-      //console.log('SETTING WEATHER DATA', liveWeatherData.main.temp);
-      setLiveWeather(liveWeatherData);  // Updates liveWeather state with the fetched data
+      // Set live weather data first
+      setLiveWeather(liveWeatherData); 
       setLiveTemperature(liveWeatherData.main.temp || null);
-      setLiveWeatherId(liveWeatherData.weather[0]?.id || null); 
+      
+      // Set the weather string before id
       setLiveWeatherString(JSON.stringify(liveWeatherData));
+      
+      // Now set the weather id after the string is set
+      setLiveWeatherId(liveWeatherData.weather[0]?.id || null);
     } else {
       setLiveWeather(defaultLiveWeather);
       setLiveTemperature(null);
@@ -75,6 +79,7 @@ const useLiveWeather = () => {
       setLiveWeatherString('');
     }
   }, [liveWeatherData]);
+  
 
   return { liveWeather, liveTemperature, liveWeatherId, liveWeatherString, isFetching, isPending, isSuccess };
 };

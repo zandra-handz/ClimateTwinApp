@@ -4,11 +4,11 @@ import GroqFullScreen from "./GroqFullScreen";
 import { useQueryClient } from "@tanstack/react-query";
 import { useFocusEffect } from "expo-router";
 import useLiveWeather from '@/app/hooks/useLiveWeather';
-import useGroq from "@/app/hooks/useGroq";
+import { useGroqContext } from "@/app/context/GroqContext";
 // import usePexels from "@/app/hooks/usePexels";
 
 const GroqItem = ({
-  locationParamsData = {},
+ // locationParamsData = {},
   name,
   title,
   base,
@@ -18,7 +18,8 @@ const GroqItem = ({
   isKeyboardVisible,
 }) => {
   const { lastLocationId } = useSurroundingsWS();
-  const { handleGetGroqItem, groqItemMutation } = useGroq();
+  //const { handleGetGroqItem, groqItemMutation } = useGroq();
+  const { groqHistory, handleGetGroqItem, groqItemMutation } = useGroqContext();
 
   const [dataObject, setDataObject] = useState({});
     // textHeader: null,
@@ -32,11 +33,14 @@ const GroqItem = ({
 
   const queryClient = useQueryClient();
 
+
+
+
   useFocusEffect(
     React.useCallback(() => {
       setDataObject({});
       setResponseMessage(null);
-      if (!base || !topic) {
+      if (!base || !topic || !groqHistory) {
         return;
       }
 
@@ -47,7 +51,10 @@ const GroqItem = ({
 
         if (isInCache !== true) {
           console.log("no data in cache");
-          await handleGetGroqItem(topic, base);
+     
+            
+          await handleGetGroqItem(topic, base, groqHistory);
+           
         }
 
         if (isInCache === true) {
@@ -60,7 +67,7 @@ const GroqItem = ({
         setPexelsImageData(null);
         console.log("cleanup for screen focus lost");
       };
-    }, [base, topic])
+    }, [base, topic, groqHistory])
   );
 
   const [responseMessage, setResponseMessage] = useState(null);

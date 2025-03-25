@@ -17,6 +17,10 @@ import TextInputBlock from "@/app/components/TextInputBlock";
 import GroqItem from "@/app/components/GroqComponents/GroqItem";
 import { useFocusEffect } from "expo-router"; 
 
+import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
+
+ 
+
 
 const collect = () => {
   const { name, topic, base } = useLocalSearchParams<{
@@ -27,7 +31,7 @@ const collect = () => {
 
   const locationData = { name, topic, base };
 
-    const [fadeAnim] = useState(new Animated.Value(0));  
+    const [fadeAnim] = useState(new Animated.Value(0));   
 
   
   
@@ -48,7 +52,11 @@ const collect = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      handleAvgPhotoColor(null);
+      handleAvgPhotoColor(null); 
+      handleFullScreenToggle();
+      setIsMinimized(false);
+   
+      Keyboard.dismiss(); 
 
       return () => {
         handleAvgPhotoColor(null);
@@ -80,6 +88,7 @@ const collect = () => {
       setIsMinimized(false);
       Keyboard.dismiss();
     } else {
+      console.log('minimizing groq component');
       setIsMinimized(true);
       openKeyboard();
       handleStart();
@@ -310,7 +319,8 @@ const collect = () => {
   };
 
   return (
-    <> 
+    <>  
+      
     <Animated.View
       style={[
         appContainerStyles.screenContainer,
@@ -351,7 +361,7 @@ const collect = () => {
       </View>
  
         <GroqItem
-        locationParamsData={locationData}
+        //locationParamsData={locationData}
           name={name}
           title={"Treasure found by Groq"}
           base={base}
@@ -370,7 +380,7 @@ const collect = () => {
         // labelCenter={"Groq"}
       />
     </Animated.View>
-    
+     
     </>
   );
 };

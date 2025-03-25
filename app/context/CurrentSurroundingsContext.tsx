@@ -16,6 +16,7 @@ import { useSurroundingsWS } from "./SurroundingsWSContext";
 import useLiveWeather from "../hooks/useLiveWeather";
 
 import useGroq from "../hooks/useGroq";
+import { useGroqContext  } from "./GroqContext";
  
  
 interface CurrentSurroundings {
@@ -120,7 +121,7 @@ export const CurrentSurroundingsProvider: React.FC<
   
   const { user, isAuthenticated, isInitializing } = useUser();
   const { liveWeather } = useLiveWeather();
-  const { extendGroqStaleTime, logGroqState } = useGroq();
+  const { extendGroqStaleTime, logGroqState } = useGroqContext();
   const segments = useSegments();
   const queryClient = useQueryClient();
   const { lastLocationName, lastLocationId } = useSurroundingsWS();

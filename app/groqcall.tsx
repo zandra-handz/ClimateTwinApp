@@ -71,9 +71,12 @@ export const talkToGroq = async ({ model = modelOptionOne, role, prompt }) => {
         );
 
         const data = await response.json();
+       // console.log( JSON.stringify(requestBody))
         return data.choices[0]?.message?.content || ""; // Ensure string return
     } catch (error) {
+        
         console.error("Error calling Groq API:", error.response?.data || error.message);
+       // console.log( JSON.stringify(requestBody))
         return ""; // Return empty string instead of an object
     }
 };

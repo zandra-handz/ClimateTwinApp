@@ -77,7 +77,7 @@ const useGroq = () => {
     isSuccess,
     isError,
   }: UseQueryResult<GroqHistoryData, Error> = useQuery({
-    queryKey: ["groq", lastLocationId, "history", liveWeatherId, liveWeatherString],
+    queryKey: ["groq", lastLocationId, "history", liveWeatherId], //, liveWeatherString],
     queryFn: () => talkToGroq({ role: roleHistory, prompt: promptHistory }),
     enabled: !!isAuthenticated && !!lastLocationId && !!liveWeatherId && !!liveWeatherString && !isInitializing,
   
@@ -88,20 +88,33 @@ const useGroq = () => {
 
 
 
-  const getRoleAndPrompt = (keyword: string) => {
+  const getRoleAndPrompt = (keyword: string, locationGroqHistory: string) => {
     if (keyword === "plants" || keyword === "trees") {
-      return { role: rolePlant, prompt: promptPlant };
+      return { role: rolePlant, prompt: findMeAPlant(latitude, longitude, locationGroqHistory, "ONE") };
     } else if (keyword === "birds") {
-      return { role: roleBird, prompt: promptBird };
+      return { role: roleBird, prompt: findMeABird(latitude, longitude, locationGroqHistory, "ONE")};
     } else if (keyword === "weapons" || keyword === "ancient sword" || keyword === "ancient dagger") {
-      return { role: roleWeapon, prompt: promptWeapon };
+      return { role: roleWeapon, prompt: findMeAWeapon(latitude, longitude, locationGroqHistory, "ONE") };
     }
     return { role: rolePlant, prompt: promptPlant };
   };
 
   const groqItemMutation = useMutation({
     mutationFn: ({ keyword, base }) => {
-      const { role, prompt } = getRoleAndPrompt(keyword); // Get the correct role and prompt
+
+      const locationGroqHistory = queryClient.getQueryData([
+        "groq",
+        lastLocationId,
+        "history",
+        liveWeatherId, 
+      ]);
+
+      if (!locationGroqHistory) {
+        return Promise.reject("No data available for locationGroqHistory");
+      }
+   
+
+      const { role, prompt } = getRoleAndPrompt(keyword, locationGroqHistory); // Get the correct role and prompt
       // console.log(keyword);
       // console.log(base);
       // console.log(role);
@@ -111,6 +124,8 @@ const useGroq = () => {
       }
       return Promise.reject("Invalid keyword");
     },
+
+
     onMutate: ({ keyword, base }) => {
       const queryKey = ["groq", lastLocationId, keyword, base];
       console.log("Mutation key:", queryKey);
