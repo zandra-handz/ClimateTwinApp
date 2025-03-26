@@ -10,6 +10,7 @@ import { useUser } from "../context/UserContext";
 import {
   getFriends,
   getAllUsers,
+  searchUsers,
   requestToAddFriend,
   acceptFriendship,
   declineFriendship,
@@ -38,6 +39,7 @@ const useFriends = () => {
   const [friendsDropDown, setFriendsDropDown] = useState<DropdownOption[]>([]);
 
   const [userSearchResults, setUserSearchResults] = useState(null);
+  const [allUsers, setAllUsers] = useState(null);
 
   const queryClient = useQueryClient();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -83,11 +85,13 @@ const useFriends = () => {
   // Memoize the dropdown data to avoid unnecessary re-renders
   const memoizedDropDown = useMemo(() => friendsDropDown, [friendsDropDown]);
 
+ 
   const searchUsersMutation = useMutation({
-    mutationFn: () => getAllUsers(),
+    mutationFn: (query) => searchUsers(query),
     onSuccess: (data) => {
-      console.log("User search results successful!");
+      console.log("User search results successful!", data);
       setUserSearchResults(data);
+      console.log(`user search results, `, userSearchResults);
 
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
@@ -108,8 +112,39 @@ const useFriends = () => {
     },
   });
 
-  const handleSearchUsers = () => {
-    searchUsersMutation.mutate();
+  const handleSearchUsers = (query) => {
+    console.log('handleSearchUsers');
+    searchUsersMutation.mutate(query);
+  };
+
+
+  const getAllUsersMutation = useMutation({
+    mutationFn: () => getAllUsers(),
+    onSuccess: (data) => {
+      console.log("User search results successful!");
+      setAllUsers(data);
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        getAllUsersMutation.reset();
+      }, 2000);
+    },
+    onError: (error) => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        getAllUsersMutation.reset();
+      }, 2000);
+    },
+  });
+
+  const handleGetAllUsers = () => {
+    getAllUsersMutation.mutate();
   };
 
   const handleSendFriendRequest = (recipientId: number, message: string) => {
@@ -207,6 +242,9 @@ const useFriends = () => {
     isError,
     friendsDropDown: memoizedDropDown,
     replaceUserIdWithFriendName, //this is for the notification update from the websocket
+    handleGetAllUsers,
+    getAllUsersMutation,
+    allUsers,
     handleSearchUsers,
     userSearchResults,
     handleSendFriendRequest,

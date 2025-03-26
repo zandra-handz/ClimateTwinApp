@@ -50,6 +50,34 @@ export default () => {
               gestureEnabled: true,
             }}
           />
+                    <Stack.Screen
+            name="search"
+            options={{
+              headerShown: true,
+              headerTitle: "Search users",
+              headerTitleStyle: {
+                color: constantColorsStyles.v1LogoColor.color,
+              },
+              headerStyle: {
+                backgroundColor:
+                  constantColorsStyles.v1LogoColor.backgroundColor,
+              },
+
+              headerLeft: () => (
+                <TouchableOpacity
+                  onPress={() => console.log("icon is pressable!")}
+                  style={{ paddingLeft: 10, paddingRight: 10 }}
+                >
+                  <Feather
+                    name="search"
+                    size={appFontStyles.exploreTabBarIcon.width}
+                    color={constantColorsStyles.v1LogoColor.color}
+                  />
+                </TouchableOpacity>
+              ),
+              gestureEnabled: true,
+            }}
+          />
             {/* <Stack.Screen
             name="[id]"
             options={{
