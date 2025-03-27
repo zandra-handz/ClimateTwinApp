@@ -5,36 +5,30 @@ import useDateTimeFunctions from "../../hooks/useDateTimeFunctions";
 import CuteDetailBox from "../CuteDetailBox";
 import SingleDetailPanel from "../SingleDetailPanel";
 import GoToItemButton from "../GoToItemButton";
+import { Image } from "expo-image";
 
 import useFriends from "@/app/hooks/useFriends";
 
-const FriendsUICard = ({
-  data, 
-  onViewFriendPress,
-  isFullView,
-}) => {
+const FriendsUICard = ({ data, onViewFriendPress, isFullView }) => {
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
   const { formatUTCToMonthDayYear } = useDateTimeFunctions();
   const { friends } = useFriends();
 
+  const image = data?.friend_profile?.avatar || null;
+
   const renderFriendName = (id) => {
     if (friends) {
-      
-    const friend = friends.find((friend) => friend.id === id);
-    return friend?.nickname || null;
-    
-  } else {
-    return null;
-  }
+      const friend = friends.find((friend) => friend.id === id);
+      return friend?.nickname || null;
+    } else {
+      return null;
+    }
   };
 
   const handlePress = () => {
     if (onViewFriendPress) {
       onViewFriendPress(data.id, data.username);
-
     }
-  
-
   };
   // Function to recursively render object fields
   const renderField = (key, value, level = 0) => {
@@ -102,12 +96,11 @@ const FriendsUICard = ({
           themeStyles.primaryText,
         ]}
       >
-        {" "} 
+        {" "}
         {formatUTCToMonthDayYear(data?.created_on) || "unknown date"}.
       </Text>
     </>
   );
-
 
   const findLastVisit = (
     <>
@@ -125,53 +118,75 @@ const FriendsUICard = ({
           themeStyles.primaryText,
         ]}
       >
-        {" "}{data?.friend_profile?.most_recent_visit?.location_name || ''}
-        {" "}{formatUTCToMonthDayYear(data?.friend_profile?.most_recent_visit?.visited_on) || "No trips"}
- 
+        {" "}
+        {data?.friend_profile?.most_recent_visit?.location_name || ""}{" "}
+        {formatUTCToMonthDayYear(
+          data?.friend_profile?.most_recent_visit?.visited_on
+        ) || "No trips"}
       </Text>
     </>
   );
 
-//   const ownershipDetails = (
-//     <>
-//       <Text
-//         style={[
-//           appFontStyles.itemCollectionDetailsText,
-//           themeStyles.primaryText,
-//         ]}
-//       >
-//         This was given to you by {renderFriendName(data?.giver)} on{" "}
-//         {formatUTCToMonthDayYear(data?.owned_since) ||
-//           formatUTCToMonthDayYear(data?.created_on) ||
-//           "unknown date"}
-//         !
-//       </Text>
-//     </>
-//   );
-
- 
+  //   const ownershipDetails = (
+  //     <>
+  //       <Text
+  //         style={[
+  //           appFontStyles.itemCollectionDetailsText,
+  //           themeStyles.primaryText,
+  //         ]}
+  //       >
+  //         This was given to you by {renderFriendName(data?.giver)} on{" "}
+  //         {formatUTCToMonthDayYear(data?.owned_since) ||
+  //           formatUTCToMonthDayYear(data?.created_on) ||
+  //           "unknown date"}
+  //         !
+  //       </Text>
+  //     </>
+  //   );
 
   return (
-    <> 
-        <View
-          style={[
-            themeStyles.darkerBackground,
-            appContainerStyles.itemCardContainer,
-            { borderColor: themeStyles.primaryBorder.color },
-          ]}
-        >
-          <View style={appContainerStyles.itemHeaderRow}>
-            <Text
-              style={[
-                appFontStyles.itemHeaderText,
-                themeStyles.primaryText,
-              ]}
-            >
-              {data?.username || "Friend name is missing"}
-            </Text>
+    <>
+      <View
+        style={[
+          themeStyles.darkerBackground,
+          appContainerStyles.itemCardContainer,
+          { borderColor: themeStyles.primaryBorder.color },
+        ]}
+      >
+        <View style={appContainerStyles.friendHeaderRow}>
+          <Text style={[appFontStyles.itemHeaderText, themeStyles.primaryText]}>
+            {data?.username || "Friend name is missing"}
+          </Text>
+        </View>
+
+        {image && (
+          <View
+            style={{
+              flexDirection: "column",
+              paddingHorizontal: 0,
+              paddingVertical: 10,
+              borderRadius: 100 / 2,
+              alignItems: "center",
+              alignContent: "center",
+
+              width: "100%",
+              justifyContent: "center",
+            }}
+          >
+            <Image
+              // key={imageUri}
+              source={{ uri: image }}
+              style={{
+                width: 100,
+                height: 100,
+                borderRadius: 100 / 2,
+                backgroundColor: "pink",
+              }}
+              contentFit="cover" //change to contain to fit whole image
+            />
           </View>
-          {isFullView && (
-            
+        )}
+        {isFullView && (
           <View
             style={[
               appContainerStyles.itemDescriptionContainer,
@@ -188,7 +203,6 @@ const FriendsUICard = ({
               {data?.friend_profile?.bio || "No bio"}
             </Text>
           </View>
-          
         )}
         {/* {isFullView && (
           
@@ -211,29 +225,27 @@ const FriendsUICard = ({
           
         )} */}
 
-<View style={[appContainerStyles.itemCollectionDetailsSubheader]}>
-            <CuteDetailBox
-              //iconOne={"heart"}
-              iconTwo={"map"}
-              message={findLastVisit}
-            /> 
- 
-          </View> 
-          <View style={[appContainerStyles.itemCollectionDetailsSubheader]}>
-            <CuteDetailBox
-              iconOne={"heart"}
-              //iconTwo={"map"}
-              message={findDetails}
-            /> 
- 
-          </View> 
 
-         {onViewFriendPress && (
-          
-          <GoToItemButton onPress={() => handlePress()} label={'See profile'}/>
-          
-         )}
-        </View> 
+
+        <View style={[appContainerStyles.itemCollectionDetailsSubheader]}>
+          <CuteDetailBox
+            //iconOne={"heart"}
+            iconTwo={"map"}
+            message={findLastVisit}
+          />
+        </View>
+        <View style={[appContainerStyles.itemCollectionDetailsSubheader]}>
+          <CuteDetailBox
+            iconOne={"heart"}
+            //iconTwo={"map"}
+            message={findDetails}
+          />
+        </View>
+
+        {onViewFriendPress && (
+          <GoToItemButton onPress={() => handlePress()} label={"See profile"} />
+        )}
+      </View>
     </>
   );
 };

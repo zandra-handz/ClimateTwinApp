@@ -29,6 +29,7 @@ interface Friend {
     id: number;
     first_name: string;
     last_name: string;
+    avatar: string | null;
     bio: string | null;
     gender: string;
     most_recent_visit: {
@@ -70,7 +71,7 @@ const useFriends = () => {
     queryKey: ["friends"],
     queryFn: getFriends,
     enabled: !!isAuthenticated && !isInitializing,
-    onSuccess: (data) => {
+    onSuccess: (data) => { 
       // Convert the friends data into a dropdown array
       const dropdownData = data.map((friend) => ({
         label: friend.nickname,

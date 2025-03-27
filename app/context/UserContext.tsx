@@ -13,6 +13,7 @@ import * as Device from "expo-device";
 import Constants from "expo-constants";
 import { Platform, AppState } from "react-native";
 import useProtectedRoute from "../hooks/useProtectedRoute";
+import useImageUploadFunctions from "../hooks/useImageUploadFunction";
 import {
   signup,
   signin,
@@ -23,7 +24,7 @@ import {
   updateUserSettings,
 } from "../apicalls";
 import { useAppMessage } from "./AppMessageContext";
-import { useSegments } from "expo-router";
+import { useSegments } from "expo-router"; 
  
 interface User {
   id?: string;
@@ -66,6 +67,7 @@ interface UserProviderProps {
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [authenticated, setAuthenticated] = useState(false);
+  const { imageUri } = useImageUploadFunctions();
   const [loading, setLoading] = useState(false);
   const [appSettings, setAppSettings] = useState<Record<string, any>>({});
   const [userNotificationSettings, setUserNotificationSettings] = useState<
@@ -78,6 +80,8 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
   const segments = useSegments();
   const isOnSignIn = segments[0] === "signin";
+  const isUploading = segments[0] === "(drawer)/(profile)/upload";
+  const isOnExploreTabs = segments[0] === "(drawer)/(exploretabs)";
   const isOnAPreSignInPage =
     segments.length === 0 ||
     segments[0] === "" ||
@@ -196,7 +200,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   }, [appSettings]);
 
   useEffect(() => {
-    if (appStateVisible === "active" && !isOnSignIn) {
+    if (appStateVisible === "active" && !isOnSignIn && !isUploading) {
       console.log(
         "APP IN FOREGROUND, REINITTING IN USER CONTEXT!!!!!!!!!!!!!!!!!!!!!!!!"
       ); 

@@ -798,6 +798,17 @@ const containerStyles = StyleSheet.create({
     padding: 20,
 
   },
+  friendHeaderRow: {
+    width: '100%',
+    textAlign: 'left',
+    alignItems: 'center',
+    alignContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center',
+      
+    paddingVertical: 10,
+
+  },
   
 
 

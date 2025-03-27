@@ -366,7 +366,42 @@ export const getUserProfile = async () => {
     }
 };
 
+
+export const updateUserProfile = async (userId, updatedProfile) => {
+    console.log(userId);
+    console.log([...updatedProfile]);
+    console.log('Request Headers:', axios.defaults.headers.common);
+    try {
+        const response = await axios.patch(`/users/profile/update/${userId}/`, updatedProfile);
+        console.log('API PATCH CALL updatedProfile', response.data);
+        //console.log('API response:', response.data); // Log the response data
+        return response.data; // Ensure this returns the expected structure
+    } catch (error) {
+        console.error('Error updating user profile:', error);
+        throw error;
+    }
+  };
+
  
+
+  export const uploadUserAvatar = async (userId, formData) => {
+    console.log('FormData in uploadUserAvatar:', userId, formData);
+    
+    try {
+        const response = await axios.patch(`/users/profile/update/${userId}/`, formData, {
+            headers: {
+                'Content-Type': 'multipart/form-data',
+            },
+        });
+
+        console.log('Avatar uploaded successfully:', response.data);
+        return response.data; // Return the created image data if needed
+    } catch (error) {
+        console.error('Error uploading avatar:', error);
+        throw error; // Throw error to handle it in component level
+    }
+};
+
  
 
 
@@ -850,7 +885,7 @@ export const getFriends = async () => {
     try {
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/users/friends/');
-        console.log('API GET Call getFriends'); //, response.data);
+        console.log('API GET Call getFriends');//, response.data);
         return response.data;
     } catch (error) {
         if (error.response) {

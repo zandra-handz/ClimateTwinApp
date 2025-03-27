@@ -49,6 +49,34 @@ export default () => {
               gestureEnabled: true,
             }}
           />
+                    <Stack.Screen
+            name="upload"
+            options={{
+              headerShown: true,
+              headerTitle: "Upload avatar",
+              headerTitleStyle: {
+                color: constantColorsStyles.v1LogoColor.color,
+              },
+              headerStyle: {
+                backgroundColor:
+                  constantColorsStyles.v1LogoColor.backgroundColor,
+              },
+
+              headerLeft: () => (
+                <TouchableOpacity
+                  onPress={() => console.log("icon is pressable!")}
+                  style={{ paddingLeft: 10, paddingRight: 10 }}
+                >
+                  <Feather
+                    name="users"
+                    size={appFontStyles.exploreTabBarIcon.width}
+                    color={constantColorsStyles.v1LogoColor.color}
+                  />
+                </TouchableOpacity>
+              ),
+              gestureEnabled: true,
+            }}
+          />
 
           {/* <Stack.Screen
             name="[id]"

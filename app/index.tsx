@@ -11,6 +11,8 @@ import { LinearGradient } from "expo-linear-gradient";
 import { StatusBar } from "react-native";
 import { useAppState } from "./context/AppStateContext";
 import CustomStatusBar from "./components/CustomStatusBar";
+import useImageUploadFunctions from "./hooks/useImageUploadFunction";
+import GoToItemButton from "./components/GoToItemButton";
 
 
 //a frienddate assistant for overwhelmed adults, and for people who just have a lot to talk about
@@ -24,6 +26,7 @@ const Index = () => {
   const { reInitialize } = useUser();
   const { showAppMessage } = useAppMessage();
     const { appStateVisible } = useAppState();
+    const { handleSelectImage, handleCaptureImage } = useImageUploadFunctions();
 
   const router = useRouter();
   const usernameInputRef = useRef(null);
@@ -128,6 +131,9 @@ const Index = () => {
                     paddingHorizontal: "3%",
                   }}
                 >
+                  {/* <GoToItemButton label='Upload image'  onPress={handleSelectImage} />
+                  <GoToItemButton label='Take photo'  onPress={handleCaptureImage} /> */}
+
                   {/* <LogoSmaller
                     accessible={true} //field not in component
                     accessibilityLabel="App Logo" //field not in component
@@ -143,6 +149,8 @@ const Index = () => {
                     position: "absolute",
                   }}
                 >
+                  {showSignIn && (
+                    
                   <SignInButton
                     onPress={() => handleNavigateToSignIn()}
                     title={"Sign in"}
@@ -157,20 +165,9 @@ const Index = () => {
                     accessibilityLabel={"Sign in button"}
                     accessibilityHint="Press to sign in or create an account"
                   />
-
-                  {/* <View style={{paddingTop: '3%'}}>
-
-                    <Text
-                      style={styles.nonSignInButtonText}
-                      onPress={() => handleNavigateToAuthScreen(true)} 
-                      accessible={true}
-                      accessibilityLabel="Toggle button"
-                      accessibilityHint="Press to toggle between sign in and create account"
-                    >
-                       New account
-                    </Text>
-
-                    </View> */}
+                  
+                )}
+ 
                 </View>
               </> 
           </>
