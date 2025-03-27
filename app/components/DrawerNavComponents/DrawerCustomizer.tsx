@@ -233,7 +233,7 @@ const DrawerCustomizer = (props) => {
             { borderBottomColor: themeStyles.primaryText.color },
           ]}
           label="Manage account"
-          onPress={() => router.push("/treasures")}
+          onPress={() => router.push("/(profile)")}
         />
         <DrawerItem
           icon={() => (

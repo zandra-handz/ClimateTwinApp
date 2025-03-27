@@ -1,5 +1,5 @@
 import { View, Text, TextInput } from "react-native";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { searchUsers } from "../apicalls";
 import useFriends from "../hooks/useFriends";
 import { useGlobalStyles } from "../context/GlobalStylesContext";
@@ -16,6 +16,26 @@ const DebouncedUserSearch = ({onEnter}) => {
     console.log(text); 
   };
 
+
+  //const stableOnEnter = useCallback(onEnter, []);
+
+
+  const debouncedOnEnter = useCallback(
+    debounce((query) => {
+      console.log("Debounced search query:", query);
+      //stableOnEnter(query);
+      onEnter(query);
+    }, 500),
+   // [stableOnEnter]
+    []
+  );
+ 
+  useEffect(() => {
+    if (searchQuery.trim()) {
+      console.log('fetching search results via debounce function');
+      debouncedOnEnter(searchQuery);
+    }
+  }, [searchQuery, debouncedOnEnter]);
 
   const handleEnterPress = () => {
     console.log('enter press detected, searchQuery in memory is:', searchQuery);

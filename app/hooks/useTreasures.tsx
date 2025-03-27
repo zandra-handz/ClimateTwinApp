@@ -180,7 +180,7 @@ const useTreasures = () => {
   };
 
   const triggerTreasuresRefetch = () => { 
-    console.log('Refreshing treasures...');
+   // console.log('Refreshing treasures...');
     queryClient.invalidateQueries({ queryKey: ["treasures"] });
     queryClient.refetchQueries({ queryKey: ["teasures"] });  
   };

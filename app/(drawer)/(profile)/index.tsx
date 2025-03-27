@@ -10,6 +10,7 @@ import FriendsView from "@/app/components/FriendsComponents/FriendsView";
 import GoToItemButton from "@/app/components/GoToItemButton";
 import ActionsFooter from "@/app/components/ActionsFooter";
 
+import useProfile from "@/app/hooks/useProfile";
 
 
 import DataList from "../../components/Scaffolding/DataList";
@@ -19,29 +20,17 @@ const index = () => {
   const { showAppMessage } = useAppMessage();
   const { friends, handleGetAllUsers, allUsers, handleSendFriendRequest } = useFriends();
   const router = useRouter();
+  const { profile } = useProfile();
 
   const handlePress = () => {
-    console.log("Friend handlePress pressed!");
+    console.log("User profile handlePress pressed!");
   };
 
 
-  const handleViewFriend = (id, friendName) => {
-    if (id) {
-        router.push({
-            pathname: "(friends)/[id]",
-            params: { id: id, friendName: friendName},
-        })
-    }
-
-}
+ 
  
 
-  const handleFriendRequest = (friendObject) => {
-    if (friendObject) {
-      console.log("attempting to send friend request", friendObject);
-      handleSendFriendRequest(friendObject.id, 'Friend request message placeholder!');
-    }
-  };
+ 
 
   return (
     <>
@@ -55,8 +44,8 @@ const index = () => {
  
         <View style={appContainerStyles.innerFlexStartContainer}>
 
-          {friends && (
-            <FriendsView listData={friends} onCardButtonPress={handlePress} onViewFriendPress={handleViewFriend}  />
+          {profile && (
+            <DataList listData={[profile]} onCardButtonPress={handlePress} />
           )}
 
         </View>
@@ -64,8 +53,8 @@ const index = () => {
                 height={66}
                 onPressLeft={() => router.back()}
                 labelLeft={"Back"}
-                onPressRight={() => router.push('search/')}
-                labelRight={"Add new"}
+                onPressRight={() => console.log('implement edit screen eventually')}
+                labelRight={"Edit"}
                 // onPressCenter={isMinimized ? handleFullScreenToggle : null}
                 // labelCenter={"Groq"}
               />

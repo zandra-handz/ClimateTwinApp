@@ -25,7 +25,7 @@ export default () => {
             name="index"
             options={{
               headerShown: true,
-              headerTitle: "Friends",
+              headerTitle: "My account",
               headerTitleStyle: {
                 color: constantColorsStyles.v1LogoColor.color,
               },
@@ -50,7 +50,7 @@ export default () => {
             }}
           />
 
-          <Stack.Screen
+          {/* <Stack.Screen
             name="[id]"
             options={({ route }) => ({
               headerShown: true,
@@ -105,63 +105,8 @@ export default () => {
               ),
               gestureEnabled: true,
             }}
-          />
-          {/* <Stack.Screen
-            name="[id]"
-            options={{
-              headerShown: true,
-              headerTitle: "Message",
-              headerTitleStyle: {
-                color: constantColorsStyles.v1LogoColor.color,
-              },
-              headerStyle: {
-                backgroundColor:
-                  constantColorsStyles.v1LogoColor.backgroundColor,
-              },
-
-              headerLeft: () => (
-                <TouchableOpacity
-                  onPress={() => router.back()}
-                  style={{ paddingLeft: 10, paddingRight: 10 }}
-                >
-                  <AntDesign
-                    name="mail"
-                    size={appFontStyles.exploreTabBarIcon.width}
-                    color={constantColorsStyles.v1LogoColor.color}
-                  />
-                </TouchableOpacity>
-              ),
-              gestureEnabled: true,
-            }}
-          />
-                      <Stack.Screen
-            name="compose"
-            options={{
-              headerShown: true,
-              headerTitle: "Compose",
-              headerTitleStyle: {
-                color: constantColorsStyles.v1LogoColor.color,
-              },
-              headerStyle: {
-                backgroundColor:
-                  constantColorsStyles.v1LogoColor.backgroundColor,
-              },
-
-              headerLeft: () => (
-                <TouchableOpacity
-                  onPress={() => router.back()}
-                  style={{ paddingLeft: 10, paddingRight: 10 }}
-                >
-                  <MaterialIcons
-                    name="add"
-                    size={appFontStyles.exploreTabBarIcon.width}
-                    color={constantColorsStyles.v1LogoColor.color}
-                  />
-                </TouchableOpacity>
-              ),
-              gestureEnabled: true,
-            }}
           /> */}
+ 
         </Stack>
       </SafeAreaView>
     </GestureHandlerRootView>

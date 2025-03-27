@@ -45,9 +45,13 @@ export default () => {
           name="(history)"
           options={{ header: () => null, drawerLabel: "History" }}
         />
-                <Drawer.Screen
+        <Drawer.Screen
           name="(stats)"
           options={{ header: () => null, drawerLabel: "Stats" }}
+        />
+                <Drawer.Screen
+          name="(profile)"
+          options={{ header: () => null, drawerLabel: "Profile" }}
         />
       </Drawer>
     </GestureHandlerRootView>

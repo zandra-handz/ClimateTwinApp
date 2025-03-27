@@ -9,14 +9,14 @@ import {
 import { useUser } from "../context/UserContext";
 import {
   getFriends,
+  getFriend,
   getAllUsers,
   searchUsers,
   requestToAddFriend,
   acceptFriendship,
   declineFriendship,
 } from "../apicalls";
-
-// Define the types for the response from getFriends API
+ 
 interface Friend {
   id: number;
   nickname: string;
@@ -24,10 +24,24 @@ interface Friend {
   user: number;
   friend: number;
   friendship: number;
-  // Add other properties based on your actual friend data structure
+  username: string; 
+  friend_profile: {
+    id: number;
+    first_name: string;
+    last_name: string;
+    bio: string | null;
+    gender: string;
+    most_recent_visit: {
+      location_name: string;
+      latitude: number;
+      longitude: number;
+      visited_on: string;  
+    } | null;
+    total_visits: number;  
+  };
 }
 
-// Define the type for the dropdown data
+//not currently using dropdown
 interface DropdownOption {
   label: string;
   value: number;
@@ -37,6 +51,7 @@ interface DropdownOption {
 const useFriends = () => {
   const { user, isAuthenticated, isInitializing } = useUser();
   const [friendsDropDown, setFriendsDropDown] = useState<DropdownOption[]>([]);
+  const [viewingFriend, setViewingFriend] = useState<Friend | null>(null); //is this correct or do i need the friendship?
 
   const [userSearchResults, setUserSearchResults] = useState(null);
   const [allUsers, setAllUsers] = useState(null);
@@ -84,6 +99,25 @@ const useFriends = () => {
   };
   // Memoize the dropdown data to avoid unnecessary re-renders
   const memoizedDropDown = useMemo(() => friendsDropDown, [friendsDropDown]);
+
+
+    const handleGetFriend = async (id: number) => {
+      try {
+        const friend = await queryClient.fetchQuery<Friend>({
+          queryKey: ["treasure", user?.id, id],
+          queryFn: () => getFriend(id),
+        });
+  
+        if (friend) {
+          setViewingFriend(friend); 
+        }
+      } catch (error) {
+        console.error("Error fetching friend: ", error);
+      }
+    };
+
+
+
 
  
   const searchUsersMutation = useMutation({
@@ -231,6 +265,8 @@ const useFriends = () => {
           }, 2000); 
         },
       });
+
+ 
     
 
 
@@ -240,6 +276,7 @@ const useFriends = () => {
     isFetching,
     isSuccess,
     isError,
+    handleGetFriend,
     friendsDropDown: memoizedDropDown,
     replaceUserIdWithFriendName, //this is for the notification update from the websocket
     handleGetAllUsers,
@@ -250,6 +287,7 @@ const useFriends = () => {
     handleSendFriendRequest,
     handleAcceptFriendship,
     acceptFriendshipMutation,
+    viewingFriend,
   };
 };
 

@@ -709,8 +709,6 @@ const containerStyles = StyleSheet.create({
     alignItems: 'center',
     height: '100%',
     borderRadius: 10
-    
-    
   }, 
   treasureCardContainer: { 
     borderRadius: 20,
@@ -718,8 +716,7 @@ const containerStyles = StyleSheet.create({
     marginBottom: 10,
     width: '100%',  
     alignItems: 'center',
-    justifyContent: 'center',  
-
+    justifyContent: 'center',   
     height: "auto",
     padding: 30,
     borderRadius: 30,
@@ -727,7 +724,6 @@ const containerStyles = StyleSheet.create({
     flexDirection: "column",
     flex: 1,
     borderWidth: StyleSheet.hairlineWidth,
-
   },
   treasureHeaderRow: {
     width: '100%',
@@ -746,7 +742,6 @@ const containerStyles = StyleSheet.create({
     height: 'auto',
     paddingTop: 4,
     marginBottom: 20,
-
   },
   treasureDescriptionContainer: {
     width: '100%',
@@ -759,6 +754,52 @@ const containerStyles = StyleSheet.create({
     padding: 20,
 
   },
+  itemCardContainer: { 
+    borderRadius: 20,
+    padding: 10, 
+    marginBottom: 10,
+    width: '100%',  
+    alignItems: 'center',
+    justifyContent: 'center',   
+    height: "auto",
+    padding: 30,
+    borderRadius: 30,
+    width: "100%",
+    flexDirection: "column",
+    flex: 1,
+    borderWidth: StyleSheet.hairlineWidth,
+  },
+  itemHeaderRow: {
+    width: '100%',
+    textAlign: 'left',
+    alignItems: 'center',
+    alignContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'flex-start',
+      
+    paddingVertical: 10,
+
+  },
+  itemCollectionDetailsSubheader: {
+    width: '100%',
+    textAlign: 'left',
+    height: 'auto',
+    paddingTop: 4,
+    marginBottom: 20,
+  },
+  itemDescriptionContainer: {
+    width: '100%',
+    textAlign: 'left',
+    height: 40,
+    marginVertical: 4,
+    height: 'auto',
+    flexWrap: 'flex',
+    borderRadius: 16, 
+    padding: 20,
+
+  },
+  
+
 
   singleDetailPanelContainer: {
     borderRadius: 20, 
@@ -1007,23 +1048,37 @@ const fontStyles = StyleSheet.create({
     fontSize: 17,
     fontWeight: 'bold',
     lineHeight: 20,
-
   },
   treasureDescriptionText: {
     fontSize: 15,
     lineHeight: 20,
-
   },
   treasureCollectionDetailsBoldText: {
     fontWeight: 'bold',
     fontSize: 14,
     lineHeight: 20,
-
   },
   treasureCollectionDetailsText: {
     fontSize: 14,
     lineHeight: 20,
-
+  },
+  itemHeaderText: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    lineHeight: 20,
+  },
+  itemDescriptionText: {
+    fontSize: 15,
+    lineHeight: 20,
+  },
+  itemCollectionDetailsBoldText: {
+    fontWeight: 'bold',
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  itemCollectionDetailsText: {
+    fontSize: 14,
+    lineHeight: 20,
   },
   tabBarText: {
     fontSize: 11,

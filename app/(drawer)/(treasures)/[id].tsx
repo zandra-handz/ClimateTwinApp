@@ -68,7 +68,7 @@ const { treasures, handleGetTreasure, viewingTreasure } = useTreasures();
  
         </ScrollView>
         <ActionsFooter
-        onPressLeft={() => router.replace('(treasures)')}
+        onPressLeft={() => router.back()}
         labelLeft={"Back"}
         onPressRight={handleGoToGiveScreen}
         labelRight={"Gift"}
