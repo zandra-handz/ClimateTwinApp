@@ -1,6 +1,7 @@
 import { View, Text } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
+import { useAppMessage } from "@/app/context/AppMessageContext";
 import useProfile from "@/app/hooks/useProfile";
 import { useUser } from "@/app/context/UserContext";
 import { Image } from "expo-image";
@@ -11,14 +12,15 @@ import ActionsFooter from "@/app/components/ActionsFooter";
 import * as FileSystem from "expo-file-system"; 
 
 const upload = () => {
-  const { handleUploadAvatar } = useProfile();
+  const { handleUploadAvatar, uploadAvatarMutation } = useProfile();
+  const { showAppMessage } = useAppMessage();
   const { user } = useUser();
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { resizeImage } = useImageUploadFunctions();
   const { imageUri } = useLocalSearchParams<{ imageUri: string }>();
   const decodedUri = decodeURIComponent(imageUri);
   const [image, setImage] = useState(null);
-  const { router } = useRouter();
+  const router = useRouter();
 
   // console.log(`decoded`, decodedUri);
 
@@ -36,23 +38,18 @@ const upload = () => {
   //console.log(imageUri);
 
   
-const handleSave = async () => {  
-  console.log(imageUri);
 
 
+
+
+const handleSave = async () => {   
 
   if (imageUri && user?.id) {
     try { 
       
       const manipResult = await resizeImage(imageUri); 
-
       const formData = new FormData();
       const fileType = manipResult.uri.split('.').pop();  
-      // const avatarData =  {
-      //   uri: manipResult.uri,
-      //   name: `image.${fileType}`,
-      //   type: `image/${fileType}`,
-      // };
 
       formData.append('avatar', {
         uri: manipResult.uri,
@@ -63,10 +60,7 @@ const handleSave = async () => {
     formData.append('user', user?.id);
      console.log(`formData: `, formData);
 
-//removed the await here, the function is not async
       handleUploadAvatar(formData);
- 
- 
 
     } catch (error) {
       console.error('Error saving image:', error); 
@@ -74,7 +68,22 @@ const handleSave = async () => {
   }
  
 };
-  
+  useEffect(() => {
+    if (uploadAvatarMutation.isSuccess) {
+      showAppMessage(true, null, "New icon set!");
+      router.back();
+    }
+
+  }, [uploadAvatarMutation.isSuccess]);
+
+
+  useEffect(() => {
+    if (uploadAvatarMutation.isError) {
+      showAppMessage(true, null, "Oops! Icon not uploaded.");
+      router.back();
+    }
+
+  }, [uploadAvatarMutation.isError]);
 
   return (
     <View

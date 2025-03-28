@@ -52,11 +52,17 @@ const useProfile = () => {
     queryKey: ["profile", user?.id],
     queryFn: getUserProfile,
     enabled: !!isAuthenticated && !isInitializing,
-    onSuccess: (data) => {
-      setAvatarUrl(data.avatar);
+    onSuccess: (data) => { 
      
     },
   });
+
+  useEffect(() => {
+    if (profile) {
+      setAvatar(profile?.avatar || null);
+    }
+
+  }, [profile]);
 
  
 
@@ -75,19 +81,39 @@ const useProfile = () => {
       updateProfileMutation.mutate(newData);
     }
 
-    const updateAvatarMutation = useMutation({
+    const uploadAvatarMutation = useMutation({
       mutationFn: (newData) => uploadUserAvatar(user?.id, newData),
       onSuccess: () => {
-        queryClient.invalidateQueries(['profile', user?.id]);
+        triggerProfileRefetch();
+
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+    
+        timeoutRef.current = setTimeout(() => {
+          uploadAvatarMutation.reset();
+        }, 2000); 
       },
       onError: (error) => {
-        console.log('Error updating profile: ', error);
+        if (timeoutRef.current) {
+          clearTimeout(timeoutRef.current);
+        }
+    
+        timeoutRef.current = setTimeout(() => {
+          uploadAvatarMutation.reset();
+        }, 2000); 
       }
     });
 
+    const triggerProfileRefetch = () => {  
+      queryClient.invalidateQueries({ queryKey: ['profile', user?.id]});
+      queryClient.refetchQueries({ queryKey: ['profile', user?.id] });  
+    };
+  
+
 
     const handleUploadAvatar = (newData) => {
-      updateAvatarMutation.mutate(newData);
+      uploadAvatarMutation.mutate(newData);
     }
 
 
@@ -104,6 +130,7 @@ const useProfile = () => {
     avatar,
     handleUpdateProfile,
     handleUploadAvatar,
+    uploadAvatarMutation,
   };
 };
 

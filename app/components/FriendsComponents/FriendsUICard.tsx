@@ -6,6 +6,7 @@ import CuteDetailBox from "../CuteDetailBox";
 import SingleDetailPanel from "../SingleDetailPanel";
 import GoToItemButton from "../GoToItemButton";
 import { Image } from "expo-image";
+import Avatar from "./Avatar";
 
 import useFriends from "@/app/hooks/useFriends";
 
@@ -159,32 +160,8 @@ const FriendsUICard = ({ data, onViewFriendPress, isFullView }) => {
           </Text>
         </View>
 
-        {image && (
-          <View
-            style={{
-              flexDirection: "column",
-              paddingHorizontal: 0,
-              paddingVertical: 10,
-              borderRadius: 100 / 2,
-              alignItems: "center",
-              alignContent: "center",
-
-              width: "100%",
-              justifyContent: "center",
-            }}
-          >
-            <Image
-              // key={imageUri}
-              source={{ uri: image }}
-              style={{
-                width: 100,
-                height: 100,
-                borderRadius: 100 / 2,
-                backgroundColor: "pink",
-              }}
-              contentFit="cover" //change to contain to fit whole image
-            />
-          </View>
+        {image && ( 
+            <Avatar image={image} size={100}/>
         )}
         {isFullView && (
           <View

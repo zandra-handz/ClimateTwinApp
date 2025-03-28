@@ -173,14 +173,13 @@ const useTreasures = () => {
       treasure: treasureId,
       message: message || 'None',
       sender: user?.id,
-      recipient: recipientId,  // Include recipient's ID
+      recipient: recipientId,  
     };
  
     giftTreasureMutation.mutate(giftData);
   };
 
-  const triggerTreasuresRefetch = () => { 
-   // console.log('Refreshing treasures...');
+  const triggerTreasuresRefetch = () => {  
     queryClient.invalidateQueries({ queryKey: ["treasures"] });
     queryClient.refetchQueries({ queryKey: ["teasures"] });  
   };

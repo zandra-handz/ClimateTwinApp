@@ -809,6 +809,17 @@ const containerStyles = StyleSheet.create({
     paddingVertical: 10,
 
   },
+
+  floatingIconButtonContainer: {
+    //padding: 8,
+    alignItems:'center',
+    justifyContent: 'center',
+    borderWidth: StyleSheet.hairlineWidth,
+    height: 46,
+    width: 46,
+    borderRadius: 46 / 2,
+
+  },
   
 
 

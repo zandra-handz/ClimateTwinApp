@@ -286,6 +286,7 @@ export const sendEmail = async (email) => {
 export const signup = async ({username, email, password}) => {
     console.log(username);
     console.log(email);
+    console.log(password);
   
     try {
         return await axios.post('/users/sign-up/', { username, email, password });
