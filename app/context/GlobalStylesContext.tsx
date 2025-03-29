@@ -825,8 +825,7 @@ const containerStyles = StyleSheet.create({
 
   singleDetailPanelContainer: {
     borderRadius: 20, 
-    padding: 10, 
-    marginBottom: 10,
+    padding: 10,  
     width: '100%',  
     alignItems: 'center',
     justifyContent: 'center', 
@@ -1161,7 +1160,12 @@ const fontStyles = StyleSheet.create({
   actionFooterLabel: {
     fontSize: 15,
     fontWeight: 'bold',
-  }
+  },
+  profileHeaderText: {
+    fontSize: 32,
+    fontWeight: 'bold',
+
+  },
 });
 
 const lightThemeStyles = StyleSheet.create({

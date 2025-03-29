@@ -129,6 +129,7 @@ const useProfile = () => {
     isError,
     avatar,
     handleUpdateProfile,
+    updateProfileMutation,
     handleUploadAvatar,
     uploadAvatarMutation,
   };

@@ -96,7 +96,7 @@ const useGroq = () => {
     } else if (keyword === "weapons" || keyword === "ancient sword" || keyword === "ancient dagger") {
       return { role: roleWeapon, prompt: findMeAWeapon(latitude, longitude, locationGroqHistory, "ONE") };
     }
-    return { role: rolePlant, prompt: promptPlant };
+    return { role: rolePlant, prompt:findMeAPlant(latitude, longitude, locationGroqHistory, "ONE")};
   };
 
   const groqItemMutation = useMutation({

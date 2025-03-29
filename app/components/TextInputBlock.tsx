@@ -14,7 +14,7 @@ import { useGlobalStyles } from "../context/GlobalStylesContext";
     (
       {
         title = "title",
-        mountingText = "Start typing",
+        mountingText = "",
         onTextChange,
         helperText,
         autoFocus = true,

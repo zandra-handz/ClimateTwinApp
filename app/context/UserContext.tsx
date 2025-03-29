@@ -200,7 +200,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   }, [appSettings]);
 
   useEffect(() => {
-    if (appStateVisible === "active" && !isOnSignIn && !isUploading) {
+    if (appStateVisible === "active" && !isOnSignIn) {
       console.log(
         "APP IN FOREGROUND, REINITTING IN USER CONTEXT!!!!!!!!!!!!!!!!!!!!!!!!"
       ); 

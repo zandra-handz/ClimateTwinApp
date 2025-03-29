@@ -49,7 +49,7 @@ export default () => {
               gestureEnabled: true,
             }}
           />
-                    <Stack.Screen
+          <Stack.Screen
             name="upload"
             options={{
               headerShown: true,
@@ -69,6 +69,35 @@ export default () => {
                 >
                   <Feather
                     name="users"
+                    size={appFontStyles.exploreTabBarIcon.width}
+                    color={constantColorsStyles.v1LogoColor.color}
+                  />
+                </TouchableOpacity>
+              ),
+              gestureEnabled: true,
+            }}
+          />
+
+          <Stack.Screen
+            name="edit"
+            options={{
+              headerShown: true,
+              headerTitle: "Edit bio",
+              headerTitleStyle: {
+                color: constantColorsStyles.v1LogoColor.color,
+              },
+              headerStyle: {
+                backgroundColor:
+                  constantColorsStyles.v1LogoColor.backgroundColor,
+              },
+
+              headerLeft: () => (
+                <TouchableOpacity
+                  onPress={() => console.log("icon is pressable!")}
+                  style={{ paddingLeft: 10, paddingRight: 10 }}
+                >
+                  <Feather
+                    name="info"
                     size={appFontStyles.exploreTabBarIcon.width}
                     color={constantColorsStyles.v1LogoColor.color}
                   />
@@ -134,7 +163,6 @@ export default () => {
               gestureEnabled: true,
             }}
           /> */}
- 
         </Stack>
       </SafeAreaView>
     </GestureHandlerRootView>

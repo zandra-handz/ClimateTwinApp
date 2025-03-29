@@ -58,7 +58,7 @@ const handleSave = async () => {
       });  
 
     formData.append('user', user?.id);
-     console.log(`formData: `, formData);
+    // console.log(`formData: `, formData);
 
       handleUploadAvatar(formData);
 

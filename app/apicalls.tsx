@@ -370,10 +370,18 @@ export const getUserProfile = async () => {
 
 export const updateUserProfile = async (userId, updatedProfile) => {
     console.log(userId);
-    console.log([...updatedProfile]);
+   // console.log([...updatedProfile]);
+    console.log('Updated Profile:', updatedProfile);
+
     console.log('Request Headers:', axios.defaults.headers.common);
     try {
-        const response = await axios.patch(`/users/profile/update/${userId}/`, updatedProfile);
+        const response = await axios.patch(`/users/profile/update/${userId}/`, updatedProfile,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            }
+        );
         console.log('API PATCH CALL updatedProfile', response.data);
         //console.log('API response:', response.data); // Log the response data
         return response.data; // Ensure this returns the expected structure

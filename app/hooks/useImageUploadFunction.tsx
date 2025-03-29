@@ -22,7 +22,8 @@ const useImageUploadFunctions = () => {
 
 
       const handleCaptureImage = async () => {
-        const result = await ImagePicker.launchImageLibraryAsync({
+       
+        const result = await ImagePicker.launchCameraAsync({
           mediaTypes: ['images'], 
           allowsEditing: true,
           quality: 1,
@@ -47,6 +48,7 @@ const useImageUploadFunctions = () => {
           // });
 
           const result = await ImagePicker.launchImageLibraryAsync({
+         
             mediaTypes: ['images'], 
             allowsEditing: true,
             quality: 1,

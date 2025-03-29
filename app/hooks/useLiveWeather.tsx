@@ -4,6 +4,7 @@ import { useUser } from "../context/UserContext";
 import { useSurroundingsWS } from "../context/SurroundingsWSContext";
 import { getLiveWeather } from "../liveweathercall";
 
+
 interface LiveWeather {
   coord: { lon: number; lat: number };
   weather: { id: number; main: string; description: string; icon: string }[];

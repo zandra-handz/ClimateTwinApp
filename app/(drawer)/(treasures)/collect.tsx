@@ -289,8 +289,7 @@ const collect = () => {
     setFocusedIndex(nextIndex);
   };
 
-  const resetFields = () => {
-    console.log("resetting fields in collect treasure");
+  const resetFields = () => { 
     if (descriptorTextRef && descriptorTextRef.current) {
       descriptorTextRef.current.clearText();
     }
@@ -302,12 +301,10 @@ const collect = () => {
     }
   };
 
-  const handleCollect = () => {
-    console.log("handle collect");
+  const handleCollect = () => { 
     if (locationData && editedTextRef.current) {
       const parsedValue = JSON.parse(locationData?.base);
-      const firstString = parsedValue[0];
-      console.log("attempting to collect treasure", locationData?.base);
+      const firstString = parsedValue[0]; 
       handleCollectTreasure(
         firstString,
         descriptorTextRef.current.getText(),

@@ -6,6 +6,8 @@ import { useSurroundingsWS } from "../context/SurroundingsWSContext";
 import useLLMScripts from "../llm/useLLMScripts";
 import { talkToGroq } from "../groqcall";
 import useLiveWeather from "../hooks/useLiveWeather";
+//import useNativePlants from "../hooks/useNativePlants";
+import useINaturalist from "../hooks/useINaturalist";
 
 interface GroqHistoryData {
   [key: string]: any;
@@ -37,6 +39,8 @@ export const useGroqContext = () => {
 export const GroqProvider: React.FC = ({ children }) => {
     const { isAuthenticated, isInitializing } = useUser();
     const { liveWeather, liveTemperature, liveWeatherId, liveWeatherString } = useLiveWeather();
+    //const { nativePlants } = useNativePlants();
+    const { iNaturalist } = useINaturalist();
     const { lastLocationName, lastLocationId, lastLatAndLong } = useSurroundingsWS();
     const [latitude, longitude] = Array.isArray(lastLatAndLong) ? lastLatAndLong : [null, null];
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
