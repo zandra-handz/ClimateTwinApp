@@ -1,6 +1,7 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import { Image } from 'expo-image'
+import ComponentSpinner from '../Scaffolding/ComponentSpinner'
 
 const Avatar = ({image, size=100}) => {
   return (

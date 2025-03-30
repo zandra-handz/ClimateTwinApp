@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet } from 'react-native'; 
 import ArrowPixellySvg from '../../assets/svgs/arrow-pixelly.svg';
 
+
 const WindSquare = ({ windSpeed, windDirection, windFriends, specialHarmony, size=100, opacity=1, color="white"}) => {
  
   let correctedWindDirection = (windDirection + 180 - 90) % 360;

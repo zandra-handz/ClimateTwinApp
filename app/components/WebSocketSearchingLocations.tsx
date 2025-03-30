@@ -387,6 +387,7 @@ const WebSocketSearchingLocations: React.FC<{
                   // width: 52,
                   // height: 52,
                   // borderRadius: 52 / 2,
+                  marginTop: 6,
                   textAlign: "center",
                   alignItems: "center",
                   justifyContent: "center",

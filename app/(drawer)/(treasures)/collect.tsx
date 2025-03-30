@@ -16,9 +16,6 @@ import TextInputLine from "@/app/components/TextInputLine";
 import TextInputBlock from "@/app/components/TextInputBlock";
 import GroqItem from "@/app/components/GroqComponents/GroqItem";
 import { useFocusEffect } from "expo-router"; 
-
-import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
-
  
 
 

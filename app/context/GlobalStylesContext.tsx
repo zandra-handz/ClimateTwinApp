@@ -678,7 +678,7 @@ const containerStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center', 
     //flexGrow: 1,
-    height: 220,
+    height: 230,
     overflow: 'hidden',
 
   },
@@ -969,7 +969,7 @@ const fontStyles = StyleSheet.create({
     fontSize: 28,
   },
   bannerHeaderText: {
-    fontSize: 18,
+    fontSize: 24,
 
   },
   drawerHeaderWelcomeText: {

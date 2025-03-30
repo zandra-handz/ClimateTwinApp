@@ -1,10 +1,12 @@
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react"; 
 import INaturalistImageCard from "./INaturalistImageCard";
 import { useGlobalStyles } from "@/app/context/GlobalStylesContext";
 import useINaturalist from "@/app/hooks/useINaturalist";
 
-const INaturalistTray = ({ index, item }) => {
+
+//pass topic and base and pass those in to touchable on press to start allowing treasure saving
+const INaturalistTray = ({ index, item, onPress }) => {
   const { iNaturalist } = useINaturalist(); // Use iNaturalist data from the hook
   const { handleAvgPhotoColor, avgPhotoColor } = useGlobalStyles();
 
@@ -15,13 +17,17 @@ const INaturalistTray = ({ index, item }) => {
   }, [item]);
 
   return (
-    <View
+    <TouchableOpacity
+    onPress={onPress}
       style={{
         width: "100%",
         marginBottom: 10,
         flexDirection: "row",
         justifyContent: "center",
         height: "auto",
+        borderRadius: 30,
+       
+        
       }}
     >
       {/* Render the image card with data from iNaturalist */}
@@ -46,7 +52,7 @@ const INaturalistTray = ({ index, item }) => {
       ) : (
         <Text>No image available</Text> // Fallback in case data is missing
       )}
-    </View>
+    </TouchableOpacity>
   );
 };
 

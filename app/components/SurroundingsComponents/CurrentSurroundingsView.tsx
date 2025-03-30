@@ -6,10 +6,16 @@ import PortalTreasuresView from "../ItemChoicesComponents/PortalTreasuresView";
 import { useGroqContext } from "@/app/context/GroqContext";
 import INaturalistTray from "../INaturalistComponents/iNaturalistTray";
 import useINaturalist from "@/app/hooks/useINaturalist";
+import WindyMap from "../WindyMap";
+import { useSurroundingsWS } from "@/app/context/SurroundingsWSContext";
+
 
 const CurrentSurroundingsView = ({ height }) => {
   const { groqHistory } = useGroqContext();
   const { iNaturalist } = useINaturalist();
+  const { lastLatAndLong } = useSurroundingsWS();
+  const [latitude, longitude] = Array.isArray(lastLatAndLong) ? lastLatAndLong : [null, null];
+   
 
   useEffect(() => {
     if (iNaturalist) {
@@ -20,7 +26,14 @@ const CurrentSurroundingsView = ({ height }) => {
   const { itemChoicesAsObjectTwin, itemChoicesAsObjectExplore } = useInteractiveElements();
 
   return (
-    <>
+    <> 
+    <View style={{marginVertical: 10, height: 100}}>
+
+    <WindyMap lat={latitude} lon={longitude} zoom={12}/>
+    
+    </View>
+
+     
       {iNaturalist && iNaturalist.results && iNaturalist.results.length > 0 && (
         <View
           style={{
@@ -35,7 +48,7 @@ const CurrentSurroundingsView = ({ height }) => {
             {iNaturalist.results.map((item, index) => (
               <View key={index} style={{ width: 300, marginRight: 20 }}>
                 {/* Pass the observation data to the INaturalistTray */}
-                <INaturalistTray index={index} observation={item} />
+                <INaturalistTray index={index} observation={item} onPress={() => console.log('iNaturalist card pressed!')} />
               </View>
             ))}
           </ScrollView>

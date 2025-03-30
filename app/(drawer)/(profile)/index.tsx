@@ -133,7 +133,7 @@ const index = () => {
 
   return (
     <>
-    {avatar && (
+    {profile && (
       
       <View
         style={[

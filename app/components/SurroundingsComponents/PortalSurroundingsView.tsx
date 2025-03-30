@@ -6,6 +6,7 @@ import WindFriendsView from "@/app/components/SurroundingsComponents/WindFriends
 import MagnifiedNavButton from "../MagnifiedNavButton";
 import { useGlobalStyles } from "@/app/context/GlobalStylesContext";
 import { useInteractiveElements } from "@/app/context/InteractiveElementsContext";
+import WindyWindFriendsView from "./WindyWindFriendsView";
 
 const PortalSurroundingsView = ({ height, triggerParentAutoScroll }) => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
@@ -41,7 +42,7 @@ const PortalSurroundingsView = ({ height, triggerParentAutoScroll }) => {
           zIndex: 1, // Ensures this section is below the overlay
         }}
       >
-        <WindFriendsView
+        {/* <WindFriendsView
           name={portalSurroundings.name}
           description={portalSurroundings.description}
           windSpeed={portalSurroundings.windSpeed}
@@ -50,6 +51,25 @@ const PortalSurroundingsView = ({ height, triggerParentAutoScroll }) => {
           homeDescription={homeSurroundings.description}
           homeWindSpeed={homeSurroundings.windSpeed}
           homeWindDirection={homeSurroundings.windDirection}
+        /> */}
+
+      <WindyWindFriendsView
+          name={portalSurroundings.name}
+          description={portalSurroundings.description}
+          windSpeed={portalSurroundings.windSpeed}
+          windDirection={portalSurroundings.windDirection}
+          windFriends={portalSurroundings.windFriends}
+          homeDescription={homeSurroundings.description}
+          homeWindSpeed={homeSurroundings.windSpeed}
+          homeWindDirection={homeSurroundings.windDirection}
+
+          homeLat={homeSurroundings.latitude}
+          homeLon={homeSurroundings.longitude}
+          //homeZoom set inside
+          portalLat={portalSurroundings.latitude}
+          portalLon={portalSurroundings.longitude}
+          //portalZoom set inside
+          
         />
 
         <SingleDetailPanel label="Details" value={portalSurroundings.details} />

@@ -1,0 +1,63 @@
+<!DOCTYPE html> 
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Windy Debug</title>
+  <!-- Windy REQUIRES Leaflet 1.4.0 -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
+  <!-- MUST load libBoot.js AFTER Leaflet -->
+  <script src="https://api.windy.com/assets/map-forecast/libBoot.js"></script>
+</head>
+<body style="margin:0;">
+  <div id="windy" style="width:100%;height:100vh;"></div>
+  <script>
+    // Debugging setup
+    function log(message) {
+      const debug = document.getElementById('debug') || document.createElement('div');
+      debug.id = 'debug';
+      debug.style.position = 'fixed';
+      debug.style.background = 'white';
+      debug.style.padding = '10px';
+      debug.style.zIndex = '9999';
+      debug.innerHTML += message + '<br>';
+      document.body.appendChild(debug);
+    }
+
+    function initWindy() {
+      log(`Leaflet version: ${L.version}`);
+      log(`windyInit exists? ${typeof windyInit}`);
+      
+      if (typeof windyInit !== 'function') {
+        log("❌ ERROR: windyInit not found. Check:");
+        log("1. libBoot.js loaded? (Network tab)");
+        log("2. No console errors?");
+        return;
+      }
+
+      windyInit({
+        key: 'ucTQB2sDlEOmPEqtiHS4ecSgDo95awsf', // REPLACE
+        lat: 37.77,
+        lon: -122.42,
+        zoom: 5,
+        verbose: true // Shows API logs
+      }, (api) => {
+        log("✅ Windy initialized!");
+        api.overlay('wind');
+      });
+    }
+
+    // Start initialization after everything loads
+    if (document.readyState === 'complete') {
+      initWindy();
+    } else {
+      window.addEventListener('load', initWindy);
+      setTimeout(() => {
+        if (typeof windyInit === 'undefined') {
+          log("⚠️ Still loading...");
+        }
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
