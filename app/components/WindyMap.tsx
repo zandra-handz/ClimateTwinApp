@@ -3,6 +3,8 @@ import { WebView } from 'react-native-webview';
 import { StyleSheet, View } from 'react-native';
 import Constants from 'expo-constants';
 
+
+//this key is just a test key
 export const WINDY_API_KEY = Constants.expoConfig?.extra?.WINDY_API_KEY;
 
 const WindyMap = ({lat = 37.7749, lon = -122.4194, zoom = 8 }) => { //12 is max zoom-in
