@@ -29,7 +29,7 @@
       log(`windyInit exists? ${typeof windyInit}`);
       
       if (typeof windyInit !== 'function') {
-        log("❌ ERROR: windyInit not found. Check:");
+        log("ERROR: windyInit not found. Check:");
         log("1. libBoot.js loaded? (Network tab)");
         log("2. No console errors?");
         return;
@@ -42,7 +42,7 @@
         zoom: 5,
         verbose: true // Shows API logs
       }, (api) => {
-        log("✅ Windy initialized!");
+        log("Windy initialized!");
         api.overlay('wind');
       });
     }
@@ -54,7 +54,7 @@
       window.addEventListener('load', initWindy);
       setTimeout(() => {
         if (typeof windyInit === 'undefined') {
-          log("⚠️ Still loading...");
+          log("Still loading...");
         }
       }, 3000);
     }
