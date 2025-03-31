@@ -1,15 +1,16 @@
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react"; 
-import ItemChoiceUICard from "../ItemChoicesComponents/ItemChoiceUICard"; 
+import ItemChoiceUICard from "./ItemChoiceUICard"; 
 import { useInteractiveElements } from "@/app/context/InteractiveElementsContext";
 import CardAnimationWrapper from "../CardAnimationWrapper";
 import { useRouter } from "expo-router";
-import TreasureUICard from "../ItemChoicesComponents/TreasureUICard";
+import TreasureUICard from "./TreasureUICard";
 import { useSurroundingsWS } from "@/app/context/SurroundingsWSContext";
 
 
-
-const PortalTreasuresView = () => {
+//Mapped = Item details influence groq/item query
+//used for Pexel images
+const PortalMappedTreasuresView = () => {
     
       const router = useRouter(); 
       const { itemChoicesAsObjectTwin } = useInteractiveElements();
@@ -90,4 +91,4 @@ const treasuresList = [
   );
 }; 
 
-export default PortalTreasuresView
+export default PortalMappedTreasuresView

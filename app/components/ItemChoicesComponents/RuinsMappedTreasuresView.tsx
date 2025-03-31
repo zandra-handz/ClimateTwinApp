@@ -2,10 +2,13 @@ import { View, Text, FlatList, StyleSheet } from "react-native";
 import React, { useState } from "react";
 import { useInteractiveElements } from "@/app/context/InteractiveElementsContext";
 import { useRouter } from "expo-router";
-import TreasureUICard from "../ItemChoicesComponents/TreasureUICard";
+import TreasureUICard from "./TreasureUICard";
 import { useSurroundingsWS } from "@/app/context/SurroundingsWSContext";
 
-const RuinsTreasuresView = () => {
+
+//Mapped = Item details influence groq/item query
+//used for Pexel images
+const RuinsMappedTreasuresView = () => {
   const router = useRouter();
   const { itemChoicesAsObjectExplore } = useInteractiveElements();
   const { lastLocationName } = useSurroundingsWS();
@@ -79,4 +82,4 @@ const RuinsTreasuresView = () => {
   );
 };
 
-export default RuinsTreasuresView;
+export default RuinsMappedTreasuresView;

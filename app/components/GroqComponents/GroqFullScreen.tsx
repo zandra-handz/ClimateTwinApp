@@ -6,6 +6,7 @@ import GoToItemButton from "../GoToItemButton";
 import PexelsTray from "../PexelsComponents/PexelsTray";
 import UnsplashTray from "../UnsplashComponents/UnsplashTray";
 import SmithsonianTray from "../SmithsonianComponents/SmithsonianTray";
+import INaturalistTray from "../INaturalistComponents/iNaturalistTray";
 
 import ComponentSpinner from "../Scaffolding/ComponentSpinner";
 import { useFocusEffect } from "expo-router";
@@ -18,6 +19,10 @@ const GroqFullScreen = ({
   isMinimized,
   isLoading,
   isKeyboardVisible,
+  base,
+  topic,
+  index,
+
 }) => {
   const {
     themeStyles,
@@ -29,15 +34,17 @@ const GroqFullScreen = ({
 
   const debug = true;
 
+  const iNaturalistImageSize = 350; 
   const [fadeAnim] = useState(new Animated.Value(0));
 
   useFocusEffect(
     React.useCallback(() => {
-      console.log("setting color to null in groqfullscreen");
+      //console.log("setting color to null in groqfullscreen");
       handleAvgPhotoColor(null);
+      console.log(`index in groqfullscreen: `, index);
 
       return () => {
-        console.log("setting color to null in groqfullscreen return");
+        //console.log("setting color to null in groqfullscreen return");
         handleAvgPhotoColor(null);
       };
     }, [])
@@ -70,7 +77,8 @@ const GroqFullScreen = ({
           
          <BackgroundFadeIn triggerFade={true} />
          
-        )} */}
+        )} */} 
+                  
           <Animated.View
             style={[
               appContainerStyles.groqScrollFullScreenContainer,
@@ -92,62 +100,72 @@ const GroqFullScreen = ({
               },
             ]}
           >
+
             {/* <BackgroundFadeIn triggerFade={true} /> */}
             {!dataObject?.altImageSearchQuery && (
               <ComponentSpinner showSpinner={true} /> //backgroundColor={themeStyles.primaryBackground}/>
             )}
             {/* {value && ( */}
-
-            {dataObject && dataObject.altImageSearchQuery && (
+{/* 
+            {((dataObject && dataObject.altImageSearchQuery) || index) && ( */}
               <View
                 style={{
                   flexDirection: "column",
                   paddingHorizontal: 10,
-                  paddingVertical: 8,
+                  paddingVertical: 8, 
 
                   width: "100%",
-                  justifyContent: "flex-start",
+                  justifyContent: "flex-end",
                 }}
               >
+                                  {!isMinimized && index && (
+              <View style={{ width: "100%", height: iNaturalistImageSize , justifyContent: 'center', alignItems: 'center'  }}>
+                      <INaturalistTray
+                        index={index}
+                        item={null}
+                        topic={topic}
+                        base={base}
+                        onPress={() => console.log('Disable this empty onPress in GroqFullScreen')}
+                        height={iNaturalistImageSize }
+                        width={iNaturalistImageSize }
+
+                      />
+                    </View> 
+               )}
+
+{!isMinimized && dataObject?.altImageSearchQuery && !index && (
                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                   {/* just change the -Tray prefix to change hook to an unsplash image */}
-                  {!isMinimized && dataObject?.altImageSearchQuery && (
+    
+        
                     <View style={{ width: "16%", marginRight: 20 }}>
                       <PexelsTray
                         queryString={dataObject?.altImageSearchQuery}
                         base={dataObject?.base || null}
                         photoNumber={1}
                       />
-                    </View>
-                  )}
-                  {!isMinimized && dataObject?.altImageSearchQuery && (
+                    </View>  
                     <View style={{ width: "16%", marginRight: 20 }}>
                       <PexelsTray
                         queryString={dataObject?.altImageSearchQuery}
                         base={dataObject?.base || null}
                         photoNumber={2}
                       />
-                    </View>
-                  )}
-                  {!isMinimized && dataObject?.altImageSearchQuery && (
+                    </View>  
                     <View style={{ width: "16%", marginRight: 20 }}>
                       <PexelsTray
                         queryString={dataObject?.altImageSearchQuery}
                         base={dataObject?.base || null}
                         photoNumber={3}
                       />
-                    </View>
-                  )}
-
-                  {!isMinimized && dataObject?.altImageSearchQuery && (
+                    </View>  
                     <View style={{ width: "16%", marginRight: 20 }}>
                       <PexelsTray
                         queryString={dataObject?.altImageSearchQuery}
                         base={dataObject?.base || null}
                         photoNumber={4}
                       />
-                    </View>
-                  )}
+                    </View> 
 
                   {/* {!isMinimized && dataObject?.altImageSearchQuery && (
                     <View style={{ width: "16%", marginRight: 20 }}>
@@ -159,6 +177,7 @@ const GroqFullScreen = ({
                     </View>
                   )} */}
                 </ScrollView>
+)}
 
                 {/* 
                 {!isMinimized && images && !pexelImages && (
@@ -178,7 +197,7 @@ const GroqFullScreen = ({
                     
                 )} */}
                 <View
-                  style={{
+                  style={{ 
                     flexDirection: "row",
                     width: "100%",
                     height: 72,
@@ -197,11 +216,12 @@ const GroqFullScreen = ({
                 {!isMinimized && (
                   <View
                     style={{
-                      height: images[0] ? "44%" : "90%",
+                      height: images[0] ? "44%" : "34%",
                       width: "100%",
                       backgroundColor:
                         themeStyles.primaryBackground.backgroundColor,
                       padding: 20,
+                      marginTop: 10,
                       borderRadius: 20,
                     }}
                   >
@@ -231,7 +251,7 @@ const GroqFullScreen = ({
                   </View>
                 )}
               </View>
-            )}
+            {/* )} */}
           </Animated.View>
         </>
       )}

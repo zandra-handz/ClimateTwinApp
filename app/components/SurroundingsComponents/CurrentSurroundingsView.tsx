@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import { View, ScrollView } from "react-native";
 import { useInteractiveElements } from "@/app/context/InteractiveElementsContext";
-import RuinsTreasuresView from "../ItemChoicesComponents/RuinsTreasuresView";
-import PortalTreasuresView from "../ItemChoicesComponents/PortalTreasuresView";
+import RuinsMappedTreasuresView from "../ItemChoicesComponents/RuinsMappedTreasuresView";
+import PortalMappedTreasuresView from "../ItemChoicesComponents/PortalMappedTreasuresView";
+import PortalUnmappedTreasuresView from "../ItemChoicesComponents/PortalUnmappedTreasuresView";
 import { useGroqContext } from "@/app/context/GroqContext";
 import INaturalistTray from "../INaturalistComponents/iNaturalistTray";
 import useINaturalist from "@/app/hooks/useINaturalist";
@@ -35,33 +36,34 @@ const CurrentSurroundingsView = ({ height }) => {
 
      
       {iNaturalist && iNaturalist.results && iNaturalist.results.length > 0 && (
-        <View
-          style={{
-            flexDirection: "column",
-            paddingHorizontal: 10,
-            paddingVertical: 8,
-            width: "100%",
-            justifyContent: "flex-start",
-          }}
-        >
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {iNaturalist.results.map((item, index) => (
-              <View key={index} style={{ width: 300, marginRight: 20 }}>
-                {/* Pass the observation data to the INaturalistTray */}
-                <INaturalistTray index={index} observation={item} onPress={() => console.log('iNaturalist card pressed!')} />
-              </View>
-            ))}
-          </ScrollView>
-        </View>
+        <PortalUnmappedTreasuresView />
+        // <View
+        //   style={{
+        //     flexDirection: "column",
+        //     paddingHorizontal: 10,
+        //     paddingVertical: 8,
+        //     width: "100%",
+        //     justifyContent: "flex-start",
+        //   }}
+        // >
+        //   <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+        //     {iNaturalist.results.map((item, index) => (
+        //       <View key={index} style={{ width: 300, marginRight: 20 }}>
+        //         {/* Pass the observation data to the INaturalistTray */}
+        //         <INaturalistTray index={index} observation={item} onPress={() => console.log('iNaturalist card pressed!')} />
+        //       </View>
+        //     ))}
+        //   </ScrollView>
+        // </View>
       )}
 
       {groqHistory && (
         <View style={{ height: height }}>
           {Object.keys(itemChoicesAsObjectExplore).length > 0 && (
-            <RuinsTreasuresView />
+            <RuinsMappedTreasuresView />
           )}
           {Object.keys(itemChoicesAsObjectTwin).length > 0 && (
-            <PortalTreasuresView />
+            <PortalMappedTreasuresView />
           )}
         </View>
       )}

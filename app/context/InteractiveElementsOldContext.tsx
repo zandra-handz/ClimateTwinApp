@@ -199,35 +199,6 @@ export const InteractiveElementsProvider: React.FC<InteractiveElementsProviderPr
     });
   };
 
-
-const formatLocationProperties = (location: TwinLocationDetails | ExploreLocationDetails | null, prefix: string) => {
-  if (!location) return [];
-
-  return Object.entries(location).map(([key, value]) => {
-    // Prefix the key with 'prefix__' and keep the original key.
-    const formattedKey = `${prefix}__${key}`;
-    
-    // Ensure value is not null or undefined. If it is, use the string "null".
-    const formattedValue = value ?? "null"; 
-
-    return [formattedKey, formattedValue];
-  });
-};
-
-
-const twinLocationProperties = formatLocationProperties(
-  itemChoicesResponse?.choices?.twin_location,
-  "twin_location"
-);
-
-const exploreLocationProperties = formatLocationProperties(
-  itemChoicesResponse?.choices?.explore_location,
-  "explore_location"
-);
-
-const locationPropertiesList = [...twinLocationProperties, ...exploreLocationProperties];
-
-
   useEffect(() => {
     const unsubscribe = queryClient.getQueryCache().subscribe((event) => {
       if (event.query.queryKey[0] === 'itemChoices') {
@@ -250,7 +221,7 @@ const locationPropertiesList = [...twinLocationProperties, ...exploreLocationPro
 
   return (
     <InteractiveElementsContext.Provider 
-      value={{ itemChoices, locationPropertiesList, itemChoicesAsObject, itemChoicesAsObjectTwin, itemChoicesAsObjectExplore, triggerItemChoicesRefetch }}
+      value={{ itemChoices, itemChoicesAsObject, itemChoicesAsObjectTwin, itemChoicesAsObjectExplore, triggerItemChoicesRefetch }}
     >
       {children}
     </InteractiveElementsContext.Provider>

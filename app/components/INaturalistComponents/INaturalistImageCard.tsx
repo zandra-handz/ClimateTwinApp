@@ -1,4 +1,4 @@
-import { View, Text } from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import React, { useEffect } from "react";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import { Image } from "expo-image";
@@ -10,6 +10,12 @@ const INaturalistImageCard = ({
   scientificLabel,
   label,
   accessibilityLabel,
+  base,
+  index, //to find image in groq
+  query, //for groq to search
+  onPress, //navs to collect screen
+  width=300,
+  height=300,
 }) => {
   const {
     themeStyles,
@@ -26,11 +32,17 @@ const INaturalistImageCard = ({
     }, [])
   );
 
+  const handlePress = () => {
+    onPress(query, base, query, index);
+
+  };
+
   const debug = false;
   const imageUrl = value || null;
 
   return (
-    <View
+    <TouchableOpacity
+      onPress={handlePress}
       style={[
         appContainerStyles.groqImageContainer, 
       ]}
@@ -40,15 +52,15 @@ const INaturalistImageCard = ({
           flexDirection: "row",
           paddingHorizontal: 0,
           paddingVertical: 0,
-          height: 300,
-          width: 300,
+          height: height,
+          width: width,
           justifyContent: "center",
           borderRadius: 30,
           overflow: "hidden",
         }}
       >
         {!imageUrl && (
-          <View style={{ width: 300, height: 300, borderRadius: 30 }}>
+          <View style={{ width: width, height: height, borderRadius: 30 }}>
             <ComponentSpinner showSpinner={true} />
           </View>
         )}
@@ -76,7 +88,7 @@ const INaturalistImageCard = ({
             <Image
               key={imageUrl}
               source={{ uri: imageUrl, cache: "reload" }} // Force image reload
-              style={{ width: 300, height: 300, borderRadius: 30 }}
+              style={{ width: width, height: height, borderRadius: 30 }}
               accessibilityLabel={accessibilityLabel || "No label available"}
               contentFit="cover"
               //onError={() => setImgSource(require("./fallback-image.png"))}
@@ -84,7 +96,7 @@ const INaturalistImageCard = ({
           </>
         )}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 export default INaturalistImageCard;

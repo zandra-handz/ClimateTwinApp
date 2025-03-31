@@ -16,15 +16,18 @@ import TextInputLine from "@/app/components/TextInputLine";
 import TextInputBlock from "@/app/components/TextInputBlock";
 import GroqItem from "@/app/components/GroqComponents/GroqItem";
 import { useFocusEffect } from "expo-router"; 
- 
-
+  
 
 const collect = () => {
-  const { name, topic, base } = useLocalSearchParams<{
+  const { name, topic, base, query, index } = useLocalSearchParams<{
     name: string | null;
     topic: string | null;
     base: string | null;
+    query: string | null;
+    index: string | null;
   }>();
+
+  const iNaturalistIndex = index ? Number(index) : null; 
 
   const locationData = { name, topic, base };
 
@@ -233,27 +236,7 @@ const collect = () => {
         />
       </View>
     );
-  };
-
-  // const handleNext = (index) => {
-  //   const currentItem = inputData[index];
-  //   currentItem.onSubmitEditing();
-
-  //   const nextIndex = index + 1;
-  //   if (nextIndex < inputData.length) {
-  //     flatListRef.current?.scrollToIndex({ index: nextIndex, animated: true });
-
-  //     if (nextIndex === 1 && editedTextRef.current) {
-  //       editedTextRef.current.focusText();
-  //     } else if (nextIndex === 2 && additionalTextRef.current) {
-  //       additionalTextRef.current.focusText();
-  //     } else {
-  //       console.log("Refs not ready yet");
-  //     }
-
-  //     setFocusedIndex(nextIndex);
-  //   }
-  // };
+  }; 
 
   const handleNext = (index) => {
     const currentItem = inputData[index];
@@ -299,6 +282,7 @@ const collect = () => {
   };
 
   const handleCollect = () => { 
+    console.log(locationData);
     if (locationData && editedTextRef.current) {
       const parsedValue = JSON.parse(locationData?.base);
       const firstString = parsedValue[0]; 
@@ -360,9 +344,11 @@ const collect = () => {
           title={"Treasure found by Groq"}
           base={base}
           topic={topic}
+          query={query}
           isMinimized={isMinimized}
           fullScreenToggle={handleFullScreenToggle}
           isKeyboardVisible={isKeyboardVisible}
+          index={iNaturalistIndex}
         /> 
       <ActionsFooter
         height={isKeyboardVisible ? 40 : 66}

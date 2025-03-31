@@ -87,7 +87,10 @@ export const GroqProvider: React.FC = ({ children }) => {
       onSuccess: () => {},
     });
   
-    const getRoleAndPrompt = (keyword: string, locationGroqHistory: string) => {
+    const getRoleAndPrompt = (keyword: string, locationGroqHistory: string, query: string) => {
+      if (query) {
+        return { role: 'You are an explorer, a diligent fact checker and a lover of nature!', prompt: `Please describe ${query} found at coordinates ${latitude}, ${longitude}. Please incorporate current weather conditions into your description, as found here: ${locationGroqHistory}`}
+      }
       if (keyword === "plants" || keyword === "trees") {
         return { role: rolePlant, prompt: findMeAPlant(latitude, longitude, locationGroqHistory, "ONE") };
       } else if (keyword === "birds") {
@@ -99,9 +102,9 @@ export const GroqProvider: React.FC = ({ children }) => {
     };
   
     const groqItemMutation = useMutation({
-      mutationFn: ({ keyword, base, groqHistory }) => {
+      mutationFn: ({ keyword, base, groqHistory, query }) => {
     
-        const { role, prompt } = getRoleAndPrompt(keyword, groqHistory);
+        const { role, prompt } = getRoleAndPrompt(keyword, groqHistory, query);
         if (role && prompt) {
           return talkToGroq({ role, prompt });
         }
@@ -146,8 +149,8 @@ export const GroqProvider: React.FC = ({ children }) => {
       },
     });
   
-    const handleGetGroqItem = (keyword: string, base: string, groqHistory: string) => {
-        if (!lastLocationId) {
+    const handleGetGroqItem = (keyword: string, base: string, groqHistory: string, query?: string | null) => {
+      if (!lastLocationId) {
             console.error("no lastLocationId found to get groq item with");
             return; // Add return here to stop the function execution
           }
@@ -161,7 +164,7 @@ export const GroqProvider: React.FC = ({ children }) => {
       const cachedData = queryClient.getQueryData(queryKey);
       if (cachedData) return;
   
-      groqItemMutation.mutate({ keyword, base, groqHistory });
+      groqItemMutation.mutate({ keyword, base, groqHistory, query });
     };
   
     const extendGroqStaleTime = () => {

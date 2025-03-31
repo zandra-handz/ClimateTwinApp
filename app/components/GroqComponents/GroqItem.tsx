@@ -13,9 +13,11 @@ const GroqItem = ({
   title,
   base,
   topic,
+  query,
   isMinimized,
   fullScreenToggle,
   isKeyboardVisible,
+  index,
 }) => {
   const { lastLocationId } = useSurroundingsWS();
   //const { handleGetGroqItem, groqItemMutation } = useGroq();
@@ -53,7 +55,7 @@ const GroqItem = ({
           console.log("no data in cache");
      
             
-          await handleGetGroqItem(topic, base, groqHistory);
+          await handleGetGroqItem(topic, base, groqHistory, query);
            
         }
 
@@ -154,14 +156,16 @@ const GroqItem = ({
     {/* {dataObject && dataObject?.altImageSearchQuery && ( */}
       
         <GroqFullScreen
-          dataObject={dataObject || null}
-          opacity={1} 
-          searchKeyword={keyword}
-          images={responseMessage?.images} 
+          dataObject={dataObject || {}}
+          opacity={1}  
+          images={responseMessage?.images || []} 
           fullScreenToggle={fullScreenToggle}
           isMinimized={isMinimized}
           isLoading={showSpinner}
           isKeyboardVisible={isKeyboardVisible}
+          index={index || null}
+          base={base}
+          topic={topic}
         />
         
     {/* )} */}
