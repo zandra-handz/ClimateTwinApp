@@ -18,17 +18,21 @@ const GoButton = ({ address }) => {
           <TouchableOpacity
             onPress={!searchIsActive ? handleButtonPress : () => {}}
             style={[
-              appContainerStyles.goButtonContainer,
+              appContainerStyles.bigGoButtonContainer,
               themeStyles.primaryOverlayBackground,
               { borderColor: themeStyles.tabBarHighlightedText.color },
             ]}
           >
             <>
+            <View style={{flexWrap: 'flex', textAlign: 'center', alignItems: 'center', justifyContent: 'center', flex: 1, width: '100%'}}>
+              
               <Text
                 style={[themeStyles.primaryText, appFontStyles.goButtonText]}
               >
-                GO
+                Open a portal
               </Text>
+              
+            </View>
               {remainingGoes != "No limit" && (
                 <Text
                   style={[

@@ -7,7 +7,6 @@ const useHomeLocation = () => {
 
   // Retrieve the formatted location data from the cache
     const homeLocation = queryClient.getQueryData('homeLocation');
-
     const homeRegion = queryClient.getQueryData('homeRegion');
     
 

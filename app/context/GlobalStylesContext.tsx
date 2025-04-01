@@ -250,6 +250,36 @@ const containerStyles = StyleSheet.create({
    
 
   },
+  mapHomeScreenContainer: {
+    overflow: 'hidden',
+    alignContent: 'center',
+    textAlign: 'center',
+    alignItems: 'center', 
+    borderRadius: 240 / 2,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    flexWrap: 'wrap', 
+    height: 240,
+    width: 240, 
+    borderWidth: StyleSheet.hairlineWidth,
+    
+  }, 
+  bigGoButtonContainer: {
+    overflow: 'hidden',
+    alignContent: 'center',
+    textAlign: 'center',
+    alignItems: 'center',
+    paddingVertical: 7,
+    paddingHorizontal: 16,
+    borderRadius: 240 / 2,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    flexWrap: 'wrap', 
+    height: 240,
+    width: 240, 
+    borderWidth: StyleSheet.hairlineWidth,
+    
+  }, 
   goButtonContainer: {
     overflow: 'hidden',
     textAlign: 'center',
@@ -876,6 +906,21 @@ const containerStyles = StyleSheet.create({
     bottom: 78,
     borderWidth: StyleSheet.hairlineWidth
   },
+  groqHistoryScrollContainer: {
+    borderRadius: 20, 
+    padding: 10,  
+    width: '100%', 
+    alignSelf: 'center', 
+    alignItems: 'center',
+    justifyContent: 'center', 
+ 
+   // height: 270, managed dynamically now, 360 for portal, 270 for ruins
+    overflow: 'hidden', 
+    zIndex: 100,
+    position: 'absolute',
+    bottom: 78,
+    borderWidth: StyleSheet.hairlineWidth
+  },
   groqScrollFullScreenContainer: {
     borderRadius: 20, 
     padding: 10,  
@@ -988,7 +1033,8 @@ const fontStyles = StyleSheet.create({
 
   },
   goButtonText: {
-    fontSize: 60,
+    fontSize: 50, 
+    textAlign: 'center',  
 
   },
   smallGoButtonText: {

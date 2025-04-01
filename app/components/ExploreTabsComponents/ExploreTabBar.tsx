@@ -1,4 +1,5 @@
 import { View } from "react-native";
+import React, { useState } from 'react';
 import { useLinkBuilder } from "@react-navigation/native";
 import { Text, TouchableOpacity } from "react-native";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
@@ -7,10 +8,11 @@ import NearbyButton from "./NearbyButton";
 import { useActiveSearch } from "../../context/ActiveSearchContext";
 
 
-function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled }) {
+function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled, openDoubleChecker }) {
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
   const { buildHref } = useLinkBuilder();
   const { exploreLocationsAreReady } = useActiveSearch();
+  const [ doubleCheckerVisible, setDoubleCheckerVisible ] = useState(false);
 
   const icons = {
     index: (props) => (
@@ -36,8 +38,16 @@ function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled }) {
     ),
   };
 
+  const handleCloseDoubleChecker = () => {
+    console.log('pressed no on go home double checker');
+    setDoubleCheckerVisible(false)
+  };
+
   return (
+    <>
+
     <View style={[themeStyles.darkerBackground, appContainerStyles.exploreTabBarContainer]}>
+  
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];
         const label =
@@ -52,6 +62,12 @@ function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled }) {
         const isFocused = state.index === index;
 
         const onPress = () => {
+          // const isHomeButton = route.name === "home"; 
+          // if (isHomeButton) {
+          //   setDoubleCheckerVisible(true);
+          //   return; // Prevent further execution
+          
+          // } else 
           if (route.name === 'nearby' && !exploreLocationsAreReady) return; // Prevent navigation if disabled
 
           const event = navigation.emit({
@@ -73,10 +89,12 @@ function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled }) {
         };
 
         // Check if this is the "nearby" tab and apply the disabled condition
+       
         const isNearbyTab = route.name === "nearby";
         const disabled = isNearbyTab && isNearbyDisabled;
 
         return (
+          <>
           <TouchableOpacity
             key={route.name}
             style={[
@@ -114,9 +132,16 @@ function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled }) {
               {label === "index" ? "now" : label}
             </Text>
           </TouchableOpacity>
+
+  
+          </>
         );
       })}
+            
+           
     </View>
+
+        </>
   );
 }
 

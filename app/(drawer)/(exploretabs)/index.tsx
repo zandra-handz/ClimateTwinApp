@@ -13,16 +13,14 @@ import PortalSurroundingsView from "@/app/components/SurroundingsComponents/Port
 import RuinsSurroundingsView from "@/app/components/SurroundingsComponents/RuinsSurroundingsView";
 
 import { useUser } from "@/app/context/UserContext";
-
-import useLiveWeather from "@/app/hooks/useLiveWeather";
+ 
 
 import NotificationNotifier from "@/app/components/NotificationNotifier";
 
 import PortalBanner from "@/app/components/PortalBanner";
  
-import GroqHistory from "@/app/components/GroqComponents/GroqHistory";
-import useLLMScripts from "@/app/llm/useLLMScripts";
-import useINaturalist from "@/app/hooks/useINaturalist";
+import GroqHistory from "@/app/components/GroqComponents/GroqHistory"; 
+
 
 const index = () => {
   const { user } = useUser();

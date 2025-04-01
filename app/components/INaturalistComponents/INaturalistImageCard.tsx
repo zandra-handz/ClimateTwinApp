@@ -36,7 +36,8 @@ const INaturalistImageCard = ({
   );
 
   const handlePress = () => {
-    onPress(query, base, query, index);
+    const adjustedIndex = index + 1;
+    onPress(query, base, query, adjustedIndex);
 
   };
 

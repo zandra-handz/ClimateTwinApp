@@ -5,16 +5,19 @@ import { useGlobalStyles } from "../context/GlobalStylesContext";
 import GroqImageCard from "./GroqComponents/GroqImageCard";
 
 import ComponentSpinner from "./Scaffolding/ComponentSpinner";
+import { useSurroundings } from "../context/CurrentSurroundingsContext";
 
 const ScrollDetailPanel = ({ label, value, opacity, images, isLoading=false }) => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
+  const { ruinsSurroundings, portalSurroundings } = useSurroundings(); // used to change the height of the groq Container
+
 
   return (
     <Animated.View
       style={[
-        appContainerStyles.scrollDetailPanelContainer,
+        appContainerStyles.groqHistoryScrollContainer,
         themeStyles.darkerBackground,
-        { opacity: opacity || 1 },
+        { opacity: opacity || 1, height: ruinsSurroundings.id? 270 : 360 },
       ]}
     >
               {isLoading && (

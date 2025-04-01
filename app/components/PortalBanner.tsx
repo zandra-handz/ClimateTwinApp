@@ -70,7 +70,7 @@ const PortalBanner = () => {
           
    
         </View> 
-        <GoHomeButton />
+        {/* <GoHomeButton /> */}
         </>
       )} 
       

@@ -25,7 +25,7 @@ const PortalSurroundingsView = ({ height, triggerParentAutoScroll }) => {
  
   };
 
-  const overlayColor = `${themeStyles.primaryBackground.backgroundColor}99`;
+  const overlayColor = `${themeStyles.primaryBackground.backgroundColor}CC`; //99 is slightly lighter
 
 
   return (

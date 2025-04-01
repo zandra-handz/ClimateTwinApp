@@ -3,9 +3,7 @@ import { View } from "react-native";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import { useGeolocationWatcher } from "../../hooks/useCurrentLocationWatcher";
 import useHomeLocation from "../../hooks/useHomeLocation";
-import { useActiveSearch } from "../../context/ActiveSearchContext";
-import PortalBanner from "@/app/components/PortalBanner";
- 
+import { useActiveSearch } from "../../context/ActiveSearchContext"; 
 import HomeSurroundingsView from "@/app/components/HomeSurroundingsComponents/HomeSurroundingsView";
  
 import { useSurroundings } from "../../context/CurrentSurroundingsContext";

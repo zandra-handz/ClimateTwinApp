@@ -42,10 +42,12 @@ const GroqFullScreen = ({
   const [fadeAnim] = useState(new Animated.Value(0));
   const [ wiki, setWiki ] = useState(null);
 
+  const reAdjustedIndex = index ? index - 1 : null;
+
   
 
-  const wikiLink = iNaturalist.results[index]?.taxon?.wikipedia_url
-    ? iNaturalist.results[index].taxon.wikipedia_url.replace(/^http:/, "https:")
+  const wikiLink = iNaturalist.results[reAdjustedIndex]?.taxon?.wikipedia_url
+    ? iNaturalist.results[reAdjustedIndex].taxon.wikipedia_url.replace(/^http:/, "https:")
     : null;
 
   console.log(wikiLink);
@@ -54,6 +56,7 @@ const GroqFullScreen = ({
     React.useCallback(() => {
       handleAvgPhotoColor(null);
       console.log(`index in groqfullscreen: `, index);
+      console.log(`index in groqfullscreen: `, reAdjustedIndex);
 
       return () => {
         handleAvgPhotoColor(null);
@@ -115,7 +118,7 @@ const GroqFullScreen = ({
               }}
             >
               <INaturalistTray
-                index={index}
+                index={reAdjustedIndex}
                 item={null}
                 topic={topic}
                 base={base}
@@ -228,6 +231,8 @@ const GroqFullScreen = ({
                 mixedContentMode="always"
                 startInLoadingState={true}
                 onError={(error) => console.error("WebView error:", error)}
+                androidLayerType="hardware"
+                forceDarkOn={true}
               />
             </View>
           )}

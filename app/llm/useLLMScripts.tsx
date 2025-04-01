@@ -55,17 +55,16 @@ const useLLMScripts = () => {
 
   // Please repeat the 
   // data I sent you so I can confirm it is getting to you successfully.
-
+//     Please print out this data I sent you so that I can review it for testing purposes.
+//but please DO print out the data I sent you so that I can review for testing purposes.
   const tellMeRecentHistoryOf = (lat, long, name, liveWeather) => {
 
     return `Can you please look at this data from OpenWeatherMap about my current location,
      and then describe to me how the weather feels and how the wind feels and 
      what nature/the outdoors aronud me look like? Data: ${liveWeather}.(THE TEMPERATURE IN THIS DATA IS IN FAHRENHEIT!!!) 
-     Please print out this data I sent you
-    so that I can review it for testing purposes.
+
      (Please do NOT explicity
-     mention that I sent you OpenWeatherMap data, but please DO print out the data I sent you so
-     that I can review for testing purposes.) Make your answer CONCISE and remove 90%
+     mention that I sent you OpenWeatherMap data.) Make your answer CONCISE and remove 90%
      of your adjectives.
    
     Please include the name of my location, and what country I am in,

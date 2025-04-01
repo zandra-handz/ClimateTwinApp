@@ -1,12 +1,19 @@
-import React, { useMemo, useRef, useState } from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useUser } from "../context/UserContext";
-import { getInboxItems, getInboxItem, acceptTreasureGift } from "../apicalls";
-
-// Define types for inbox items and messages
 
   
 const useDateTimeFunctions = () => { 
+
+
+  const getCurrentDateValues = () => {
+    const isoString = new Date().toISOString(); // Example: "2025-04-01T14:30:00.000Z"
+    const [year, month, day] = isoString.split("T")[0].split("-"); // Split the date part
+
+    return {
+        year: Number(year),
+        month: Number(month),
+        day: Number(day)
+    };
+}
+
  
  
 
@@ -37,6 +44,7 @@ const useDateTimeFunctions = () => {
 
 
   return { 
+    getCurrentDateValues,
     formatUTCToMonthDayYear,
     getTimeDifferenceInSeconds,
   };

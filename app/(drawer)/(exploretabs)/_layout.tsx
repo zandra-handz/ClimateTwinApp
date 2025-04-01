@@ -1,15 +1,25 @@
 import { Tabs } from "expo-router";
+import React, { useState } from 'react';
 import ExploreTabBar from '../../components/ExploreTabsComponents/ExploreTabBar';
 import CustomStatusBar from "../../components/CustomStatusBar";
 
+import DoubleChecker from "@/app/components/Scaffolding/DoubleChecker";
+
+
 
 export default () => {
+  const [ doubleCheckerVisible, setDoubleCheckerVisible ] = useState(false);
+  
+  const openDoubleChecker = () => {
+    setDoubleCheckerVisible(true);
+  }
+  
   return (
     <>
-    <CustomStatusBar/>
+    <CustomStatusBar/> 
   
     <Tabs 
-    tabBar={props=> <ExploreTabBar {...props} />}
+    tabBar={props=> <ExploreTabBar {...props} openDoubleChecker={openDoubleChecker}  />}
     > 
 
             <Tabs.Screen name="home" />
