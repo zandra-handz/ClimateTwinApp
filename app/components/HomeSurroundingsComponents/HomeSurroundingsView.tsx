@@ -3,7 +3,7 @@ import React from "react";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import CurrentSurroundingsUICard from "../SurroundingsComponents/CurrentSurroundingsUICard";
 import { useSurroundings } from "../../context/CurrentSurroundingsContext";
-import ThreeJS from "../ThreeJS";
+ 
 
 const HomeSurroundingsView = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
@@ -32,7 +32,7 @@ const HomeSurroundingsView = () => {
   return (
     <View style={styles.container}>
       <View style={{ backgroundColor: 'red', height: 300, width: 300, borderWidth: 2, borderColor: 'blue' }}>
-        <ThreeJS />
+     
       </View>
       {/* Uncomment other components once ThreeJS is working */}
       {/* <Text style={[styles.title, appFontStyles.text]}>Current Surroundings</Text> */}

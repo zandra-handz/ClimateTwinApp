@@ -5,6 +5,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useFocusEffect } from "expo-router";
 import useLiveWeather from '@/app/hooks/useLiveWeather';
 import { useGroqContext } from "@/app/context/GroqContext";
+import collect from "@/app/(drawer)/(treasures)/collect";
 // import usePexels from "@/app/hooks/usePexels";
 
 const GroqItem = ({
@@ -14,22 +15,17 @@ const GroqItem = ({
   base,
   topic,
   query,
-  isMinimized,
-  fullScreenToggle,
+  isMinimized, 
   isKeyboardVisible,
   index,
+  goToCollect,
+  collectInProgress, //boolean
 }) => {
-  const { lastLocationId } = useSurroundingsWS();
-  //const { handleGetGroqItem, groqItemMutation } = useGroq();
+  const { lastLocationId } = useSurroundingsWS(); 
   const { groqHistory, handleGetGroqItem, groqItemMutation } = useGroqContext();
 
   const [dataObject, setDataObject] = useState({});
-    // textHeader: null,
-    // textBody: null,
-    // textBodyImagesArray: null,
-    // altImageSearchQuery: null,
-    // base: null,
-    // topic: null});
+ 
 
   const debug = true;
 
@@ -152,23 +148,22 @@ const GroqItem = ({
   }, [groqItemMutation.isPending]);
 
   return (
-    <> 
-    {/* {dataObject && dataObject?.altImageSearchQuery && ( */}
+    <>  
       
         <GroqFullScreen
           dataObject={dataObject || {}}
           opacity={1}  
-          images={responseMessage?.images || []} 
-          fullScreenToggle={fullScreenToggle}
+          images={responseMessage?.images || []}  
           isMinimized={isMinimized}
           isLoading={showSpinner}
           isKeyboardVisible={isKeyboardVisible}
           index={index || null}
           base={base}
           topic={topic}
+          goToCollect={goToCollect}
+          collectInProgress={collectInProgress}
         />
-        
-    {/* )} */}
+         
      
     </>
   );

@@ -27,6 +27,26 @@ const collect = () => {
     index: string | null;
   }>();
 
+  const { descriptor, additional, noteEdit, placeSaver: placeSaverString } = useLocalSearchParams();
+
+  const placeSaver = placeSaverString ? Number(placeSaverString) : 0;  
+  
+
+// useEffect(() => {
+
+
+//   if (descriptorTextRef.current && descriptor) {
+//     descriptorTextRef.current.setText(descriptor);
+//   }
+//   if (additionalTextRef.current && additional) {
+//     additionalTextRef.current.setText(additional);
+//   }
+//   if (editedTextRef.current && noteEdit) {
+//     editedTextRef.current.setText(noteEdit);
+//   }
+  
+// }, []);
+
   const iNaturalistIndex = index ? Number(index) : null; 
 
   const locationData = { name, topic, base };
@@ -52,16 +72,28 @@ const collect = () => {
 
   useFocusEffect(
     React.useCallback(() => {
-      handleAvgPhotoColor(null); 
-      handleFullScreenToggle();
-      setIsMinimized(false);
-   
-      Keyboard.dismiss(); 
 
-      return () => {
-        handleAvgPhotoColor(null);
-        setIsMinimized(false);
-        resetFields();
+      if (descriptorTextRef.current && descriptor) {
+        descriptorTextRef.current.setText(descriptor);
+      }
+      if (additionalTextRef.current && additional) {
+        additionalTextRef.current.setText(additional);
+      }
+      if (editedTextRef.current && noteEdit) {
+        editedTextRef.current.setText(noteEdit);
+      }
+      //openKeyboard();
+
+      if (placeSaver) {
+        handlePlaceSaver(placeSaver);
+      } else {
+        
+      handleStart();
+      
+    }
+
+      return () => { 
+       // resetFields();
       };
     }, [])
   );
@@ -77,23 +109,11 @@ const collect = () => {
     }).start();
   }, [avgPhotoColor]);
  
-  const openKeyboard = () => {
-    if (descriptorTextRef.current) {
-      descriptorTextRef.current.focusText();
-    }
-  };
-
-  const handleFullScreenToggle = () => {
-    if (isMinimized) {
-      setIsMinimized(false);
-      Keyboard.dismiss();
-    } else {
-      console.log('minimizing groq component');
-      setIsMinimized(true);
-      openKeyboard();
-      handleStart();
-    }
-  };
+  // const openKeyboard = () => {
+  //   if (descriptorTextRef.current) {
+  //     descriptorTextRef.current.focusText();
+  //   }
+  // }; 
 
   useEffect(() => {
     if (collectTreasureMutation.isSuccess) {
@@ -146,6 +166,23 @@ const collect = () => {
     }
   };
 
+  const handleBack = () => {
+    router.replace({
+      pathname: "(treasures)/interact", // Go back to the previous screen
+      params: {
+        name,
+        topic,
+        base,
+        query,
+        index,
+        descriptor: descriptorTextRef.current?.getText() || "",
+        additional: additionalTextRef.current?.getText() || "",
+        noteEdit: editedTextRef.current?.getText() || "",
+        placeSaver: focusedIndex || 0,
+      },
+    });
+  };
+  
   const ITEM_HEIGHT = 160;
   const SPACER = 16;
 
@@ -193,6 +230,25 @@ const collect = () => {
       setFocusedIndex(viewableItems[0].index);
     }
   }, []);
+
+  const handlePlaceSaver = (saved) => {
+    setTimeout(() => {
+    flatListRef.current?.scrollToIndex({ index: saved, animated: true,         // Using the callback to focus after scrolling
+      onScrollToIndexFailed: (error) => {
+        // Handle failure (if any) by logging or retrying
+        console.error("Scroll failed:", error);
+      }, });
+    
+    if (saved === 1 && editedTextRef.current) {
+      editedTextRef.current.focusText();
+    } else if (saved === 2 && additionalTextRef.current) {
+      additionalTextRef.current.focusText();
+    } else if (descriptorTextRef.current) {
+      descriptorTextRef.current.focusText();
+    }
+    }, 300);
+    setFocusedIndex(saved);
+  };
 
   const handleStart = () => {
     flatListRef.current?.scrollToIndex({ index: 0, animated: true });
@@ -336,23 +392,10 @@ const collect = () => {
             index,
           })}
         />
-      </View>
- 
-        <GroqItem
-        //locationParamsData={locationData}
-          name={name}
-          title={"Treasure found by Groq"}
-          base={base}
-          topic={topic}
-          query={query}
-          isMinimized={isMinimized}
-          fullScreenToggle={handleFullScreenToggle}
-          isKeyboardVisible={isKeyboardVisible}
-          index={iNaturalistIndex}
-        /> 
+      </View> 
       <ActionsFooter
         height={isKeyboardVisible ? 40 : 66}
-        onPressLeft={isMinimized ? handleFullScreenToggle : () => router.back()}
+        onPressLeft={handleBack}
         labelLeft={"Back"}
         onPressRight={handleCollect}
         labelRight={"Collect"}

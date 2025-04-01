@@ -25,7 +25,7 @@ export const API_URL = 'https://api.inaturalist.org/v1/observations';
  
 
          const data = await response.json(); 
-         //console.log(`getINaturalist api call data: `, data);
+        // console.log(`getINaturalist api call data: `, data);
        
          return data;
      } catch (error) { 

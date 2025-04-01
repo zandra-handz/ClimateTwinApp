@@ -5,6 +5,7 @@ import { useGlobalStyles } from "@/app/context/GlobalStylesContext";
 import useINaturalist from "@/app/hooks/useINaturalist";
 
 
+
 //pass topic and base and pass those in to touchable on press to start allowing treasure saving
 const INaturalistTray = ({ index, item, topic, base, onPress, width=300, height=300 }) => {
   const { iNaturalist } = useINaturalist(); // Use iNaturalist data from the hook
@@ -21,6 +22,7 @@ const INaturalistTray = ({ index, item, topic, base, onPress, width=300, height=
   const label = iNaturalist.results[index]?.taxon?.preferred_common_name || "No common name available";
   const scientificLabel = iNaturalist.results[index]?.taxon?.preferred_common_name || "No common name available"
   const query = `${label} (${scientificLabel})`;
+  //const wikiLink = iNaturalist.results[index]?.taxon?.wikipedia_url || `No wiki available`;
         
 
   return (
@@ -39,7 +41,8 @@ const INaturalistTray = ({ index, item, topic, base, onPress, width=300, height=
     >
       {/* Render the image card with data from iNaturalist */}
       {iNaturalist && iNaturalist.results && iNaturalist.results[index] ? (
-        <INaturalistImageCard
+       
+       <INaturalistImageCard
           value={
             // Accessing medium_url from default_photo
             iNaturalist.results[index]?.taxon?.default_photo?.medium_url ||
@@ -58,6 +61,7 @@ const INaturalistTray = ({ index, item, topic, base, onPress, width=300, height=
           width={width}
           height={height}
         />
+ 
       ) : (
         <Text>No image available</Text> // Fallback in case data is missing
       )}

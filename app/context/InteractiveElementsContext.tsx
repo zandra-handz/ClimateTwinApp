@@ -1,9 +1,15 @@
-import React, { createContext, useContext, useEffect, ReactNode, useState } from 'react';
-import { useUser } from './UserContext';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getItemChoices } from '../apicalls';  
-import { useSurroundings } from './CurrentSurroundingsContext';
-import { useSurroundingsWS } from './SurroundingsWSContext';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  ReactNode,
+  useState,
+} from "react";
+import { useUser } from "./UserContext";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getItemChoices } from "../apicalls";
+import { useSurroundings } from "./CurrentSurroundingsContext";
+import { useSurroundingsWS } from "./SurroundingsWSContext";
 
 interface LocationDetails {
   id: number | null;
@@ -74,12 +80,16 @@ interface InteractiveElementsContextType {
   triggerItemChoicesRefetch: () => void;
 }
 
-const InteractiveElementsContext = createContext<InteractiveElementsContextType | undefined>(undefined);
+const InteractiveElementsContext = createContext<
+  InteractiveElementsContextType | undefined
+>(undefined);
 
 export const useInteractiveElements = (): InteractiveElementsContextType => {
   const context = useContext(InteractiveElementsContext);
   if (!context) {
-    throw new Error('useInteractiveElements must be used within an InteractiveElementsProvider');
+    throw new Error(
+      "useInteractiveElements must be used within an InteractiveElementsProvider"
+    );
   }
   return context;
 };
@@ -88,151 +98,124 @@ interface InteractiveElementsProviderProps {
   children: ReactNode;
 }
 
-export const InteractiveElementsProvider: React.FC<InteractiveElementsProviderProps> = ({ children }) => {
-  const { user, isAuthenticated, isInitializing } = useUser(); 
-  const { currentSurroundings, locationId  } = useSurroundings();
+export const InteractiveElementsProvider: React.FC<
+  InteractiveElementsProviderProps
+> = ({ children }) => {
+  const { user, isAuthenticated, isInitializing } = useUser();
+  const { currentSurroundings, locationId } = useSurroundings();
   const { lastLocationId } = useSurroundingsWS();
-  const queryClient = useQueryClient(); 
+  const queryClient = useQueryClient();
 
-  const { data: itemChoicesResponse, isLoading, isError } = useQuery<ItemChoicesResponse | null>({
-    queryKey: ['itemChoices', lastLocationId],
+  const {
+    data: itemChoicesResponse,
+    isLoading,
+    isError,
+  } = useQuery<ItemChoicesResponse | null>({
+    queryKey: ["itemChoices", lastLocationId],
     queryFn: getItemChoices,
-    enabled: !!isAuthenticated && !isInitializing && !!lastLocationId, 
+    enabled: !!isAuthenticated && !isInitializing && !!lastLocationId,
     onError: (err) => {
-      console.error('Error fetching location data:', err);
+      console.error("Error fetching location data:", err);
     },
     onSuccess: (data) => {
       if (data) {
-        console.log('getItemChoices success:', data);
+        console.log("getItemChoices success:", data);
       }
     },
   });
 
-
-
-  
   // Convert itemChoices.choices (object) into an array of key-value pairs
   const itemChoices = itemChoicesResponse?.choices
     ? Object.entries(itemChoicesResponse.choices)
     : [];
 
-    const itemChoicesAsObject = itemChoicesResponse?.choices
-    ? Object.entries(itemChoicesResponse.choices).reduce((acc, [key, value]) => {
-        acc[key] = value;
-        return acc;
-    }, {})
+  const itemChoicesAsObject = itemChoicesResponse?.choices
+    ? Object.entries(itemChoicesResponse.choices).reduce(
+        (acc, [key, value]) => {
+          acc[key] = value;
+          return acc;
+        },
+        {}
+      )
     : {};
 
-//add twin_location__ back in whem saving the treasure
-    const itemChoicesAsObjectTwin = itemChoicesResponse?.choices && itemChoicesResponse.choices["twin_location"] !== "None"
-    ? Object.entries(itemChoicesResponse.choices).reduce((acc, [key, value]) => {
-        // Check if the key starts with "twin_location__" and strip it
-        const newKey = key.startsWith("twin_location__") ? key.replace("twin_location__", "") : key;
+  //Can't save treasure with this -- add twin_location__ back in whem saving the treasure
+  const itemChoicesAsObjectTwin =
+    itemChoicesResponse?.choices &&
+    itemChoicesResponse.choices["twin_location"] !== "None"
+      ? Object.entries(itemChoicesResponse.choices).reduce(
+          (acc, [key, value]) => { 
+            acc[key] = value;
+            return acc;
+          },
+          {}
+        )
+      : {};
+
+  const itemChoicesAsObjectExplore =
+    itemChoicesResponse?.choices &&
+    itemChoicesResponse.choices["explore_location"] !== "None"
+      ? Object.entries(itemChoicesResponse.choices).reduce(
+          (acc, [key, value]) => {
         
-        acc[newKey] = value;
-        return acc;
-    }, {})
-    : {}; // Return an empty object if "twin_location" is "None"
-  
+            acc[key] = value;
+            return acc;
+          },
+          {}
+        )
+      : {};
 
-    const itemChoicesAsObjectExplore = itemChoicesResponse?.choices && itemChoicesResponse.choices["explore_location"] !== "None"
-    ? Object.entries(itemChoicesResponse.choices).reduce((acc, [key, value]) => {
+  const strippedItemChoicesAsObjectTwin =
+    itemChoicesResponse?.choices &&
+    itemChoicesResponse.choices["twin_location"] !== "None"
+      ? Object.entries(itemChoicesResponse.choices).reduce(
+          (acc, [key, value]) => {
+            // strip for simplicity
+            const newKey = key.startsWith("twin_location__")
+              ? key.replace("twin_location__", "")
+              : key;
 
+            acc[newKey] = value;
+            return acc;
+          },
+          {}
+        )
+      : {};
 
-      const newKey = key.startsWith("explore_location__") ? key.replace("explore_location__", "") : key;
-        
-        acc[newKey] = value;
-        return acc;
-    }, {})
-    : {}; // Return an empty object if "twin_location" is "None"
-  
-  
-  
-    // const [ itemChoicesAsObject, setItemChoicesAsObject ] = useState({});
-    // useEffect(() => {
-    //   // Create a new object to avoid mutating the state directly
-    //   const updatedObject = {};
-    
-    //   itemChoices.forEach(([key, value]) => {
-    //     updatedObject[key] = value;
-    //   });
-    
-    //   // Update state with the new object
-    //   setItemChoicesAsObject(updatedObject);
-    // }, []); // Only runs when itemChoices changes
+  const strippedItemChoicesAsObjectExplore =
+    itemChoicesResponse?.choices &&
+    itemChoicesResponse.choices["explore_location"] !== "None"
+      ? Object.entries(itemChoicesResponse.choices).reduce(
+          (acc, [key, value]) => {
+            const newKey = key.startsWith("explore_location__")
+              ? key.replace("explore_location__", "")
+              : key;
 
-    // const itemChoicesAsObjects = itemChoicesResponse?.choices
-    // ? Object.entries(itemChoicesResponse.choices).reduce((acc, [key, value]) => {
-    //     // If the value is not an object or is null, skip it
-    //     if (typeof value !== "object" || value === null) {
-    //       console.warn(`Skipping invalid value for ${key}: `, value);
-    //       return acc;
-    //     }
-  
-    //     // Check if the key contains 'twin_location' or 'explore_location'
-    //     if (key.includes("twin_location")) {
-    //       // If 'twin_location' exists, add to twinLocation object
-    //       acc.twinLocation = acc.twinLocation || {};  // Initialize if not already
-    //       acc.twinLocation[key] = value;
-    //     } else if (key.includes("explore_location")) {
-    //       // If 'explore_location' exists, add to exploreLocation object
-    //       acc.exploreLocation = acc.exploreLocation || {};  // Initialize if not already
-    //       acc.exploreLocation[key] = value;
-    //     }
-  
-    //     return acc;
-    //   }, {})
-    // : {};
-  
-  
+            acc[newKey] = value;
+            return acc;
+          },
+          {}
+        )
+      : {};
 
   const triggerItemChoicesRefetch = () => {
-    console.log('invalidating item choices query');
+    console.log("invalidating item choices query");
     queryClient.invalidateQueries({
-      queryKey: ['itemChoices', lastLocationId],
+      queryKey: ["itemChoices", lastLocationId],
       // Include currentSurroundings.id
     });
-    console.log('refetching item choices query');
+    console.log("refetching item choices query");
     queryClient.refetchQueries({
-      queryKey: ['itemChoices', lastLocationId],
-    
+      queryKey: ["itemChoices", lastLocationId],
     });
   };
 
 
-const formatLocationProperties = (location: TwinLocationDetails | ExploreLocationDetails | null, prefix: string) => {
-  if (!location) return [];
-
-  return Object.entries(location).map(([key, value]) => {
-    // Prefix the key with 'prefix__' and keep the original key.
-    const formattedKey = `${prefix}__${key}`;
-    
-    // Ensure value is not null or undefined. If it is, use the string "null".
-    const formattedValue = value ?? "null"; 
-
-    return [formattedKey, formattedValue];
-  });
-};
-
-
-const twinLocationProperties = formatLocationProperties(
-  itemChoicesResponse?.choices?.twin_location,
-  "twin_location"
-);
-
-const exploreLocationProperties = formatLocationProperties(
-  itemChoicesResponse?.choices?.explore_location,
-  "explore_location"
-);
-
-const locationPropertiesList = [...twinLocationProperties, ...exploreLocationProperties];
-
-
   useEffect(() => {
     const unsubscribe = queryClient.getQueryCache().subscribe((event) => {
-      if (event.query.queryKey[0] === 'itemChoices') {
+      if (event.query.queryKey[0] === "itemChoices") {
         console.log(
-          'itemChoices cache updated.',
+          "itemChoices cache updated."
           // queryClient.getQueryData([
           //   'itemChoices',
           //   currentSurroundings?.explore_location?.id ?? null,
@@ -241,16 +224,23 @@ const locationPropertiesList = [...twinLocationProperties, ...exploreLocationPro
         );
       }
     });
-  
+
     return () => {
       unsubscribe(); // Unsubscribe when the component unmounts
     };
   }, [lastLocationId]); //passing in queryClient will trigger useEffect any time ANY query key is updated
-  
 
   return (
-    <InteractiveElementsContext.Provider 
-      value={{ itemChoices, locationPropertiesList, itemChoicesAsObject, itemChoicesAsObjectTwin, itemChoicesAsObjectExplore, triggerItemChoicesRefetch }}
+    <InteractiveElementsContext.Provider
+      value={{
+        itemChoices, 
+        itemChoicesAsObject,
+        itemChoicesAsObjectTwin,
+        itemChoicesAsObjectExplore,
+        strippedItemChoicesAsObjectTwin,
+        strippedItemChoicesAsObjectExplore,
+        triggerItemChoicesRefetch,
+      }}
     >
       {children}
     </InteractiveElementsContext.Provider>

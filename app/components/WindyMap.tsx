@@ -7,6 +7,9 @@ import Constants from 'expo-constants';
 //this key is just a test key
 export const WINDY_API_KEY = Constants.expoConfig?.extra?.WINDY_API_KEY;
 
+//put above leaflet script
+{/* <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" /> */}
+
 const WindyMap = ({lat = 37.7749, lon = -122.4194, zoom = 8 }) => { //12 is max zoom-in
   const windyHTML = `
   <!DOCTYPE html> 
@@ -14,7 +17,7 @@ const WindyMap = ({lat = 37.7749, lon = -122.4194, zoom = 8 }) => { //12 is max 
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Windy Debug</title>
-  <!-- Windy REQUIRES Leaflet 1.4.0 -->
+  <!-- Windy REQUIRES Leaflet 1.4.0 --> 
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"></script>
   <!-- MUST load libBoot.js AFTER Leaflet -->

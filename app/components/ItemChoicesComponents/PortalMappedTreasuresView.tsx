@@ -13,7 +13,7 @@ import { useSurroundingsWS } from "@/app/context/SurroundingsWSContext";
 const PortalMappedTreasuresView = () => {
     
       const router = useRouter(); 
-      const { itemChoicesAsObjectTwin } = useInteractiveElements();
+      const { strippedItemChoicesAsObjectTwin } = useInteractiveElements();
       const { lastLocationName } = useSurroundingsWS();
      
     
@@ -70,12 +70,12 @@ const treasuresList = [
         renderItem={({ item }) => (
           <>
             {item &&
-              itemChoicesAsObjectTwin[item[0]] && ( // Check if item exists and if the value exists in itemChoicesAsObjectExplore
+              strippedItemChoicesAsObjectTwin[item[0]] && ( // Check if item exists and if the value exists in itemChoicesAsObjectExplore
                 <TreasureUICard
                   label={`${item[1]}`}
                   value={formatValue([
                     `twin_location__${item[0]}`,
-                    itemChoicesAsObjectTwin[item[0]],
+                    strippedItemChoicesAsObjectTwin[item[0]],
                   ])}
                   onPress={handleCollectTreasure}
                 />

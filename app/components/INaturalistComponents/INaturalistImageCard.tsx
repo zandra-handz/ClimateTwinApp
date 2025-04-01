@@ -2,7 +2,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React, { useEffect } from "react";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import { Image } from "expo-image";
-import { useFocusEffect } from "expo-router";
+import { useFocusEffect } from "expo-router"; 
 
 import ComponentSpinner from "../Scaffolding/ComponentSpinner";
 const INaturalistImageCard = ({
@@ -23,6 +23,9 @@ const INaturalistImageCard = ({
     avgPhotoColor,
     handleAvgPhotoColor,
   } = useGlobalStyles();
+
+
+ 
 
   useFocusEffect(
     React.useCallback(() => {

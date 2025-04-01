@@ -10,7 +10,7 @@ import { useSurroundingsWS } from "@/app/context/SurroundingsWSContext";
 //used for Pexel images
 const RuinsMappedTreasuresView = () => {
   const router = useRouter();
-  const { itemChoicesAsObjectExplore } = useInteractiveElements();
+  const { strippedItemChoicesAsObjectExplore } = useInteractiveElements();
   const { lastLocationName } = useSurroundingsWS();
 
   // const handleCollectTreasure = (topic, base) => {
@@ -62,12 +62,12 @@ const RuinsMappedTreasuresView = () => {
         renderItem={({ item }) => (
           <>
             {item &&
-              itemChoicesAsObjectExplore[item[0]] && ( // Check if item exists and if the value exists in itemChoicesAsObjectExplore
+              strippedItemChoicesAsObjectExplore[item[0]] && ( // Check if item exists and if the value exists in itemChoicesAsObjectExplore
                 <TreasureUICard
                   label={`${item[1]}`}
                   value={formatValue([
                     `explore_location__${item[0]}`,
-                    itemChoicesAsObjectExplore[item[0]],
+                    strippedItemChoicesAsObjectExplore[item[0]],
                   ])}
                   onPress={handleCollectTreasure}
                 />

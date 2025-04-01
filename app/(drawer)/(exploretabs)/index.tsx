@@ -22,6 +22,7 @@ import PortalBanner from "@/app/components/PortalBanner";
  
 import GroqHistory from "@/app/components/GroqComponents/GroqHistory";
 import useLLMScripts from "@/app/llm/useLLMScripts";
+import useINaturalist from "@/app/hooks/useINaturalist";
 
 const index = () => {
   const { user } = useUser();
@@ -31,14 +32,9 @@ const index = () => {
     ruinsSurroundings,
     locationId,
     isInitializingLocation,
-  } = useSurroundings();
-  const { itemChoices } = useInteractiveElements();
-  const { lastLocationId } = useSurroundingsWS();
-  const { liveWeather } = useLiveWeather();
+  } = useSurroundings(); 
   const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const [surroundingsViews, setSurroundingsViews] = useState({});
-  const { yourRoleIsFriendlyDiligentHistorian, tellMeRecentHistoryOf } =
-    useLLMScripts();
+  const [surroundingsViews, setSurroundingsViews] = useState({}); 
 
   const [portalBannerVisible, setPortalBannerVisible] = useState(true);
   const [triggerRerender, setTriggerRerender] = useState(false);
