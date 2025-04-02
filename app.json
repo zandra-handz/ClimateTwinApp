@@ -53,14 +53,14 @@
 //"favicon": "./assets/images/favicon.png"
     },
     "plugins": [
-      [
-        "@sentry/react-native/expo",
-        {
-          "url": "https://sentry.io/",
-          "project": "react-native",
-          "organization": "badrainbowz"
-        }
-      ],
+      // [
+      //   "@sentry/react-native/expo",
+      //   {
+      //     "url": "https://sentry.io/",
+      //     "project": "react-native",
+      //     "organization": "badrainbowz"
+      //   }
+      // ],
       "expo-router",
       "expo-secure-store",
       "expo-font",

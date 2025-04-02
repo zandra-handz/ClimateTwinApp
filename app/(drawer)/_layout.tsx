@@ -5,13 +5,13 @@ import HomeHeader from "../components/HeaderComponents/HomeHeader";
 
 import DrawerCustomizer from "../components/DrawerNavComponents/DrawerCustomizer";
 
-import * as Sentry from "@sentry/react-native";
+// import * as Sentry from "@sentry/react-native";
 
-Sentry.init({
-  dsn: "https://b003b07ef14d51d700aac9ce83006d95@o4509079411752960.ingest.us.sentry.io/4509079412801536",
-  enableInExpoDevelopment: true, // Set to true if using Expo Go
-  debug: true, // Enable debugging logs
-});
+// Sentry.init({
+//   dsn: "https://b003b07ef14d51d700aac9ce83006d95@o4509079411752960.ingest.us.sentry.io/4509079412801536",
+//   enableInExpoDevelopment: true, // Set to true if using Expo Go
+//   debug: true, // Enable debugging logs
+// });
 
 
 export default () => {
