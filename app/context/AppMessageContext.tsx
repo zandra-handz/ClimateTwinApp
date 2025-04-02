@@ -3,14 +3,15 @@ import React, { createContext, useState, useContext, ReactNode } from 'react';
 // Define types for the context value
 interface AppMessageData {
   result: boolean | null;
-  resultData: any; // You can refine this type depending on your data
+  resultData: any;
   resultsMessage: string;
 }
 
 interface AppMessageContextType {
-  appMessageData: AppMessageData;
+  messageQueue: AppMessageData[]; // Now it's a queue (array)
   showAppMessage: (result: boolean, resultData: any, resultsMessage?: string) => void;
   hideAppMessage: () => void;
+  removeMessage: () => void; // Removes message from the queue
 }
 
 // Create the context with the correct type
@@ -19,11 +20,9 @@ const AppMessageContext = createContext<AppMessageContextType | undefined>(undef
 // Custom hook to use the AppMessageContext
 export const useAppMessage = () => {
   const context = useContext(AppMessageContext);
-
   if (!context) {
     throw new Error('useAppMessage must be used within an AppMessageContextProvider');
   }
-
   return context;
 };
 
@@ -33,22 +32,22 @@ interface AppMessageContextProviderProps {
 }
 
 export const AppMessageContextProvider: React.FC<AppMessageContextProviderProps> = ({ children }) => {
-  const [appMessageData, setAppMessageData] = useState<AppMessageData>({
-    result: false,
-    resultData: null,
-    resultsMessage: '',
-  });
+  const [messageQueue, setMessageQueue] = useState<AppMessageData[]>([]);
 
   const showAppMessage = (result: boolean, resultData: any, resultsMessage = 'Action successful') => {
-    setAppMessageData({ result, resultData, resultsMessage });
+    setMessageQueue(prevQueue => [...prevQueue, { result, resultData, resultsMessage }]);
   };
 
   const hideAppMessage = () => {
-    setAppMessageData({ result: null, resultData: null, resultsMessage: '' });
+    setMessageQueue([]);
+  };
+
+  const removeMessage = () => {
+    setMessageQueue(prevQueue => prevQueue.slice(1)); // Remove the first message from the queue
   };
 
   return (
-    <AppMessageContext.Provider value={{ appMessageData, showAppMessage, hideAppMessage }}>
+    <AppMessageContext.Provider value={{ messageQueue, showAppMessage, hideAppMessage, removeMessage }}>
       {children}
     </AppMessageContext.Provider>
   );

@@ -7,10 +7,10 @@ import PexelsTray from "../PexelsComponents/PexelsTray";
 import UnsplashTray from "../UnsplashComponents/UnsplashTray";
 import SmithsonianTray from "../SmithsonianComponents/SmithsonianTray";
 
-import INaturalistTray from "../INaturalistComponents/iNaturalistTray";
+import INaturalistHeader from "../INaturalistComponents/INaturalistHeader";
 import { WebView } from "react-native-webview";
 import useINaturalist from "@/app/hooks/useINaturalist";
-
+import { SafeAreaView } from "react-native-safe-area-context";
 import ComponentSpinner from "../Scaffolding/ComponentSpinner";
 import { useFocusEffect } from "expo-router";
 
@@ -38,7 +38,7 @@ const GroqFullScreen = ({
   const debug = true;
 
   const { iNaturalist } = useINaturalist();
-  const iNaturalistImageSize = 350;
+  const iNaturalistImageSize = 300;
   const [fadeAnim] = useState(new Animated.Value(0));
   const [ wiki, setWiki ] = useState(null);
 
@@ -76,6 +76,8 @@ const GroqFullScreen = ({
 
   return (
     <>
+   
+
       <Animated.View
         style={[
           appContainerStyles.groqScrollFullScreenContainer,
@@ -85,7 +87,7 @@ const GroqFullScreen = ({
             // backgroundColor: avgPhotoColor
             //   ? avgPhotoColor
             //   : themeStyles.darkerBackground.backgroundColor,
-            height: 700,
+            height: '100%',  
             opacity: opacity || 1,
             backgroundColor: fadeAnim.interpolate({
               inputRange: [0, 1],
@@ -100,14 +102,16 @@ const GroqFullScreen = ({
         {!dataObject?.altImageSearchQuery && (
           <ComponentSpinner showSpinner={true} />
         )}
+        
         <View
           style={{
             flexDirection: "column",
-            paddingVertical: 8,
+            paddingVertical: 10,
             flex: 1,
             //  justifyContent: "flex-end",
           }}
         >
+          
           {index && (
             <View
               style={{
@@ -115,9 +119,10 @@ const GroqFullScreen = ({
                 height: iNaturalistImageSize,
                 justifyContent: "center",
                 alignItems: "center",
+                marginBottom: 10,
               }}
             >
-              <INaturalistTray
+              <INaturalistHeader
                 index={reAdjustedIndex}
                 item={null}
                 topic={topic}
@@ -174,31 +179,14 @@ const GroqFullScreen = ({
                     </View>
                   )} */}
             </ScrollView>
-          )}
-
-          {/* 
-                {images && !pexelImages && (
-
-                    <View
-                      style={{
-                        width: "100%",
-                      
-                        marginBottom: 10,
-                        flexDirection: "row",
-                        justifyContent: "center",
-                        height: 'auto', 
-                      }}
-                    >
-                      <GroqImageCard value={images[0]} />
-                    </View> 
-                    
-                )} */}
+          )} 
 
           <View
             style={{
               flexDirection: "row",
               width: "100%",
-              height: 72,
+              height: 60,
+              marginBottom: 10,
               justifyContent: "center",
             }}
           >
@@ -236,14 +224,16 @@ const GroqFullScreen = ({
               />
             </View>
           )}
-
+        {dataObject && dataObject?.textBody && (
+          
           <View
             style={{
-              height: images[0] ? "44%" : "34%",
+              height: wikiLink ? 200 : 350,
+              
               width: "100%",
-              backgroundColor: themeStyles.primaryBackground.backgroundColor,
+              backgroundColor: themeStyles.darkerBackground.backgroundColor,
               padding: 10,
-              marginTop: 10,
+              marginTop: 10, 
               borderRadius: 20,
             }}
           >
@@ -271,8 +261,12 @@ const GroqFullScreen = ({
               </Text>
             </ScrollView>
           </View>
+          
+        )}
         </View>
       </Animated.View>
+      
+         
     </>
   );
 };

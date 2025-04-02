@@ -386,9 +386,9 @@ const containerStyles = StyleSheet.create({
   newItemsNonCircle: {
     height: 'auto',
     width: 'auto',
-    borderRadius: 10,
-    paddingVertical: 8,
-    paddingHorizontal: 16,
+    borderRadius: 20,
+    paddingVertical: 4,
+    paddingHorizontal: 8,
     textAlign: 'center',
     alignItems: 'center',
     justifyContent: 'center',
@@ -565,7 +565,7 @@ const containerStyles = StyleSheet.create({
   },
   innerFlexStartContainer: {
     width: "100%",
-    paddingHorizontal: "3%",
+    paddingHorizontal: "2%",
     flexDirection: "column",
     flex: 1,
   //  backgroundColor: 'teal',
@@ -922,18 +922,15 @@ const containerStyles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth
   },
   groqScrollFullScreenContainer: {
-    borderRadius: 20, 
-    padding: 10,  
+    borderRadius: 20,    
     width: '100%', 
+    flex: 1,
     alignSelf: 'center', 
     alignItems: 'center',
     justifyContent: 'center', 
- 
-   // height: 680,
+  
     overflow: 'hidden', 
     zIndex: 100,
-    position: 'absolute',
-    bottom: 78,
     borderWidth: StyleSheet.hairlineWidth
   },
   statRow: {
@@ -951,14 +948,13 @@ const containerStyles = StyleSheet.create({
 
   },
   goToItemButtonContainer: {  
-    padding: 10, 
-    marginBottom: 10,
+    padding: 10,  
     width: '100%',  
     alignItems: 'center',
     justifyContent: 'center',  
 
     height: "auto",
-    padding: 20,
+    padding: 10,
     borderRadius: 16,
     width: "100%",
     flexDirection: "column",

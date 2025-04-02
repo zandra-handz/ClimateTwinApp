@@ -145,7 +145,7 @@ const interact = () => {
         <GroqItem
         //locationParamsData={locationData}
           name={name}
-          title={"Treasure found by Groq"}
+          title={"Make believe with Groq"}
           base={base}
           topic={topic}
           query={query}
@@ -157,7 +157,7 @@ const interact = () => {
         /> 
         </View>
       <ActionsFooter
-        height={66}
+        height={46}
         onPressLeft={() => router.replace('(exploretabs)')}
         labelLeft={"Back"}
         onPressRight={handleCollectATreasure}

@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useMemo, useRef, useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useUser } from "../context/UserContext";
 import { getInboxItems, getInboxItem, acceptTreasureGift } from "../apicalls";
@@ -55,6 +55,7 @@ const useInbox = () => {
     enabled: !!isAuthenticated && !isInitializing,
     onSuccess: (data) => {
 
+
       //not working
       // let count;
       // count = data?.filter(item => item.is_read === false).length;
@@ -63,6 +64,17 @@ const useInbox = () => {
       // Handle successful fetch
     },
   });
+
+
+  useEffect(() => {
+    if (inboxItems) {
+      const unread = inboxItems?.filter(item => item.is_read === false).length || 0;
+      setUnreadCount(unread);
+    } else {
+      setUnreadCount(0);
+    }
+
+  }, [inboxItems]);
 
   const handleGetInboxItem = async (id: number) => {
     try {

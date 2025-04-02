@@ -609,7 +609,7 @@ export const getItemChoices = async () => {
     try {
        // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/climatevisitor/item-choices/');
-        console.log('API GET Call getItemChoices', response.data);
+       // console.log('API GET Call getItemChoices', response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
@@ -692,7 +692,7 @@ export const requestToGiftTreasure = async (data) => {
         return response.data;
     } catch (error) {
         if (error.response) {
-            console.error('Error response for /users/send-gift-request/:', );
+            console.error('Error response for /users/send-gift-request/:');
         } else if (error.request) {
             console.error('Error request for /users/send-gift-request/, add console logging in api file for more details');
         } else {

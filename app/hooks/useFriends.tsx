@@ -49,6 +49,10 @@ interface DropdownOption {
   friendshipNumber: number;
 }
 
+//WARNING: The endpoint here returns the user's profiles for their friends
+//rather than just the friend object
+//So the top level id is for the profile
+// //To use the friend pk must specify .friend
 const useFriends = () => {
   const { user, isAuthenticated, isInitializing } = useUser();
   const [friendsDropDown, setFriendsDropDown] = useState<DropdownOption[]>([]);
@@ -74,7 +78,7 @@ const useFriends = () => {
     onSuccess: (data) => { 
       // Convert the friends data into a dropdown array
       const dropdownData = data.map((friend) => ({
-        label: friend.nickname,
+        label: friend.username,
         value: friend.id,
         friendshipNumber: friend.friendship,
       }));
@@ -105,7 +109,7 @@ const useFriends = () => {
     const handleGetFriend = async (id: number) => {
       try {
         const friend = await queryClient.fetchQuery<Friend>({
-          queryKey: ["treasure", user?.id, id],
+          queryKey: ["friends", user?.id, id],
           queryFn: () => getFriend(id),
         });
   

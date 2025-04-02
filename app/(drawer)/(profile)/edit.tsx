@@ -114,8 +114,7 @@ const handleSave = async () => {
         
  
       </View>
-      <ActionsFooter
-        height={66}
+      <ActionsFooter 
         onPressLeft={() => router.back()}
         labelLeft={"Back"}
         onPressRight={handleSave}

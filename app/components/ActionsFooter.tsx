@@ -3,7 +3,7 @@ import React from "react";
 import { useGlobalStyles } from "../context/GlobalStylesContext";
 
 const ActionsFooter = ({
-  height=80, //THis is what the global styles setting is as well, tho on my phone 66 is closer to tab bar height
+  height=46,  //managed here instead of in styles
   onPressLeft,
   onPressRight,
   labelLeft = "Left button",

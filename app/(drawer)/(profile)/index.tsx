@@ -14,9 +14,7 @@ import useDateTimeFunctions from "@/app/hooks/useDateTimeFunctions";
 import CuteDetailBox from "@/app/components/CuteDetailBox";
 
 import useImageUploadFunctions from "@/app/hooks/useImageUploadFunction";
-
-import FriendsView from "@/app/components/FriendsComponents/FriendsView";
-import GoToItemButton from "@/app/components/GoToItemButton";
+import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
 import ActionsFooter from "@/app/components/ActionsFooter";
 
 import useProfile from "@/app/hooks/useProfile";
@@ -133,7 +131,7 @@ const index = () => {
 
   return (
     <>
-    {profile && (
+   
       
       <View
         style={[
@@ -142,6 +140,11 @@ const index = () => {
           { paddingTop: 10 },
         ]}
       >
+        {!profile && (
+          <ComponentSpinner showSpinner={true} />
+        )}
+         {profile && (
+          <>
         <ScrollView contentContainerStyle={[appContainerStyles.innerFlexStartContainer]}>
           <View style={{ width: "100%", height: 170 }}>
             {avatar && <Avatar image={avatar} size={140} />}
@@ -154,7 +157,7 @@ const index = () => {
                         
                           top: 160,
           }}>
-            <Text style={appFontStyles.profileHeaderText}>{user.username}</Text>
+            <Text style={[appFontStyles.profileHeaderText, themeStyles.primaryText]}>{user.username}</Text>
           </View>
           <View
             style={{
@@ -301,9 +304,9 @@ const index = () => {
                   </TouchableOpacity>
                 </View>
               </View>
+              
 
         <ActionsFooter
-          height={66}
           onPressLeft={() => router.back()}
           labelLeft={"Back"}
           // onPressRight={() => console.log("implement edit screen eventually")}
@@ -311,9 +314,11 @@ const index = () => {
           // onPressCenter={() => router.push("/update")}
           // labelCenter={"Change avatar"}
         />
+        </>
+      )}
       </View>
       
-    )}
+   
     </>
   );
 };

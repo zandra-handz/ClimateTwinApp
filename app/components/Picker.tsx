@@ -1,10 +1,10 @@
 import React, { useRef, useState, forwardRef, useImperativeHandle } from 'react';
 import { View, Button, StyleSheet } from 'react-native';
 import Animated, { Easing, withTiming, useSharedValue, useAnimatedStyle } from 'react-native-reanimated';
-
+import { useGlobalStyles } from '../context/GlobalStylesContext';
 // Define the props type to include labels and values
 interface PickerProps {
-  items: { label: string; value: string; nickname: string }[];  // Array of label/value pairs
+  items: { label: string; value: string; username: string }[];  // Array of label/value pairs
   onSelect: (selectedItem: string) => void;  // Callback to notify parent of selection
 }
 
@@ -27,6 +27,7 @@ const Picker = forwardRef((props: PickerProps, ref) => {
   // Handle button selection and call onSelect
   const handleButtonPress = (data: Record<string, any>) => {
     setSelectedValue(data.id);
+    console.log(data);
     onSelect(data); // Forward the selected value to the parent
     setIsListVisible(false); // Hide the list after selection
     heightAnim.value = withTiming(0, { duration: 200 }); // Collapse the list
@@ -88,7 +89,7 @@ const Picker = forwardRef((props: PickerProps, ref) => {
         {isListVisible && items && items.map((item) => (
           <Animated.View key={item.id} style={optionButtonStyle}>
             <Button
-              title={item.nickname}
+              title={item.username}
               onPress={() => handleButtonPress(item)}
             />
           </Animated.View>

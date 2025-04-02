@@ -10,10 +10,13 @@ const NewItemsDot = () => {
     const { themeStyles, appFontStyles, appContainerStyles, constantColorsStyles } = useGlobalStyles();
   return (
     <> 
-       
+       {unreadCount > 0 && (
+        
     <View style={[appContainerStyles.newItemsNonCircle, {backgroundColor: constantColorsStyles.v1LogoColor.backgroundColor}]}>
       <Text style={[appFontStyles.newItemsText, {color: constantColorsStyles.v1LogoColor.color}]}>{ inboxItems?.filter(item => item.is_read === false).length || 0} new</Text>
     </View>
+    
+  )}
     
     
     </>

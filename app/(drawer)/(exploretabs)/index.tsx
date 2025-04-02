@@ -146,7 +146,7 @@ const index = () => {
     if (totalSections >= 3 && offsetY >= ITEM_HEIGHT * 2) {
       setGroqVisible(false);
       groqOpacity.setValue(0);
-      console.log("At least at the third section!");
+      //console.log("At least at the third section!");
     }
   };
   

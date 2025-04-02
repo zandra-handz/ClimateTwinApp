@@ -13,7 +13,7 @@ import TextInputBlock from "@/app/components/TextInputBlock";
 
 interface Friend {
   id: number;
-  nickame: string;
+  username: string;
 }
 
 const give = () => {
@@ -34,7 +34,7 @@ const give = () => {
   const oneThirdHeight = height / 3;
   const oneHalfHeight = height / 2;
 
-  const [selectedFriend, setSelectedFriend] = useState<Friend | null>(null);
+  const [selectedFriendProfile, setSelectedFriendProfile] = useState<Friend | null>(null);
 
 
   useEffect(() => {
@@ -79,14 +79,13 @@ const give = () => {
 
 
   const handleFriendSelect = (selectedValue: Friend) => {
-    setSelectedFriend(selectedValue);
-    console.log("Selected Friend:", selectedValue.nickname);
+    setSelectedFriendProfile(selectedValue); 
   };
 
   const handleGift = () => {
-    if (selectedFriend && id) {
-      console.log("attempting to send treasure", selectedFriend, id);
-      handleGiftTreasure(id, selectedFriend.id, editedTextRef.current.getText());
+    if (selectedFriendProfile && id) {
+      console.log("attempting to send treasure", selectedFriendProfile, id);
+      handleGiftTreasure(id, selectedFriendProfile.friend, editedTextRef.current.getText());
     }
   };
 
@@ -129,7 +128,7 @@ const give = () => {
           </View>
 
           {/* Optionally, display the selected friend */}
-          {selectedFriend && <Text>Selected Friend: {selectedFriend.nickname}</Text>}
+          {selectedFriendProfile && <Text>Selected Friend: {selectedFriendProfile.username}</Text>}
         </View>
 
         <ActionsFooter
