@@ -9,7 +9,7 @@ import useImageUploadFunctions from "@/app/hooks/useImageUploadFunction";
 import React, { useState, useEffect, useRef } from "react";
 import ActionsFooter from "@/app/components/ActionsFooter";
 //test
-import * as FileSystem from "expo-file-system"; 
+import * as FileSystem from "expo-file-system";
 import TextInputBlock from "@/app/components/TextInputBlock";
 
 // title = "title",
@@ -23,18 +23,16 @@ import TextInputBlock from "@/app/components/TextInputBlock";
 // onSubmitEditing,
 
 const edit = () => {
-    const { textToEdit } = useLocalSearchParams<{ textToEdit: string }>(); 
+  const { textToEdit } = useLocalSearchParams<{ textToEdit: string }>();
   const { handleUpdateProfile, updateProfileMutation } = useProfile();
   const { showAppMessage } = useAppMessage();
   const { user } = useUser();
   const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { resizeImage } = useImageUploadFunctions(); 
+  const { resizeImage } = useImageUploadFunctions();
   const router = useRouter();
 
   const textToEditRef = useRef(null);
 
- 
-  
   const updateTextToEditString = (text) => {
     if (textToEditRef && textToEditRef.current) {
       // console.log(text);
@@ -42,53 +40,42 @@ const edit = () => {
     }
   };
 
-//I don't think we need to, since it re-fills the block every time we nav here 
-//since the text is in the params
+  //I don't think we need to, since it re-fills the block every time we nav here
+  //since the text is in the params
   const resetBlock = () => {
-    if (textToEditRef &&  textToEditRef.current) {
-        textToEditRef.current.clearText();
-      }
-
+    if (textToEditRef && textToEditRef.current) {
+      textToEditRef.current.clearText();
+    }
   };
 
+  const handleSave = async () => {
+    if (textToEditRef.current && user?.id) {
+      try {
+        let newBio = textToEditRef.current.getText();
 
-const handleSave = async () => {   
+        const formData = new FormData();
+        formData.append("user", user?.id);
+        formData.append("bio", newBio);
 
-  if (textToEditRef.current && user?.id) {
-    try { 
-       let newBio =  textToEditRef.current.getText();
-
-       const formData = new FormData();
-       formData.append('user', user?.id);
-       formData.append('bio', newBio);
-
-      handleUpdateProfile(formData);
-      //handleUpdateProfile({ bio: newBio });  
-
-    
-
-    } catch (error) {
-      console.error('Error updating bio:', error); 
-    }  
-  }
- 
-};
+        handleUpdateProfile(formData);
+        //handleUpdateProfile({ bio: newBio });
+      } catch (error) {
+        console.error("Error updating bio:", error);
+      }
+    }
+  };
   useEffect(() => {
     if (updateProfileMutation.isSuccess) {
-        
       showAppMessage(true, null, "Bio updated!");
       router.back();
     }
-
   }, [updateProfileMutation.isSuccess]);
-
 
   useEffect(() => {
     if (updateProfileMutation.isError) {
       showAppMessage(true, null, "Oops! Bio not updated.");
       router.back();
     }
-
   }, [updateProfileMutation.isError]);
 
   return (
@@ -100,21 +87,18 @@ const handleSave = async () => {
       ]}
     >
       <View style={[appContainerStyles.innerFlexStartContainer]}>
-        <TextInputBlock 
-        ref={textToEditRef}
-        title={'Edit bio'}
-        helperText={null}
-        mountingText={textToEdit}
-        onTextChange={updateTextToEditString}
-        multiline={true}
-        height={'50%'}
-        onSubmitEditing={handleSave}
-        
+        <TextInputBlock
+          ref={textToEditRef}
+          title={"Edit bio"}
+          helperText={null}
+          mountingText={textToEdit}
+          onTextChange={updateTextToEditString}
+          multiline={true}
+          height={"50%"}
+          onSubmitEditing={handleSave}
         />
-        
- 
       </View>
-      <ActionsFooter 
+      <ActionsFooter
         onPressLeft={() => router.back()}
         labelLeft={"Back"}
         onPressRight={handleSave}

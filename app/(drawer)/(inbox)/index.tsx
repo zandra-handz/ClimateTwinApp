@@ -1,21 +1,20 @@
 import React from "react";
 import { SafeAreaView, View } from "react-native";
-import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
+import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import { useAppMessage } from "../../context/AppMessageContext";
-import useInbox from "../../hooks/useInbox"; 
-import { StatusBar } from "expo-status-bar"; 
-import DataList from "../../components/Scaffolding/DataList"; 
+import useInbox from "../../hooks/useInbox";
+import { StatusBar } from "expo-status-bar";
+import DataList from "../../components/Scaffolding/DataList";
 import InboxView from "@/app/components/InboxComponents/InboxView";
 import { useRouter } from "expo-router";
 
 import ActionsFooter from "@/app/components/ActionsFooter";
 
 const index = () => {
-  const { themeStyles, appContainerStyles } = useGlobalStyles(); 
+  const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { inboxItems } = useInbox();
   const router = useRouter();
 
- 
   const handleOpenInboxItem = (id, messageId) => {
     // console.log(id);
     // console.log(messageId);
@@ -32,8 +31,8 @@ const index = () => {
   };
 
   const handleCompose = () => {
-    router.push('/compose');
-  }
+    router.push("/compose");
+  };
 
   return (
     <>
@@ -57,17 +56,14 @@ const index = () => {
               onOpenButtonPress={handleOpenInboxItem}
             />
           )}
-
         </View>
         <ActionsFooter
-        onPressLeft={() => console.log("Left footer botton pressed!")}
-        labelLeft={"Left button"}
-        onPressRight={handleCompose}
-        labelRight={"New"}
-      />
- 
+          onPressLeft={() => console.log("Left footer botton pressed!")}
+          labelLeft={"Left button"}
+          onPressRight={handleCompose}
+          labelRight={"New"}
+        />
       </View>
-
     </>
   );
 };

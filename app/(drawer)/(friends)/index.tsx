@@ -20,10 +20,7 @@ const index = () => {
   const { friends, handleGetAllUsers, allUsers, handleSendFriendRequest } = useFriends();
   const router = useRouter();
 
-  const handlePress = () => {
-    console.log("Friend handlePress pressed!");
-  };
-
+ 
 
   const handleViewFriend = (id, friendName) => {
     if (id) {
@@ -33,16 +30,7 @@ const index = () => {
         })
     }
 
-}
- 
-
-  const handleFriendRequest = (friendObject) => {
-    if (friendObject) {
-      console.log("attempting to send friend request", friendObject);
-      handleSendFriendRequest(friendObject.id, 'Friend request message placeholder!');
-    }
-  };
-
+} 
   return (
     <>
       <View
@@ -56,18 +44,15 @@ const index = () => {
         <View style={appContainerStyles.innerFlexStartContainer}>
 
           {friends && (
-            <FriendsView listData={friends} onCardButtonPress={handlePress} onViewFriendPress={handleViewFriend}  />
+            <FriendsView listData={friends} onViewFriendPress={handleViewFriend}  />
           )}
 
         </View>
-              <ActionsFooter
-                height={66}
+              <ActionsFooter 
                 onPressLeft={() => router.back()}
                 labelLeft={"Back"}
                 onPressRight={() => router.push('search/')}
-                labelRight={"Add new"}
-                // onPressCenter={isMinimized ? handleFullScreenToggle : null}
-                // labelCenter={"Groq"}
+                labelRight={"Add new"} 
               />
       </View>
     </>

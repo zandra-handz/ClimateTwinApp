@@ -51,8 +51,7 @@ const search = () => {
  
         </View>
         
-              <ActionsFooter
-                height={66}
+              <ActionsFooter 
                 onPressLeft={() => router.back()}
                 labelLeft={"Back"}
                 // onPressRight={() => router.push('search/')}

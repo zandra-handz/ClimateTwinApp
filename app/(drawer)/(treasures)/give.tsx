@@ -132,7 +132,7 @@ const give = () => {
         </View>
 
         <ActionsFooter
-          height={isKeyboardVisible ? 40 : 80}
+          height={isKeyboardVisible ? 40 : 46}
           onPressLeft={() => router.replace("(treasures)")}
           labelLeft={"Cancel"}
           onPressRight={handleGift}

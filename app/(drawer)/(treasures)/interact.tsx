@@ -156,8 +156,7 @@ const interact = () => {
           collectInProgress={descriptor || noteEdit || additional}
         /> 
         </View>
-      <ActionsFooter
-        height={46}
+      <ActionsFooter 
         onPressLeft={() => router.replace('(exploretabs)')}
         labelLeft={"Back"}
         onPressRight={handleCollectATreasure}

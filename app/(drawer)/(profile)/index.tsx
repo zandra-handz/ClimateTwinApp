@@ -308,11 +308,7 @@ const index = () => {
 
         <ActionsFooter
           onPressLeft={() => router.back()}
-          labelLeft={"Back"}
-          // onPressRight={() => console.log("implement edit screen eventually")}
-          // labelRight={"Edit"}
-          // onPressCenter={() => router.push("/update")}
-          // labelCenter={"Change avatar"}
+          labelLeft={"Back"} 
         />
         </>
       )}

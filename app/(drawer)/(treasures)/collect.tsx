@@ -394,13 +394,11 @@ const collect = () => {
         />
       </View> 
       <ActionsFooter
-        height={isKeyboardVisible ? 40 : 66}
+        height={isKeyboardVisible ? 40 : 46}
         onPressLeft={handleBack}
         labelLeft={"Back"}
         onPressRight={handleCollect}
         labelRight={"Collect"}
-        // onPressCenter={isMinimized ? handleFullScreenToggle : null}
-        // labelCenter={"Groq"}
       />
     </Animated.View>
      
