@@ -33,16 +33,16 @@ import { SurroundingsWSProvider } from "./context/SurroundingsWSContext";
 
 import AppMessage from "./components/AppMessage";
 import CustomStatusBar from "./components/CustomStatusBar";
-// import * as Sentry from '@sentry/react-native';
+import * as Sentry from '@sentry/react-native';
 
-// Sentry.init({
-//   dsn: 'https://b003b07ef14d51d700aac9ce83006d95@o4509079411752960.ingest.us.sentry.io/4509079412801536',
+Sentry.init({
+  dsn: 'https://b003b07ef14d51d700aac9ce83006d95@o4509079411752960.ingest.us.sentry.io/4509079412801536',
 
-//   // uncomment the line below to enable Spotlight (https://spotlightjs.com)
-//   // spotlight: __DEV__,
-// });
+  // uncomment the line below to enable Spotlight (https://spotlightjs.com)
+  // spotlight: __DEV__,
+});
 
-export default function Layout() {
+export default Sentry.wrap(function Layout() {
   const queryClient = new QueryClient();
 
   const appState = useRef(AppState.currentState);
@@ -152,4 +152,4 @@ export default function Layout() {
       </QueryClientProvider>
     </GestureHandlerRootView>
   );
-};
+});;

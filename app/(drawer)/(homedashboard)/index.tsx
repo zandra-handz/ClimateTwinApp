@@ -8,13 +8,14 @@ import GoButton from "@/app/components/GoButton";
 import WebSocketSearchingLocations from "../../components/WebSocketSearchingLocations";
 import WindyMap from "@/app/components/WindyMap";
 import WindyWindSquare from "@/app/components/SurroundingsComponents/WindyWindSquare";
-
+import * as Sentry from '@sentry/react-native';
 
 const index = () => {
   const { homeLocation } = useGeolocationWatcher(); 
   //const { homeLocation } = useHomeLocation(); 
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { searchIsActive } = useActiveSearch();
+  
 
 
   useEffect(() => {
@@ -34,6 +35,8 @@ const index = () => {
           { paddingTop: 10 },
         ]}
       >
+        <Button title='Try!' onPress={ () => { Sentry.captureException(new Error('First error')) }}/>
+
         <View style={appContainerStyles.innerFlexStartContainer}>
         {/* <Button title='Try!' onPress={ () => { Sentry.captureException(new Error('First error')) }}/>
         */}

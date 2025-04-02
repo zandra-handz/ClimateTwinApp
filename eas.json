@@ -3,6 +3,9 @@
     "version": ">= 14.2.0",
     "appVersionSource": "remote"
   },
+  // "env": {
+  //   "EXPO_PUBLIC_SENTRY_AUTH_TOKEN": "$EXPO_PUBLIC_SENTRY_AUTH_TOKEN"
+  // },
   "build": {
     "development": {
       "developmentClient": true,
@@ -12,6 +15,7 @@
       "distribution": "internal"
     },
     "production": {
+ 
       "autoIncrement": true
     }
   },
