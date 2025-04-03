@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "683916980018",
+    "project_id": "climatetwin-8f2b0",
+    "storage_bucket": "climatetwin-8f2b0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:683916980018:android:039a9d12ec49a0591e312b",
+        "android_client_info": {
+          "package_name": "com.badrainbowz.climatetwinapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwOpnLZvi0IKR8LlEXWgEW1RWKt9eKcCU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

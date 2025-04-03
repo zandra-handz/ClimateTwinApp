@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { AppState, Platform } from "react-native";
+import { Alert, AppState, Platform } from "react-native";
 
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -33,6 +33,7 @@ import { SurroundingsWSProvider } from "./context/SurroundingsWSContext";
 
 import AppMessage from "./components/AppMessage";
 import CustomStatusBar from "./components/CustomStatusBar";
+ 
 import * as Sentry from '@sentry/react-native';
 
 Sentry.init({
@@ -70,6 +71,21 @@ export default Sentry.wrap(function Layout() {
 
     requestPermissions();
   }, [hasShareIntent, shareIntent]);
+
+
+  useEffect(() => {
+   // hellofriendh had load fonts here
+
+    const notificationSubscription =
+      Notifications.addNotificationReceivedListener((notification) => {
+        console.log("Notification received in foreground:", notification);
+        Alert.alert(
+          notification.request.content.title,
+          notification.request.content.body
+        );
+      });
+    return () => notificationSubscription.remove();
+  }, []);
 
   // useEffect(() => {
   //   const subscription = AppState.addEventListener("change", (nextAppState) => {

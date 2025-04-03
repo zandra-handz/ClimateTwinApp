@@ -291,6 +291,54 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     queryClient.clear();
   };
 
+
+  useEffect(() => {
+    console.log('usernotifs useEffect triggered in context');
+    if (userNotificationSettings?.receive_notifications) {
+        console.log('registering for notifs');
+        registerForNotifications();
+    } else {
+        console.log('removing notifs permissions');
+        removeNotificationPermissions();
+    }
+}, [userNotificationSettings]);
+
+
+const registerForNotifications = async () => {
+    if (Platform.OS === "android") {
+        await Notifications.setNotificationChannelAsync("default", {
+            name: "default",
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: "#FF231F7C",
+        });
+    }
+
+    if (Device.isDevice) {
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+        if (existingStatus !== "granted") {
+            const { status } = await Notifications.requestPermissionsAsync();
+            finalStatus = status;
+        }
+
+        if (finalStatus === "granted" && user) {
+            const projectId = Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId;
+            const pushTokenString = (await Notifications.getExpoPushTokenAsync({ projectId })).data;
+            await SecureStore.setItemAsync('pushToken', pushTokenString);
+            await updateUserSettings(user.id, { receive_notifications: true, expo_push_token: pushTokenString });
+          //  console.log(pushTokenString);
+        }
+    }
+};
+
+const removeNotificationPermissions = async () => {
+    await SecureStore.deleteItemAsync('pushToken');
+    if (user) {
+        await updateUserSettings(user.id, { receive_notifications: false, expo_push_token: null });
+    } 
+};
+
   return (
     <UserContext.Provider
       value={{

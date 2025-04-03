@@ -45,7 +45,8 @@
        "foregroundImage": "./app/assets/images/logo.png",
         "backgroundColor": "#60aa68"
       },
-      "package": "com.badrainbowz.climatetwinapp"
+      "package": "com.badrainbowz.climatetwinapp", 
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "bundler": "metro",
