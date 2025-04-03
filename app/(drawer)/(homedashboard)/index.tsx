@@ -35,7 +35,7 @@ const index = () => {
           { paddingTop: 10 },
         ]}
       >
-        <Button title='Try!' onPress={ () => { Sentry.captureException(new Error('First error')) }}/>
+        {/* <Button title='Try!' onPress={ () => { Sentry.captureException(new Error('First error')) }}/> */}
 
         <View style={appContainerStyles.innerFlexStartContainer}>
         {/* <Button title='Try!' onPress={ () => { Sentry.captureException(new Error('First error')) }}/>

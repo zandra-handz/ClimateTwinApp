@@ -19,27 +19,7 @@ import CountDowner from "./CountDowner"; //needs: lastLocationName
 const ExploreTabsHeader = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { sendMessage, lastLocationName, lastLocationAccessTime } =
-    useSurroundingsWS();
-  // const { isAuthenticated, appSettings } = useUser();
-  // const colorScheme = useColorScheme();
-  // const { searchIsActive } = useActiveSearch();
-
-  // const [statusIconTheme, setStatusIconTheme] = useState("light");
-
-  // const statusBarStyle = () => {
-  //   if (appSettings.manual_dark_mode !== null) {
-  //     return appSettings.manual_dark_mode ? "light" : "dark";
-  //   }
-  //   return colorScheme || "dark";
-  // };
-
-  // useEffect(() => {
-  //   if (isAuthenticated && appSettings) {
-  //     const theme = statusBarStyle();
-  //     setStatusIconTheme(theme);
-  //     console.log(theme);
-  //   }
-  // }, [appSettings]);
+    useSurroundingsWS(); 
 
   useEffect(() => {
     console.log("exploretabheader rerendered");
@@ -51,16 +31,7 @@ const ExploreTabsHeader = () => {
   };
 
   return (
-    <>
-      {/* {statusIconTheme && (
-      
-      <StatusBar
-        style={statusIconTheme}
-        translucent={true}
-        backgroundColor="transparent"
-      />
-      
-    )} */}
+    <> 
       <SafeAreaView style={[themeStyles.primaryBackground, { flex: 1 }]}>
         <View
           style={[

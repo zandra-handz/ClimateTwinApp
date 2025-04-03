@@ -1,7 +1,8 @@
 import React, { useRef, useState, forwardRef, useImperativeHandle } from 'react';
-import { View, Button, ScrollView, StyleSheet } from 'react-native';
+import { View, Button, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import Animated, { Easing, withTiming, useSharedValue, useAnimatedStyle } from 'react-native-reanimated';
 import { useGlobalStyles } from '../context/GlobalStylesContext';
+import { TouchableOpacityComponent } from 'react-native';
 // Define the props type to include labels and values
 interface PickerProps {
   items: { label: string; value: string; username: string }[];  
@@ -10,10 +11,12 @@ interface PickerProps {
 
 const Picker = forwardRef((props: PickerProps, ref) => {
   const { items, onSelect } = props;
+  const { themeStyles, appContainerStyles } = useGlobalStyles();
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
+  const [selectedName, setSelectedName] = useState<string | null>(null);
   const [isListVisible, setIsListVisible] = useState<boolean>(false);
  
-  const widthAnim = useSharedValue(120);  
+  const widthAnim = useSharedValue(120); 
  
   const heightAnim = useSharedValue(0);
  
@@ -23,6 +26,7 @@ const Picker = forwardRef((props: PickerProps, ref) => {
  
   const handleButtonPress = (data: Record<string, any>) => {
     setSelectedValue(data.id);
+    setSelectedName(data.username);
     console.log(data);
     onSelect(data); 
     setIsListVisible(false);  
@@ -34,7 +38,7 @@ const Picker = forwardRef((props: PickerProps, ref) => {
     setIsListVisible(!isListVisible);
     if (!isListVisible) {
       heightAnim.value = withTiming(200, { duration: 300, easing: Easing.ease }); 
-      widthAnim.value = withTiming(300, { duration: 300, easing: Easing.ease });  
+      widthAnim.value = withTiming(200, { duration: 300, easing: Easing.ease });  
     } else {
       heightAnim.value = withTiming(0, { duration: 200 });  
       widthAnim.value = withTiming(120, { duration: 200 });  
@@ -63,17 +67,20 @@ const Picker = forwardRef((props: PickerProps, ref) => {
   });
 
   return (
-    <View style={styles.container}>  
-      <Animated.View style={animatedStyle}> 
+    <View style={[appContainerStyles.pickerContainer, themeStyles.darkestBackground]}>  
+      <Animated.View style={[animatedStyle]}> 
         {!isListVisible && (
-          <Button
-            title={selectedValue ? `Selected: ${selectedValue}` : 'Select a Friend'}
-            onPress={toggleListVisibility}
-          />
+          <TouchableOpacity style={[appContainerStyles.pickerButtonContainer, themeStyles.darkestBackground]} onPress={toggleListVisibility}>
+            <Text style={themeStyles.primaryText}>
+            {selectedName ? `Give to ${selectedName}` : 'Give to...'}
+            </Text>
+            
+            </TouchableOpacity>
         )}
       </Animated.View>
+      
+      <Animated.View style={[listStyle, {padding: 10, borderRadius: 20}]}> 
       <ScrollView>
-      <Animated.View style={[listStyle]}> 
         {isListVisible && items && items.map((item) => (
     
           <Animated.View key={item.id} style={optionButtonStyle}>
@@ -82,30 +89,20 @@ const Picker = forwardRef((props: PickerProps, ref) => {
               onPress={() => handleButtonPress(item)}
             />
           </Animated.View>
-          
-            
-        
+  
         ))}
+        </ScrollView>
  
         {isListVisible && (
-          <Animated.View style={optionButtonStyle}>
+          <View style={{position: 'absolute', right: 0, width: 60}} >
             <Button title="Close" onPress={toggleListVisibility} />
-          </Animated.View>
+          </View>
         )}
-      </Animated.View>
-      </ScrollView>
+      </Animated.View> 
        
     </View>
   );
 });
- 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'flex-start', 
-    alignItems: 'flex-end',     
-    padding: 10, 
-  },
-});
+  
 
 export default Picker;

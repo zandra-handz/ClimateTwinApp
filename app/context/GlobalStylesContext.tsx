@@ -506,6 +506,25 @@ const containerStyles = StyleSheet.create({
     justifyContent: 'flex-start',
 
   },
+  pickerContainer: {
+    //flex: 1,
+    justifyContent: 'flex-start', 
+    alignItems: 'flex-end',     
+    padding: 10, 
+    borderRadius: 20,
+    position: 'absolute',
+    width: 'auto',
+    top: 0,
+    right: 0,
+    zIndex: 10,
+
+  },
+  pickerButtonContainer: {
+    padding: 10,
+    borderRadius: 20,
+
+
+  },
   tabBarContainer: {
     position: "absolute",
     bottom: 0,

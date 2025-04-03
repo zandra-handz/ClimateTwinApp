@@ -33,10 +33,9 @@ const TreasuresUICard = ({
       onOpenTreasurePress(data.id, data.descriptor);
 
     }
-  
-
   };
-  // Function to recursively render object fields
+
+  // Recursively renders object fields
   const renderField = (key, value, level = 0) => {
     if (value && typeof value === "object" && !Array.isArray(value)) {
       return (

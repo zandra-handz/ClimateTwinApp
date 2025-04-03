@@ -1,12 +1,10 @@
 import React from "react";
 import { SafeAreaView, View } from "react-native";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
-import { useAppMessage } from "../../context/AppMessageContext";
-import useInbox from "../../hooks/useInbox";
-import { StatusBar } from "expo-status-bar";
-import DataList from "../../components/Scaffolding/DataList";
+import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
+import useInbox from "../../hooks/useInbox"; 
 import InboxView from "@/app/components/InboxComponents/InboxView";
 import { useRouter } from "expo-router";
+import { useNavigation, useRoute } from "@react-navigation/native";
 
 import ActionsFooter from "@/app/components/ActionsFooter";
 
@@ -14,33 +12,25 @@ const index = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { inboxItems } = useInbox();
   const router = useRouter();
+  const navigation = useNavigation();
 
-  const handleOpenInboxItem = (id, messageId) => {
-    // console.log(id);
-    // console.log(messageId);
+
+  //Data coming from InboxItemUICard
+  const handleOpenInboxItem = (id, messageId, contentType, senderName) => {
+ 
     if (id && messageId) {
       router.push({
         pathname: "(inbox)/[id]",
-        params: { id: id, messageId: messageId },
+        params: { id: id, messageId: messageId, contentType: contentType, senderName: senderName },
       });
     }
   };
 
-  const handlePress = () => {
-    console.log("Inbox Item pressed!");
-  };
-
-  const handleCompose = () => {
-    router.push("/compose");
-  };
+ 
+ 
 
   return (
-    <>
-      {/* <StatusBar
-        barStyle={themeStyles.primaryBackground.backgroundColor}
-        translucent={true}
-        backgroundColor="transparent"
-      /> */}
+    <> 
       <View
         style={[
           appContainerStyles.screenContainer,
@@ -51,17 +41,14 @@ const index = () => {
         <View style={appContainerStyles.innerFlexStartContainer}>
           {inboxItems && (
             <InboxView
-              listData={inboxItems}
-              onCardButtonPress={handlePress}
+              listData={inboxItems} 
               onOpenButtonPress={handleOpenInboxItem}
             />
           )}
         </View>
         <ActionsFooter
-          onPressLeft={() => console.log("Left footer botton pressed!")}
-          labelLeft={"Left button"}
-          onPressRight={handleCompose}
-          labelRight={"New"}
+          onPressLeft={() => router.back()}
+          labelLeft={"Back"} 
         />
       </View>
     </>

@@ -3,7 +3,8 @@ import TreasuresUICard from './TreasuresUICard';
 import React from 'react';
 import { useGlobalStyles } from '../../context/GlobalStylesContext';
 
-const TreasuresView = ({listData, onCardButtonPress, onOpenButtonPress, onOpenTreasurePress}) => {
+
+const TreasuresView = ({listData, onOpenTreasurePress}) => {
  
 
     const {  appContainerStyles  } = useGlobalStyles();

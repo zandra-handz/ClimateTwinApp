@@ -7,7 +7,7 @@ import { useGlobalStyles } from "../../context/GlobalStylesContext";
  
 import useTreasures from "../../hooks/useTreasures"; 
 import TreasuresView from '../../components/TreasuresComponents/TreasuresView';
- 
+import ActionsFooter from "@/app/components/ActionsFooter";
   
 const index = () => {
   const { themeStyles,  appContainerStyles } = useGlobalStyles();  
@@ -47,6 +47,10 @@ const handleViewTreasure = (id, descriptor) => {
         {treasures && <TreasuresView listData={treasures} onCardButtonPress={handlePress} onOpenTreasurePress={handleViewTreasure} />}
  
           </View>
+          <ActionsFooter
+          onPressLeft={() => router.back()}
+          labelLeft={"Back"} 
+        />
       </View>
     </>
   );

@@ -8,18 +8,17 @@ import { useAppMessage } from "../../context/AppMessageContext";
 import useInbox from "../../hooks/useInbox";
 import useTreasures from "@/app/hooks/useTreasures";
 import useFriends from "@/app/hooks/useFriends";
+ 
 
-import { StatusBar } from "expo-status-bar";
-
-import DataList from "../../components/Scaffolding/DataList";
-import { useFocusEffect } from "expo-router";
-import { getInboxItem, getMessage } from "../../apicalls";
+import DataList from "../../components/Scaffolding/DataList"; 
 
 import ActionsFooter from "@/app/components/ActionsFooter";
 
 const read = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { messageId } = useLocalSearchParams<{ messageId: string }>();
+  const { contentType } = useLocalSearchParams<{ contentType: string }>();
+  const { senderName } = useLocalSearchParams<{ senderName: string }>();
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { handleAcceptTreasureGift, acceptTreasureGiftMutation } =
     useTreasures();
@@ -112,8 +111,10 @@ const read = () => {
           )}
         </View>
         <ActionsFooter
-          onPressLeft={() => console.log("Left footer botton pressed!")}
-          labelLeft={"Decline"}
+          onPressLeft={() => router.back()}
+          labelLeft={"Back"}
+          onPressCenter={() => console.log("Left footer botton pressed!")}
+          labelCenter={"Decline"}
           onPressRight={handleAccept}
           labelRight={"Accept"}
         />

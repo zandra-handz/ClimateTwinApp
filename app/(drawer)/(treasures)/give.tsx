@@ -1,4 +1,4 @@
-import { View, Text, Keyboard, Dimensions } from "react-native";
+import { View, Text, Keyboard, Dimensions, KeyboardAvoidingView } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import ActionsFooter from "@/app/components/ActionsFooter";
 import { StatusBar } from "expo-status-bar";
@@ -19,8 +19,10 @@ interface Friend {
 const give = () => {
   const { id } = useLocalSearchParams<{ id: number }>();
   const { descriptor } = useLocalSearchParams<{ descriptor: string | null }>();
+  const { friendId } = useLocalSearchParams<{ friendId: string | null }>();
+
   const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { friends, friendsDropDown } = useFriends(); // Assuming friendsDropDown is already a list of { label, value }
+  const { friends, friendsDropDown } = useFriends();  
   const { showAppMessage } = useAppMessage();
   const router = useRouter();
   const { viewingTreasure, handleGiftTreasure, giftTreasureMutation } = useTreasures();
@@ -83,19 +85,14 @@ const give = () => {
   };
 
   const handleGift = () => {
-    if (selectedFriendProfile && id) {
-      console.log("attempting to send treasure", selectedFriendProfile, id);
-      handleGiftTreasure(id, selectedFriendProfile.friend, editedTextRef.current.getText());
+    if (friendId && id) {
+      console.log("attempting to send treasure", friendId, id);
+      handleGiftTreasure(id, friendId, editedTextRef.current.getText());
     }
   };
 
   return (
-    <>
-      {/* <StatusBar
-        barStyle={themeStyles.primaryBackground.backgroundColor}
-        translucent={true}
-        backgroundColor="transparent"
-      /> */}
+    <> 
       <View
         style={[
           appContainerStyles.screenContainer,
@@ -104,18 +101,18 @@ const give = () => {
         ]}
       >
         <View style={appContainerStyles.innerFlexStartContainer}>
-          {!isKeyboardVisible && (
+          {/* {!isKeyboardVisible && (
             <Picker
               items={friends} // Passing label/value pairs (friendsDropDown)
               onSelect={handleFriendSelect} // Handling the selection
             />
-          )}
-          <View style={{ flex: 1, flexGrow: 1 }}>
+          )} */}
+          <View style={{ flex: 1,  marginBottom: 10 }}>
             <TextInputBlock
               width={"100%"}
-              height={!isKeyboardVisible ? oneThirdHeight : oneHalfHeight}
+              height={'100%'}
               ref={editedTextRef}
-              autoFocus={false}
+              autoFocus={true}
               title={"Add a message?"}
               helperText={!isKeyboardVisible ? null : "Press enter to exit"}
               iconColor={
@@ -126,18 +123,17 @@ const give = () => {
               multiline={false}
             />
           </View>
-
-          {/* Optionally, display the selected friend */}
-          {selectedFriendProfile && <Text>Selected Friend: {selectedFriendProfile.username}</Text>}
+  
         </View>
-
-        <ActionsFooter
-          height={isKeyboardVisible ? 40 : 46}
+ 
+        <ActionsFooter 
           onPressLeft={() => router.replace("(treasures)")}
           labelLeft={"Cancel"}
           onPressRight={handleGift}
           labelRight={"Send"}
         />
+        
+   
       </View>
     </>
   );

@@ -2,13 +2,19 @@ import { View, FlatList } from 'react-native';
 import DataCard from '../Scaffolding/DataCard';
 import React from 'react';
 import { useGlobalStyles } from '../../context/GlobalStylesContext';
-
-const InboxView = ({listData, onCardButtonPress, onOpenButtonPress, onOpenTreasurePress}) => {
+import InboxItemUICard
+ from './InboxItemUICard';
+const InboxView = ({listData,   onOpenButtonPress }) => {
  
 
     const {  appContainerStyles  } = useGlobalStyles();
     return (
 <View style={[ appContainerStyles.dataListContainer]}>
+{/* <View style={{height: 400}}>
+  
+  <InboxItemUICard data={listData[0]} />
+  
+</View> */}
   <FlatList
     data={listData}
     keyExtractor={(item, index) => 
@@ -18,7 +24,7 @@ const InboxView = ({listData, onCardButtonPress, onOpenButtonPress, onOpenTreasu
     }
     renderItem={({ item }) => (
       <View style={{ marginVertical: '2%' }}>
-        <DataCard data={item} onPress={onCardButtonPress} onOpenPress={onOpenButtonPress} onOpenTreasurePress={onOpenTreasurePress} />
+        <InboxItemUICard data={item} onOpenInboxItemPress={onOpenButtonPress} />
       </View>
     )}
     contentContainerStyle={{ paddingBottom: 60 }} 
