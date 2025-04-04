@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { getNearbyLocations } from '../apicalls'; 
 import { useSurroundingsWS } from './SurroundingsWSContext';
 
-import { ActiveSearchProvider, useActiveSearch } from "@/app/context/ActiveSearchContext";
+import { useActiveSearch } from "@/app/context/ActiveSearchContext";
 
 interface NearbyLocation {
   id: number;

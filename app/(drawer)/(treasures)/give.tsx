@@ -42,7 +42,7 @@ const give = () => {
   useEffect(() => {
     if (giftTreasureMutation.isSuccess) {
       showAppMessage(true, null, `${descriptor} sent!`);
-      router.back();
+      router.replace('(treasures)/');
     }
 
   }, [giftTreasureMutation.isSuccess]);
@@ -86,7 +86,7 @@ const give = () => {
 
   const handleGift = () => {
     if (friendId && id) {
-      console.log("attempting to send treasure", friendId, id);
+      //console.log("attempting to send treasure", friendId, id);
       handleGiftTreasure(id, friendId, editedTextRef.current.getText());
     }
   };

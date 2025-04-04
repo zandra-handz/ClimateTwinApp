@@ -53,6 +53,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   const [lastMessage, setLastMessage] = useState<any>(null);
   const [lastLocationName, setLastLocationName] = useState<any>(null);
   const [lastSearchProgress, setLastSearchProgress] = useState<any>(null);
+  const [lastState, setLastState] = useState<any>(null);
   const [lastLocationId, setLastLocationId] = useState<any>(null);
   const [lastLocationAccessTime, setLastLocationAccessTime] = useState<any>(null);
   const [lastNotification, setLastNotification] = useState<any>(null);
@@ -87,6 +88,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       setLastMessage(null);
       setLastNotification(null);
       setLastSearchProgress(null);
+      setLastState(null);
       //console.log('setting last location name to null in context');
       console.log('setting last location name to null in closeSocket');
       setLastLocationName(null); 
@@ -190,6 +192,11 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
       if ('message' in update) {
         setLastMessage(update.message);
+        console.log('message from socket: ', update.message);
+      }
+
+      if ('state' in update) {
+        setLastState(update.state);
       }
 
       if ('search_progress' in update) {
@@ -429,7 +436,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
   return (
     <SurroundingsWSContext.Provider
-      value={{ locationUpdateWSIsOpen, sendMessage, handleRefreshDataFromSocket, lastMessage, lastNotification, lastSearchProgress, lastLocationName, lastLocationId, lastLocationAccessTime, lastLatAndLong, isLocationSocketOpen, locationSocketColor, alwaysReRender }}
+      value={{ locationUpdateWSIsOpen, sendMessage, handleRefreshDataFromSocket, lastMessage, lastNotification, lastSearchProgress, lastState, lastLocationName, lastLocationId, lastLocationAccessTime, lastLatAndLong, isLocationSocketOpen, locationSocketColor, alwaysReRender }}
     >
       {children}
     </SurroundingsWSContext.Provider>

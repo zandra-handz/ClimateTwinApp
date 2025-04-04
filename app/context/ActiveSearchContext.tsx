@@ -52,7 +52,7 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
   const [activeSearch, setActiveSearch] = useState<ActiveSearch | null>(null);
   const [searchIsActive, setSearchIsActive] = useState<boolean>(false);
   const [userIsHome, setUserIsHome] = useState<boolean>(false);
-  const { locationUpdateWSIsOpen, lastMessage, lastLocationName } =
+  const { locationUpdateWSIsOpen, lastMessage, lastLocationName, lastState } =
     useSurroundingsWS();
   const [exploreLocationsAreReady, setExploreLocationsAreReady] =
     useState<boolean>(true);
@@ -188,23 +188,39 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
     setManualSurroundingsRefresh(false);
   };
 
-  useEffect(() => {
-    if (lastMessage) {
-      // if (lastMessage === 'User has returned home.') {
-      //   if (searchIsActive) {
-      //     closeSearchExternally();
-      //   }
+  // useEffect(() => {
+  //   if (lastMessage) { 
+  //     if (lastMessage === "Searching for ruins!") {
+  //       gettingExploreLocations();
+  //       showAppMessage(true, null, "Searching for ruins!");
+  //     } else if (lastMessage === "Search complete!") {
+  //       if (searchIsActive) {
+  //         closeSearchExternally();
+  //       }
+  //       showAppMessage(true, null, "Search complete!");
+  //       foundExploreLocations();
+  //     } else if (lastMessage === "Clear") {
+  //       if (searchIsActive) {
+  //         closeSearchExternally();
+  //       }
+  //       foundExploreLocations();
+  //     }
+  //   }
+  // }, [lastMessage]);
 
-      //   showAppMessage(true, null, 'You have returned home');
-      // }
-      if (lastMessage === "Searching for ruins!") {
+  useEffect(() => {
+    if (lastState) { 
+      if (lastState === "Searching for twin") {
+        setSearchIsActive(true);
+      } else if (lastState === "Searching for ruins") {
+        setSearchIsActive(false);
         gettingExploreLocations();
         showAppMessage(true, null, "Searching for ruins!");
-      } else if (lastMessage === "Search complete!") {
+      } else if (lastState === "home" || lastState === 'exploring') {
         if (searchIsActive) {
           closeSearchExternally();
         }
-        showAppMessage(true, null, "Search complete!");
+        // showAppMessage(true, null, "Search complete!");
         foundExploreLocations();
       } else if (lastMessage === "Clear") {
         if (searchIsActive) {
@@ -213,23 +229,24 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
         foundExploreLocations();
       }
     }
-  }, [lastMessage]);
+  }, [lastState]);
 
-  useEffect(() => {
-    if ((lastLocationName && lastLocationName === `You are home`) || null) {
-      if (searchIsActive) {
 
-        //sets search to false and also refetches remaining goes
-        closeSearchExternally();
-      }
-      if (!exploreLocationsAreReady) {
-        foundExploreLocations();
-      }
+  // useEffect(() => {
+  //   if ((lastLocationName && lastLocationName === `You are home`) || null) {
+  //     if (searchIsActive) {
+
+  //       //sets search to false and also refetches remaining goes
+  //       closeSearchExternally();
+  //     }
+  //     if (!exploreLocationsAreReady) {
+  //       foundExploreLocations();
+  //     }
  
-    } else if (lastLocationName && lastLocationName === `You are searching`) {
-      setSearchIsActive(true);
-    }
-  }, [lastLocationName]);
+  //   } else if (lastLocationName && lastLocationName === `You are searching`) {
+  //     setSearchIsActive(true);
+  //   }
+  // }, [lastLocationName]);
 
   return (
     <ActiveSearchContext.Provider

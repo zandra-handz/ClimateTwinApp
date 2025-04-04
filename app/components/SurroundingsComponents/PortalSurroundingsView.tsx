@@ -72,12 +72,14 @@ const PortalSurroundingsView = ({ height, triggerParentAutoScroll }) => {
           
         />
 
-        <SingleDetailPanel label="Details" value={portalSurroundings.details} />
+        {/* <SingleDetailPanel label="Details" value={portalSurroundings.details} />
          <SingleDetailPanel
           label={"Experience"}
           value={portalSurroundings.experience}
         />  
         <SingleDetailPanel label="Wind speed interaction" value={portalSurroundings.windSpeedInteraction} />
+      */}
+     
         {isDisabled && (
         <View style={[appContainerStyles.dimmer, {backgroundColor: overlayColor}]}  >
 

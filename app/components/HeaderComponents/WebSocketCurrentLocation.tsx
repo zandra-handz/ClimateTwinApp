@@ -22,7 +22,7 @@ const WebSocketCurrentLocation: React.FC = () => {
   useEffect(() => {
     if (lastMessage) {
       if (lastMessage === 'User has returned home.') {
-        if (searchIsActive) {
+        if (searchIsActive) { // not sure if need now with lastState in ActiveSearchContext
           closeSearchExternally();
         }
         setUpdate("You are home");
@@ -54,7 +54,7 @@ const WebSocketCurrentLocation: React.FC = () => {
     } else if (lastLocationName === null) {
       setUpdate("You are home");  
     } else if (lastLocationName === `You are searching`) {
-      setSearchIsActive(true); 
+      // setSearchIsActive(true); 
       setUpdate(`You are searching`);
     } else if (lastLocationName !== update) { 
       // triggerSurroundingsRefetch();
