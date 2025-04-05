@@ -17,6 +17,11 @@ import { AntDesign, Feather  } from "@expo/vector-icons";
 import CustomStatusBar from "../CustomStatusBar";
 import InboxWithNotifs from "./InboxWithNotifs";
 
+
+//Remove for production (?)
+import DeviceLocationSwitch from "./DeviceLocationSwitch";
+import PushNotifsSwitch from "./PushNotifsSwitch";
+
 const DrawerCustomizer = (props) => {
   const {
     lightOrDark,
@@ -216,6 +221,8 @@ const DrawerCustomizer = (props) => {
           onPress={() => router.push("/(treasures)")}
         />
         <DarkLightSwitch />
+        <DeviceLocationSwitch />
+        <PushNotifsSwitch />
         <DrawerItem
           icon={() => (
             <AntDesign

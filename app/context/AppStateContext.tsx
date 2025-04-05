@@ -1,45 +1,56 @@
-import React, { createContext, useContext, useEffect, useRef, useState } from "react";
-import { AppState } from "react-native";
+import React, { createContext, useContext, useEffect, useState } from 'react';
+import { AppState } from 'react-native';
 
+// Define the context and its type
 interface AppStateContextProps {
-  appStateVisible: string;
+  isAppForeground: boolean;
+  isAppInactive: boolean;
+  isAppBackground: boolean;
 }
 
 const AppStateContext = createContext<AppStateContextProps | undefined>(undefined);
 
-export const AppStateProvider = ({ children }: { children: React.ReactNode }) => {
-  const appState = useRef(AppState.currentState);
-  const [appStateVisible, setAppStateVisible] = useState(appState.current);
+// Custom hook to access the context
+export const useAppState = (): AppStateContextProps => {
+  const context = useContext(AppStateContext);
+  if (!context) {
+    throw new Error('useAppState must be used within an AppStateProvider');
+  }
+  return context;
+};
+
+// AppStateProvider component to wrap the app and provide the state
+export const AppStateProvider: React.FC = ({ children }) => {
+  const [isAppForeground, setIsAppForeground] = useState<boolean>(false);
+  const [isAppInactive, setIsAppInactive] = useState<boolean>(false);
+  const [isAppBackground, setIsAppBackground] = useState<boolean>(true);
 
   useEffect(() => {
-    const subscription = AppState.addEventListener("change", (nextAppState) => {
-      console.log("AppState changed:", nextAppState);
-      console.log("Previous AppState:", appState.current);
-
-      const previousAppState = appState.current;
-      appState.current = nextAppState;
-
-      if (previousAppState.match(/inactive|background/) && nextAppState === "active") {
-        console.log("App has come to the foreground!");
+    const appStateListener = AppState.addEventListener('change', (nextAppState) => {
+      if (nextAppState === 'active') {
+        setIsAppForeground(true);
+        setIsAppInactive(false);
+        setIsAppBackground(false);
+      } else if (nextAppState === 'background') {
+        setIsAppForeground(false);
+        setIsAppInactive(false);
+        setIsAppBackground(true);
+      } else if (nextAppState === 'inactive') {
+        setIsAppForeground(false);
+        setIsAppInactive(true);
+        setIsAppBackground(false);
       }
-
-      setAppStateVisible(nextAppState);
     });
 
-    return () => subscription.remove();
+    // Cleanup on unmount
+    return () => {
+      appStateListener.remove();
+    };
   }, []);
 
   return (
-    <AppStateContext.Provider value={{ appStateVisible }}>
+    <AppStateContext.Provider value={{ isAppForeground, isAppInactive, isAppBackground }}>
       {children}
     </AppStateContext.Provider>
   );
-};
-
-export const useAppState = () => {
-  const context = useContext(AppStateContext);
-  if (!context) {
-    throw new Error("useAppState must be used within an AppStateProvider");
-  }
-  return context;
 };

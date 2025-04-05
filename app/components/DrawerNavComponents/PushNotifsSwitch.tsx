@@ -1,45 +1,54 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import { useUser } from "../../context/UserContext";
+import { useAppState } from "@/app/context/AppStateContext";
 import { DrawerItem } from "@react-navigation/drawer";
-import { Feather } from "@expo/vector-icons";
+import { Feather, AntDesign } from "@expo/vector-icons";
+import * as Linking from "expo-linking";
 
-const DarkLightSwitch = () => {
-  const { appSettings, updateSettings } = useUser();
+const PushNotifsSwitch = () => {
+  const { appSettings, updateSettings, removeNotificationPermissions, registerForNotifications } = useUser();
   const { lightOrDark, themeStyles, appContainerStyles, appFontStyles } =
     useGlobalStyles();
 
-  const currentMode =
-    lightOrDark === "dark"
-      ? { mode: "Light", icon: "sun" }
-      : { mode: "Dark", icon: "moon" };
-  //const pressColor = lightOrDark === "dark" ? "white" : "black";
+  const { isAppForeground, isAppBackground, isAppInactive } = useAppState();
+
+
+  const [ returningFromPhoneSettings, setReturningFromPhoneSettings ] = useState<boolean>(false);
+ 
   const pressColor = themeStyles.primaryText.color;
-  const handlePress = () => {
-    if (appSettings?.manual_dark_mode == null) {
-      // console.log("lightDark handlePress PRESSED");
-      updateSettings({ manual_dark_mode: false });
-    } else if (appSettings?.manual_dark_mode === false) {
-      // console.log("lightDark handlePress PRESSED");
-      updateSettings({ manual_dark_mode: true });
-    } else if (appSettings?.manual_dark_mode === true) {
-      // console.log("lightDark handlePress PRESSED");
-      updateSettings({ manual_dark_mode: false });
-    }
-  };
+
+  const setting = appSettings?.receive_notifications === true ? 'On' : 'Off';
+ 
 
   const handleReset = () => {
-    // Just pass the settings, no need to pass the user ID
-    updateSettings({ manual_dark_mode: null });
+    if (appSettings?.receive_notifications === true) {
+      setReturningFromPhoneSettings(true);
+      Linking.openSettings();
+      // app state will then trigger registering for notifications upon return to app
+     
+    } else {
+      registerForNotifications();
+
+    } 
+
   };
+
+  useEffect(() => {
+    if (isAppForeground && returningFromPhoneSettings) {
+      registerForNotifications();
+      setReturningFromPhoneSettings(false);
+    }
+
+  }, [isAppForeground]);
 
   return (
     <View style={{ height: "auto" }}>
       <DrawerItem
         icon={() => (
-          <Feather
-            name={currentMode?.icon}
+          <AntDesign
+            name={'notification'}
             size={appFontStyles.exploreTabBarIcon.width}
             color={themeStyles.exploreTabBarText.color}
           />
@@ -51,11 +60,10 @@ const DarkLightSwitch = () => {
           appContainerStyles.drawerButtonContainer,
           { borderBottomColor: themeStyles.primaryText.color },
         ]}
-        label={currentMode?.mode}
-        onPress={() => handlePress()}
+        label={'Notifications'}
+        onPress={() => handleReset()}
       />
-
-      {appSettings && appSettings.manual_dark_mode != null && (
+ 
         <View
           style={{
             position: "absolute",
@@ -66,16 +74,17 @@ const DarkLightSwitch = () => {
           }}
         >
           <TouchableOpacity onPress={() => handleReset()} style={[]}>
+        
             <Text
               style={[themeStyles.primaryText, appFontStyles.drawerLabelText]}
             >
-              Sync to phone
+              {setting}
+            
             </Text>
           </TouchableOpacity>
-        </View>
-      )}
+        </View> 
     </View>
   );
 };
 
-export default DarkLightSwitch;
+export default PushNotifsSwitch;

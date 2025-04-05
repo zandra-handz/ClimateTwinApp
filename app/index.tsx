@@ -1,32 +1,25 @@
-import React, { useState, useEffect, useRef } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import React, { useState,  useRef } from "react";
+import { View, StyleSheet } from "react-native";
 import { useUser } from "./context/UserContext";
 import { useGlobalStyles } from "./context/GlobalStylesContext";
 import { useAppMessage } from "./context/AppMessageContext";
-import { useRouter, Link } from "expo-router";
+import { useRouter } from "expo-router";
 import SignInButton from "./components/SignInButton";
 import { useFonts } from "expo-font";
 import * as SecureStore from "expo-secure-store"; 
-import { LinearGradient } from "expo-linear-gradient";
-import { StatusBar } from "react-native";
-import { useAppState } from "./context/AppStateContext";
-import CustomStatusBar from "./components/CustomStatusBar";
-import useImageUploadFunctions from "./hooks/useImageUploadFunction";
-import GoToItemButton from "./components/GoToItemButton";
+import { LinearGradient } from "expo-linear-gradient"; 
+import CustomStatusBar from "./components/CustomStatusBar"; 
 
 
 //a frienddate assistant for overwhelmed adults, and for people who just have a lot to talk about
 
 const TOKEN_KEY = "accessToken";
 
-const Index = () => {
-  //const { showMessage } = useMessage();
+const Index = () => { 
   const { themeStyles, manualGradientColors } = useGlobalStyles();
   const [showSignIn, setShowSignIn] = useState(true);
   const { reInitialize } = useUser();
-  const { showAppMessage } = useAppMessage();
-    const { appStateVisible } = useAppState();
-    const { handleSelectImage, handleCaptureImage } = useImageUploadFunctions();
+  const { showAppMessage } = useAppMessage(); 
 
   const router = useRouter();
   const usernameInputRef = useRef(null);

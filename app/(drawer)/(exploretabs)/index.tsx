@@ -24,7 +24,7 @@ import GroqHistory from "@/app/components/GroqComponents/GroqHistory";
 
 const index = () => {
   const { user } = useUser();
-  useGeolocationWatcher();
+ // useGeolocationWatcher();
   const {
     portalSurroundings,
     ruinsSurroundings,

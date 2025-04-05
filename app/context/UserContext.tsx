@@ -359,6 +359,8 @@ const removeNotificationPermissions = async () => {
         onSignOut,
         reInitialize,
         updateSettings, 
+        registerForNotifications,
+        removeNotificationPermissions,
       }}
     >
       {children}

@@ -4,15 +4,16 @@ import { useGlobalStyles } from "../context/GlobalStylesContext";
 import { useActiveSearch } from "../context/ActiveSearchContext";
 import { useSurroundings } from "../context/CurrentSurroundingsContext";
 import * as Notifications from "expo-notifications";
+ 
 
-import { useManualLocationTrigger } from "../hooks/useCurrentLocationWatcher";
+import { useDeviceLocationContext } from "../context/DeviceLocationContext";
 import fetchCurrentLocation from "../hooks/useCurrentLocationWatcher";
 
 const TurnOnLocationButton = () => {
     const { handleGo, remainingGoes, searchIsActive } = useActiveSearch();
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const { portalSurroundings } = useSurroundings();
-  const { triggerManualLocation } = useManualLocationTrigger();
+  const { triggerNewPermissionRequest } = useDeviceLocationContext();
  
 
 
@@ -21,13 +22,13 @@ const TurnOnLocationButton = () => {
  
 
   const handleButtonPress = () => {
-    fetchCurrentLocation();
+    triggerNewPermissionRequest();
     console.log('implement turn on location manually feature')
   };
   return (
     <> 
           <TouchableOpacity
-            onPress={triggerManualLocation}
+            onPress={handleButtonPress}
             style={[
               appContainerStyles.bigGoButtonContainer,
               themeStyles.primaryOverlayBackground,

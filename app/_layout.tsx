@@ -22,6 +22,7 @@ import { Stack } from "expo-router";
 import { AppMessageContextProvider } from "./context/AppMessageContext";
 import { GlobalStylesProvider } from "./context/GlobalStylesContext";
 import { UserProvider } from "./context/UserContext";
+import { DeviceLocationProvider } from "./context/DeviceLocationContext";
 import { AppStateProvider } from "./context/AppStateContext";
 import { CurrentSurroundingsProvider } from "./context/CurrentSurroundingsContext";
 import { NearbyLocationsProvider } from "./context/NearbyLocationsContext";
@@ -30,14 +31,13 @@ import { InteractiveElementsProvider } from "./context/InteractiveElementsContex
 import { GroqProvider } from "./context/GroqContext";
 import { SurroundingsWSProvider } from "./context/SurroundingsWSContext";
 
-
 import AppMessage from "./components/AppMessage";
 import CustomStatusBar from "./components/CustomStatusBar";
- 
-import * as Sentry from '@sentry/react-native';
+
+import * as Sentry from "@sentry/react-native";
 
 Sentry.init({
-  dsn: 'https://b003b07ef14d51d700aac9ce83006d95@o4509079411752960.ingest.us.sentry.io/4509079412801536',
+  dsn: "https://b003b07ef14d51d700aac9ce83006d95@o4509079411752960.ingest.us.sentry.io/4509079412801536",
 
   // uncomment the line below to enable Spotlight (https://spotlightjs.com)
   // spotlight: __DEV__,
@@ -50,31 +50,30 @@ export default Sentry.wrap(function Layout() {
   //const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
   const { hasShareIntent, shareIntent, resetShareIntent, error } =
-  useShareIntentContext();
+    useShareIntentContext();
 
   useEffect(() => {
     let permissionsGranted = false;
     async function requestPermissions() {
       if (Platform.OS === "android" && Platform.Version >= 33) {
-        const { status } = await MediaLibrary.requestPermissionsAsync();  
+        const { status } = await MediaLibrary.requestPermissionsAsync();
         if (status === "granted") {
           console.log("Media permissions granted!");
-          permissionsGranted = true; 
+          permissionsGranted = true;
         } else {
           console.warn("Media permissions denied.");
           permissionsGranted = false;
         }
       } else {
-        permissionsGranted = true;  
+        permissionsGranted = true;
       }
-    } 
+    }
 
     requestPermissions();
   }, [hasShareIntent, shareIntent]);
 
-
   useEffect(() => {
-   // hellofriendh had load fonts here
+    // hellofriendh had load fonts here
 
     const notificationSubscription =
       Notifications.addNotificationReceivedListener((notification) => {
@@ -112,60 +111,62 @@ export default Sentry.wrap(function Layout() {
       <QueryClientProvider client={queryClient}>
         <AppMessageContextProvider>
           <UserProvider>
-            <AppStateProvider>
-              <GlobalStylesProvider>
-                <AppMessage />
-                <CustomStatusBar />
+            <DeviceLocationProvider>
+              <AppStateProvider>
+                <GlobalStylesProvider>
+                  <AppMessage />
+                  <CustomStatusBar />
 
-                <SurroundingsWSProvider>
-                  <GroqProvider>
-                    <CurrentSurroundingsProvider>
-                      <ActiveSearchProvider>
-                        <NearbyLocationsProvider>
-                          <InteractiveElementsProvider>
-                            <Stack screenOptions={{ headerShown: false }}>
-                              <Stack.Screen
-                                name="(drawer)"
-                                options={{
-                                  headerShown: false,
-                                  gestureEnabled: false,
-                                }}
-                              />
+                  <SurroundingsWSProvider>
+                    <GroqProvider>
+                      <CurrentSurroundingsProvider>
+                        <ActiveSearchProvider>
+                          <NearbyLocationsProvider>
+                            <InteractiveElementsProvider>
+                              <Stack screenOptions={{ headerShown: false }}>
+                                <Stack.Screen
+                                  name="(drawer)"
+                                  options={{
+                                    headerShown: false,
+                                    gestureEnabled: false,
+                                  }}
+                                />
 
-                              <Stack.Screen
-                                name="index"
-                                options={{
-                                  headerShown: false,
-                                  headerTitle: "Welcome",
-                                  headerStyle: {
-                                    backgroundColor: "teal",
-                                  },
-                                  gestureEnabled: false,
-                                }}
-                              />
-                              <Stack.Screen
-                                name="signin"
-                                options={{
-                                  headerShown: false,
-                                  headerTitle: "Sign in",
-                                  headerStyle: {
-                                    backgroundColor: "teal",
-                                  },
-                                  gestureEnabled: false,
-                                }}
-                              />
-                            </Stack>
-                          </InteractiveElementsProvider>
-                        </NearbyLocationsProvider>
-                      </ActiveSearchProvider>
-                    </CurrentSurroundingsProvider>
-                  </GroqProvider>
-                </SurroundingsWSProvider>
-              </GlobalStylesProvider>
-            </AppStateProvider>
+                                <Stack.Screen
+                                  name="index"
+                                  options={{
+                                    headerShown: false,
+                                    headerTitle: "Welcome",
+                                    headerStyle: {
+                                      backgroundColor: "teal",
+                                    },
+                                    gestureEnabled: false,
+                                  }}
+                                />
+                                <Stack.Screen
+                                  name="signin"
+                                  options={{
+                                    headerShown: false,
+                                    headerTitle: "Sign in",
+                                    headerStyle: {
+                                      backgroundColor: "teal",
+                                    },
+                                    gestureEnabled: false,
+                                  }}
+                                />
+                              </Stack>
+                            </InteractiveElementsProvider>
+                          </NearbyLocationsProvider>
+                        </ActiveSearchProvider>
+                      </CurrentSurroundingsProvider>
+                    </GroqProvider>
+                  </SurroundingsWSProvider>
+                </GlobalStylesProvider>
+              </AppStateProvider>
+            </DeviceLocationProvider>
           </UserProvider>
         </AppMessageContextProvider>
       </QueryClientProvider>
     </GestureHandlerRootView>
   );
-});;
+});

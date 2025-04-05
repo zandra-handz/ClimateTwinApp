@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
 import { View, Button } from "react-native";
+import { useDeviceLocationContext } from "@/app/context/DeviceLocationContext";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import { useGeolocationWatcher } from "../../hooks/useCurrentLocationWatcher";
-import useHomeLocation from "../../hooks/useHomeLocation";
+import usedeviceLocation from "../../hooks/usedeviceLocation";
 import { useActiveSearch } from "../../context/ActiveSearchContext";
 import GoButton from "@/app/components/GoButton";
 import TurnOnLocationButton from "@/app/components/TurnOnLocationButton";
@@ -12,16 +13,16 @@ import WindyWindSquare from "@/app/components/SurroundingsComponents/WindyWindSq
 import * as Sentry from "@sentry/react-native";
 
 const index = () => {
-  const { homeLocation } = useGeolocationWatcher();
-  //const { homeLocation } = useHomeLocation();
+  const { deviceLocation } = useDeviceLocationContext();  
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { searchIsActive } = useActiveSearch();
 
+
   useEffect(() => {
-    if (homeLocation) {
-      console.log(`HOMELOCATION: `, homeLocation.longitude);
+    if (deviceLocation) {
+      console.log(`DEVICE LOCATION ADDRESS: `, deviceLocation.address);
     }
-  }, [homeLocation]);
+  }, [deviceLocation]);
 
   return (
     <>
@@ -48,10 +49,10 @@ const index = () => {
           {/* <Button title='Try!' onPress={ () => { Sentry.captureException(new Error('First error')) }}/>
            */}
           {!searchIsActive &&
-            homeLocation &&
-            homeLocation?.address &&
-            homeLocation?.latitude &&
-            homeLocation?.longitude && (
+            deviceLocation &&
+            deviceLocation?.address &&
+            deviceLocation?.latitude &&
+            deviceLocation?.longitude && (
               <>
    
                   <View
@@ -68,11 +69,11 @@ const index = () => {
                       />
                     </View>
                   </View> 
-                    <GoButton address={homeLocation?.address} /> 
+                    <GoButton address={deviceLocation?.address} /> 
                
               </>
             )}
-              {!homeLocation?.address && <TurnOnLocationButton />}
+              {!deviceLocation?.address && <TurnOnLocationButton />}
           {searchIsActive && (
             <View
               style={[
