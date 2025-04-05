@@ -1,51 +1,20 @@
-import React, { useEffect, useCallback, useState } from "react";
+import React, { useEffect,  useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
 import { useActiveSearch } from "../../context/ActiveSearchContext"; 
 import { useSurroundingsWS } from "../../context/SurroundingsWSContext";
-import { useAppMessage } from "../../context/AppMessageContext";
-import { useNearbyLocations } from "../../context/NearbyLocationsContext";
-import { useSurroundings } from "../../context/CurrentSurroundingsContext";
-
+ 
+ 
 const WebSocketCurrentLocation: React.FC = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles(); 
   const [update, setUpdate] = useState<string>(' ');
-  const { searchIsActive, setSearchIsActive, locationUpdateWSIsOpen, closeSearchExternally, refreshSurroundingsManually, gettingExploreLocations, foundExploreLocations } = useActiveSearch();
-  const { showAppMessage} = useAppMessage();
-  const { triggerRefetch } = useNearbyLocations(); 
-  const { locationId, triggerSurroundingsRefetch } = useSurroundings();
+  const { isSearchingForTwin, locationUpdateWSIsOpen } = useActiveSearch();
   
-  const { sendMessage, lastMessage, lastLocationName, lastLocationId } = useSurroundingsWS();
+  
+  const { lastLocationName } = useSurroundingsWS();
  
 
-   
-  useEffect(() => {
-    if (lastMessage) {
-      if (lastMessage === 'User has returned home.') {
-        if (searchIsActive) { // not sure if need now with lastState in ActiveSearchContext
-          closeSearchExternally();
-        }
-        setUpdate("You are home");
-        if (locationId) { //if user did just return home from a location versus if app was just opened
-        refreshSurroundingsManually();
-      }
-         
-        showAppMessage(true, null, 'You have returned home');
-      }
- 
- 
-    }
-  }, [lastMessage]);
-
-
- 
-
-
-  // useEffect(() => {
-  //   if (lastNotification) { 
-  //      console.log(`Last notification: ${lastNotification}`);
-  //   }
-  // }, [lastNotification]);
+     
   
   useEffect(() => {
     console.log('last location name: ', lastLocationName);
@@ -54,7 +23,7 @@ const WebSocketCurrentLocation: React.FC = () => {
     } else if (lastLocationName === null) {
       setUpdate("You are home");  
     } else if (lastLocationName === `You are searching`) {
-      // setSearchIsActive(true); 
+      // setisSearchingForTwin(true); 
       setUpdate(`You are searching`);
     } else if (lastLocationName !== update) { 
       // triggerSurroundingsRefetch();
@@ -71,7 +40,7 @@ const WebSocketCurrentLocation: React.FC = () => {
     // {user?.authenticated && (
       
     <View style={appContainerStyles.defaultElementRow}>
-      {update && locationUpdateWSIsOpen && !searchIsActive && (
+      {update && locationUpdateWSIsOpen && !isSearchingForTwin && (
         <>
           <Text style={[appFontStyles.subHeaderMessageText, themeStyles.primaryText]}>
             {update !== "You are home" ? `you are in: ` : ``}

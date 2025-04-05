@@ -550,6 +550,8 @@ const containerStyles = StyleSheet.create({
     gap: 4,
   },
   exploreTabBarContainer: {
+   height: 66,
+   width: '100%',
     position: "absolute",
     bottom: 0,
     flexDirection: "row",
@@ -575,10 +577,13 @@ const containerStyles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: 4,
+    
   },
   mapContainer: {
-    borderRadius: 20,
-    width: "100%", // Makes it fill the container's width
+    //borderRadius: 20,
+    //width: "100%", // Makes it fill the container's width
+    width: 480,
+    
     aspectRatio: 1280 / 640, // This keeps the original aspect ratio (1280x640)
     zIndex: 0, // Adjust z-index if needed
   },
@@ -608,6 +613,18 @@ const containerStyles = StyleSheet.create({
     //backgroundColor: 'orange',
     borderRadius: 20,
     borderWidth: 1,
+  },
+  mapParentContainer: {
+    paddingTop: 24,
+   // flexDirection: "row",
+    width: 300,
+    height: 300,
+    alignItems: "center",
+    justifyContent: "center", 
+    overflow: 'hidden',
+    borderRadius: 400 / 2,
+    borderWidth: 0,
+
   },
   defaultElementRow: {
     flexDirection: "row",

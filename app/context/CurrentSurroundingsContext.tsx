@@ -14,8 +14,7 @@ import { getExploreLocation, pickNewSurroundings } from "../apicalls";
 import { useSurroundingsWS } from "./SurroundingsWSContext";
 
 import useLiveWeather from "../hooks/useLiveWeather";
-
-import useGroq from "../hooks/useGroq";
+ 
 import { useGroqContext  } from "./GroqContext";
  
  
@@ -546,8 +545,7 @@ useEffect(() => {
         portalSurroundings,
         homeSurroundings,
         ruinsSurroundings,
-        lastAccessed,
-        //remainingGoes, considerin moving this here, it is in ActiveSearchContext right now
+        lastAccessed, 
         handlePickNewSurroundings,
         pickNewSurroundingsMutation,
         triggerSurroundingsRefetch,

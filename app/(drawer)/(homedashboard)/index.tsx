@@ -1,28 +1,25 @@
 import React, { useEffect } from "react";
 import { View, Button } from "react-native";
 import { useDeviceLocationContext } from "@/app/context/DeviceLocationContext";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
-import { useGeolocationWatcher } from "../../hooks/useCurrentLocationWatcher";
-import usedeviceLocation from "../../hooks/usedeviceLocation";
+import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
 import { useActiveSearch } from "../../context/ActiveSearchContext";
 import GoButton from "@/app/components/GoButton";
 import TurnOnLocationButton from "@/app/components/TurnOnLocationButton";
 import WebSocketSearchingLocations from "../../components/WebSocketSearchingLocations";
-import WindyMap from "@/app/components/WindyMap";
 import WindyWindSquare from "@/app/components/SurroundingsComponents/WindyWindSquare";
 import * as Sentry from "@sentry/react-native";
 
 const index = () => {
   const { deviceLocation } = useDeviceLocationContext();  
   const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { searchIsActive } = useActiveSearch();
+  const { isSearchingForTwin } = useActiveSearch();
 
 
-  useEffect(() => {
-    if (deviceLocation) {
-      console.log(`DEVICE LOCATION ADDRESS: `, deviceLocation.address);
-    }
-  }, [deviceLocation]);
+  // useEffect(() => {
+  //   if (deviceLocation) {
+  //     console.log(`DEVICE LOCATION ADDRESS: `, deviceLocation.address);
+  //   }
+  // }, [deviceLocation]);
 
   return (
     <>
@@ -45,10 +42,12 @@ const index = () => {
               alignItems: "center",
             }}
           >
+
+
                   <>
           {/* <Button title='Try!' onPress={ () => { Sentry.captureException(new Error('First error')) }}/>
            */}
-          {!searchIsActive &&
+          {!isSearchingForTwin &&
             deviceLocation &&
             deviceLocation?.address &&
             deviceLocation?.latitude &&
@@ -74,19 +73,19 @@ const index = () => {
               </>
             )}
               {!deviceLocation?.address && <TurnOnLocationButton />}
-          {searchIsActive && (
+          {isSearchingForTwin && (
             <View
               style={[
-                appContainerStyles.defaultScreenElementContainer,
+                appContainerStyles.mapParentContainer,
                 {
                   borderColor: themeStyles.primaryText.color,
-                  height: 300,
-                  marginVertical: "1%",
+                 
                 },
               ]}
             >
               <WebSocketSearchingLocations
-                reconnectOnUserButtonPress={searchIsActive}
+              //don't think am using the below
+                reconnectOnUserButtonPress={isSearchingForTwin}
               />
               
             </View>

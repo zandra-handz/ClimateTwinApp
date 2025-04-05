@@ -13,14 +13,11 @@ import { go, getRemainingGoes, expireSurroundings } from "../apicalls";
 import { useSurroundingsWS } from "./SurroundingsWSContext";
 import { useAppMessage } from "./AppMessageContext";
 
-interface ActiveSearch {
-  id: string;
-  name: string;
-}
-
 interface ActiveSearchContextType {
-  activeSearch: ActiveSearch | null;
   isSearchingForTwin: boolean;
+  isSearchingForRuins: boolean;
+  isHome: boolean;
+  isExploring: boolean;
   triggerActiveSearch: () => void;
 }
 
@@ -49,25 +46,22 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
   const { showAppMessage } = useAppMessage();
   const queryClient = useQueryClient();
   const timeoutRef = useRef(null);
-  const [activeSearch, setActiveSearch] = useState<ActiveSearch | null>(null);
-  const [searchIsActive, setSearchIsActive] = useState<boolean>(false);
-  const [userIsHome, setUserIsHome] = useState<boolean>(false);
-  const { locationUpdateWSIsOpen, lastMessage, lastLocationName, lastState } =
-    useSurroundingsWS();
-  const [exploreLocationsAreReady, setExploreLocationsAreReady] =
-    useState<boolean>(true);
-  const [manualSurroundingsRefresh, setManualSurroundingsRefresh] =
+  const [isSearchingForRuins, setIsSearchingForRuins] =
     useState<boolean>(false);
+  const [isSearchingForTwin, setIsSearchingForTwin] = useState<boolean>(false);
+  const [isExploring, setIsExploring] = useState<boolean>(false);
+  const [isHome, setIsHome] = useState<boolean>(false);
+  const { locationUpdateWSIsOpen, lastState } = useSurroundingsWS();
 
   useEffect(() => {
     if (!isAuthenticated) {
-      console.log(
-        "isAuthenticated === false --> resetting ActiveSearch context"
-      );
-      setActiveSearch(null);
-      setSearchIsActive(false);
-      //setExploreLocationsAreReady(true);
-      //setManualSurroundingsRefresh(false);
+      // console.log(
+      //   "isAuthenticated === false --> resetting ActiveSearch context"
+      // );
+      setIsSearchingForTwin(false);
+      setIsSearchingForRuins(false);
+      setIsExploring(false);
+      setIsHome(false);
     }
   }, [isAuthenticated]);
 
@@ -101,7 +95,7 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
   const sendGoRequestMutation = useMutation({
     mutationFn: (address) => go(address),
     onMutate: () => {
-      setSearchIsActive(true);
+      // setIsSearchingForTwin(true); //Extra, might set it slightly earlier than we get the info from the socket
     },
     onError: (error) => {
       if (timeoutRef.current) {
@@ -113,20 +107,6 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
       }, 2000);
     },
     onSuccess: (data) => {
-      // refetchRemainingGoes();  if the search errors and no location is created, this will be the same, so maybe don't bother fetching it here
-
-      const dataWithTimestamp = {
-        ...data,
-        timestamp: new Date().toISOString(), // Add a timestamp when the data is fetched
-      };
-      // Cache the data with the timestamp
-      // NOT USING YET, USING JUST THE EXISTENCE OF ACTIVESEARCH FOR RN
-      // queryClient.setQueryData(['activeSearch', user?.user?.id], dataWithTimestamp);
-
-      // Optionally update the activeSearch state with the new data
-      setActiveSearch(dataWithTimestamp);
-      console.log("Data with timestamp:", dataWithTimestamp);
-
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -166,103 +146,51 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
     },
   });
 
-  const gettingExploreLocations = () => {
-    setExploreLocationsAreReady(false);
-  };
-
-  const foundExploreLocations = () => {
-    setExploreLocationsAreReady(true);
-  };
-
-  // search status is updated by current location websocket (component WebSocketCurrentLocation)
-  const closeSearchExternally = () => {
-    setSearchIsActive(false);
-    refetchRemainingGoes();
-  };
-
-  const refreshSurroundingsManually = () => {
-    setManualSurroundingsRefresh(true);
-  };
-
-  const resetRefreshSurroundingsManually = () => {
-    setManualSurroundingsRefresh(false);
-  };
-
-  // useEffect(() => {
-  //   if (lastMessage) { 
-  //     if (lastMessage === "Searching for ruins!") {
-  //       gettingExploreLocations();
-  //       showAppMessage(true, null, "Searching for ruins!");
-  //     } else if (lastMessage === "Search complete!") {
-  //       if (searchIsActive) {
-  //         closeSearchExternally();
-  //       }
-  //       showAppMessage(true, null, "Search complete!");
-  //       foundExploreLocations();
-  //     } else if (lastMessage === "Clear") {
-  //       if (searchIsActive) {
-  //         closeSearchExternally();
-  //       }
-  //       foundExploreLocations();
-  //     }
-  //   }
-  // }, [lastMessage]);
+  useEffect(() => {
+    if (isExploring) {
+      refetchRemainingGoes();
+    }
+  }, [isExploring]);
 
   useEffect(() => {
-    if (lastState) { 
-      if (lastState === "Searching for twin") {
-        setSearchIsActive(true);
-      } else if (lastState === "Searching for ruins") {
-        setSearchIsActive(false);
-        gettingExploreLocations();
+    if (lastState) {
+      if (lastState === "searching for twin") {
+        setIsHome(false);
+        setIsSearchingForTwin(true);
+        setIsSearchingForRuins(false);
+        setIsExploring(false);
+        showAppMessage(true, null, "Searching for portal!");
+      } else if (lastState === "searching for ruins") {
+        setIsSearchingForTwin(false);
+        setIsSearchingForRuins(true);
+        setIsHome(false);
+        setIsExploring(false);
         showAppMessage(true, null, "Searching for ruins!");
-      } else if (lastState === "home" || lastState === 'exploring') {
-        if (searchIsActive) {
-          closeSearchExternally();
-        }
-        // showAppMessage(true, null, "Search complete!");
-        foundExploreLocations();
-      } else if (lastMessage === "Clear") {
-        if (searchIsActive) {
-          closeSearchExternally();
-        }
-        foundExploreLocations();
+      } else if (lastState === "home") {
+        setIsSearchingForTwin(false);
+        setIsSearchingForRuins(false);
+        setIsHome(true);
+        setIsExploring(false);
+        showAppMessage(true, null, "You are home");
+      } else if (lastState === "exploring") {
+        setIsSearchingForTwin(false);
+        setIsSearchingForRuins(false);
+        setIsHome(false);
+        setIsExploring(true);
+        showAppMessage(true, null, "You are exploring!");
       }
     }
   }, [lastState]);
 
-
-  // useEffect(() => {
-  //   if ((lastLocationName && lastLocationName === `You are home`) || null) {
-  //     if (searchIsActive) {
-
-  //       //sets search to false and also refetches remaining goes
-  //       closeSearchExternally();
-  //     }
-  //     if (!exploreLocationsAreReady) {
-  //       foundExploreLocations();
-  //     }
- 
-  //   } else if (lastLocationName && lastLocationName === `You are searching`) {
-  //     setSearchIsActive(true);
-  //   }
-  // }, [lastLocationName]);
-
   return (
     <ActiveSearchContext.Provider
       value={{
-        activeSearch,
-        searchIsActive,
-        setSearchIsActive,
-        exploreLocationsAreReady,
-        gettingExploreLocations,
-        foundExploreLocations,
+        isHome,
+        isSearchingForTwin,
+        isSearchingForRuins,
+        isExploring,
         handleGo,
-        closeSearchExternally,
-        refreshSurroundingsManually,
-        resetRefreshSurroundingsManually,
         locationUpdateWSIsOpen,
-        manualSurroundingsRefresh,
         remainingGoes,
         handleGoHome,
       }}

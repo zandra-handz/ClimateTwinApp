@@ -7,7 +7,6 @@ import PortalUnmappedTreasuresView from "../ItemChoicesComponents/PortalUnmapped
 
 import RuinsUnmappedTreasuresView from "../ItemChoicesComponents/RuinsUnmappedTreasureView";
 import { useGroqContext } from "@/app/context/GroqContext";
-import INaturalistTray from "../INaturalistComponents/iNaturalistTray";
 import useINaturalist from "@/app/hooks/useINaturalist";
 import WindyMap from "../WindyMap";
 import { useSurroundingsWS } from "@/app/context/SurroundingsWSContext";
@@ -25,36 +24,35 @@ const CurrentSurroundingsView = ({ height }) => {
 
   return (
     <>
-
       <View style={{ marginVertical: 10, height: 100 }}>
         <WindyMap lat={latitude} lon={longitude} zoom={12} />
       </View>
 
-      {iNaturalist && 
-      groqHistory &&
-        iNaturalist.results &&
-        iNaturalist.results.length > 0 && (
-          <View style={{ height: height }}>
+      <View style={{ height: height }}>
+        {groqHistory && iNaturalist?.results?.length > 0 ? (
+          <>
             {Object.keys(itemChoicesAsObjectExplore).length > 0 && (
               <RuinsUnmappedTreasuresView />
             )}
-
             {Object.keys(itemChoicesAsObjectTwin).length > 0 && (
               <PortalUnmappedTreasuresView />
             )}
-          </View>
+          </>
+        ) : (
+          groqHistory && (
+            <>
+            {/* these buttons go straight to collect screen rn without groqscreen pulled up first, only pulls up when 
+            you back out...  */}
+              {/* {Object.keys(itemChoicesAsObjectExplore).length > 0 && (
+                <RuinsMappedTreasuresView />
+              )}
+              {Object.keys(itemChoicesAsObjectTwin).length > 0 && (
+                <PortalMappedTreasuresView />
+              )} */}
+            </>
+          )
         )}
-
-      {groqHistory && !iNaturalist?.results && iNaturalist.results.length < 1 && (
-        <View style={{ height: height }}>
-          {Object.keys(itemChoicesAsObjectExplore).length > 0 && (
-            <RuinsMappedTreasuresView />
-          )}
-          {Object.keys(itemChoicesAsObjectTwin).length > 0 && (
-            <PortalMappedTreasuresView />
-          )}
-        </View>
-      )}
+      </View>
     </>
   );
 };

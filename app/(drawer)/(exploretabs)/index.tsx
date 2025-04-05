@@ -44,7 +44,7 @@ const index = () => {
   const ITEM_BOTTOM_MARGIN = 0;
 
   useEffect(() => {
-    if (ruinsSurroundings?.id) {
+    if (ruinsSurroundings?.id && portalSurroundings?.id) {
       setSurroundingsViews([
         { id: "1", component: <PortalSurroundingsView height={ITEM_HEIGHT} triggerParentAutoScroll={handleAutoScroll} /> },
         { id: "2", component: <RuinsSurroundingsView height={ITEM_HEIGHT} /> },

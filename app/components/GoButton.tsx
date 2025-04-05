@@ -4,7 +4,7 @@ import { useGlobalStyles } from "../context/GlobalStylesContext";
 import { useActiveSearch } from "../context/ActiveSearchContext";
 import { useSurroundings } from "../context/CurrentSurroundingsContext";
 const GoButton = ({ address }) => {
-  const { handleGo, remainingGoes, searchIsActive } = useActiveSearch();
+  const { handleGo, remainingGoes, isSearchingForTwin } = useActiveSearch();
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const { portalSurroundings } = useSurroundings();
 
@@ -16,7 +16,7 @@ const GoButton = ({ address }) => {
       {remainingGoes && remainingGoes !== "0" ? (
         !portalSurroundings || portalSurroundings?.id === null ? (
           <TouchableOpacity
-            onPress={!searchIsActive ? handleButtonPress : () => {}}
+            onPress={!isSearchingForTwin ? handleButtonPress : () => {}}
             style={[
               appContainerStyles.bigGoButtonContainer,
               themeStyles.primaryOverlayBackground,
@@ -58,7 +58,7 @@ const GoButton = ({ address }) => {
         ) : (
           <>
             <TouchableOpacity
-              onPress={!searchIsActive ? handleButtonPress : () => {}}
+              onPress={!isSearchingForTwin ? handleButtonPress : () => {}}
               style={[
                 appContainerStyles.goButtonContainer,
                 themeStyles.primaryOverlayBackground,

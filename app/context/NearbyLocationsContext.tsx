@@ -42,7 +42,7 @@ interface NearbyLocationsProviderProps {
 export const NearbyLocationsProvider: React.FC<NearbyLocationsProviderProps> = ({ children }) => {
   const { user, isAuthenticated, isInitializing } = useUser(); 
   const { lastMessage } = useSurroundingsWS();
-  const { foundExploreLocations } = useActiveSearch();
+  const { isExploring } = useActiveSearch();
   const queryClient = useQueryClient();  
 
 
@@ -58,9 +58,7 @@ export const NearbyLocationsProvider: React.FC<NearbyLocationsProviderProps> = (
     },
     onSuccess: (data) => {
       if (data) {
-        console.log('getTwinLocation query success:', data);
-        foundExploreLocations(); //will stop animation in NearbyButton and allow button to be pressed
-        // Data is already in the correct structure, no mapping needed here
+        console.log('getTwinLocation query success:', data); 
       }
     },
   });

@@ -13,7 +13,7 @@ import Animated, {
 
 const NearbyButton = ({ color }) => {
   const { themeStyles, appFontStyles } = useGlobalStyles();
-  const {  exploreLocationsAreReady } = useActiveSearch();
+  const { isExploring, isSearchingForRuins } = useActiveSearch();
 
   // Create shared values for rotation and scale
   const rotation = useSharedValue(0);
@@ -21,7 +21,7 @@ const NearbyButton = ({ color }) => {
   const positionShift = useSharedValue(0);
 
   React.useEffect(() => {
-    if (!exploreLocationsAreReady) {
+    if (!isExploring && isSearchingForRuins) { //added both conditions in case app gets stuck
       // Start spinning and enlarging
       rotation.value = withRepeat(
         withTiming(360, { duration: 2000, easing: Easing.linear }), // Smooth rotation
@@ -37,7 +37,7 @@ const NearbyButton = ({ color }) => {
       scale.value = withTiming(1, { duration: 500, easing: Easing.inOut(Easing.ease) }); // Scale down
       positionShift.value = withTiming(0, { duration: 500, easing: Easing.inOut(Easing.ease) }); // Reset position
     }
-  }, [exploreLocationsAreReady]);
+  }, [isExploring, isSearchingForRuins]);
 
   // Create animated styles for rotation and scale
   const animatedStyle = useAnimatedStyle(() => {

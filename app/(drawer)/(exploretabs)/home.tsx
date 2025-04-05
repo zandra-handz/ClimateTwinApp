@@ -13,7 +13,7 @@ const home = () => {
   const { homeLocation } = useHomeLocation(); 
   const { themeStyles, appContainerStyles } = useGlobalStyles(); 
   const { homeSurroundings } = useSurroundings();
-  const { searchIsActive } = useActiveSearch(); 
+  const { isSearchingForTwin } = useActiveSearch(); 
 
  
 
@@ -30,7 +30,7 @@ const home = () => {
         <View style={appContainerStyles.innerFlexStartContainer}>
         {/* <PortalBanner address={homeLocation?.address || "Manchester, NH"} />
           */}
-          {homeSurroundings && !searchIsActive && (
+          {homeSurroundings && !isSearchingForTwin && (
             <HomeSurroundingsView /> 
           )} 
         </View>

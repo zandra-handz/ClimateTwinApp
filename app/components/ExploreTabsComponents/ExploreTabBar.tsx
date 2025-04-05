@@ -5,22 +5,20 @@ import { Text, TouchableOpacity } from "react-native";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
 import NearbyButton from "./NearbyButton";
+import NowButton from "./NowButton";
 import { useActiveSearch } from "../../context/ActiveSearchContext";
 
 
 function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled, openDoubleChecker }) {
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
   const { buildHref } = useLinkBuilder();
-  const { exploreLocationsAreReady } = useActiveSearch();
+  const { isHome, isExploring, isSearchingForTwin, isSearchingForRuins } = useActiveSearch();
   const [ doubleCheckerVisible, setDoubleCheckerVisible ] = useState(false);
 
   const icons = {
     index: (props) => (
-      <MaterialIcons
-        name="my-location"
-        size={appFontStyles.exploreTabBarIcon.width}
-        color={themeStyles.exploreTabBarText.color}
-        {...props}
+      <NowButton 
+        color={props.color} 
       />
     ),
     home: (props) => (
@@ -61,14 +59,8 @@ function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled, openD
 
         const isFocused = state.index === index;
 
-        const onPress = () => {
-          // const isHomeButton = route.name === "home"; 
-          // if (isHomeButton) {
-          //   setDoubleCheckerVisible(true);
-          //   return; // Prevent further execution
-          
-          // } else 
-          if (route.name === 'nearby' && !exploreLocationsAreReady) return; // Prevent navigation if disabled
+        const onPress = () => { 
+          if (route.name === 'nearby' && !isExploring && isSearchingForRuins) return; // Prevent navigation if disabled
 
           const event = navigation.emit({
             type: "tabPress",
@@ -125,7 +117,8 @@ function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled, openD
                     ? themeStyles.exploreTabBarHighlightedText.color
                     : themeStyles.exploreTabBarText.color,
                 },
-                route.name === "nearby" && { opacity: exploreLocationsAreReady ? 1 : 0 },
+                ((route.name === "nearby") || (route.name === "home")) && { opacity: (isExploring && !isSearchingForRuins) ? 1 : 0 },
+                ((route.name === "index")) && { opacity: (!isSearchingForTwin) ? 1 : 0 },
                 disabled && { color: themeStyles.exploreTabBarText.color, opacity: 0.5 }, // Modify text color for disabled
               ]}
             >
