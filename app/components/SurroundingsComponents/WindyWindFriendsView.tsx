@@ -2,6 +2,7 @@ import { View, Text } from "react-native";
 import React from "react"; 
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import WindyWindSquare from "./WindyWindSquare";
+import useHomeLocation from "@/app/hooks/useHomeLocation";
 
 //maybe get wind direction and wind speed of both home and portal locations and animate that way?
 
@@ -24,6 +25,7 @@ const WindyWindFriendsView = ({
 }) => {
 
       const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
+      const  homeLocation  = useHomeLocation();
       const formatDescription = (description) => {
         return description
           .replace(/([A-Z])/g, " $1") // Add space before uppercase letters
@@ -63,12 +65,17 @@ const WindyWindFriendsView = ({
    
         <View style={{ marginTop: 10, flexDirection: 'row', padding: 10,  alignItems: 'center', justifyContent: 'space-between', width: "100%",   flex: 1 }}>
         <View style={{height: 100, width: '26%'}}>
+        {homeLocation && (
+          
         <WindyWindSquare
             lat={homeLat}
             lon={homeLon}
             zoom={homeZoom}
 
           />
+
+          
+        )}
           
             
         </View>

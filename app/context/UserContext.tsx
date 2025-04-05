@@ -139,6 +139,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
         }
 
         try {
+          //This will check cache first, then hit up endpoint if nothing in cache
           const userSettingsData = await queryClient.fetchQuery({
             queryKey: ["userSettings", userData?.id],
             queryFn: getUserSettings,
@@ -212,6 +213,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     mutationFn: (newSettings) => updateUserSettings(user?.id, newSettings),
     onSuccess: (data) => {
       setAppSettings((prev) => ({ ...prev, ...data }));
+
       queryClient.invalidateQueries(["userSettings", user?.id]);
       queryClient.refetchQueries(["userSettings", user?.id]).then(() => {
         const updatedSettings = queryClient.getQueryData([
@@ -293,15 +295,15 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
 
   useEffect(() => {
-    console.log('usernotifs useEffect triggered in context');
-    if (userNotificationSettings?.receive_notifications) {
+    console.log('usernotifs useEffect triggered in context: ', appSettings?.receive_notifications);
+    if (appSettings?.receive_notifications) {
         console.log('registering for notifs');
         registerForNotifications();
     } else {
         console.log('removing notifs permissions');
         removeNotificationPermissions();
     }
-}, [userNotificationSettings]);
+}, [appSettings]);
 
 
 const registerForNotifications = async () => {
@@ -316,18 +318,23 @@ const registerForNotifications = async () => {
 
     if (Device.isDevice) {
         const { status: existingStatus } = await Notifications.getPermissionsAsync();
+       console.log(`existingStatus: `, existingStatus)
         let finalStatus = existingStatus;
         if (existingStatus !== "granted") {
             const { status } = await Notifications.requestPermissionsAsync();
             finalStatus = status;
+            console.log(`new status: `, status);
         }
 
         if (finalStatus === "granted" && user) {
+          console.log('GRANTED is TRUE');
             const projectId = Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId;
             const pushTokenString = (await Notifications.getExpoPushTokenAsync({ projectId })).data;
             await SecureStore.setItemAsync('pushToken', pushTokenString);
             await updateUserSettings(user.id, { receive_notifications: true, expo_push_token: pushTokenString });
           //  console.log(pushTokenString);
+        } else {
+          removeNotificationPermissions();
         }
     }
 };
