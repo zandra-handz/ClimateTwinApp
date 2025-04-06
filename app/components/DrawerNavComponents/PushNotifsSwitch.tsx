@@ -8,7 +8,7 @@ import { Feather, AntDesign } from "@expo/vector-icons";
 import * as Linking from "expo-linking";
 
 const PushNotifsSwitch = () => {
-  const { appSettings, updateSettings, removeNotificationPermissions, registerForNotifications } = useUser();
+  const { appSettings, registerForNotifications } = useUser();
   const { lightOrDark, themeStyles, appContainerStyles, appFontStyles } =
     useGlobalStyles();
 

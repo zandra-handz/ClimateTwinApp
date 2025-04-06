@@ -326,8 +326,7 @@ const registerForNotifications = async () => {
             console.log(`new status: `, status);
         }
 
-        if (finalStatus === "granted" && user) {
-          console.log('GRANTED is TRUE');
+        if (finalStatus === "granted" && user) { 
             const projectId = Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId;
             const pushTokenString = (await Notifications.getExpoPushTokenAsync({ projectId })).data;
             await SecureStore.setItemAsync('pushToken', pushTokenString);

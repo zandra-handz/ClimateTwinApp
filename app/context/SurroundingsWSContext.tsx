@@ -8,7 +8,7 @@ import React, {
 import * as SecureStore from "expo-secure-store"; 
 import { useUser } from "../context/UserContext"; 
 import { useAppMessage } from "../context/AppMessageContext"; 
-import useExploreRoute from "../hooks/useExploreRoute"; 
+import useExploreRoute from "../hooks/useExploreRoute";  
 
 interface SurroundingsWSContextType {
   sendMessage: (message: any) => void;
@@ -148,6 +148,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     socket.onmessage = (event: WebSocketMessageEvent) => {
       const update = JSON.parse(event.data);
       console.log("Received update from socket in WS context:", update);
+      showAppMessage(true, null, `Update from socket: ${update.name || 'No name'}`);
       // Update state so that consumers can receive the update.
       // setLastMessage(update);
 
@@ -321,6 +322,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
   const handleRefreshDataFromSocket = () => {
     console.log('sending refresh message to socket');
+    showAppMessage(true, null, 'Triggered resend from socket!')
     sendMessage({ action: "refresh" });
   };
 
