@@ -13,6 +13,7 @@ import { go, getRemainingGoes, expireSurroundings } from "../apicalls";
 import { useSurroundingsWS } from "./SurroundingsWSContext";
 import { useAppMessage } from "./AppMessageContext";
 
+import useExploreRoute from "../hooks/useExploreRoute";
 interface ActiveSearchContextType {
   isSearchingForTwin: boolean;
   isSearchingForRuins: boolean;
@@ -64,6 +65,8 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
       setIsHome(false);
     }
   }, [isAuthenticated]);
+
+  useExploreRoute((isExploring || isSearchingForRuins), false, isAuthenticated);
 
   const {
     data: remainingGoes,

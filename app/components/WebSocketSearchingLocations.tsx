@@ -180,14 +180,14 @@ const WebSocketSearchingLocations: React.FC<{
             </View>
             <View style={appContainerStyles.defaultElementRow}>
               <View style={styles.updatesContainer}>
-                <View style={styles.infoContainer}>
+                {/* <View style={styles.infoContainer}>
                   <AnimatedTextInput
                     style={[styles.updateText, themeStyles.primaryText]}
                     animatedProps={animatedCountry}
                     editable={false}
                     defaultValue={""}
                   />
-                </View>
+                </View> */}
               </View>
             </View>
           </View>

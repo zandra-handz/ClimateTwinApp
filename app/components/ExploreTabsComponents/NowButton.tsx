@@ -1,5 +1,5 @@
 import React from "react";
-import { View, TextInput } from "react-native";
+import { View, Text, TextInput } from "react-native";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import { useActiveSearch } from "../../context/ActiveSearchContext";
@@ -7,6 +7,7 @@ import Animated, {
   Easing,
   useSharedValue,
   useAnimatedProps,
+  useDerivedValue,
   withRepeat,
   withTiming,
   useAnimatedStyle,
@@ -52,13 +53,18 @@ const NowButton = ({ color }) => {
   const scale = useSharedValue(1);
   const positionShift = useSharedValue(0);
 
-  const animatedTemp = useAnimatedProps(() => {
-    const difference =
-      temperatureDifference.value !== null &&
-      !isNaN(Number(temperatureDifference.value))
-        ? Number(temperatureDifference.value)
-        : null;
 
+  const derivedTemp = useDerivedValue(() => {
+    return temperatureSharedValue.value;
+  });
+  
+  const animatedTemp = useAnimatedProps(() => {
+    const temp = derivedTemp.value;
+  
+    const difference = !isNaN(Number(temperatureDifference.value))
+      ? Number(temperatureDifference.value)
+      : null;
+  
     let color = null;
     if (difference && difference < 2) {
       color = "red";
@@ -68,19 +74,47 @@ const NowButton = ({ color }) => {
     } else {
       color = themeStyles.primaryText.color;
     }
-
+  
     return {
-      text: `${temperatureSharedValue.value}°`,
-      defaultValue: `${temperatureSharedValue.value}°`,
+      text: `${temp}°`,
+      defaultValue: `${temp}°`,
       color: color,
-      //fontSize: 2,
       transform: [
-        { opacity: scale.value },
-        // { rotate: `${rotation.value}deg` }, // Apply rotation
-        { scale: scale.value }, // Apply scaling
+        { scale: scale.value },
       ],
     };
   });
+  
+
+  // const animatedTemp = useAnimatedProps(() => {
+  //   const difference =
+  //     // temperatureDifference.value !== null &&
+  //     !isNaN(Number(temperatureDifference.value))
+  //       ? Number(temperatureDifference.value)
+  //       : null;
+
+  //   let color = null;
+  //   if (difference && difference < 2) {
+  //     color = "red";
+  //   } else if (difference && difference <= 30) {
+  //     const colorIndex = Math.floor(((difference - 2) / 28) * 8);
+  //     color = colorMap[colorIndex];
+  //   } else {
+  //     color = themeStyles.primaryText.color;
+  //   }
+
+  //   return {
+  //     text: `${temperatureSharedValue.value}°`,
+  //     defaultValue: `${temperatureSharedValue.value}°`,
+  //     color: color,
+  //     //fontSize: 2,
+  //     transform: [
+  //       { opacity: scale.value },
+  //       // { rotate: `${rotation.value}deg` }, // Apply rotation
+  //       { scale: scale.value }, 
+  //     ],
+  //   };
+  // });
 
   React.useEffect(() => {
     if (!isExploring && isSearchingForTwin) {
@@ -100,8 +134,7 @@ const NowButton = ({ color }) => {
         duration: 500,
         easing: Easing.inOut(Easing.ease),
       }); // Move up
-    } else {
-      // Reset rotation and shrink back to normal size
+    } else { 
       rotation.value = 0;
       scale.value = withTiming(1, {
         duration: 500,
@@ -141,9 +174,7 @@ const NowButton = ({ color }) => {
         {isSearchingForTwin && (
           <View
             style={[
-              {
-                // position: "absolute",
-
+              { 
                 width: "100%",
                 height: "auto",
                 zIndex: 100,
@@ -152,7 +183,8 @@ const NowButton = ({ color }) => {
                 paddingBottom: 10,
               },
             ]}
-          >
+          > 
+
             <AnimatedTextInput
               style={[themeStyles.primaryText]}
               animatedProps={animatedTemp}

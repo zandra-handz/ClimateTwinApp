@@ -54,7 +54,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   const [locationSocketColor, setLocationSocketColor] = useState<any>(null);
   const [ alwaysReRender, setAlwaysReRender ] = useState<number>(1);
 
-  useExploreRoute(!!lastLocationId, false, isAuthenticated);
+  //useExploreRoute(!!lastLocationId, false, isAuthenticated);
 
   //const [reconnectAttempt, setReconnectAttempt] = useState(0);
    

@@ -4,11 +4,17 @@ import ExploreTabsHeader from "../components/HeaderComponents/ExploreTabsHeader"
 import HomeHeader from "../components/HeaderComponents/HomeHeader";
 
 import DrawerCustomizer from "../components/DrawerNavComponents/DrawerCustomizer";
-
-import * as Notifications from "expo-notifications";
-
-
  
+import * as Notifications from 'expo-notifications';
+
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
+
 
 export default () => {
   // export default function Layout() {

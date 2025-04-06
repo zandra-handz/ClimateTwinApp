@@ -71,20 +71,21 @@ export default Sentry.wrap(function Layout() {
 
     requestPermissions();
   }, [hasShareIntent, shareIntent]);
+  
 
-  useEffect(() => {
-    // hellofriendh had load fonts here
+  // useEffect(() => {
+  //   // hellofriendh had load fonts here
 
-    const notificationSubscription =
-      Notifications.addNotificationReceivedListener((notification) => {
-        console.log("Notification received in foreground:", notification);
-        Alert.alert(
-          notification.request.content.title,
-          notification.request.content.body
-        );
-      });
-    return () => notificationSubscription.remove();
-  }, []);
+  //   const notificationSubscription =
+  //     Notifications.addNotificationReceivedListener((notification) => {
+  //       console.log("Notification received in foreground:", notification);
+  //       Alert.alert(
+  //         notification.request.content.title,
+  //         notification.request.content.body
+  //       );
+  //     });
+  //   return () => notificationSubscription.remove();
+  // }, []);
 
   // useEffect(() => {
   //   const subscription = AppState.addEventListener("change", (nextAppState) => {

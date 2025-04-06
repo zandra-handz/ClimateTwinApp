@@ -3,6 +3,10 @@ import React from "react";
 import { useGlobalStyles } from "../context/GlobalStylesContext";
 import { useActiveSearch } from "../context/ActiveSearchContext";
 import { useSurroundings } from "../context/CurrentSurroundingsContext";
+
+import AnimatedCircle from "../animations/AnimatedCircle";
+
+
 const GoButton = ({ address }) => {
   const { handleGo, remainingGoes, isSearchingForTwin } = useActiveSearch();
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
@@ -13,6 +17,7 @@ const GoButton = ({ address }) => {
   };
   return (
     <>
+
       {remainingGoes && remainingGoes !== "0" ? (
         !portalSurroundings || portalSurroundings?.id === null ? (
           <TouchableOpacity
@@ -23,6 +28,9 @@ const GoButton = ({ address }) => {
               { borderColor: themeStyles.tabBarHighlightedText.color },
             ]}
           >
+                <View style={{position: 'absolute', top: 0}}>
+      <AnimatedCircle width={'240'} height={'240'} />
+    </View>
             <>
             <View style={{flexWrap: 'flex', textAlign: 'center', alignItems: 'center', justifyContent: 'center', flex: 1, width: '100%'}}>
               
@@ -53,6 +61,7 @@ const GoButton = ({ address }) => {
                   {`${remainingGoes}`}
                 </Text>
               )}
+         
             </>
           </TouchableOpacity>
         ) : (

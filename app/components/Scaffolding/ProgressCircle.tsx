@@ -15,7 +15,7 @@ const AnimatedCircle = Animated.createAnimatedComponent(Circle); // Create an an
 const AnimatedText = Animated.createAnimatedComponent(Text); // Create an animated Text component
 
 const ProgressCircle = ({height = 52, width = 52}) => {
-  const { lastSearchProgress, lastLocationId } = useSurroundingsWS();
+  const { lastSearchProgress } = useSurroundingsWS();
   const { themeStyles, constantColorsStyles } = useGlobalStyles();
 
   const progressPercentage = useSharedValue(0);
@@ -50,12 +50,6 @@ const ProgressCircle = ({height = 52, width = 52}) => {
   //   }
   // }, [lastLocationId]);
 
-  // Animate the text displaying the percentage
-  const animatedTextProps = useAnimatedProps(() => {
-    return {
-      text: `${Math.round(progressPercentage.value)}%`, // Round the value for display
-    };
-  });
 
   const animatedCircleProps = useAnimatedProps(() => ({
     strokeDashoffset: circumference - (progressPercentage.value / 100) * circumference,
@@ -69,27 +63,21 @@ const ProgressCircle = ({height = 52, width = 52}) => {
           cy={height / 2}
           r={radius}
           stroke="#e0e0e0"
-          strokeWidth="10"
+          strokeWidth="5"
           fill="none"
         />
         <AnimatedCircle
           cx={width / 2}
           cy={height / 2}
           r={radius}
-          stroke={'teal'}
-        //  stroke={constantColorsStyles.v1LogoColor.backgroundColor}
-          strokeWidth="10"
+          stroke={'teal'} 
+          strokeWidth="5"
           fill="none"
           strokeDasharray={circumference}
           animatedProps={animatedCircleProps}
           strokeLinecap="round"
         />
-      </Svg>
-      {/* Display the percentage text
-      <AnimatedText
-        style={[constantColorsStyles.text, { marginTop: 10 }]}
-        animatedProps={animatedTextProps}
-      /> */}
+      </Svg> 
     </View>
   );
 };

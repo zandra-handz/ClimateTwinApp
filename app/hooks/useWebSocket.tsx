@@ -85,7 +85,8 @@ const useWebSocket = () => {
         prevLatitude.value = latitude.value;
         prevLongitude.value = longitude.value;
 
-        temperatureSharedValue.value = update.temperature || "";
+        temperatureSharedValue.value = update.temperature || 1;
+        console.log(temperatureSharedValue.value);
         countrySharedValue.value = update.country_name || "";
         temperatureDifference.value = update.temp_difference || "";
 

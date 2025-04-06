@@ -1,11 +1,14 @@
 import { useNavigationContainerRef, useRouter, useSegments } from "expo-router";
 import { useState, useEffect } from "react";
+import { usePathname } from "expo-router";
+
 
  
 
 const useExploreRoute = (isExploring: boolean, isInitializingLocation: boolean, isAuthenticated: boolean) => {
   const navigationRef = useNavigationContainerRef();
   const router = useRouter();
+  const pathname = usePathname(); 
   const segments = useSegments();
   const [isNavigationReady, setNavigationReady] = useState(false);
  
@@ -29,6 +32,9 @@ const useExploreRoute = (isExploring: boolean, isInitializingLocation: boolean, 
     const isOnSignIn = segments[0] === "signin";
     const isOnExploreTabs = segments[1] === "(exploretabs)"; 
     const isOnDashboard = segments[1] === "(homedashboard)";
+
+    // const isOnExploreTabs = pathname?.startsWith("/exploretabs");
+    // const isOnDashboard = pathname?.startsWith("/homedashboard");
     console.log(segments[0]);
    
     // console.log(isNavigationReady);
