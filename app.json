@@ -32,12 +32,13 @@
       "supportsTablet": true
     },
     "android": {
-      "useNextNotificationsApi": true,
+      // "useNextNotificationsApi": true,
       "permissions": [
+        "android.permission.POST_NOTIFICATIONS",
         "android.permission.READ_MEDIA_IMAGES",
         "android.permission.READ_MEDIA_VIDEO",
         "android.permission.READ_MEDIA_AUDIO",
-        "android.permission.POST_NOTIFICATIONS",
+      
         "READ_EXTERNAL_STORAGE",
         "WRITE_EXTERNAL_STORAGE",  
       ],
@@ -48,9 +49,9 @@
       "package": "com.badrainbowz.climatetwinapp", 
       "googleServicesFile": "./google-services.json"
     },
-    "notification": {
-      "iosDisplayInForeground": true
-    },
+    // "notification": {
+    //   "iosDisplayInForeground": true
+    // },
     "web": {
       "bundler": "metro",
       "output": "static",
