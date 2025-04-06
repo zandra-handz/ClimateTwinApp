@@ -78,7 +78,7 @@ export const DeviceLocationProvider: React.FC = ({ children }) => {
   
               try {
                 const response = await Geocoder.from(latitude, longitude);
-                console.log('response from Geocoder: ', response);
+             
                 const address =
                   response.results[0]?.formatted_address || "Unknown Address";
                 const formattedData = {

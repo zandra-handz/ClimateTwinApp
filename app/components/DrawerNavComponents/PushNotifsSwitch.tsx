@@ -27,6 +27,7 @@ const PushNotifsSwitch = () => {
       setReturningFromPhoneSettings(true);
       Linking.openSettings();
       // app state will then trigger registering for notifications upon return to app
+  
      
     } else {
       registerForNotifications();

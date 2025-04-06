@@ -148,7 +148,10 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     socket.onmessage = (event: WebSocketMessageEvent) => {
       const update = JSON.parse(event.data);
       console.log("Received update from socket in WS context:", update);
-      showAppMessage(true, null, `Update from socket: ${update.name || 'No name'}`);
+
+      //FOR DEBUGGING ONLY:
+      // showAppMessage(true, null, `Update from socket: ${update.name || 'No name'}`);
+      
       // Update state so that consumers can receive the update.
       // setLastMessage(update);
 
