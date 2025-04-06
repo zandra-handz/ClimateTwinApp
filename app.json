@@ -32,7 +32,7 @@
       "supportsTablet": true
     },
     "android": {
-      
+      "useNextNotificationsApi": true,
       "permissions": [
         "android.permission.READ_MEDIA_IMAGES",
         "android.permission.READ_MEDIA_VIDEO",
@@ -47,6 +47,9 @@
       },
       "package": "com.badrainbowz.climatetwinapp", 
       "googleServicesFile": "./google-services.json"
+    },
+    "notification": {
+      "iosDisplayInForeground": true
     },
     "web": {
       "bundler": "metro",
