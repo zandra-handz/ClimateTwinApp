@@ -34,8 +34,15 @@ interface AppMessageContextProviderProps {
 export const AppMessageContextProvider: React.FC<AppMessageContextProviderProps> = ({ children }) => {
   const [messageQueue, setMessageQueue] = useState<AppMessageData[]>([]);
 
-  const showAppMessage = (result: boolean, resultData: any, resultsMessage = 'Action successful') => {
-    setMessageQueue(prevQueue => [...prevQueue, { result, resultData, resultsMessage }]);
+  const showAppMessage = (
+    result: boolean,
+    resultData: any,
+    resultsMessage = 'Action successful',
+    buttonPress: (() => void) | null = null,
+    buttonLabel = ''
+  ) => {
+
+    setMessageQueue(prevQueue => [...prevQueue, { result, resultData, resultsMessage, buttonPress, buttonLabel }]);
   };
 
   const hideAppMessage = () => {

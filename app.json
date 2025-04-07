@@ -32,7 +32,11 @@
       "supportsTablet": true
     },
     "android": {
-      // "useNextNotificationsApi": true,
+      "notification": {
+        "icon": "./app/assets/images/logoicon.png",
+        "color": "#60aa68"
+
+      },
       "permissions": [
         "NOTIFICATIONS",
         "android.permission.POST_NOTIFICATIONS",

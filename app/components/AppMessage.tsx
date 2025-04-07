@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, StyleSheet, Text, Animated } from 'react-native';
+import { View, StyleSheet, Text, Animated, TouchableOpacity } from 'react-native';
 import { useGlobalStyles } from '../context/GlobalStylesContext';
 import { useAppMessage } from '../context/AppMessageContext';
 
@@ -7,9 +7,12 @@ const AppMessage = ({
   delay = 0,
   resultsDisplayDuration = 1600, // Duration to show results message (default 3 seconds)
   messageDelay = 0, // Delay before the message appears (2 seconds)
+  onPress=null,
+  onPressLabel='',
+
 }) => {
   const { messageQueue, removeMessage } = useAppMessage();
-  const { themeStyles } = useGlobalStyles();
+  const { themeStyles, appContainerStyles, appFontStyles, constantColorsStyles } = useGlobalStyles();
   const [showResultsMessage, setShowResultsMessage] = useState(false);
   const translateY = useRef(new Animated.Value(-100)).current;
 
@@ -19,6 +22,7 @@ const AppMessage = ({
 
       let timeout;
       let resultsTimeout;
+      let delay = messageQueue[0]?.buttonPress ? 5000 :  resultsDisplayDuration;
 
       timeout = setTimeout(() => {
         if (message.result) {
@@ -42,7 +46,7 @@ const AppMessage = ({
               removeMessage(); // Remove the message from the queue once it's finished
               setShowResultsMessage(false);
             });
-          }, resultsDisplayDuration);
+          }, delay);
         }
       }, messageDelay); // Delay before showing the message
 
@@ -62,7 +66,17 @@ const AppMessage = ({
       >
         <Text style={[styles.loadingTextBold, themeStyles.primaryText]}>
           {messageQueue[0]?.resultsMessage}
+
         </Text>
+        {messageQueue[0]?.buttonPress && messageQueue[0]?.buttonLabel && (
+          <View style={{marginTop: 10, marginBottom: 4}}>
+            
+          <TouchableOpacity style={[appContainerStyles.appMessageButton, {backgroundColor: constantColorsStyles.v1LogoColor.backgroundColor}]} onPress={messageQueue[0]?.buttonPress}>
+            <Text style={[constantColorsStyles.v1LogoColor, appFontStyles.appMessageButtonText]}>{messageQueue[0]?.buttonLabel}</Text>
+          </TouchableOpacity>
+          
+          </View>
+        )}
       </Animated.View>
     </View>
   );

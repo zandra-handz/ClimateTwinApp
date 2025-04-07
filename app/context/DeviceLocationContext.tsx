@@ -53,7 +53,6 @@ export const DeviceLocationProvider: React.FC = ({ children }) => {
     DeviceLocation | undefined
   >(undefined);
 
-  const [locationPermissionTrigger, setLocationPermissionTrigger] = useState(0); // updates trigger via timestamp
   const [newPermissionRequest, setNewPermissionRequest] = useState<number>(0);
 
    useEffect(() => {

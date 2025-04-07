@@ -425,6 +425,19 @@ const containerStyles = StyleSheet.create({
     alignItems: "center",
     flexWrap: "wrap",
   },
+  appMessageButton: {
+    textAlign: 'center',
+    flexDirection: 'row',
+    alignItems:'center',
+    justifyContent: 'center',
+    paddingVertical: 6, 
+    paddingHorizontal: 12,
+    borderWidth: StyleSheet.hairlineWidth,
+
+    borderRadius: 20,
+    height: 'auto',
+
+  },
   notifierContainer: {
     height: 180,
     width: '96%',  
@@ -1079,6 +1092,11 @@ const fontStyles = StyleSheet.create({
   },
   windCompassText: {
     fontSize: 12, 
+
+  },
+  appMessageButtonText: {
+    fontWeight: 'bold',
+    fontSize: 15,
 
   },
   notifierText: {

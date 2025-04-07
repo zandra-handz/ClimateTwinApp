@@ -1,20 +1,25 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text, TouchableOpacity, Platform } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import { useUser } from "../../context/UserContext";
 import { useAppState } from "@/app/context/AppStateContext";
+import { useAppMessage } from "@/app/context/AppMessageContext";
+
 import { DrawerItem } from "@react-navigation/drawer";
 import { Feather, AntDesign } from "@expo/vector-icons";
 import * as Linking from "expo-linking";
+import * as Notifications from "expo-notifications";
+
+import MetaGuider from "../MetaGuider";
 
 const PushNotifsSwitch = () => {
-  const { appSettings, registerForNotifications } = useUser();
+  const { appSettings, registerForNotifications, getNotificationPermissionStatus, removeNotificationPermissions } = useUser();
   const { lightOrDark, themeStyles, appContainerStyles, appFontStyles } =
     useGlobalStyles();
 
   const { isAppForeground, isAppBackground, isAppInactive } = useAppState();
-
-
+const { showAppMessage } = useAppMessage();
+  const [metaGuiderVisible, setMetaGuiderVisible ] = useState<boolean>(false);
   const [ returningFromPhoneSettings, setReturningFromPhoneSettings ] = useState<boolean>(false);
  
   const pressColor = themeStyles.primaryText.color;
@@ -22,22 +27,38 @@ const PushNotifsSwitch = () => {
   const setting = appSettings?.receive_notifications === true ? 'On' : 'Off';
  
 
-  const handleReset = () => {
-    if (appSettings?.receive_notifications === true) {
-      setReturningFromPhoneSettings(true);
-      Linking.openSettings();
-      // app state will then trigger registering for notifications upon return to app
-  
-     
+  const handleReset = async () => {
+    console.log('handleReset triggered');
+    const currentPhonePermission = await getNotificationPermissionStatus();
+    const userSettingsPermission = appSettings?.receive_notifications;
+
+    console.log(currentPhonePermission);
+    console.log(userSettingsPermission);
+ 
+    if (currentPhonePermission === 'granted') {
+      console.log('current permissions is granted');
+      showAppMessage(true, null, `To change notification settings, please visit your phone's system settings.`, handlePhoneAppSettings, 'Settings');
     } else {
       registerForNotifications();
+
 
     } 
 
   };
 
+  const handlePhoneAppSettings = () => {
+    
+    setReturningFromPhoneSettings(true);
+    Linking.openSettings();
+    setMetaGuiderVisible(false);
+
+
+
+  };
+
   useEffect(() => {
     if (isAppForeground && returningFromPhoneSettings) {
+      console.log('returning from phone app settings!');
       registerForNotifications();
       setReturningFromPhoneSettings(false);
     }
@@ -83,6 +104,7 @@ const PushNotifsSwitch = () => {
             
             </Text>
           </TouchableOpacity>
+          <MetaGuider title={'title'} message={`To change notification settings, please visit your phone's system settings.`} isVisible={metaGuiderVisible} onPress={handlePhoneAppSettings} />
         </View> 
     </View>
   );
