@@ -39,7 +39,12 @@ const { showAppMessage } = useAppMessage();
       console.log('current permissions is granted');
       showAppMessage(true, null, `To change notification settings, please visit your phone's system settings.`, handlePhoneAppSettings, 'Settings');
     } else {
-      registerForNotifications();
+      showAppMessage(true, null, `To change notification settings, please visit your phone's system settings.`, handlePhoneAppSettings, 'Settings');
+   
+      // doesn't seem to work
+      //maybe we don't check if granted is true in this function 
+      //and just ask for permission every time
+      //registerForNotifications();
 
 
     } 

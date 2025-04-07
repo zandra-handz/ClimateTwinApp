@@ -168,19 +168,19 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
         setIsSearchingForRuins(true);
         setIsHome(false);
         setIsExploring(false);
-        showAppMessage(true, null, "Searching for ruins!");
+        // showAppMessage(true, null, "Searching for ruins!");
       } else if (lastState === "home") {
         setIsSearchingForTwin(false);
         setIsSearchingForRuins(false);
         setIsHome(true);
         setIsExploring(false);
-        showAppMessage(true, null, "You are home");
+        // showAppMessage(true, null, "You are home");
       } else if (lastState === "exploring") {
         setIsSearchingForTwin(false);
         setIsSearchingForRuins(false);
         setIsHome(false);
         setIsExploring(true);
-        showAppMessage(true, null, "You are exploring!");
+        // showAppMessage(true, null, "You are exploring!");
       }
     }
   }, [lastState]);
