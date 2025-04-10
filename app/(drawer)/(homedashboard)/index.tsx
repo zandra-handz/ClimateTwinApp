@@ -1,19 +1,19 @@
 import React, { useEffect } from "react";
 import { View, Button } from "react-native";
 import { useDeviceLocationContext } from "@/app/context/DeviceLocationContext";
-import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
+import { useGlobalStyles } from "../../context/GlobalStylesContext";
 import { useActiveSearch } from "../../context/ActiveSearchContext";
 import GoButton from "@/app/components/GoButton";
 import TurnOnLocationButton from "@/app/components/TurnOnLocationButton";
 import WebSocketSearchingLocations from "../../components/WebSocketSearchingLocations";
 import WindyWindSquare from "@/app/components/SurroundingsComponents/WindyWindSquare";
+import Temperatures from "@/app/animations/Temperatures";
 import * as Sentry from "@sentry/react-native";
 
 const index = () => {
-  const { deviceLocation } = useDeviceLocationContext();  
+  const { deviceLocation } = useDeviceLocationContext();
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { isSearchingForTwin } = useActiveSearch();
-
 
   // useEffect(() => {
   //   if (deviceLocation) {
@@ -33,7 +33,6 @@ const index = () => {
         {/* <Button title='Try!' onPress={ () => { Sentry.captureException(new Error('First error')) }}/> */}
 
         <View style={appContainerStyles.innerFlexStartContainer}>
-
           <View
             style={{
               width: "100%",
@@ -42,56 +41,67 @@ const index = () => {
               alignItems: "center",
             }}
           >
+                          {isSearchingForTwin && (
+                            <>
+                            
+                <View
+                  style={[
+                    appContainerStyles.mapParentContainer,
+                    {
+                      borderColor: themeStyles.primaryText.color,
+                    },
+                  ]}
+                >
+                  <WebSocketSearchingLocations
+                    //don't think am using the below
+                    reconnectOnUserButtonPress={isSearchingForTwin}
+                  />
 
+                </View>
+                <View style={{ height: 100, marginTop: 80 }}>
+                    <Temperatures />
+                  </View>
+                </>
 
-                  <>
-          {/* <Button title='Try!' onPress={ () => { Sentry.captureException(new Error('First error')) }}/>
-           */}
-          {!isSearchingForTwin &&
-            deviceLocation &&
-            deviceLocation?.address &&
-            deviceLocation?.latitude &&
-            deviceLocation?.longitude && (
+              )}
+            <>
+              {/* <Button title='Try!' onPress={ () => { Sentry.captureException(new Error('First error')) }}/>
+               */}
               <>
-   
-                  <View
-                    style={[
-                      appContainerStyles.mapHomeScreenContainer,
-                      { marginBottom: 20 },
-                    ]}
-                  >
-                    <View style={{ width: "100%", height: "100%" }}>
-                      <WindyWindSquare
-                        lat={42.846411}
-                        lon={-71.5046743}
-                        zoom={11}
-                      />
-                    </View>
-                  </View> 
-                    <GoButton address={deviceLocation?.address} /> 
-               
+                <View
+                  style={[
+                    appContainerStyles.mapHomeScreenContainer,
+                    { marginBottom: 20 },
+                  ]}
+                >
+                  {!isSearchingForTwin &&
+                    deviceLocation &&
+                    deviceLocation?.address &&
+                    deviceLocation?.latitude &&
+                    deviceLocation?.longitude && (
+                      <View style={{ width: "100%", height: "100%" }}>
+                        <WindyWindSquare
+                          lat={42.846411}
+                          lon={-71.5046743}
+                          zoom={11}
+                        />
+                      </View>
+                    )}
+                </View>
+
+                <View style={{ height: 240 }}>
+                  {!isSearchingForTwin &&
+                    deviceLocation &&
+                    deviceLocation?.address &&
+                    deviceLocation?.latitude &&
+                    deviceLocation?.longitude && (
+                      <GoButton address={deviceLocation?.address} size={240} />
+                    )}
+                  {!deviceLocation?.address && <TurnOnLocationButton />}
+                </View>
               </>
-            )}
-              {!deviceLocation?.address && <TurnOnLocationButton />}
-          {isSearchingForTwin && (
-            <View
-              style={[
-                appContainerStyles.mapParentContainer,
-                {
-                  borderColor: themeStyles.primaryText.color,
-                 
-                },
-              ]}
-            >
-              <WebSocketSearchingLocations
-              //don't think am using the below
-                reconnectOnUserButtonPress={isSearchingForTwin}
-              />
-              
-            </View>
-            
-          )}
-          </>
+
+            </>
           </View>
         </View>
       </View>

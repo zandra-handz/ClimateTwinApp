@@ -10,23 +10,26 @@ import WindyWindFriendsView from "./WindyWindFriendsView";
 
 const PortalSurroundingsView = ({ height, triggerParentAutoScroll }) => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { portalSurroundings, ruinsSurroundings, homeSurroundings, handlePickNewSurroundings } = useSurroundings();
+  const {
+    portalSurroundings,
+    ruinsSurroundings,
+    homeSurroundings,
+    handlePickNewSurroundings,
+  } = useSurroundings();
   const { triggerItemChoicesRefetch } = useInteractiveElements();
   const isDisabled = !!ruinsSurroundings?.id;
 
   const handleExploreLocation = async () => {
-    const formattedData =  {
-      explore_type: 'twin_location',
+    const formattedData = {
+      explore_type: "twin_location",
       id: portalSurroundings?.id,
-    } 
+    };
     await handlePickNewSurroundings(formattedData);
     //triggerParentAutoScroll();
     //triggerItemChoicesRefetch();
- 
   };
 
   const overlayColor = `${themeStyles.primaryBackground.backgroundColor}CC`; //99 is slightly lighter
-
 
   return (
     <View style={{ flex: 1, height, position: "relative" }}>
@@ -35,7 +38,7 @@ const PortalSurroundingsView = ({ height, triggerParentAutoScroll }) => {
       {/* Main content container */}
       <View
         style={{
-         // backgroundColor: "gray",
+          // backgroundColor: "gray",
           borderRadius: 20,
           width: "100%",
           //padding: 10,
@@ -52,25 +55,26 @@ const PortalSurroundingsView = ({ height, triggerParentAutoScroll }) => {
           homeWindSpeed={homeSurroundings.windSpeed}
           homeWindDirection={homeSurroundings.windDirection}
         /> */}
-
-      <WindyWindFriendsView
-          name={portalSurroundings.name}
-          description={portalSurroundings.description}
-          windSpeed={portalSurroundings.windSpeed}
-          windDirection={portalSurroundings.windDirection}
-          windFriends={portalSurroundings.windFriends}
-          homeDescription={homeSurroundings.description}
-          homeWindSpeed={homeSurroundings.windSpeed}
-          homeWindDirection={homeSurroundings.windDirection}
-
-          homeLat={homeSurroundings.latitude}
-          homeLon={homeSurroundings.longitude}
-          //homeZoom set inside
-          portalLat={portalSurroundings.latitude}
-          portalLon={portalSurroundings.longitude}
-          //portalZoom set inside
-          
-        />
+        {portalSurroundings &&
+          portalSurroundings?.name &&
+          portalSurroundings?.id && (
+            <WindyWindFriendsView
+              name={portalSurroundings.name}
+              description={portalSurroundings.description}
+              windSpeed={portalSurroundings.windSpeed}
+              windDirection={portalSurroundings.windDirection}
+              windFriends={portalSurroundings.windFriends}
+              homeDescription={homeSurroundings.description}
+              homeWindSpeed={homeSurroundings.windSpeed}
+              homeWindDirection={homeSurroundings.windDirection}
+              homeLat={homeSurroundings.latitude}
+              homeLon={homeSurroundings.longitude}
+              //homeZoom set inside
+              portalLat={portalSurroundings.latitude}
+              portalLon={portalSurroundings.longitude}
+              //portalZoom set inside
+            />
+          )}
 
         {/* <SingleDetailPanel label="Details" value={portalSurroundings.details} />
          <SingleDetailPanel
@@ -79,12 +83,19 @@ const PortalSurroundingsView = ({ height, triggerParentAutoScroll }) => {
         />  
         <SingleDetailPanel label="Wind speed interaction" value={portalSurroundings.windSpeedInteraction} />
       */}
-     
-        {isDisabled && (
-        <View style={[appContainerStyles.dimmer, {backgroundColor: overlayColor}]}  >
 
-          <MagnifiedNavButton message={"Go back to portal location"} onPress={handleExploreLocation}/>
-          {/* <View
+        {isDisabled && (
+          <View
+            style={[
+              appContainerStyles.dimmer,
+              { backgroundColor: overlayColor },
+            ]}
+          >
+            <MagnifiedNavButton
+              message={"Go back to portal location"}
+              onPress={handleExploreLocation}
+            />
+            {/* <View
             style={{
               backgroundColor: "rgba(0, 0, 0, 0.6)",
               padding: 20,
@@ -93,20 +104,16 @@ const PortalSurroundingsView = ({ height, triggerParentAutoScroll }) => {
           >
             <SingleDetailPanel label="This section is disabled" value="Due to ruins surroundings" />
           </View> */}
-        </View>
-      )}
-     
+          </View>
+        )}
       </View>
 
       {/* Overlay to disable interactions */}
-
     </View>
   );
 };
 
 export default PortalSurroundingsView;
-
-
 
 // import React from "react";
 // import { View } from "react-native";
@@ -122,7 +129,6 @@ export default PortalSurroundingsView;
 //     <View style={{ flex: 1, height: height, zIndex: 1 }}>
 //       <View style={{ height: 90, width: "100%" }}></View>
 //       <View style={{backgroundColor: 'gray', borderRadius: 20, width: '100%'}}>
-        
 
 //       <>
 //         <WindFriendsView
@@ -161,9 +167,9 @@ export default PortalSurroundingsView;
 //           value={portalSurroundings.humidityInteraction}
 //         /> */}
 //       </>
-      
+
 //       </View>
-//       </View> 
+//       </View>
 //   );
 // };
 

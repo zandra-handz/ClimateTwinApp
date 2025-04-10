@@ -5,7 +5,7 @@ import { usePathname } from "expo-router";
 
  
 
-const useExploreRoute = (isExploring: boolean, isInitializingLocation: boolean, isAuthenticated: boolean) => {
+const useExploreRoute = (lastState: string, isAuthenticated: boolean) => {
   const navigationRef = useNavigationContainerRef();
   const router = useRouter();
   const pathname = usePathname(); 
@@ -26,7 +26,7 @@ const useExploreRoute = (isExploring: boolean, isInitializingLocation: boolean, 
   }, [navigationRef.isReady()]);
 
   useEffect(() => {
-    if (!isNavigationReady || isInitializingLocation) { 
+    if (!isNavigationReady || !lastState) { 
       return;
     }  
     const isOnSignIn = segments[0] === "signin";
@@ -41,14 +41,14 @@ const useExploreRoute = (isExploring: boolean, isInitializingLocation: boolean, 
     console.log(segments[1]);
 
                                                   //was previously !isOnDashboard but couldn't open other drawer screens when not exploring
-    if (!isExploring && !isInitializingLocation && isOnExploreTabs && isAuthenticated) {
+    if ((lastState === 'home' || lastState === 'searching for twin') && isOnExploreTabs && isAuthenticated) {
         console.log('going to dashboard!!!'); 
       router.replace("(homedashboard)")
-    } else if (isExploring && isOnDashboard && isAuthenticated) { 
+    } else if ((lastState === 'exploring' || lastState === 'searching for ruins') && isOnDashboard && isAuthenticated) { 
       router.replace("(exploretabs)");
     }
-    console.log(`IS EXPLORING?`, isExploring);
-  }, [ isInitializingLocation, isExploring, segments, isNavigationReady]);
+    console.log(`LAST STATE`, lastState);
+  }, [ lastState, segments, isNavigationReady]);
 };
 
 export default useExploreRoute;

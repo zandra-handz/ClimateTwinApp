@@ -6,8 +6,7 @@ import { useSurroundings } from "../context/CurrentSurroundingsContext";
 
 import AnimatedCircle from "../animations/AnimatedCircle";
 
-
-const GoButton = ({ address }) => {
+const GoButton = ({ address, size=240  }) => {
   const { handleGo, remainingGoes, isSearchingForTwin } = useActiveSearch();
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const { portalSurroundings } = useSurroundings();
@@ -17,30 +16,39 @@ const GoButton = ({ address }) => {
   };
   return (
     <>
-
-      {remainingGoes && remainingGoes !== "0" ? (
-        !portalSurroundings || portalSurroundings?.id === null ? (
+      {remainingGoes && remainingGoes !== "0" ? ( 
           <TouchableOpacity
             onPress={!isSearchingForTwin ? handleButtonPress : () => {}}
             style={[
               appContainerStyles.bigGoButtonContainer,
               themeStyles.primaryOverlayBackground,
-              { borderColor: themeStyles.tabBarHighlightedText.color },
+              { height: size,
+                width: size,
+                borderRadius: size / 2, 
+                borderColor: themeStyles.tabBarHighlightedText.color },
             ]}
           >
-                <View style={{position: 'absolute', top: 0}}>
-      <AnimatedCircle width={'240'} height={'240'} />
-    </View>
-            <>
-            <View style={{flexWrap: 'flex', textAlign: 'center', alignItems: 'center', justifyContent: 'center', flex: 1, width: '100%'}}>
-              
-              <Text
-                style={[themeStyles.primaryText, appFontStyles.goButtonText]}
-              >
-                Open a portal
-              </Text>
-              
+            <View style={{ position: "absolute", top: 0 }}>
+              <AnimatedCircle width={size} height={size} /> 
             </View>
+            <>
+              <View
+                style={{
+                  flexWrap: "flex",
+                  textAlign: "center",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flex: 1,
+                  width: "100%",
+                }}
+              >
+                <Text
+                  style={[themeStyles.primaryText, appFontStyles.goButtonText]}
+                >
+                  Open a portal
+                </Text>
+              </View>
+              <View style={{position: 'absolute', bottom: 26 }}>
               {remainingGoes != "No limit" && (
                 <Text
                   style={[
@@ -60,51 +68,10 @@ const GoButton = ({ address }) => {
                 >
                   {`${remainingGoes}`}
                 </Text>
-              )}
-         
+              )} 
+              </View>
             </>
           </TouchableOpacity>
-        ) : (
-          <>
-            <TouchableOpacity
-              onPress={!isSearchingForTwin ? handleButtonPress : () => {}}
-              style={[
-                appContainerStyles.goButtonContainer,
-                themeStyles.primaryOverlayBackground,
-                { borderColor: themeStyles.tabBarHighlightedText.color },
-              ]}
-            >
-              <Text
-                style={[
-                  themeStyles.primaryText,
-                  appFontStyles.smallGoButtonText,
-                ]}
-              >
-                GO
-              </Text>
-              {remainingGoes != "No limit" && (
-                <Text
-                  style={[
-                    themeStyles.primaryText,
-                    appFontStyles.remainingTripsText,
-                  ]}
-                >
-                  {`${remainingGoes} left`}
-                </Text>
-              )}
-              {remainingGoes === "No limit" && (
-                <Text
-                  style={[
-                    themeStyles.primaryText,
-                    appFontStyles.remainingTripsText,
-                  ]}
-                >
-                  {`${remainingGoes}`}
-                </Text>
-              )}
-            </TouchableOpacity>
-          </>
-        )
       ) : (
         <View
           style={[

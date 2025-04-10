@@ -24,7 +24,7 @@ import {
   updateUserSettings,
 } from "../apicalls";
 import { useAppMessage } from "./AppMessageContext";
-import { useSegments } from "expo-router"; 
+import { useNavigationContainerRef, useSegments } from "expo-router"; 
  
 interface User {
   id?: string;
@@ -67,6 +67,7 @@ interface UserProviderProps {
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [authenticated, setAuthenticated] = useState(false);
+  const navigationRef = useNavigationContainerRef();
   const { imageUri } = useImageUploadFunctions();
   const [loading, setLoading] = useState(false);
   const [appSettings, setAppSettings] = useState<Record<string, any>>({});
@@ -79,6 +80,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
   const segments = useSegments();
+   const [isNavigationReady, setNavigationReady] = useState(false);
   const isOnSignIn = segments[0] === "signin";
   const isUploading = segments[0] === "(drawer)/(profile)/upload";
   const isOnExploreTabs = segments[0] === "(drawer)/(exploretabs)";
@@ -87,6 +89,19 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     segments[0] === "" ||
     segments[0] === "secondindex" ||
     segments[0] === "signin";
+
+      useEffect(() => {
+        if (navigationRef.isReady()) {
+          setNavigationReady(true);
+        }
+    
+        const unsubscribe = navigationRef.addListener("state", () => {
+          setNavigationReady(true);
+        });
+    
+        return () => unsubscribe && unsubscribe();
+      }, [navigationRef.isReady()]);
+    
 
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (nextAppState) => {
@@ -201,13 +216,20 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   }, [appSettings]);
 
   useEffect(() => {
-    if (appStateVisible === "active" && !isOnSignIn) {
+    if (
+      appStateVisible === "active" &&
+
+      isNavigationReady &&
+      !isOnSignIn
+    ) {
+      console.log("Current segment:", segments[0]);
       console.log(
         "APP IN FOREGROUND, REINITTING IN USER CONTEXT!!!!!!!!!!!!!!!!!!!!!!!!"
-      ); 
+      );
       reInitialize();
     }
-  }, [appStateVisible]);
+  }, [appStateVisible, isNavigationReady]);
+  
 
   const updateUserSettingsMutation = useMutation({
     mutationFn: (newSettings) => updateUserSettings(user?.id, newSettings),

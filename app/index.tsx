@@ -1,4 +1,4 @@
-import React, { useState,  useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { View, StyleSheet } from "react-native";
 import { useUser } from "./context/UserContext";
 import { useGlobalStyles } from "./context/GlobalStylesContext";
@@ -16,9 +16,9 @@ import CustomStatusBar from "./components/CustomStatusBar";
 const TOKEN_KEY = "accessToken";
 
 const Index = () => { 
-  const { themeStyles, manualGradientColors } = useGlobalStyles();
-  const [showSignIn, setShowSignIn] = useState(true);
-  const { reInitialize } = useUser();
+  const { themeStyles, manualGradientColors, constantColorsStyles } = useGlobalStyles();
+  const [showSignIn, setShowSignIn] = useState(false);
+  const { reInitialize, isAuthenticated, isInitializing } = useUser();
   const { showAppMessage } = useAppMessage(); 
 
   const router = useRouter();
@@ -60,25 +60,12 @@ const Index = () => {
   //i think i should do a condiitional check for user.authenticated at a higher level to ensure
   // app screens can't be viewed at all if user logged out
 
-  const checkIfSignedIn = async () => {
-    console.log('checking if signed in');
-    try {
-      const token = await SecureStore.getItemAsync(TOKEN_KEY);
-      if (token) {
-        console.log(token);
-        showAppMessage(true, null, "Reinitializing...");
-        reInitialize();
-        //handleNavigateToHome();
-      } else {
-        setShowSignIn(true);
-        setConfirmedUserNotSignedIn(true);
-        //  showMessage(true, null, "Signed out");
-      }
-    } catch (error) {
-      console.error("Error checking sign-in status", error);
-      // Handle errors as necessary
-    }
-  };
+useEffect(() => {
+  if (!isAuthenticated && !isInitializing) {
+    setShowSignIn(true);
+  }
+
+}, [isAuthenticated, isInitializing]);
 
   // useEffect(() => {
   //   checkIfSignedIn();
@@ -92,16 +79,13 @@ const Index = () => {
 
   return (
     <>
-    <CustomStatusBar />
-           {/* <StatusBar
-             //barStyle={themeStyles.primaryBackground.backgroundColor}
-             translucent={true}
-             backgroundColor="transparent"
-           /> */}
+    <CustomStatusBar /> 
       <LinearGradient
         colors={[
-          manualGradientColors.darkColor,
-          manualGradientColors.lightColor,
+          'teal',
+          //manualGradientColors.lightColor,
+          constantColorsStyles.v1LogoColor.backgroundColor,
+          
         ]}
         start={{ x: 0, y: 1 }} // REVERSED:  start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }} //end={{ x: 1, y: 1 }}
@@ -142,7 +126,7 @@ const Index = () => {
                     position: "absolute",
                   }}
                 >
-                  {showSignIn && (
+                  {!isAuthenticated && !isInitializing && (
                     
                   <SignInButton
                     onPress={() => handleNavigateToSignIn()}

@@ -66,7 +66,7 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
     }
   }, [isAuthenticated]);
 
-  useExploreRoute((isExploring || isSearchingForRuins), false, isAuthenticated);
+  useExploreRoute(lastState, isAuthenticated);
 
   const {
     data: remainingGoes,

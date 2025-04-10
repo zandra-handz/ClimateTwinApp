@@ -82,7 +82,7 @@ const WebSocketSearchingLocations: React.FC<{
   const animatedStyle = useAnimatedStyle(() => {
     const normalizedLeft =
       (longitude.value + 180) * (mapDimensions.width / 360);
-    const normalizedTop = (90 - latitude.value) * (mapDimensions.height / 180); // Invert the vertical axis
+    const normalizedTop = (90 - latitude.value) * (mapDimensions.height / 180); 
 
     return {
       position: "absolute",
@@ -90,20 +90,19 @@ const WebSocketSearchingLocations: React.FC<{
       top: normalizedTop,
       zIndex: 2000,
       opacity: 1,
-      backgroundColor: themeStyles.primaryText.color, // Use the color cycle here
-      width: 6, // Size of the dot
-      height: 6, // Size of the dot
-      borderRadius: 3, // To make it round
+      backgroundColor: themeStyles.primaryText.color, 
+      width: 6, 
+      height: 6,  
+      borderRadius: 3, 
       fadeOutDuration: 100,
     };
   });
 
-  const animatedStylePrev = useAnimatedStyle(() => {
-    // Normalize coordinates based on the mapContainer's dimensions
+  const animatedStylePrev = useAnimatedStyle(() => { 
     const normalizedLeft =
       (prevLongitude.value + 180) * (mapDimensions.width / 360);
     const normalizedTop =
-      (90 - prevLatitude.value) * (mapDimensions.height / 180); // Invert the vertical axis
+      (90 - prevLatitude.value) * (mapDimensions.height / 180);  
 
     return {
       position: "absolute",
@@ -111,20 +110,19 @@ const WebSocketSearchingLocations: React.FC<{
       top: normalizedTop,
       zIndex: 2000,
       opacity: 0.6,
-      backgroundColor: themeStyles.primaryText.color, // Use the color cycle here
-      width: 6, // Size of the dot
-      height: 6, // Size of the dot
-      borderRadius: 3, // To make it round
+      backgroundColor: themeStyles.primaryText.color,  
+      width: 6,  
+      height: 6,  
+      borderRadius: 3, 
       fadeOutDuration: 200,
     };
   });
 
-  const animatedStylePrevPrev = useAnimatedStyle(() => {
-    // Normalize coordinates based on the mapContainer's dimensions
+  const animatedStylePrevPrev = useAnimatedStyle(() => { 
     const normalizedLeft =
       (prevPrevLongitude.value + 180) * (mapDimensions.width / 360);
     const normalizedTop =
-      (90 - prevPrevLatitude.value) * (mapDimensions.height / 180); // Invert the vertical axis
+      (90 - prevPrevLatitude.value) * (mapDimensions.height / 180);  
 
     return {
       position: "absolute",
@@ -132,10 +130,10 @@ const WebSocketSearchingLocations: React.FC<{
       top: normalizedTop,
       zIndex: 2000,
       opacity: 0.3,
-      backgroundColor: themeStyles.primaryText.color, // Use the color cycle here
-      width: 4, // Size of the dot
-      height: 4, // Size of the dot
-      borderRadius: 3, // To make it round
+      backgroundColor: themeStyles.primaryText.color,  
+      width: 4,  
+      height: 4, 
+      borderRadius: 3,  
       fadeOutDuration: 200,
     };
   });
@@ -163,8 +161,7 @@ const WebSocketSearchingLocations: React.FC<{
               <WorldMapSvg
                 width={"100%"}
                 color={constantColorsStyles.v1LogoColor.backgroundColor}
-              />
-              {/* Only show the Dot if the map has dimensions */}
+              /> 
               {mapDimensions.width > 0 &&
                 mapDimensions.height > 0 &&
                 latitude !== undefined &&

@@ -36,7 +36,7 @@ const router = useRouter();
   const createNewAccount = false;
 
   const { showAppMessage } = useAppMessage();
-  const { themeStyles, appFontStyles, appContainerStyles, gradientColors, manualGradientColors } =
+  const { themeStyles, appFontStyles, appContainerStyles, manualGradientColors, constantColorsStyles } =
     useGlobalStyles();
   const [showSignIn, setShowSignIn] = useState(true);
   const [username, setUsername] = useState("");
@@ -274,8 +274,10 @@ const router = useRouter();
       <StatusBar />
       <LinearGradient
         colors={[
-          manualGradientColors.darkColor,
-          manualGradientColors.lightColor,
+          'teal',
+          //manualGradientColors.lightColor,
+          constantColorsStyles.v1LogoColor.backgroundColor,
+          
         ]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
@@ -292,25 +294,19 @@ const router = useRouter();
           <TouchableOpacity
             onPress={handleNavigateBackToWelcomeScreen}
             style={{
-              height: 40,
-              width: 40,
+              height: 30,
+              width: 30,
               alignItems: "center",
               justifyContent: "center",
+              textAlign: "center",
               backgroundColor: manualGradientColors.homeDarkColor,
-              borderRadius: 20, // Half of the height/width to create a circle
+              borderRadius: 30 / 2, // Half of the height/width to create a circle
             }}
           >
-            <Text style={{ fontSize: 18, color: "white", textAlign: "center" }}>
+            <Text style={{ fontSize: 18,   color: constantColorsStyles.v1LogoColor.color, selfAlign: 'center', lineHeight: 18, justifyContent: 'center' }}>
               x
             </Text>
-          </TouchableOpacity>
-          
-          {/* <Text
-                  style={styles.toggleButton} 
-                  accessible={true} 
-                >
-                  {isSignInScreen ? "Sign in" : "Create new account"}
-                </Text> */}
+          </TouchableOpacity> 
           <> 
               <View
                 style={{ 

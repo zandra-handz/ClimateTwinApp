@@ -1,8 +1,8 @@
 import React from "react";
-import { View, Text, TextInput } from "react-native";
-import { Feather, MaterialIcons } from "@expo/vector-icons";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
-import { useActiveSearch } from "../../context/ActiveSearchContext";
+import { View, TextInput } from "react-native";
+import { MaterialIcons } from "@expo/vector-icons";
+import { useGlobalStyles } from "../context/GlobalStylesContext";
+import { useActiveSearch } from "../context/ActiveSearchContext";
 import Animated, {
   Easing,
   useSharedValue,
@@ -15,7 +15,7 @@ import Animated, {
 
 import useWebSocket from "@/app/hooks/useWebSocket";
 
-const NowButton = ({ color }) => {
+const Temperatures = () => {
   const { themeStyles, appFontStyles } = useGlobalStyles();
   const { isExploring, isSearchingForTwin } = useActiveSearch();
 
@@ -29,17 +29,17 @@ const NowButton = ({ color }) => {
     temperatureDifference,
   } = sharedValues;
 
-  // const colorMap = {
-  //   0: "red",
-  //   1: "darkorange",
-  //   2: "darkorange",
-  //   3: "darkorange",
-  //   4: "orange",
-  //   5: "orange",
-  //   6: "orange",
-  //   7: "gold",
-  //   8: "yellow",
-  // };
+  const colorMap = {
+    0: "red",
+    1: "darkorange",
+    2: "darkorange",
+    3: "darkorange",
+    4: "orange",
+    5: "orange",
+    6: "orange",
+    7: "gold",
+    8: "yellow",
+  };
 
   // Create shared values for rotation and scale
   const rotation = useSharedValue(0);
@@ -47,39 +47,38 @@ const NowButton = ({ color }) => {
   const positionShift = useSharedValue(0);
 
 
-  // const derivedTemp = useDerivedValue(() => {
-  //   return temperatureSharedValue.value;
-  // });
+  const derivedTemp = useDerivedValue(() => {
+    return temperatureSharedValue.value;
+  });
   
-  // WAS USING THIS
-  // const animatedTemp = useAnimatedProps(() => {
-  //   const temp = derivedTemp.value;
+  const animatedTemp = useAnimatedProps(() => {
+    const temp = derivedTemp.value;
   
-  //   const difference = !isNaN(Number(temperatureDifference.value))
-  //     ? Number(temperatureDifference.value)
-  //     : null;
+    const difference = !isNaN(Number(temperatureDifference.value))
+      ? Number(temperatureDifference.value)
+      : null;
   
-  //   let color = null;
-  //   if (difference && difference < 2) {
-  //     color = "red";
-  //   } else if (difference && difference <= 30) {
-  //     const colorIndex = Math.floor(((difference - 2) / 28) * 8);
-  //     color = colorMap[colorIndex];
-  //   } else {
-  //     color = themeStyles.primaryText.color;
-  //   }
+    let color = null;
+    if (difference && difference < 2) {
+      color = "red";
+    } else if (difference && difference <= 30) {
+      const colorIndex = Math.floor(((difference - 2) / 28) * 8);
+      color = colorMap[colorIndex];
+    } else {
+      color = themeStyles.primaryText.color;
+    }
   
-  //   return {
-  //     text: `${temp}°`,
-  //     defaultValue: `${temp}°`,
-  //     color: color,
-  //     transform: [
-  //       { scale: scale.value },
-  //     ],
-  //   };
-  // });
+    return {
+      text: `${temp}°`,
+      defaultValue: `${temp}°`,
+      color: color,
+      transform: [
+        { scale: scale.value },
+      ],
+    };
+  });
   
-  // WASN'T USING THIS
+
   // const animatedTemp = useAnimatedProps(() => {
   //   const difference =
   //     // temperatureDifference.value !== null &&
@@ -111,37 +110,34 @@ const NowButton = ({ color }) => {
   // });
 
   React.useEffect(() => {
-    if (!isExploring && isSearchingForTwin) {
-      //added both conditions in case app gets stuck
-      // Start spinning and enlarging
+    if (!isExploring && isSearchingForTwin) { 
       rotation.value = withRepeat(
-        withTiming(360, { duration: 2000, easing: Easing.linear }), // Smooth rotation
-        -1, // Infinite loop
-        false // No reset after loop
+        withTiming(360, { duration: 2000, easing: Easing.linear }),  
+        -1,  
+        false 
       );
 
       scale.value = withTiming(3, {
         duration: 500,
         easing: Easing.inOut(Easing.ease),
-      }); // Scale up
+      }); 
       positionShift.value = withTiming(-130, {
         duration: 500,
         easing: Easing.inOut(Easing.ease),
-      }); // Move up
+      }); 
     } else { 
       rotation.value = 0;
       scale.value = withTiming(1, {
         duration: 500,
         easing: Easing.inOut(Easing.ease),
-      }); // Scale down
+      });  
       positionShift.value = withTiming(0, {
         duration: 500,
         easing: Easing.inOut(Easing.ease),
-      }); // Reset position
+      }); 
     }
   }, [isExploring, isSearchingForTwin]);
-
-  // Create animated styles for rotation and scale
+ 
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [
@@ -158,14 +154,14 @@ const NowButton = ({ color }) => {
   });
 
   return (
-    <Animated.View
-      style={[
-        containerStyle,
-        { justifyContent: "center", alignContent: "center" },
-      ]}
-    >
+    // <Animated.View
+    //   style={[
+    //     containerStyle,
+    //     { justifyContent: "center", alignContent: "center" },
+    //   ]}
+    // >
       <Animated.View style={animatedStyle}>
-        {/* {isSearchingForTwin && (
+        {isSearchingForTwin && (
           <View
             style={[
               { 
@@ -186,17 +182,10 @@ const NowButton = ({ color }) => {
               defaultValue={""}
             />
           </View>
-        )} */}
-        <View style={{ flexDirection: "row", width: "100%" }}>
-          <MaterialIcons
-            name="my-location"
-            size={appFontStyles.exploreTabBarIcon.width + 4}
-            color={color}
-          />
-        </View>
+        )} 
       </Animated.View>
-    </Animated.View>
+    // </Animated.View>
   );
 };
 
-export default NowButton;
+export default Temperatures;

@@ -271,12 +271,12 @@ const containerStyles = StyleSheet.create({
     alignItems: 'center',
     paddingVertical: 7,
     paddingHorizontal: 16,
-    borderRadius: 240 / 2,
     flexDirection: 'column',
     justifyContent: 'center',
-    flexWrap: 'wrap', 
-    height: 240,
-    width: 240, 
+    flexWrap: 'wrap',  
+    // height: 240,
+    // width: 240, 
+    // borderRadius: 240 / 2,
     borderWidth: StyleSheet.hairlineWidth,
     
   }, 
@@ -1078,7 +1078,7 @@ const fontStyles = StyleSheet.create({
 
   },
   goButtonText: {
-    fontSize: 50, 
+    fontSize: 36, 
     textAlign: 'center',  
 
   },
@@ -1129,7 +1129,7 @@ const fontStyles = StyleSheet.create({
 
   },
   remainingTripsText: {
-    fontSize: 11,
+    fontSize: 16,
 
   },
   goButtonPortalSize: {
