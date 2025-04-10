@@ -15,6 +15,7 @@ interface SurroundingsWSContextType {
   handleRefreshDataFromSocket: () => void; 
   lastMessage: any; // You can specify a more strict type if you know the structure
   lastLocationName: any;
+  isPortal: any;
   lastNotification: any;
   lastLocationId: any;
   lastLocationAccessTime: any;
@@ -43,6 +44,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   const [reconnectionDelay, setReconnectionDelay] = useState(10000);
  
   const [lastMessage, setLastMessage] = useState<any>(null);
+  const [ isPortal, setIsPortal ] = useState<any>(null);
   const [lastLocationName, setLastLocationName] = useState<any>(null);
   const [lastSearchProgress, setLastSearchProgress] = useState<any>(null);
   const [lastState, setLastState] = useState<any>(null);
@@ -63,6 +65,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
      // console.log('Location Socket open --> resetting variables and closing...');
       setLastMessage(null);
+      setIsPortal(null);
       setLastNotification(null);
       setLastSearchProgress(null);
       setLastState(null); 
@@ -162,6 +165,11 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
       if ('state' in update) {
         setLastState(update.state);
+      }
+
+        //added to backend specifically for reducing triggering nearby locations fetch
+      if ('is_twin_location' in update) {
+        setIsPortal(update.is_twin_location);
       }
 
       if ('search_progress' in update) {
@@ -351,7 +359,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
   return (
     <SurroundingsWSContext.Provider
-      value={{ locationUpdateWSIsOpen, sendMessage, handleRefreshDataFromSocket, lastMessage, lastNotification, lastSearchProgress, lastState, lastLocationName, lastLocationId, lastLocationAccessTime, lastLatAndLong, isLocationSocketOpen, locationSocketColor, alwaysReRender }}
+      value={{ locationUpdateWSIsOpen, sendMessage, handleRefreshDataFromSocket, lastMessage, isPortal, lastNotification, lastSearchProgress, lastState, lastLocationName, lastLocationId, lastLocationAccessTime, lastLatAndLong, isLocationSocketOpen, locationSocketColor, alwaysReRender }}
     >
       {children}
     </SurroundingsWSContext.Provider>

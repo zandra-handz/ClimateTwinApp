@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject, // This ensures it fills the entire parent container
     justifyContent: "center",
     alignItems: "center",
-    zIndex: 10,
+    zIndex: 10000,
     //backgroundColor: "red",
   },
 

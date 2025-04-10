@@ -14,7 +14,7 @@ import NearbyView from "../../components/NearbyComponents/NearbyView";
 
 const nearby = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { triggerRefetch, nearbyLocations } = useNearbyLocations();
+  const { triggerRefetch, nearbyLocations, centeredNearbyLocations } = useNearbyLocations();
   const { handlePickNewSurroundings } = useSurroundings();
   const router = useRouter();
  
@@ -69,7 +69,7 @@ const nearby = () => {
         <View style={appContainerStyles.innerFlexStartContainer}>
           {nearbyLocations && (
             <NearbyView
-              listData={nearbyLocations}
+              listData={centeredNearbyLocations}
               onCardButtonPress={handleExploreLocation}
             />
           )}

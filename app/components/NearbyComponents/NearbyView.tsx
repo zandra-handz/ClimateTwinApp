@@ -24,7 +24,7 @@ const NearbyView = ({
           item.id ? `${item.id}-${item.timestamp || index}` : index.toString()
         }
         renderItem={({ item }) => (
-          <View style={{ marginVertical: "2%" }}>
+          <View style={{ marginVertical: 4 }}>
             {item.explore_type === "twin_location" && (
               <NearbyPortalUICard
               data={item}
@@ -47,7 +47,7 @@ const NearbyView = ({
               // />
             )}
               {item.explore_type === "discovery_location" && (
-                <>
+                <View style={{height: 152, marginVertical: 4}}>
                 <NearbyRuinUICard
                 data={item}
                 name={item.name}
@@ -67,11 +67,11 @@ const NearbyView = ({
                 onOpenTreasurePress={onOpenTreasurePress}
               /> */}
               
-                </>
+                </View>
             )}
           </View>
         )}
-        contentContainerStyle={{ paddingBottom: 60 }}
+        contentContainerStyle={{ paddingBottom: 0 }}
         ListFooterComponent={<View style={{ height: 100 }} />}
       />
     </View>

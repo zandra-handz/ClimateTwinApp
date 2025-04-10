@@ -117,7 +117,7 @@ const Temperatures = () => {
         false 
       );
 
-      scale.value = withTiming(3, {
+      scale.value = withTiming(2, {
         duration: 500,
         easing: Easing.inOut(Easing.ease),
       }); 

@@ -100,7 +100,7 @@ const GroqFullScreen = ({
         ]}
       >
         {!dataObject?.altImageSearchQuery && (
-          <ComponentSpinner showSpinner={true} />
+          <ComponentSpinner showSpinner={true} backgroundColor={themeStyles.primaryBackground.backgroundColor} />
         )}
         
         <View

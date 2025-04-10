@@ -41,18 +41,17 @@ interface NearbyLocationsProviderProps {
 
 export const NearbyLocationsProvider: React.FC<NearbyLocationsProviderProps> = ({ children }) => {
   const { user, isAuthenticated, isInitializing } = useUser(); 
-  const { lastMessage } = useSurroundingsWS();
-  const { isExploring } = useActiveSearch();
+  const { lastState, lastLocationId, isPortal } = useSurroundingsWS();
+ const [ centeredNearbyLocations, setCenteredNearbyLocations ] = useState([]);
   const queryClient = useQueryClient();  
 
 
-  const searchComplete = lastMessage === 'Search complete!' || lastMessage === 'Clear' || lastMessage === '';
-
+ // isPortal === 'yes' is not right
 
   const { data: nearbyLocations, isLoading, isError, isSuccess } = useQuery<NearbyLocation[]>({
-    queryKey: ['nearbyLocations', lastMessage],
+    queryKey: ['nearbyLocations', lastLocationId, isPortal === 'yes'],
     queryFn: getNearbyLocations,
-    enabled: !!isAuthenticated && !isInitializing,// && searchComplete,
+    enabled: !!isAuthenticated && !isInitializing, 
     onError: (err) => {
       console.error('Error fetching location data:', err);
     },
@@ -63,15 +62,25 @@ export const NearbyLocationsProvider: React.FC<NearbyLocationsProviderProps> = (
     },
   });
 
+  useEffect(() => {
+    if (lastLocationId && nearbyLocations) {
+      const filteredData = nearbyLocations.filter(item => item.id !== lastLocationId);
+      setCenteredNearbyLocations(filteredData);
+
+
+    }
+
+  }, [lastLocationId, nearbyLocations]);
+
   
   const triggerRefetch = () => {
-    queryClient.invalidateQueries({ queryKey: ['nearbyLocations', lastMessage] });
+    queryClient.invalidateQueries({ queryKey: ['nearbyLocations', lastLocationId, isPortal === 'yes'] });
   };
  
    
 
   return (
-    <NearbyLocationsContext.Provider value={{ nearbyLocations, triggerRefetch }}>
+    <NearbyLocationsContext.Provider value={{ nearbyLocations, centeredNearbyLocations, triggerRefetch }}>
       {children}
     </NearbyLocationsContext.Provider>
   );

@@ -15,8 +15,12 @@ const RuinsSurroundingsView = ({ height }) => {
       {ruinsSurroundings?.id && (
         <>
           {ruinsSurroundings.streetViewImage && (
+          
+              
             <SurroundingsTray value={ruinsSurroundings.streetViewImage} />
+            
           )}
+            <View style={{marginBottom: 4}}> 
           <RuinsHarmonyView
             name={ruinsSurroundings.name}
             windCompass={ruinsSurroundings.windCompass}
@@ -26,6 +30,7 @@ const RuinsSurroundingsView = ({ height }) => {
             directionDegree={ruinsSurroundings.directionDegree}
             windHarmony={ruinsSurroundings.windHarmony}
           />
+          </View>
 
           {/* <SingleDetailPanel
             label={"Wind compass"}
@@ -42,7 +47,7 @@ const RuinsSurroundingsView = ({ height }) => {
           /> */}
           {/* <Groq givenRole={role} prompt={prompt} title={'history from Groq'} /> */}
 
-          {ruinsSurroundings.tags && ruinsSurroundings.tags.historic && (
+          {/* {ruinsSurroundings.tags && ruinsSurroundings.tags.historic && (
             <SingleDetailPanel
               label={"#"}
               value={ruinsSurroundings.tags.historic}
@@ -54,7 +59,7 @@ const RuinsSurroundingsView = ({ height }) => {
               label={"Ruins description"}
               value={ruinsSurroundings.tags.description}
             />
-          )}
+          )} */}
         </>
       )}
     </View>

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Button } from "react-native";
 import { useDeviceLocationContext } from "@/app/context/DeviceLocationContext";
 import { useGlobalStyles } from "../../context/GlobalStylesContext";
@@ -8,12 +8,15 @@ import TurnOnLocationButton from "@/app/components/TurnOnLocationButton";
 import WebSocketSearchingLocations from "../../components/WebSocketSearchingLocations";
 import WindyWindSquare from "@/app/components/SurroundingsComponents/WindyWindSquare";
 import Temperatures from "@/app/animations/Temperatures";
-import * as Sentry from "@sentry/react-native";
+import * as Sentry from "@sentry/react-native"; 
 
 const index = () => {
   const { deviceLocation } = useDeviceLocationContext();
   const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { isSearchingForTwin } = useActiveSearch();
+  const { isSearchingForTwin } = useActiveSearch(); 
+
+ 
+  
 
   // useEffect(() => {
   //   if (deviceLocation) {
@@ -58,7 +61,7 @@ const index = () => {
                   />
 
                 </View>
-                <View style={{ height: 100, marginTop: 80 }}>
+                <View style={{ height: 100, marginTop: 200 }}>
                     <Temperatures />
                   </View>
                 </>

@@ -649,6 +649,7 @@ const containerStyles = StyleSheet.create({
   dataListContainer: {
     width: "100%",
     flexDirection: "column",
+    justifyContent: 'flex-start',
     flex: 1,
     zIndex: 2000,
   },
@@ -751,8 +752,7 @@ const containerStyles = StyleSheet.create({
   },
   windFriendsCardContainer: { 
     borderRadius: 20,
-    padding: 10, 
-    marginBottom: 10,
+    padding: 10,  
     width: '100%',  
     alignItems: 'center',
     justifyContent: 'center', 
@@ -764,7 +764,6 @@ const containerStyles = StyleSheet.create({
   ruinsHarmonyCardContainer: { 
     borderRadius: 20,
     padding: 10, 
-    marginBottom: 10,
     width: '100%',  
     alignItems: 'center',
     justifyContent: 'center', 

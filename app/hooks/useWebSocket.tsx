@@ -2,18 +2,17 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { useFocusEffect } from "expo-router";
 import { useSharedValue } from "react-native-reanimated";
 import { useUser } from "../context/UserContext";
+import { useSurroundingsWS } from "../context/SurroundingsWSContext";
 import * as SecureStore from "expo-secure-store";
 
 const useWebSocket = () => {
   const socketRef = useRef<WebSocket | null>(null);
-
   const TOKEN_KEY = "accessToken";
-
-  const {  isAuthenticated } = useUser();
-
-    const [token, setToken] = useState<string | null>(null);
-    const [triggerReconnectAfterFetch, setTriggerReconnectAfterFetch] =
-      useState(false);
+  const { isAuthenticated, isInitializing } = useUser();
+  const { lastState } = useSurroundingsWS();
+  const [token, setToken] = useState<string | null>(null);
+  const [triggerReconnectAfterFetch, setTriggerReconnectAfterFetch] =
+    useState(false);
 
   // Create shared values within the hook
   const latitude = useSharedValue(0);
@@ -22,16 +21,14 @@ const useWebSocket = () => {
   const prevLongitude = useSharedValue(0);
   const prevPrevLatitude = useSharedValue(0);
   const prevPrevLongitude = useSharedValue(0);
-  const temperatureSharedValue = useSharedValue('');
-  const countrySharedValue = useSharedValue('');
-  const temperatureDifference = useSharedValue('');
-
+  const temperatureSharedValue = useSharedValue("");
+  const countrySharedValue = useSharedValue("");
+  const temperatureDifference = useSharedValue("");
 
   useFocusEffect(
     useCallback(() => {
       console.log("Location Searcher socket is focused");
-      if (isAuthenticated) { 
-
+      if (isAuthenticated && !isInitializing && (lastState === 'searching for twin')) {
         fetchToken();
         setTriggerReconnectAfterFetch(true);
       }
@@ -40,21 +37,19 @@ const useWebSocket = () => {
         console.log("Screen location socket is unfocused");
         setTriggerReconnectAfterFetch(false);
       };
-    }, [])
-  ); 
+    }, [lastState])
+  );
 
-    const fetchToken = async () => {
-      
-      try {
-        const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
-       // console.log("fetching user token in location searcher socket", storedToken);
-  
-        setToken(storedToken);
-      } catch (error) {
-        console.error("Failed to retrieve token:", error);
-      }
-    };
+  const fetchToken = async () => {
+    try {
+      const storedToken = await SecureStore.getItemAsync(TOKEN_KEY);
+      // console.log("fetching user token in location searcher socket", storedToken);
 
+      setToken(storedToken);
+    } catch (error) {
+      console.error("Failed to retrieve token:", error);
+    }
+  };
 
   useEffect(() => {
     if (!token) return;
@@ -71,7 +66,9 @@ const useWebSocket = () => {
     socketRef.current = socket;
 
     socket.onopen = () => {
-      console.log("WebSocket connection opened!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
+      console.log(
+        "WebSocket connection opened!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1"
+      );
     };
 
     socket.onmessage = (event) => {
@@ -116,7 +113,10 @@ const useWebSocket = () => {
 
   return {
     sendMessage: (message: any) => {
-      if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
+      if (
+        socketRef.current &&
+        socketRef.current.readyState === WebSocket.OPEN
+      ) {
         socketRef.current.send(JSON.stringify(message));
       }
     },
