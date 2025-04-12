@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
-import { useSurroundingsWS } from "@/app/context/SurroundingsWSContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
+import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
 import WindSquare from "../SurroundingsComponents/WindSquare";
 
 const NearbyPortalUICard = ({

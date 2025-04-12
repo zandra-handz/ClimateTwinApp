@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
-import { useGlobalStyles } from '../context/GlobalStylesContext';
+import { useGlobalStyles } from '../../src/context/GlobalStylesContext';
 
 import * as FileSystem from 'expo-file-system';
 import * as ImagePicker from 'expo-image-picker';

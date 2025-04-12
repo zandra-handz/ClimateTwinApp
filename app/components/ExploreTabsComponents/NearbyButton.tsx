@@ -1,8 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
 import { Feather } from "@expo/vector-icons";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
-import { useActiveSearch } from "../../context/ActiveSearchContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
+import { useActiveSearch } from "../../../src/context/ActiveSearchContext";
 import Animated, { 
   Easing, 
   useSharedValue, 

@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { View, ScrollView } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import useFriends from "@/app/hooks/useFriends";
-import { useAppMessage } from "../../context/AppMessageContext";
+import { useAppMessage } from "../../../src/context/AppMessageContext";
 import { StatusBar } from "expo-status-bar";
 import DataList from "../../components/Scaffolding/DataList";
 import Picker from "@/app/components/Picker";

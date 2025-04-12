@@ -2,12 +2,12 @@ import React, {  useCallback, useEffect } from "react";
 import { 
   View, 
 } from "react-native"; 
-import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
-import { useNearbyLocations } from "../../context/NearbyLocationsContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext"; 
+import { useNearbyLocations } from "../../../src/context/NearbyLocationsContext";
  
 import { useRouter } from "expo-router"; 
 import { useFocusEffect } from "expo-router"; 
-import { useSurroundings } from "@/app/context/CurrentSurroundingsContext";
+import { useSurroundings } from "@/src/context/CurrentSurroundingsContext";
 import NearbyView from "../../components/NearbyComponents/NearbyView";
 
  
@@ -15,18 +15,18 @@ import NearbyView from "../../components/NearbyComponents/NearbyView";
 const nearby = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { triggerRefetch, nearbyLocations, centeredNearbyLocations } = useNearbyLocations();
-  const { handlePickNewSurroundings } = useSurroundings();
+ 
   const router = useRouter();
  
-  useFocusEffect(
-    useCallback(() => {
-      console.log("triggering nearby locations refetch");
-      triggerRefetch();
-      return () => {
-        console.log("nearby location screen is unfocused");
-      };
-    }, [])
-  );
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     console.log("triggering nearby locations refetch");
+  //     triggerRefetch();
+  //     return () => {
+  //       console.log("nearby location screen is unfocused");
+  //     };
+  //   }, [])
+  // );
 
   // useEffect(() => {
   //   console.log('triggering neary locations refetch');
@@ -50,11 +50,7 @@ const nearby = () => {
   // I believe it has to add more data to twin locations.
   // originally, twin location couldn't be an explore location (?)
   //this will move to the surroundings context so that i can control behaviors based on mutations
-  const handleExploreLocation = async (data) => {
  
-    await handlePickNewSurroundings(data);
- 
-  };
 
   
 
@@ -67,12 +63,12 @@ const nearby = () => {
         ]}
       >
         <View style={appContainerStyles.innerFlexStartContainer}>
-          {nearbyLocations && (
-            <NearbyView
-              listData={centeredNearbyLocations}
-              onCardButtonPress={handleExploreLocation}
-            />
-          )}
+        {centeredNearbyLocations.length > 0 && (
+          
+            <NearbyView />
+        )}
+             
+    
         </View>
       </View> 
   );

@@ -1,7 +1,7 @@
 import { View, FlatList } from 'react-native';
 import DataCard from './DataCard';
 import React from 'react';
-import { useGlobalStyles } from '../../context/GlobalStylesContext';
+import { useGlobalStyles } from '../../../src/context/GlobalStylesContext';
 
 const DataList = ({listData, onCardButtonPress, onOpenButtonPress, onOpenTreasurePress}) => {
  

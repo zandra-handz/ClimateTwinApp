@@ -1,6 +1,6 @@
 import { View, Text, StyleSheet } from 'react-native';
 import React from 'react';
-import { useGlobalStyles } from '../../context/GlobalStylesContext';
+import { useGlobalStyles } from '../../../src/context/GlobalStylesContext';
 
 const MediumUICard = ({ label, value }) => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();

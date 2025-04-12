@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Modal, TextInput, Text, Animated, Dimensions, StyleSheet, TouchableOpacity } from "react-native";
-import { useGlobalStyles } from "@/app/context/GlobalStylesContext";
+import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
  
 
 const DoubleChecker = ({

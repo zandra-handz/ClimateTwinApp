@@ -1,8 +1,8 @@
 import React from "react";
 import { View, Text, TouchableOpacity } from "react-native";
 import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
-import { useSurroundingsWS } from "../../context/SurroundingsWSContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
+import { useSurroundingsWS } from "../../../src/context/SurroundingsWSContext";
 
 const RefreshSocketButton = () => {
   const { themeStyles, appContainerStyles, appFontStyles, constantColorsStyles } = useGlobalStyles();

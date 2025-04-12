@@ -1,6 +1,6 @@
 import React from "react";
 import { SafeAreaView, View } from "react-native";
-import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext"; 
 import useInbox from "../../hooks/useInbox"; 
 import InboxView from "@/app/components/InboxComponents/InboxView";
 import { useRouter } from "expo-router";

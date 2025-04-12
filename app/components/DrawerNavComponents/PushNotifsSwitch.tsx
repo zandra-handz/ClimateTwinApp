@@ -1,9 +1,9 @@
 import { View, Text, TouchableOpacity, Platform } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
-import { useUser } from "../../context/UserContext";
-import { useAppState } from "@/app/context/AppStateContext";
-import { useAppMessage } from "@/app/context/AppMessageContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
+import { useUser } from "../../../src/context/UserContext";
+import { useAppState } from "@/src/context/AppStateContext";
+import { useAppMessage } from "@/src/context/AppMessageContext";
 
 import { DrawerItem } from "@react-navigation/drawer";
 import { Feather, AntDesign } from "@expo/vector-icons";

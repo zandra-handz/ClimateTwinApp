@@ -3,8 +3,8 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { DrawerToggleButton } from "@react-navigation/drawer";
 
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
-import { useSurroundingsWS } from "../../context/SurroundingsWSContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
+import { useSurroundingsWS } from "../../../src/context/SurroundingsWSContext";
 
 import RefreshSocketButton from "../Scaffolding/RefreshSocketButton";
  

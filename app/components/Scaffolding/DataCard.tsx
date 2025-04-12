@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 
 const DataCard = ({ data, onPress, onOpenPress, onOpenTreasurePress }) => {
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();

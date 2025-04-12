@@ -6,10 +6,10 @@ import {
     UseQueryResult,
     useMutation,
   } from "@tanstack/react-query";
-import { useUser } from "../context/UserContext";
-import { useSurroundingsWS } from "../context/SurroundingsWSContext"; 
-import { searchPexels } from "../pexelscall";
-import { useGlobalStyles } from "../context/GlobalStylesContext";
+import { useUser } from "../../src/context/UserContext";
+import { useSurroundingsWS } from "../../src/context/SurroundingsWSContext"; 
+import { searchPexels } from "../../src/calls/pexelscall";
+import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
 
 
 interface pexelsImageData {

@@ -8,8 +8,8 @@ import React, {
 import { StyleSheet, AccessibilityInfo } from "react-native";
 import { useColorScheme } from "react-native";
 import { useUser } from "./UserContext";
-import GoToItemButton from "../components/GoToItemButton";
-import MagnifiedNavButton from "../components/MagnifiedNavButton";
+import GoToItemButton from "../../app/components/GoToItemButton";
+import MagnifiedNavButton from "../../app/components/MagnifiedNavButton";
 
 // Define the types for the global styles state
 interface GradientColors {
@@ -37,9 +37,15 @@ interface Styles {
 // Define the type for the context value
 interface GlobalStylesContextType extends Styles {
   themeStyles: Record<string, any>;
+  appFontStyles: Record<string, any>;
+  appContainerStyles: Record<string, any>;
+  constantColorsStyles: Record<string, any>;
   themeStyleSpinners: Record<string, string>;
   nonCustomHeaderPage: boolean;
+  avgPhotoColor: any;
+  handleAvgPhotoColor: (color: string) => void;
   setNonCustomHeaderPage: React.Dispatch<React.SetStateAction<boolean>>;
+  lightOrDark: "light" | "dark";
 }
 
 // Create the context with the appropriate types
@@ -1585,7 +1591,7 @@ const darkThemeStyles = StyleSheet.create({
     borderBottomColor: "darkgray",
     borderBottomWidth: 1,
   },
-  headerTextColor: "#d3d3d3",
+ // headerTextColor: "#d3d3d3",
 });
 
 export default GlobalStylesProvider;

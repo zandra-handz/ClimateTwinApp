@@ -2,9 +2,9 @@ import { View, Text, Keyboard, Dimensions, KeyboardAvoidingView } from "react-na
 import React, { useEffect, useRef, useState } from "react";
 import ActionsFooter from "@/app/components/ActionsFooter";
 import { StatusBar } from "expo-status-bar";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import useTreasures from "@/app/hooks/useTreasures";
-import { useAppMessage } from "../../context/AppMessageContext";
+import { useAppMessage } from "../../../src/context/AppMessageContext";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import useFriends from "../../hooks/useFriends";
 import Picker from "@/app/components/Picker";

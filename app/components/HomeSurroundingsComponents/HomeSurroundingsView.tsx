@@ -1,10 +1,10 @@
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import React from "react";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import CurrentSurroundingsUICard from "../SurroundingsComponents/CurrentSurroundingsUICard";
-import { useSurroundings } from "../../context/CurrentSurroundingsContext";
+import { useSurroundings } from "../../../src/context/CurrentSurroundingsContext";
  import MagnifiedNavButton from "../MagnifiedNavButton";
-import { useActiveSearch } from "@/app/context/ActiveSearchContext";
+import { useActiveSearch } from "@/src/context/ActiveSearchContext";
 const HomeSurroundingsView = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const { homeSurroundings } = useSurroundings();

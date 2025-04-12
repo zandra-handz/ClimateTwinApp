@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import React from "react"; 
-import { useGlobalStyles } from "../context/GlobalStylesContext";
+import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
 
 const SingleDetailPanel = ({ label, value }) => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();

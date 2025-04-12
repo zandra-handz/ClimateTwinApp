@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'; 
 import ScrollDetailPanel from '../ScrollDetailPanel';  
 //import useGroq from '@/app/hooks/useGroq';  
-import { useGroqContext } from '@/app/context/GroqContext';
+import { useGroqContext } from '@/src/context/GroqContext';
 
 
 const GroqHistory = ({ title, cacheKey='history', userId, opacity }) => { 

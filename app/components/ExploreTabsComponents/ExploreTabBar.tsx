@@ -2,11 +2,11 @@ import { View } from "react-native";
 import React, { useState } from 'react';
 import { useLinkBuilder } from "@react-navigation/native";
 import { Text, TouchableOpacity } from "react-native";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
 import NearbyButton from "./NearbyButton";
 import NowButton from "./NowButton";
-import { useActiveSearch } from "../../context/ActiveSearchContext";
+import { useActiveSearch } from "../../../src/context/ActiveSearchContext";
 
 
 function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled, openDoubleChecker }) {
@@ -86,7 +86,7 @@ function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled, openD
         const disabled = isNearbyTab && isNearbyDisabled;
 
         return (
-          <>
+        
           <TouchableOpacity
             key={route.name}
             style={[
@@ -127,7 +127,7 @@ function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled, openD
           </TouchableOpacity>
 
   
-          </>
+       
         );
       })}
             

@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
-import { useUser } from "../../context/UserContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
+import { useUser } from "../../../src/context/UserContext";
 import { DrawerItem } from "@react-navigation/drawer";
 import { Feather } from "@expo/vector-icons";
 

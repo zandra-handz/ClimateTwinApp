@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { View, Text } from 'react-native'
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import ActionsFooter from "@/app/components/ActionsFooter";
 import { useRouter } from "expo-router";
 import useFriends from '@/app/hooks/useFriends';

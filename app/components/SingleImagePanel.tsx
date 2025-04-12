@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import React from "react";
-import { useGlobalStyles } from "../context/GlobalStylesContext";
+import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
 import { Image } from "expo-image";
 
 const SingleImagePanel = ({ label, value }) => {

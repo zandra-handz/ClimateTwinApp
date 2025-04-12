@@ -12,8 +12,8 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import * as Device from "expo-device";
 import Constants from "expo-constants";
 import { Platform, AppState } from "react-native";
-import useProtectedRoute from "../hooks/useProtectedRoute";
-import useImageUploadFunctions from "../hooks/useImageUploadFunction";
+import useProtectedRoute from "../../app/hooks/useProtectedRoute";
+import useImageUploadFunctions from "../../app/hooks/useImageUploadFunction";
 import {
   signup,
   signin,
@@ -22,7 +22,7 @@ import {
   getCurrentUser,
   getUserSettings,
   updateUserSettings,
-} from "../apicalls";
+} from "../calls/apicalls";
 import { useAppMessage } from "./AppMessageContext";
 import { useNavigationContainerRef, useSegments } from "expo-router"; 
  
@@ -82,14 +82,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const segments = useSegments();
    const [isNavigationReady, setNavigationReady] = useState(false);
   const isOnSignIn = segments[0] === "signin";
-  const isUploading = segments[0] === "(drawer)/(profile)/upload";
-  const isOnExploreTabs = segments[0] === "(drawer)/(exploretabs)";
-  const isOnAPreSignInPage =
-    segments.length === 0 ||
-    segments[0] === "" ||
-    segments[0] === "secondindex" ||
-    segments[0] === "signin";
-
+ 
       useEffect(() => {
         if (navigationRef.isReady()) {
           setNavigationReady(true);
@@ -131,9 +124,9 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     isReinitializing = true;
     try {
       console.log("reinitializing!!!!");
-      showAppMessage(true, null, "Initializing...");
+     // showAppMessage(true, null, "Initializing...");
       setLoading(true);
-      console.log("use loading --> true");
+      //console.log("use loading --> true");
 
       const token = await SecureStore.getItemAsync(TOKEN_KEY);
 
@@ -142,10 +135,10 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
         try {
           userData = await getCurrentUser();
-          console.log(
-            "REINIT USER DATA ON OTHER SIDE OF INTERCEPTOR: ",
-            userData
-          );
+          // console.log(
+          //   "REINIT USER DATA ON OTHER SIDE OF INTERCEPTOR: ",
+          //   userData
+          // );
         } catch (error) {
           console.error("Error fetching current user:", error);
           showAppMessage(true, null, "Token detected but cannot fetch user");
@@ -222,7 +215,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       isNavigationReady &&
       !isOnSignIn
     ) {
-      console.log("Current segment:", segments[0]);
+     // console.log("Current segment:", segments[0]);
       console.log(
         "APP IN FOREGROUND, REINITTING IN USER CONTEXT!!!!!!!!!!!!!!!!!!!!!!!!"
       );
@@ -231,19 +224,27 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   }, [appStateVisible, isNavigationReady]);
   
 
-  const updateUserSettingsMutation = useMutation({
+  const updateUserSettingsMutation = useMutation<Record<string, any>, Error, Record<string, any>>({
+ 
     mutationFn: (newSettings) => updateUserSettings(user?.id, newSettings),
     onSuccess: (data) => {
       setAppSettings((prev) => ({ ...prev, ...data }));
 
-      queryClient.invalidateQueries(["userSettings", user?.id]);
-      queryClient.refetchQueries(["userSettings", user?.id]).then(() => {
-        const updatedSettings = queryClient.getQueryData([
-          "userSettings",
-          user?.id,
-        ]);
-        console.log("Refetched user settings:", updatedSettings);
-      });
+      // queryClient.invalidateQueries(["userSettings", user?.id]);
+      // queryClient.refetchQueries(["userSettings", user?.id]).then(() => {
+      //   const updatedSettings = queryClient.getQueryData([
+      //     "userSettings",
+      //     user?.id,
+      //   ]);
+      //   console.log("Refetched user settings:", updatedSettings);
+      // });
+
+      queryClient.invalidateQueries({ queryKey: ["userSettings", user?.id] });
+queryClient.refetchQueries({ queryKey: ["userSettings", user?.id] }).then(() => {
+  const updatedSettings = queryClient.getQueryData(["userSettings", user?.id]);
+  console.log("Refetched user settings:", updatedSettings);
+});
+
     },
     onError: (error) => {
       console.error("Error updating user settings:", error);

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { View, Button } from "react-native";
-import { useDeviceLocationContext } from "@/app/context/DeviceLocationContext";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
-import { useActiveSearch } from "../../context/ActiveSearchContext";
+import { useDeviceLocationContext } from "@/src/context/DeviceLocationContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
+import { useActiveSearch } from "../../../src/context/ActiveSearchContext";
 import GoButton from "@/app/components/GoButton";
 import TurnOnLocationButton from "@/app/components/TurnOnLocationButton";
 import WebSocketSearchingLocations from "../../components/WebSocketSearchingLocations";

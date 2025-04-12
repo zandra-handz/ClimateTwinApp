@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useUser } from "../context/UserContext";
-import { useSurroundingsWS } from "../context/SurroundingsWSContext";
-import { getLiveWeather } from "../liveweathercall";
-import { getNativePlants } from "../nativeplantscall";
+import { useUser } from "../../src/context/UserContext";
+import { useSurroundingsWS } from "../../src/context/SurroundingsWSContext";
+import { getLiveWeather } from "../../src/calls/liveweathercall";
+import { getNativePlants } from "../../src/calls/nativeplantscall";
 
 interface NativePlants {
 //   coord: { lon: number; lat: number };

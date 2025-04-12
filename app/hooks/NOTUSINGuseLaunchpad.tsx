@@ -2,8 +2,8 @@ import React, { useMemo, useRef } from 'react';
 import { useQuery, useQueryClient, useMutation } from '@tanstack/react-query';  
 
 
-import { useUser } from '../context/UserContext';
-import { getLaunchpadData } from '../apicalls';
+import { useUser } from '../../src/context/UserContext';
+import { getLaunchpadData } from '../../src/calls/apicalls';
 
 
 const useLaunchpad = () => { 

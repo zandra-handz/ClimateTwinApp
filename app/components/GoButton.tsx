@@ -1,8 +1,8 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
-import { useGlobalStyles } from "../context/GlobalStylesContext";
-import { useActiveSearch } from "../context/ActiveSearchContext";
-import { useSurroundings } from "../context/CurrentSurroundingsContext";
+import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
+import { useActiveSearch } from "../../src/context/ActiveSearchContext";
+import { useSurroundings } from "../../src/context/CurrentSurroundingsContext";
 
 import AnimatedCircle from "../animations/AnimatedCircle";
 

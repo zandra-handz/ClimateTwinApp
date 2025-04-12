@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { View, StyleSheet, Text, Animated, TouchableOpacity } from 'react-native';
-import { useGlobalStyles } from '../context/GlobalStylesContext';
-import { useAppMessage } from '../context/AppMessageContext';
+import { useGlobalStyles } from '../../src/context/GlobalStylesContext';
+import { useAppMessage } from '../../src/context/AppMessageContext';
 
 const AppMessage = ({
   delay = 0,

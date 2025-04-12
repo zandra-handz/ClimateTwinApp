@@ -1,7 +1,7 @@
 import { View, FlatList } from "react-native"; 
 import FriendsUICard from "./FriendsUICard";
 import React from "react";
-import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext"; 
 
 const FriendsView = ({
   listData, 

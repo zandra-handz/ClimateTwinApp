@@ -8,12 +8,12 @@ import React, {
 } from "react";
 import { useUser } from "./UserContext";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { go, getRemainingGoes, expireSurroundings } from "../apicalls";
+import { go, getRemainingGoes, expireSurroundings } from "../calls/apicalls";
 
 import { useSurroundingsWS } from "./SurroundingsWSContext";
 import { useAppMessage } from "./AppMessageContext";
 
-import useExploreRoute from "../hooks/useExploreRoute";
+import useExploreRoute from "../../app/hooks/useExploreRoute";
 interface ActiveSearchContextType {
   isSearchingForTwin: boolean;
   isSearchingForRuins: boolean;

@@ -6,16 +6,16 @@ import React, {
   useState,
 } from "react";
 import * as SecureStore from "expo-secure-store"; 
-import { useUser } from "../context/UserContext"; 
-import { useAppMessage } from "../context/AppMessageContext"; 
-import useExploreRoute from "../hooks/useExploreRoute";  
+import { useUser } from "./UserContext"; 
+import { useAppMessage } from "./AppMessageContext"; 
+import useExploreRoute from "../../app/hooks/useExploreRoute";  
 
 interface SurroundingsWSContextType {
   sendMessage: (message: any) => void;
   handleRefreshDataFromSocket: () => void; 
   lastMessage: any; // You can specify a more strict type if you know the structure
   lastLocationName: any;
-  isPortal: any;
+  baseLocationId: any;
   lastNotification: any;
   lastLocationId: any;
   lastLocationAccessTime: any;
@@ -44,7 +44,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
   const [reconnectionDelay, setReconnectionDelay] = useState(10000);
  
   const [lastMessage, setLastMessage] = useState<any>(null);
-  const [ isPortal, setIsPortal ] = useState<any>(null);
+  const [ baseLocationId, setBaseLocationId ] = useState<any>(null);
   const [lastLocationName, setLastLocationName] = useState<any>(null);
   const [lastSearchProgress, setLastSearchProgress] = useState<any>(null);
   const [lastState, setLastState] = useState<any>(null);
@@ -65,7 +65,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {
      // console.log('Location Socket open --> resetting variables and closing...');
       setLastMessage(null);
-      setIsPortal(null);
+      setBaseLocationId(null);
       setLastNotification(null);
       setLastSearchProgress(null);
       setLastState(null); 
@@ -168,8 +168,8 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
       }
 
         //added to backend specifically for reducing triggering nearby locations fetch
-      if ('is_twin_location' in update) {
-        setIsPortal(update.is_twin_location);
+      if ('base_location' in update) {
+        setBaseLocationId(update.base_location);
       }
 
       if ('search_progress' in update) {
@@ -333,7 +333,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
   const handleRefreshDataFromSocket = () => {
     console.log('sending refresh message to socket');
-    showAppMessage(true, null, 'Triggered resend from socket!')
+   // showAppMessage(true, null, 'Triggered resend from socket!')
     sendMessage({ action: "refresh" });
   };
 
@@ -359,7 +359,7 @@ export const SurroundingsWSProvider: React.FC = ({ children }) => {
 
   return (
     <SurroundingsWSContext.Provider
-      value={{ locationUpdateWSIsOpen, sendMessage, handleRefreshDataFromSocket, lastMessage, isPortal, lastNotification, lastSearchProgress, lastState, lastLocationName, lastLocationId, lastLocationAccessTime, lastLatAndLong, isLocationSocketOpen, locationSocketColor, alwaysReRender }}
+      value={{ locationUpdateWSIsOpen, sendMessage, handleRefreshDataFromSocket, lastMessage, baseLocationId, lastNotification, lastSearchProgress, lastState, lastLocationName, lastLocationId, lastLocationAccessTime, lastLatAndLong, isLocationSocketOpen, locationSocketColor, alwaysReRender }}
     >
       {children}
     </SurroundingsWSContext.Provider>

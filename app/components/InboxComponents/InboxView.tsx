@@ -1,7 +1,7 @@
 import { View, FlatList } from 'react-native';
 import DataCard from '../Scaffolding/DataCard';
 import React from 'react';
-import { useGlobalStyles } from '../../context/GlobalStylesContext';
+import { useGlobalStyles } from '../../../src/context/GlobalStylesContext';
 import InboxItemUICard
  from './InboxItemUICard';
 const InboxView = ({listData,   onOpenButtonPress }) => {

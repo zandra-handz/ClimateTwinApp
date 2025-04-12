@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useState } from 'react';
 import { useQuery, useQueryClient, UseQueryResult, useMutation } from '@tanstack/react-query';
-import { useUser } from '../context/UserContext';
-import { getTreasures, getTreasure, collectTreasure, acceptTreasureGift, declineTreasureGift, requestToGiftTreasure } from '../apicalls';
+import { useUser } from '../../src/context/UserContext';
+import { getTreasures, getTreasure, collectTreasure, acceptTreasureGift, declineTreasureGift, requestToGiftTreasure } from '../../src/calls/apicalls';
 
 interface User {
   id: string; // Assuming the user model has an 'id' as a string (e.g., a UUID or integer)

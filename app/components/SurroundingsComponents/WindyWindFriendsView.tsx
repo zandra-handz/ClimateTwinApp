@@ -1,9 +1,9 @@
 import { View, Text } from "react-native";
 import React from "react"; 
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import WindyWindSquare from "./WindyWindSquare";
 import usedeviceLocation from "@/app/hooks/usedeviceLocation";
-import { useDeviceLocationContext } from "@/app/context/DeviceLocationContext";
+import { useDeviceLocationContext } from "@/src/context/DeviceLocationContext";
 
 //maybe get wind direction and wind speed of both home and portal locations and animate that way?
 

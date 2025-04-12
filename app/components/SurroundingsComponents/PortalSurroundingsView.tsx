@@ -1,11 +1,11 @@
 import React from "react";
 import { View } from "react-native";
-import { useSurroundings } from "../../context/CurrentSurroundingsContext";
+import { useSurroundings } from "../../../src/context/CurrentSurroundingsContext";
 import SingleDetailPanel from "@/app/components/SingleDetailPanel";
 import WindFriendsView from "@/app/components/SurroundingsComponents/WindFriendsView";
 import MagnifiedNavButton from "../MagnifiedNavButton";
-import { useGlobalStyles } from "@/app/context/GlobalStylesContext";
-import { useInteractiveElements } from "@/app/context/InteractiveElementsContext";
+import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
+import { useInteractiveElements } from "@/src/context/InteractiveElementsContext";
 import WindyWindFriendsView from "./WindyWindFriendsView";
 
 const PortalSurroundingsView = ({ height, triggerParentAutoScroll }) => {

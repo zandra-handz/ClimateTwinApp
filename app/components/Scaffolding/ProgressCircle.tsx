@@ -8,8 +8,8 @@ import Animated, {
 } from "react-native-reanimated";
 import Svg, { Circle } from "react-native-svg"; // Importing necessary components from react-native-svg
 
-import { useSurroundingsWS } from "@/app/context/SurroundingsWSContext";
-import { useGlobalStyles } from "@/app/context/GlobalStylesContext";
+import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
+import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle); // Create an animated Circle component
 const AnimatedText = Animated.createAnimatedComponent(Text); // Create an animated Text component

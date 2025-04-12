@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native';
 import React from 'react';
 import useInbox from '../../hooks/useInbox';
-import { useGlobalStyles } from '../../context/GlobalStylesContext';
+import { useGlobalStyles } from '../../../src/context/GlobalStylesContext';
  
 
 const NewItemsDot = () => {

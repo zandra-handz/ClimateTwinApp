@@ -1,7 +1,7 @@
 import React, { useRef, useState, forwardRef, useImperativeHandle } from 'react';
 import { View, Button, Text, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import Animated, { Easing, withTiming, useSharedValue, useAnimatedStyle } from 'react-native-reanimated';
-import { useGlobalStyles } from '../context/GlobalStylesContext';
+import { useGlobalStyles } from '../../src/context/GlobalStylesContext';
 import { TouchableOpacityComponent } from 'react-native';
 // Define the props type to include labels and values
 interface PickerProps {

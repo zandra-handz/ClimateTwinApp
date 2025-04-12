@@ -1,13 +1,13 @@
 import React, { createContext, useContext, useState, useEffect, useRef } from "react";
 import { Alert } from "react-native";
 import { useQueryClient, UseQueryResult, useQuery, useMutation } from "@tanstack/react-query";
-import { useUser } from "../context/UserContext";
-import { useSurroundingsWS } from "../context/SurroundingsWSContext";
-import useLLMScripts from "../llm/useLLMScripts";
-import { talkToGroq } from "../groqcall";
-import useLiveWeather from "../hooks/useLiveWeather";
+import { useUser } from "./UserContext";
+import { useSurroundingsWS } from "./SurroundingsWSContext";
+import useLLMScripts from "../../app/llm/useLLMScripts";
+import { talkToGroq } from "../calls/groqcall";
+import useLiveWeather from "../../app/hooks/useLiveWeather";
 //import useNativePlants from "../hooks/useNativePlants";
-import useINaturalist from "../hooks/useINaturalist";
+import useINaturalist from "../../app/hooks/useINaturalist";
 
 interface GroqHistoryData {
   [key: string]: any;

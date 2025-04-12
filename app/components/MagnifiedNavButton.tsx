@@ -1,5 +1,5 @@
 import { View, Text,  TouchableOpacity } from "react-native";
-import { useGlobalStyles } from "../context/GlobalStylesContext";
+import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
 import React from "react";
 import SingleDetailPanel from "./SingleDetailPanel";
 import NavBox from "./NavBox";

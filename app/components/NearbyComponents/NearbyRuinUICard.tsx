@@ -1,8 +1,8 @@
 import { View, TouchableOpacity, Text } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import DirectionSquare from "../SurroundingsComponents/DirectionSquare";
-import { useSurroundingsWS } from "@/app/context/SurroundingsWSContext";
+import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
 import { Image } from "expo-image";
 
 const NearbyRuinUICard = ({

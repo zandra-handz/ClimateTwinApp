@@ -5,7 +5,7 @@ import React, {
 } from "react";
 import UnsplashImageCard from "./UnsplashImageCard";
 import useUnsplash from "@/app/hooks/useUnsplash";
-import { useGlobalStyles } from "@/app/context/GlobalStylesContext"; 
+import { useGlobalStyles } from "@/src/context/GlobalStylesContext"; 
 
 const UnsplashTray = ({ queryString, base, photoNumber }) => {
   const { unsplash, isPending, isFetching, unsplashMutation } = useUnsplash({

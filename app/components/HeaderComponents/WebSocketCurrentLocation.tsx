@@ -1,8 +1,8 @@
 import React, { useEffect,  useState } from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
-import { useActiveSearch } from "../../context/ActiveSearchContext"; 
-import { useSurroundingsWS } from "../../context/SurroundingsWSContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext"; 
+import { useActiveSearch } from "../../../src/context/ActiveSearchContext"; 
+import { useSurroundingsWS } from "../../../src/context/SurroundingsWSContext";
  
  
 const WebSocketCurrentLocation: React.FC = () => {

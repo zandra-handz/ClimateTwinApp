@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 // import { StatusBar } from 'react-native'; 
 import { StatusBar } from 'expo-status-bar';
-import { useGlobalStyles } from '../context/GlobalStylesContext';
-import { useUser } from '../context/UserContext';
+import { useGlobalStyles } from '../../src/context/GlobalStylesContext';
+import { useUser } from '../../src/context/UserContext';
 import { useColorScheme } from "react-native";
 const CustomStatusBar = () => { 
     const { user, isAuthenticated, appSettings } = useUser();

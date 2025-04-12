@@ -1,6 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React, { useEffect } from "react";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { Image } from "expo-image";
 import { useFocusEffect } from "expo-router"; 
 

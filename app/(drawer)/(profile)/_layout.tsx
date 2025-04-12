@@ -2,7 +2,7 @@ import { Tabs } from "expo-router";
 import { Text, TouchableOpacity } from "react-native";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useGlobalStyles } from "@/app/context/GlobalStylesContext";
+import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
 import { useRouter } from "expo-router";
 import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
 

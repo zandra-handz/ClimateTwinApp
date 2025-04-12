@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useSurroundingsWS } from "../../context/SurroundingsWSContext";
+import { useSurroundingsWS } from "../../../src/context/SurroundingsWSContext";
 import GroqFullScreen from "./GroqFullScreen";
 import { useQueryClient } from "@tanstack/react-query";
 import { useFocusEffect } from "expo-router";
 import useLiveWeather from '@/app/hooks/useLiveWeather';
-import { useGroqContext } from "@/app/context/GroqContext";
+import { useGroqContext } from "@/src/context/GroqContext";
 import collect from "@/app/(drawer)/(treasures)/collect";
 // import usePexels from "@/app/hooks/usePexels";
 

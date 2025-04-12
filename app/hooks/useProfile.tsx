@@ -6,12 +6,12 @@ import {
   useMutation,
 } from "@tanstack/react-query";
 
-import { useUser } from "../context/UserContext";
+import { useUser } from "../../src/context/UserContext";
 import {
   getUserProfile,
   updateUserProfile,
   uploadUserAvatar,
-} from "../apicalls";
+} from "../../src/calls/apicalls";
  
 interface UserProfile {
   id: number;

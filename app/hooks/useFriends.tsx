@@ -6,7 +6,7 @@ import {
   useMutation,
 } from "@tanstack/react-query";
 
-import { useUser } from "../context/UserContext";
+import { useUser } from "../../src/context/UserContext";
 import {
   getFriends,
   getFriend,
@@ -15,7 +15,7 @@ import {
   requestToAddFriend,
   acceptFriendship,
   declineFriendship,
-} from "../apicalls";
+} from "../../src/calls/apicalls";
  
 interface Friend {
   id: number;

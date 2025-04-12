@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { useGlobalStyles } from '../context/GlobalStylesContext';
+import { useGlobalStyles } from '../../src/context/GlobalStylesContext';
 
 const MetaGuider = ({ title, message, onPress, isVisible = false, dismissLabel = 'Dismiss' }) => {
   const { themeStyles } = useGlobalStyles();

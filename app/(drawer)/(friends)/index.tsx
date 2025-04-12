@@ -1,9 +1,9 @@
 import React from "react";
 import { View, TouchableOpacity, Text } from "react-native";
 
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { useRouter } from "expo-router";
-import { useAppMessage } from "../../context/AppMessageContext";
+import { useAppMessage } from "../../../src/context/AppMessageContext";
 import useFriends from "../../hooks/useFriends";
 
 import FriendsView from "@/app/components/FriendsComponents/FriendsView";

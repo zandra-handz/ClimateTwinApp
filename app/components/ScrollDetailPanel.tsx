@@ -1,11 +1,11 @@
 import { Animated, View, Text, ScrollView } from "react-native";
 import React from "react";
-import { useGlobalStyles } from "../context/GlobalStylesContext";
+import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
  
 import GroqImageCard from "./GroqComponents/GroqImageCard";
 
 import ComponentSpinner from "./Scaffolding/ComponentSpinner";
-import { useSurroundings } from "../context/CurrentSurroundingsContext";
+import { useSurroundings } from "../../src/context/CurrentSurroundingsContext";
 
 const ScrollDetailPanel = ({ label, value, opacity, images, isLoading=false }) => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();

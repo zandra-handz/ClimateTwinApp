@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { TouchableOpacity, Text, Keyboard, View } from "react-native";
-import { useGlobalStyles } from "@/app/context/GlobalStylesContext";
+import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
 
 const KeyboardOpenFooter = ({
   labelLeft,

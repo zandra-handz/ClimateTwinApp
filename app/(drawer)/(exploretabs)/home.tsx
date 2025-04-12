@@ -1,12 +1,12 @@
 import React from "react";
 import { View } from "react-native";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { useGeolocationWatcher } from "../../hooks/useCurrentLocationWatcher";
 import useHomeLocation from "../../hooks/useHomeLocation";
-import { useActiveSearch } from "../../context/ActiveSearchContext"; 
+import { useActiveSearch } from "../../../src/context/ActiveSearchContext"; 
 import HomeSurroundingsView from "@/app/components/HomeSurroundingsComponents/HomeSurroundingsView";
  
-import { useSurroundings } from "../../context/CurrentSurroundingsContext";
+import { useSurroundings } from "../../../src/context/CurrentSurroundingsContext";
 
 const home = () => {
   useGeolocationWatcher();

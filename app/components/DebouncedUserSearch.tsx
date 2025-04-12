@@ -1,8 +1,8 @@
 import { View, Text, TextInput } from "react-native";
 import React, { useState, useRef, useEffect, useCallback } from "react";
-import { searchUsers } from "../apicalls";
+import { searchUsers } from "../../src/calls/apicalls";
 import useFriends from "../hooks/useFriends";
-import { useGlobalStyles } from "../context/GlobalStylesContext";
+import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
 import { debounce } from 'lodash';
 
 const DebouncedUserSearch = ({onEnter}) => {

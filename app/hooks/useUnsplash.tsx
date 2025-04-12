@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { useUser } from "../context/UserContext";
-import { useSurroundingsWS } from "../context/SurroundingsWSContext";
-import { searchUnsplash } from "../unsplashcall";
+import { useUser } from "../../src/context/UserContext";
+import { useSurroundingsWS } from "../../src/context/SurroundingsWSContext";
+import { searchUnsplash } from "../../src/calls/unsplashcall";
 
 const useUnsplash = ({ queryString, base }) => {
   const { isAuthenticated, isInitializing } = useUser();

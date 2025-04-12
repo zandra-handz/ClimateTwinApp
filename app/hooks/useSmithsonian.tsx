@@ -1,8 +1,8 @@
 import React, { useRef } from "react";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { useUser } from "../context/UserContext";
-import { useSurroundingsWS } from "../context/SurroundingsWSContext";
-import { searchSmithsonian } from "../smithsoniancall";
+import { useUser } from "../../src/context/UserContext";
+import { useSurroundingsWS } from "../../src/context/SurroundingsWSContext";
+import { searchSmithsonian } from "../../src/calls/smithsoniancall";
 
 const useSmithsonian = ({ queryString, base }) => {
   const { isAuthenticated, isInitializing } = useUser();

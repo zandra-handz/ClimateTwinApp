@@ -2,7 +2,7 @@ import { View, FlatList } from 'react-native';
  
 import StatsUICard from './StatsUICard';
 import React from 'react';
-import { useGlobalStyles } from '../../context/GlobalStylesContext';
+import { useGlobalStyles } from '../../../src/context/GlobalStylesContext';
 
 const StatsView = ({listData, onCardButtonPress, onOpenButtonPress, onOpenTreasurePress}) => {
  

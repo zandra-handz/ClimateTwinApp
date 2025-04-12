@@ -8,8 +8,8 @@ import Animated, {
   useDerivedValue,
 } from "react-native-reanimated";
 
-import { useSurroundingsWS } from "@/app/context/SurroundingsWSContext";
-import { useGlobalStyles } from "@/app/context/GlobalStylesContext";
+import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
+import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
 
 const ProgressBar = () => {
   const { lastMessage } = useSurroundingsWS();

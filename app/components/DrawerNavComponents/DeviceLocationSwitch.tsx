@@ -2,9 +2,9 @@
 
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
-import { useUser } from "../../context/UserContext";
-import { useDeviceLocationContext } from "@/app/context/DeviceLocationContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
+import { useUser } from "../../../src/context/UserContext";
+import { useDeviceLocationContext } from "@/src/context/DeviceLocationContext";
 import { DrawerItem } from "@react-navigation/drawer";
 import {  AntDesign, Feather } from "@expo/vector-icons";
 

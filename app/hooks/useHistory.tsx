@@ -1,8 +1,8 @@
 import React, { useMemo, useRef } from "react";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 
-import { useUser } from "../context/UserContext";
-import { getHistory } from "../apicalls";
+import { useUser } from "../../src/context/UserContext";
+import { getHistory } from "../../src/calls/apicalls";
 
 const useHistory = () => {
   const { isAuthenticated, isInitializing } = useUser();

@@ -1,6 +1,6 @@
 import { Animated, View, Text, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import GroqImageCard from "./GroqImageCard";
 import GoToItemButton from "../GoToItemButton";
 import PexelsTray from "../PexelsComponents/PexelsTray";

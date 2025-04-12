@@ -12,7 +12,10 @@ import {
   Wander,
   Wave,
 } from "react-native-animated-spinkit";
-import { useGlobalStyles } from "@/app/context/GlobalStylesContext";
+import { useUser } from "@/src/context/UserContext";
+import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
+import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
+import { LinearGradient } from "expo-linear-gradient";
 
 const spinners = {
   circle: Circle,
@@ -28,29 +31,60 @@ const spinners = {
 };
 
 const ComponentSpinner = (
-  { spinnerSize = 90, spinnerType = "flow", showSpinner = false, backgroundColor='transparent' },
+  { spinnerSize = 90, spinnerType = "flow", showSpinner = false, backgroundColor='transparent', useGradientBackground=false, isInitializerSpinner=false  },
  
 ) => {
   const { themeStyles, constantColorsStyles } = useGlobalStyles();
+  const { isInitializing } = useUser();
+  const { isLocationSocketOpen } = useSurroundingsWS();
 
   // if (!showSpinner) return null;
 
   const Spinner = spinners[spinnerType] || Circle;
 
   return (
-    <View
-      style={[
-        styles.container, {backgroundColor: backgroundColor}//themeStyles.darkerBackground
-      ]}
-    >
-      {showSpinner ? (
+    <>
+    {useGradientBackground && (isInitializing || !isLocationSocketOpen) && (
+      
+      <LinearGradient
+        colors={[
+          // 'teal', 
+          // constantColorsStyles.v1LogoColor.backgroundColor,
+          'transparent', 'transparent'
+          
+        ]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={[styles.container]}
+      >
+      {(isInitializing || !isLocationSocketOpen) ? (
          
           <Spinner
             size={spinnerSize}
             color={constantColorsStyles.v1LogoColor.backgroundColor}
           /> 
       ) : null}
-    </View>
+    </LinearGradient>
+    )}
+
+{!useGradientBackground && (
+      
+      <View
+        style={[
+          styles.container, {backgroundColor: backgroundColor}//themeStyles.darkerBackground
+        ]}
+      >
+        {showSpinner ? (
+           
+            <Spinner
+              size={spinnerSize}
+              color={constantColorsStyles.v1LogoColor.backgroundColor}
+            /> 
+        ) : null}
+      </View>
+      )}
+    
+    </>
   );
 };
 

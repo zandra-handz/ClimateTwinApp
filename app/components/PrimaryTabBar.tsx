@@ -1,7 +1,7 @@
 import { View  } from 'react-native';
 import { useLinkBuilder, useTheme } from '@react-navigation/native';
 import { Text,  TouchableOpacity } from 'react-native';
-import { useGlobalStyles } from '../context/GlobalStylesContext'; 
+import { useGlobalStyles } from '../../src/context/GlobalStylesContext'; 
 import { AntDesign, Feather } from '@expo/vector-icons';
 function PrimaryTabBar({ state, descriptors, navigation }) {
     

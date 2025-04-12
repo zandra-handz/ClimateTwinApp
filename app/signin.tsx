@@ -8,9 +8,9 @@ import {
   Keyboard,
   TouchableOpacity,
 } from "react-native";
-import { useUser } from "./context/UserContext";
-import { useGlobalStyles } from "./context/GlobalStylesContext";
-import { useAppMessage } from "./context/AppMessageContext"; 
+import { useUser } from "../src/context/UserContext";
+import { useGlobalStyles } from "../src/context/GlobalStylesContext";
+import { useAppMessage } from "../src/context/AppMessageContext"; 
 import { useFonts } from "expo-font";  
 import { LinearGradient } from "expo-linear-gradient"; 
 
@@ -20,7 +20,7 @@ import { useRouter, Link } from "expo-router";
 
 
 import { SafeAreaView } from "react-native-safe-area-context";
-import { signup } from "./apicalls";
+import { signup } from "../src/calls/apicalls";
  
 import { StatusBar } from 'react-native';
 import SimpleBottomButton from "./components/SimpleBottomButton";
@@ -194,18 +194,11 @@ const router = useRouter();
   });
 
   };
-
-
-  const navigateToHome = () => {
-    //not the route anymore
-    //router.push('(tabs)'); // Navigate to the /recover-credentials screen
-  };
-
+ 
   const handleAuthentication = async () => {
     let result;
     if (isSignInScreen) {
-      try {
-       showAppMessage(true, null, "Signing you in...");
+      try { 
 
         onSignin(username, password);
       } catch (error) {
@@ -213,8 +206,7 @@ const router = useRouter();
         showAppMessage(true, null, `Error! Not signed in.`);
       }
     } else {
-      if (password !== verifyPassword) {
-        //alert("Passwords do not match!");
+      if (password !== verifyPassword) { 
         showAppMessage(true, null, "Oops! Passwords do not match");
         return;
       }

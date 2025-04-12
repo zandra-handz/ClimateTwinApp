@@ -8,8 +8,8 @@ import {
   Keyboard,
   TouchableOpacity,
 } from "react-native"; 
-import { useGlobalStyles } from "./context/GlobalStylesContext";
-import { useAppMessage } from "./context/AppMessageContext";
+import { useGlobalStyles } from "../src/context/GlobalStylesContext";
+import { useAppMessage } from "../src/context/AppMessageContext";
 import { useFonts } from "expo-font"; 
 import { LinearGradient } from "expo-linear-gradient"; 
 
@@ -17,7 +17,7 @@ import {
   resetPassword,
   sendResetCodeEmail,
   verifyResetCodeEmail,
-} from "./apicalls";
+} from "../src/calls/apicalls";
 
 import { useRouter, useLocalSearchParams } from "expo-router";
 

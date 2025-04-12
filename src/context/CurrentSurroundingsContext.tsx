@@ -9,11 +9,11 @@ import React, {
 import { useUser } from "./UserContext";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { useRouter, useSegments } from "expo-router";
-import { getExploreLocation, pickNewSurroundings } from "../apicalls";
+import { getExploreLocation, pickNewSurroundings } from "../calls/apicalls";
  
 import { useSurroundingsWS } from "./SurroundingsWSContext";
 
-import useLiveWeather from "../hooks/useLiveWeather";
+import useLiveWeather from "../../app/hooks/useLiveWeather";
  
 import { useGroqContext  } from "./GroqContext";
  
@@ -152,7 +152,7 @@ export const CurrentSurroundingsProvider: React.FC<
   } = useQuery<CurrentSurroundings | null>({
     queryKey: ["currentSurroundings", lastLocationId, lastLocationName],
     queryFn: getExploreLocation,
-    enabled: !!isAuthenticated && !isInitializing && lastLocationName !== 'You are home' && lastLocationName !== 'You are searching',
+    enabled: !!isAuthenticated && !isInitializing && (lastLocationName !== 'You are home') && lastLocationName !== 'You are searching',
     
     staleTime: 0,
     onError: (err) => {

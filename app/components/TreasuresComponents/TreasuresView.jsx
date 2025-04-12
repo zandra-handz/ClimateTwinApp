@@ -1,7 +1,7 @@
 import { View, FlatList } from 'react-native'; 
 import TreasuresUICard from './TreasuresUICard';
 import React from 'react';
-import { useGlobalStyles } from '../../context/GlobalStylesContext';
+import { useGlobalStyles } from '../../../src/context/GlobalStylesContext';
 
 
 const TreasuresView = ({listData, onOpenTreasurePress}) => {

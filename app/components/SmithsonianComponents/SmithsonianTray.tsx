@@ -5,7 +5,7 @@ import React, {
 } from "react";
 import SmithsonianImageCard from "./SmithsonianImageCard";
 import useSmithsonian from "@/app/hooks/useSmithsonian";
-import { useGlobalStyles } from "@/app/context/GlobalStylesContext"; 
+import { useGlobalStyles } from "@/src/context/GlobalStylesContext"; 
 
 const SmithsonianTray = ({ queryString, base, photoNumber }) => {
   const { smithsonian, isPending, isFetching, smithsonianMutation } = useSmithsonian({

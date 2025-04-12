@@ -5,9 +5,9 @@ import { DrawerToggleButton } from "@react-navigation/drawer";
 
 import RefreshSocketButton from "../Scaffolding/RefreshSocketButton";
 
-import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext"; 
 import ProgressBar from "../Scaffolding/ProgressBar";
-import { useSurroundingsWS } from "@/app/context/SurroundingsWSContext";
+import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
 import ProgressCircle from "../Scaffolding/ProgressCircle";
   
 const HomeHeader = () => {

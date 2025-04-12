@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
-import { useSurroundingsWS } from "../context/SurroundingsWSContext";
-import { useActiveSearch } from "../context/ActiveSearchContext";
-import { useGlobalStyles } from "../context/GlobalStylesContext";
+import { useSurroundingsWS } from "../../src/context/SurroundingsWSContext";
+import { useActiveSearch } from "../../src/context/ActiveSearchContext";
+import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
 import useFriends from "../hooks/useFriends";
 import useInbox from "../hooks/useInbox";
 import useTreasures from "../hooks/useTreasures";
-import { clearNotificationCache } from "../apicalls";
+import { clearNotificationCache } from "../../src/calls/apicalls";
 
 const NotificationNotifier = () => {
   const { themeStyles, appContainerStyles, appFontStyles, constantColorsStyles } = useGlobalStyles();

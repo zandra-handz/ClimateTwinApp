@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useUser } from "../context/UserContext";
-import { useSurroundingsWS } from "../context/SurroundingsWSContext";
-import { getINaturalist } from "../inaturalistcall";
+import { useUser } from "../../src/context/UserContext";
+import { useSurroundingsWS } from "../../src/context/SurroundingsWSContext";
+import { getINaturalist } from "../../src/calls/inaturalistcall";
 
 interface INaturalistObservation {
   id: number;

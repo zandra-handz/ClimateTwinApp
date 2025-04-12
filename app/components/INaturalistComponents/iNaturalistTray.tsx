@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react"; 
 import INaturalistImageCard from "./INaturalistImageCard";
-import { useGlobalStyles } from "@/app/context/GlobalStylesContext";
+import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
 import useINaturalist from "@/app/hooks/useINaturalist";
 
 

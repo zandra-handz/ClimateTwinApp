@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, Alert } from "react-native";
 import React from "react";
-import { useGlobalStyles } from "../context/GlobalStylesContext";
- import { useDeviceLocationContext } from "../context/DeviceLocationContext";
+import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
+ import { useDeviceLocationContext } from "../../src/context/DeviceLocationContext";
  
 const TurnOnLocationButton = () => { 
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();

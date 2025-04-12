@@ -3,16 +3,16 @@ import { Animated, View } from "react-native";
 import { useFocusEffect } from "expo-router";
 import { useGeolocationWatcher } from "../../hooks/useCurrentLocationWatcher";
 
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
-import { useSurroundings } from "../../context/CurrentSurroundingsContext";
-import { useSurroundingsWS } from "@/app/context/SurroundingsWSContext";
-import { useInteractiveElements } from "@/app/context/InteractiveElementsContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
+import { useSurroundings } from "../../../src/context/CurrentSurroundingsContext";
+import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
+import { useInteractiveElements } from "@/src/context/InteractiveElementsContext";
 
 import CurrentSurroundingsView from "@/app/components/SurroundingsComponents/CurrentSurroundingsView";
 import PortalSurroundingsView from "@/app/components/SurroundingsComponents/PortalSurroundingsView";
 import RuinsSurroundingsView from "@/app/components/SurroundingsComponents/RuinsSurroundingsView";
 
-import { useUser } from "@/app/context/UserContext";
+import { useUser } from "@/src/context/UserContext";
  
 
 import NotificationNotifier from "@/app/components/NotificationNotifier";

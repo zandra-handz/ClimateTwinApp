@@ -3,9 +3,9 @@ import {
   SafeAreaView,
   View, 
 } from "react-native"; 
-import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext"; 
 
-import { useAppMessage } from "../../context/AppMessageContext";
+import { useAppMessage } from "../../../src/context/AppMessageContext";
  
 import useStats from "@/app/hooks/useStats";
 import StatsView from "@/app/components/StatsComponents/StatsView";

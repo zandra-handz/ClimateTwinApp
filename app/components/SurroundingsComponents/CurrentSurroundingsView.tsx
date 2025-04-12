@@ -1,15 +1,15 @@
 import React, { useEffect } from "react";
 import { View, ScrollView } from "react-native";
-import { useInteractiveElements } from "@/app/context/InteractiveElementsContext";
+import { useInteractiveElements } from "@/src/context/InteractiveElementsContext";
 import RuinsMappedTreasuresView from "../ItemChoicesComponents/RuinsMappedTreasuresView";
 import PortalMappedTreasuresView from "../ItemChoicesComponents/PortalMappedTreasuresView";
 import PortalUnmappedTreasuresView from "../ItemChoicesComponents/PortalUnmappedTreasuresView";
 
 import RuinsUnmappedTreasuresView from "../ItemChoicesComponents/RuinsUnmappedTreasureView";
-import { useGroqContext } from "@/app/context/GroqContext";
+import { useGroqContext } from "@/src/context/GroqContext";
 import useINaturalist from "@/app/hooks/useINaturalist";
 import WindyMap from "../WindyMap";
-import { useSurroundingsWS } from "@/app/context/SurroundingsWSContext";
+import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
 
 const CurrentSurroundingsView = ({ height }) => {
   const { groqHistory } = useGroqContext();

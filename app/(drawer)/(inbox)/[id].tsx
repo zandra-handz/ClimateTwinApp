@@ -1,10 +1,10 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { SafeAreaView, View } from "react-native";
 import { useLocalSearchParams } from "expo-router";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { useRouter } from "expo-router";
 
-import { useAppMessage } from "../../context/AppMessageContext";
+import { useAppMessage } from "../../../src/context/AppMessageContext";
 import useInbox from "../../hooks/useInbox";
 import useTreasures from "@/app/hooks/useTreasures";
 import useFriends from "@/app/hooks/useFriends";

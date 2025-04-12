@@ -1,12 +1,12 @@
 import React, {  useEffect  } from "react";
 import {   View, ScrollView } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 
 import useFriends from "@/app/hooks/useFriends";
 import FriendsUICard from "@/app/components/FriendsComponents/FriendsUICard";
 
-import { useAppMessage } from "../../context/AppMessageContext";  
+import { useAppMessage } from "../../../src/context/AppMessageContext";  
 import DataList from "../../components/Scaffolding/DataList"; 
 
 import ActionsFooter from "@/app/components/ActionsFooter";  

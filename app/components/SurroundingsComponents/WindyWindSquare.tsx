@@ -3,7 +3,7 @@ import { View, StyleSheet } from 'react-native';
 import ArrowPixellySvg from '../../assets/svgs/arrow-pixelly.svg';
 import WindyMap from '../WindyMap';
 import ComponentSpinner from '../Scaffolding/ComponentSpinner';
-import { useGlobalStyles } from '@/app/context/GlobalStylesContext';
+import { useGlobalStyles } from '@/src/context/GlobalStylesContext';
 
 
 

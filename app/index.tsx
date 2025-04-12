@@ -1,14 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, StyleSheet } from "react-native";
-import { useUser } from "./context/UserContext";
-import { useGlobalStyles } from "./context/GlobalStylesContext";
-import { useAppMessage } from "./context/AppMessageContext";
+import { useUser } from "../src/context/UserContext";
+import { useGlobalStyles } from "../src/context/GlobalStylesContext";
+import { useAppMessage } from "../src/context/AppMessageContext";
 import { useRouter } from "expo-router";
 import SignInButton from "./components/SignInButton";
 import { useFonts } from "expo-font";
 import * as SecureStore from "expo-secure-store"; 
 import { LinearGradient } from "expo-linear-gradient"; 
 import CustomStatusBar from "./components/CustomStatusBar"; 
+
+
 
 
 //a frienddate assistant for overwhelmed adults, and for people who just have a lot to talk about

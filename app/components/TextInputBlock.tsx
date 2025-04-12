@@ -7,7 +7,7 @@ import React, {
     forwardRef,
   } from "react";
   import { View, Text, TextInput, StyleSheet } from "react-native";
-import { useGlobalStyles } from "../context/GlobalStylesContext";
+import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
   // Forwarding ref to the parent to expose the TextInput value
   const TextInputBlock = forwardRef(
     //width and height are original settings being used in location notes

@@ -1,28 +1,45 @@
-import { View, FlatList } from "react-native";
-import NearbyUICard from "./NearbyUICard";
-import React from "react";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
-import RuinsHarmonyView from "../SurroundingsComponents/RuinsHarmonyView";
-import WindFriendsView from "../SurroundingsComponents/WindFriendsView";
+import { View, FlatList } from "react-native"; 
+import React, {useCallback, useEffect, useState } from "react";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
+import { useNearbyLocations } from "../../../src/context/NearbyLocationsContext";
+import { useSurroundings } from "@/src/context/CurrentSurroundingsContext";
+import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
 import NearbyRuinUICard from "./NearbyRuinUICard";
 import NearbyPortalUICard from "./NearbyPortalUICard";
+import { useFocusEffect } from "expo-router"; 
  
-const NearbyView = ({
-  listData,
-  onCardButtonPress,
-  onOpenButtonPress,
-  onOpenTreasurePress,
-}) => {
+const NearbyView = () => {
   const { appContainerStyles } = useGlobalStyles();
-
+  const { centeredNearbyLocations, nearbyLocations } = useNearbyLocations();
+  const { handlePickNewSurroundings } = useSurroundings();
+  const { lastLocationId, baseLocationId } = useSurroundingsWS();
+  const [copiedCenteredNearbyLocations, setCopiedCenteredNearbyLocations] = useState<NearbyLocation[]>([]);
+  
+//   useFocusEffect(
+//     useCallback(() => {
+//       console.log("triggering nearby locations refetch");
+//        setCopiedCenteredNearbyLocations(centeredNearbyLocations)
+//       return () => {
+//         console.log("nearby location screen is unfocused");
+//       };
+//     }, [])
+//   );
+//  useEffect(() => {
+//   setCopiedCenteredNearbyLocations(centeredNearbyLocations)
+//  }, [centeredNearbyLocations]);
 
   return (
+    <>
+    {centeredNearbyLocations.length > 0 && (
+      
     <View style={[appContainerStyles.dataListContainer]}>
+     
+     
+          
       <FlatList
-        data={listData}
-        keyExtractor={(item, index) =>
-          item.id ? `${item.id}-${item.timestamp || index}` : index.toString()
-        }
+        data={centeredNearbyLocations}
+       // extraData={centeredNearbyLocations} // force rerender
+        keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <View style={{ marginVertical: 4 }}>
             {item.explore_type === "twin_location" && (
@@ -36,7 +53,7 @@ const NearbyView = ({
               homeDescription={item.home_location.description}
               homeWindSpeed={item.home_location.wind_speed}
               homeWindDirection={item.home_location.wind_direction}
-              onPress={onCardButtonPress}
+              onPress={handlePickNewSurroundings}
               />
 
               // <NearbyUICard
@@ -57,7 +74,7 @@ const NearbyView = ({
                 direction={item.direction}
                 directionDegree={item.direction_degree}
                 windHarmony={item.wind_harmony}
-                onPress={onCardButtonPress}
+                onPress={handlePickNewSurroundings}
                 image={item.street_view_image}
                 />
               {/* <NearbyUICard
@@ -71,10 +88,14 @@ const NearbyView = ({
             )}
           </View>
         )}
-        contentContainerStyle={{ paddingBottom: 0 }}
+        contentContainerStyle={{ paddingBottom: 0, height: 400 }}
         ListFooterComponent={<View style={{ height: 100 }} />}
       />
+
     </View>
+    
+  )}
+  </>
   );
 };
 

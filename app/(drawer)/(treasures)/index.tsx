@@ -3,7 +3,7 @@ import {
   View, 
 } from "react-native"; 
 import { useRouter } from "expo-router";
-import { useGlobalStyles } from "../../context/GlobalStylesContext"; 
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext"; 
  
 import useTreasures from "../../hooks/useTreasures"; 
 import TreasuresView from '../../components/TreasuresComponents/TreasuresView';

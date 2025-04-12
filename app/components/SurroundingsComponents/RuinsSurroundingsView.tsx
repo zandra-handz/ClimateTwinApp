@@ -1,6 +1,6 @@
 import React from "react";
 import { View } from "react-native";
-import { useSurroundings } from "../../context/CurrentSurroundingsContext";
+import { useSurroundings } from "../../../src/context/CurrentSurroundingsContext";
 import SingleDetailPanel from "@/app/components/SingleDetailPanel";
 import SurroundingsTray from "./SurroundingsTray";
 

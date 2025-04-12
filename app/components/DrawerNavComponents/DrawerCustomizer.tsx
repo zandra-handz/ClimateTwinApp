@@ -8,8 +8,8 @@ import {
 } from "react-native";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { useRouter } from "expo-router";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
-import { useUser } from "../../context/UserContext"; 
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
+import { useUser } from "../../../src/context/UserContext"; 
 import { Image } from "expo-image";
 import ClimateTwinLogo from "../../assets/images/logo.png";
 import DarkLightSwitch from "./DarkLightSwitch";

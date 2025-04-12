@@ -1,11 +1,11 @@
 import { View, Text, FlatList, StyleSheet } from "react-native";
 import React, { useEffect, useState } from "react"; 
 import ItemChoiceUICard from "./ItemChoiceUICard"; 
-import { useInteractiveElements } from "@/app/context/InteractiveElementsContext";
+import { useInteractiveElements } from "@/src/context/InteractiveElementsContext";
 import CardAnimationWrapper from "../CardAnimationWrapper";
 import { useRouter } from "expo-router";
 import TreasureUICard from "./TreasureUICard";
-import { useSurroundingsWS } from "@/app/context/SurroundingsWSContext";
+import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
 
 
 //Mapped = Item details influence groq/item query

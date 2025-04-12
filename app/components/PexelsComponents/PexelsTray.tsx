@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import PexelsImageCard from "./PexelsImageCard";
 import usePexels from "@/app/hooks/usePexels";
-import { useGlobalStyles } from "@/app/context/GlobalStylesContext";
+import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
 import { useFocusEffect } from "expo-router";
 
 const PexelsTray = ({ queryString, base, photoNumber }) => {

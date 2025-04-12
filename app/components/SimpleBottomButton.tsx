@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, Text, StyleSheet, Image } from 'react-native'; 
-import { useGlobalStyles } from '../context/GlobalStylesContext'; // Import the global style context
+import { useGlobalStyles } from '../../src/context/GlobalStylesContext'; // Import the global style context
 
 const SimpleBottomButton = ({
   onPress,

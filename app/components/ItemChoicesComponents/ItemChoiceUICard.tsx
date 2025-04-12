@@ -1,6 +1,6 @@
 import { View, TouchableOpacity, Text, StyleSheet } from "react-native";
 import React from "react";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 
 const ItemChoiceUICard = ({ label, value, onPress }) => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();

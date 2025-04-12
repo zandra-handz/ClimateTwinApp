@@ -1,10 +1,14 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  ReactNode,
+} from 'react';
 import { useUser } from './UserContext';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getNearbyLocations } from '../apicalls'; 
+import { getNearbyLocations } from '../calls/apicalls';
 import { useSurroundingsWS } from './SurroundingsWSContext';
-
-import { useActiveSearch } from "@/app/context/ActiveSearchContext";
 
 interface NearbyLocation {
   id: number;
@@ -21,8 +25,9 @@ interface NearbyLocation {
 }
 
 interface NearbyLocationsContextType {
-  nearbyLocations: NearbyLocation[]; 
-   setTriggerFetch: React.Dispatch<React.SetStateAction<boolean>>;
+  nearbyLocations: NearbyLocation[] | undefined;
+  centeredNearbyLocations: NearbyLocation[];
+  triggerRefetch: () => void;
 }
 
 const NearbyLocationsContext = createContext<NearbyLocationsContextType | undefined>(undefined);
@@ -40,18 +45,21 @@ interface NearbyLocationsProviderProps {
 }
 
 export const NearbyLocationsProvider: React.FC<NearbyLocationsProviderProps> = ({ children }) => {
-  const { user, isAuthenticated, isInitializing } = useUser(); 
-  const { lastState, lastLocationId, isPortal } = useSurroundingsWS();
- const [ centeredNearbyLocations, setCenteredNearbyLocations ] = useState([]);
-  const queryClient = useQueryClient();  
+  const { user, isAuthenticated, isInitializing } = useUser();
+  const { lastState, lastLocationId, baseLocationId } = useSurroundingsWS();
+  const [centeredNearbyLocations, setCenteredNearbyLocations] = useState<NearbyLocation[]>([]);
+
+  const queryClient = useQueryClient();
+
 
 
  // isPortal === 'yes' is not right
 
   const { data: nearbyLocations, isLoading, isError, isSuccess } = useQuery<NearbyLocation[]>({
-    queryKey: ['nearbyLocations', lastLocationId, isPortal === 'yes'],
+    queryKey: ['nearbyLocations', baseLocationId],
     queryFn: getNearbyLocations,
-    enabled: !!isAuthenticated && !isInitializing, 
+    enabled: !!isAuthenticated && !isInitializing && !!lastLocationId && (lastState === 'exploring'), 
+    //staleTime: 0,
     onError: (err) => {
       console.error('Error fetching location data:', err);
     },
@@ -63,18 +71,22 @@ export const NearbyLocationsProvider: React.FC<NearbyLocationsProviderProps> = (
   });
 
   useEffect(() => {
-    if (lastLocationId && nearbyLocations) {
+    if (lastLocationId && nearbyLocations && nearbyLocations.length > 0) {
+      
+      console.log('FILTERING NEARBY LOCATIONS');
       const filteredData = nearbyLocations.filter(item => item.id !== lastLocationId);
       setCenteredNearbyLocations(filteredData);
 
 
+    } else {
+      setCenteredNearbyLocations([]);
     }
 
-  }, [lastLocationId, nearbyLocations]);
+  }, [nearbyLocations, lastLocationId]);
 
   
   const triggerRefetch = () => {
-    queryClient.invalidateQueries({ queryKey: ['nearbyLocations', lastLocationId, isPortal === 'yes'] });
+    queryClient.invalidateQueries({ queryKey: ['nearbyLocations', baseLocationId] });
   };
  
    

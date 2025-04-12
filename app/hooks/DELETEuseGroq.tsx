@@ -6,10 +6,10 @@ import {
   UseQueryResult,
   useMutation,
 } from "@tanstack/react-query";
-import { useUser } from "../context/UserContext";
-import { useSurroundingsWS } from "../context/SurroundingsWSContext";
+import { useUser } from "../../src/context/UserContext";
+import { useSurroundingsWS } from "../../src/context/SurroundingsWSContext";
 import useLLMScripts from "../llm/useLLMScripts";
-import { talkToGroq } from "../groqcall"; 
+import { talkToGroq } from "../../src/calls/groqcall"; 
 import useLiveWeather from "./useLiveWeather";
  
 

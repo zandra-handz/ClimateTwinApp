@@ -8,6 +8,8 @@ import * as Notifications from "expo-notifications";
 import * as FileSystem from "expo-file-system";
 import * as Linking from "expo-linking";
 
+import ComponentSpinner from "./components/Scaffolding/ComponentSpinner";
+
 import * as MediaLibrary from "expo-media-library";
 import {
   useShareIntentContext,
@@ -19,17 +21,17 @@ import {
 
 import { Stack } from "expo-router";
 
-import { AppMessageContextProvider } from "./context/AppMessageContext";
-import { GlobalStylesProvider } from "./context/GlobalStylesContext";
-import { UserProvider } from "./context/UserContext";
-import { DeviceLocationProvider } from "./context/DeviceLocationContext";
-import { AppStateProvider } from "./context/AppStateContext";
-import { CurrentSurroundingsProvider } from "./context/CurrentSurroundingsContext";
-import { NearbyLocationsProvider } from "./context/NearbyLocationsContext";
-import { ActiveSearchProvider } from "./context/ActiveSearchContext";
-import { InteractiveElementsProvider } from "./context/InteractiveElementsContext";
-import { GroqProvider } from "./context/GroqContext";
-import { SurroundingsWSProvider } from "./context/SurroundingsWSContext";
+import { AppMessageContextProvider } from "../src/context/AppMessageContext";
+import { GlobalStylesProvider } from "../src/context/GlobalStylesContext";
+import { UserProvider } from "../src/context/UserContext";
+import { DeviceLocationProvider } from "../src/context/DeviceLocationContext";
+import { AppStateProvider } from "../src/context/AppStateContext";
+import { CurrentSurroundingsProvider } from "../src/context/CurrentSurroundingsContext";
+import { NearbyLocationsProvider } from "../src/context/NearbyLocationsContext";
+import { ActiveSearchProvider } from "../src/context/ActiveSearchContext";
+import { InteractiveElementsProvider } from "../src/context/InteractiveElementsContext";
+import { GroqProvider } from "../src/context/GroqContext";
+import { SurroundingsWSProvider } from "../src/context/SurroundingsWSContext";
 
 import AppMessage from "./components/AppMessage";
 import CustomStatusBar from "./components/CustomStatusBar";
@@ -121,6 +123,8 @@ export default Sentry.wrap(function Layout() {
                   <SurroundingsWSProvider>
                     <GroqProvider>
                       <CurrentSurroundingsProvider>
+                      <ComponentSpinner spinnerType={'circle'} spinnerSize={60}  useGradientBackground={true} isInitializerSpinner={true} />
+                 
                         <ActiveSearchProvider>
                           <NearbyLocationsProvider>
                             <InteractiveElementsProvider>

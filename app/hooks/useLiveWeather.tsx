@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useUser } from "../context/UserContext";
-import { useSurroundingsWS } from "../context/SurroundingsWSContext";
-import { getLiveWeather } from "../liveweathercall";
+import { useUser } from "../../src/context/UserContext";
+import { useSurroundingsWS } from "../../src/context/SurroundingsWSContext";
+import { getLiveWeather } from "../../src/calls/liveweathercall";
 
 
 interface LiveWeather {

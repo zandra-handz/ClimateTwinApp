@@ -7,9 +7,9 @@ import Animated, {
   useAnimatedStyle,
   useAnimatedProps,
 } from "react-native-reanimated";
-import { useGlobalStyles } from "../context/GlobalStylesContext";
-import { useUser } from "../context/UserContext";
-import { useActiveSearch } from "../context/ActiveSearchContext";
+import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
+import { useUser } from "../../src/context/UserContext";
+import { useActiveSearch } from "../../src/context/ActiveSearchContext";
 
 import ProgressCircle from "./Scaffolding/ProgressCircle";
 import WorldMapSvg from "../assets/svgs/worldmap.svg";

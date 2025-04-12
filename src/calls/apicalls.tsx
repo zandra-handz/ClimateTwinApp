@@ -142,7 +142,7 @@ axios.interceptors.response.use(
 
     
     (response) => {
-        console.log('Interceptor was here!');
+       // console.log('Interceptor was here!');
         return response;
     },
     async (error) => {
@@ -157,13 +157,12 @@ axios.interceptors.response.use(
             console.log(isRefreshing);
            
             if (!isRefreshing) {
-                console.log('Attempting to refresh token...');
+               // console.log('Attempting to refresh token...');
 
                 isRefreshing = true;
                 originalRequest._retry = true;
 
-                const newAccessToken = await refreshTokenFunct();
-                console.log(`PASSED IN AS TOKEN NY INTERCEPTOR: `, newAccessToken);
+                const newAccessToken = await refreshTokenFunct(); 
 
                 try { 
 
@@ -419,7 +418,7 @@ export const getCurrentUser = async () => {
     try {
        // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/users/get-current/');
-        console.log('API GET Call getCurrentUser', response.data);
+        console.log('API GET Call getCurrentUser'); //, response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
@@ -502,23 +501,19 @@ export const go = async (startingAddress) => {
 export const getRemainingGoes = async () => {
     try {
         const response = await axios.get('/climatevisitor/get-remaining-goes/');
-        console.log('getRemainingGoes response: ', response.data);
-
-        // Check if response.data is valid and has the properties you're expecting
-        if (response.data) {
-            // Check for specific fields based on your API structure
+        console.log('API GET getRemainingGoes'); //, response.data);
+ 
+        if (response.data) { 
             if (response.data.remaining_goes) {
                 return response.data.remaining_goes;
             } else if (response.data.details) {
                 return response.data.details;
             }
         }
-
-        // If nothing matches, you can return an appropriate fallback or throw an error
+ 
         return 'No remaining goes data';
 
-    } catch (error) {
-        // Handle any error that occurs during the request
+    } catch (error) { 
         if (error.response) {
             console.error('Error response:', error.response);
         } else if (error.request) {
@@ -991,6 +986,7 @@ export const declineFriendship = async (itemViewId) => {
 
 
 
+
 export const getNearbyLocations = async () => {
     try {
        // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
@@ -1015,7 +1011,7 @@ export const pickNewSurroundings = async (locationId) => {
     try {
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.post('/climatevisitor/explore/v2/', locationId); //, locationId);
-        console.log('API GET Call getNearyLocations'); //, response.data);
+        console.log('API GET Call pickNewSurroundings'); //, response.data);
         return response.data;
     } catch (error) {
         if (error.response) {

@@ -8,9 +8,9 @@ import React, {
   useCallback,
 } from "react";
 import ActionsFooter from "@/app/components/ActionsFooter";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import useTreasures from "@/app/hooks/useTreasures";
-import { useAppMessage } from "../../context/AppMessageContext";
+import { useAppMessage } from "../../../src/context/AppMessageContext";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import TextInputLine from "@/app/components/TextInputLine";
 import TextInputBlock from "@/app/components/TextInputBlock";

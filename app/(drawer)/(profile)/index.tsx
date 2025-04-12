@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { View, TouchableOpacity, Text, ScrollView } from "react-native";
-import { useUser } from "@/app/context/UserContext";
-import { useGlobalStyles } from "../../context/GlobalStylesContext";
+import { useUser } from "@/src/context/UserContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { useRouter } from "expo-router";
-import { useAppMessage } from "../../context/AppMessageContext";
+import { useAppMessage } from "../../../src/context/AppMessageContext";
 import useFriends from "../../hooks/useFriends";
 import { AntDesign, Feather } from "@expo/vector-icons";
 import { Image } from "expo-image";
