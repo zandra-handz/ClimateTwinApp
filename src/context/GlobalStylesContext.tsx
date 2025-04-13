@@ -7,9 +7,7 @@ import React, {
 } from "react";
 import { StyleSheet, AccessibilityInfo } from "react-native";
 import { useColorScheme } from "react-native";
-import { useUser } from "./UserContext";
-import GoToItemButton from "../../app/components/GoToItemButton";
-import MagnifiedNavButton from "../../app/components/MagnifiedNavButton";
+import { useUser } from "./UserContext"; 
 
 // Define the types for the global styles state
 interface GradientColors {
@@ -42,7 +40,7 @@ interface GlobalStylesContextType extends Styles {
   constantColorsStyles: Record<string, any>;
   themeStyleSpinners: Record<string, string>;
   nonCustomHeaderPage: boolean;
-  avgPhotoColor: any;
+  avgPhotoColor: string | null;
   handleAvgPhotoColor: (color: string) => void;
   setNonCustomHeaderPage: React.Dispatch<React.SetStateAction<boolean>>;
   lightOrDark: "light" | "dark";
@@ -167,16 +165,17 @@ export const GlobalStylesProvider: React.FC<GlobalStylesProviderProps> = ({
   const appFontStyles = fontStyles;
   const appContainerStyles = containerStyles;
 
-  const [ avgPhotoColor, setAvgPhotoColor ] = useState(null);
+  const [avgPhotoColor, setAvgPhotoColor] = useState<string | null>(null);
 
-  const handleAvgPhotoColor = (color) => {
+
+  const handleAvgPhotoColor = (color: string) => {
     setAvgPhotoColor((prevColor) => {
       if (prevColor === color) {
         console.log("handleAvgPhotoColor skipped: Color is the same.");
-        return prevColor; // Don't update if the color is the same
+        return prevColor;
       }
       console.log("handleAvgPhotoColor triggered!!!!!!!", color);
-      return color; // Update only if different
+      return color;
     });
   };
   
@@ -363,8 +362,7 @@ const containerStyles = StyleSheet.create({
     padding: 10,
     width: '100%',
     flexShrink: 1,
-    backgroundColor: "red",
-    alignItems: "left",
+    backgroundColor: "red", 
     borderRadius: 5,
 
   },
@@ -372,10 +370,8 @@ const containerStyles = StyleSheet.create({
     flexDirection: 'row',
     width: '100%',
     marginTop: 20,
-    padding: 10,
-    width: '100%',
-    flexShrink: 1, 
-    alignItems: "left",
+    padding: 10, 
+    flexShrink: 1,  
     borderRadius: 5,
     justifyContent: 'space-between',
 
@@ -460,7 +456,7 @@ const containerStyles = StyleSheet.create({
   },
   notifierTextContainer: { 
     flex: 1,
-    flexWrap: 'flex', 
+    // flexWrap: 'flex', 
     width: "100%", 
     alignItems: 'center',
     justifyContent: 'center',
@@ -492,7 +488,7 @@ const containerStyles = StyleSheet.create({
 
     borderRadius: 20,
     borderWidth: StyleSheet.hairlineWidth,
-    flexWrap: 'flex',
+    // flexWrap: 'flex',
     height: 'auto',
     flexShrink: .8,
     overflow: 'hidden',
@@ -508,7 +504,7 @@ const containerStyles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
     borderRadius: 16, 
-    flexWrap: 'flex',
+    // flexWrap: 'flex',
     height: 'auto',
     textAlign: 'left', 
     overflow: 'hidden',
@@ -609,7 +605,7 @@ const containerStyles = StyleSheet.create({
   innerFlexStartContainer: {
     width: "100%",
     paddingHorizontal: "2%",
-    flexDirection: "column",
+    flexDirection: "column", 
     flex: 1,
   //  backgroundColor: 'teal',
   },
@@ -657,7 +653,7 @@ const containerStyles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: 'flex-start',
     flex: 1,
-    zIndex: 2000,
+    zIndex: 1000,
   },
   dataCardContainer: {
     height: "auto",
@@ -795,16 +791,14 @@ const containerStyles = StyleSheet.create({
     borderRadius: 10
   }, 
   treasureCardContainer: { 
-    borderRadius: 20,
-    padding: 10, 
+
     marginBottom: 10,
     width: '100%',  
     alignItems: 'center',
     justifyContent: 'center',   
     height: "auto",
     padding: 30,
-    borderRadius: 30,
-    width: "100%",
+    borderRadius: 30, 
     flexDirection: "column",
     flex: 1,
     borderWidth: StyleSheet.hairlineWidth,
@@ -831,18 +825,15 @@ const containerStyles = StyleSheet.create({
     width: '100%',
     textAlign: 'left',
     height: 40,
-    marginVertical: 4,
-    height: 'auto',
-    flexWrap: 'flex',
+    marginVertical: 4, 
+    //flexWrap: 'flex',
     borderRadius: 16, 
     padding: 20,
 
   },
   itemCardContainer: { 
-    borderRadius: 20,
-    padding: 10, 
-    marginBottom: 10,
-    width: '100%',  
+
+    marginBottom: 10,  
     alignItems: 'center',
     justifyContent: 'center',   
     height: "auto",
@@ -876,8 +867,8 @@ const containerStyles = StyleSheet.create({
     textAlign: 'left',
     height: 40,
     marginVertical: 4,
-    height: 'auto',
-    flexWrap: 'flex',
+    // height: 'auto',
+    // flexWrap: 'flex',
     borderRadius: 16, 
     padding: 20,
 
@@ -947,7 +938,7 @@ const containerStyles = StyleSheet.create({
     //groqHistory and Groq use this currently
   scrollDetailPanelContainer: {
     borderRadius: 20, 
-    padding: 10,  
+    padding: 0,  
     width: '100%', 
     alignSelf: 'center', 
     alignItems: 'center',
@@ -1006,11 +997,8 @@ const containerStyles = StyleSheet.create({
     width: '100%',  
     alignItems: 'center',
     justifyContent: 'center',  
-
-    height: "auto",
-    padding: 10,
-    borderRadius: 16,
-    width: "100%",
+    height: "auto", 
+    borderRadius: 16, 
     flexDirection: "column",
     flex: 1,
     borderWidth: StyleSheet.hairlineWidth,
@@ -1064,7 +1052,9 @@ const fontStyles = StyleSheet.create({
     fontSize: 28,
   },
   bannerHeaderText: {
-    fontSize: 24,
+    fontSize: 19,
+    fontWeight: 'bold',
+    lineHeight: 24,  
 
   },
   drawerHeaderWelcomeText: {
@@ -1278,7 +1268,7 @@ const lightThemeStyles = StyleSheet.create({
     fontFamily: "Poppins-Bold",
   },
   signInAppDescription: {
-    fontColor: "black",
+    // fontColor: "black",
     fontFamily: "Poppins-Regular",
     fontSize: 16,
   },
@@ -1340,7 +1330,7 @@ const lightThemeStyles = StyleSheet.create({
     width: "100%",
     borderColor: "lightgray",
     backgroundColor: "white",
-    placeholderTextColor: "lightgray",
+   
     fontFamily: "Poppins-Regular",
     textAlign: "left",
     fontSize: 16,
@@ -1422,8 +1412,7 @@ const lightThemeStyles = StyleSheet.create({
     backgroundColor: "white",
     borderBottomColor: "gray",
     borderBottomWidth: 1,
-  },
-  headerTextColor: "#121212",
+  }, 
 
 
 
@@ -1439,8 +1428,7 @@ const darkThemeStyles = StyleSheet.create({
     color: "white",
     fontFamily: "Poppins-Bold",
   },
-  signInAppDescription: {
-    fontColor: "black",
+  signInAppDescription: { 
     fontSize: 16,
   },
   container: {
@@ -1502,8 +1490,8 @@ const darkThemeStyles = StyleSheet.create({
     borderWidth: 1,
     borderColor: "#d3d3d3",
     backgroundColor: "#121212",
-    placeholderTextColor: "darkgray",
-    borderWidth: 1,
+    // placeholderTextColor: "darkgray",
+    // borderWidth: 1,
     borderRadius: 20,
     padding: 10,
     width: "100%",

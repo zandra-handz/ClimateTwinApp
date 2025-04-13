@@ -21,6 +21,8 @@ import PortalBanner from "@/app/components/PortalBanner";
  
 import GroqHistory from "@/app/components/GroqComponents/GroqHistory"; 
 
+import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
+
 
 const index = () => {
   const { user } = useUser();
@@ -154,6 +156,9 @@ const index = () => {
   
 
   return (
+    <>
+     <ComponentSpinner backgroundColor={themeStyles.primaryBackground.backgroundColor} spinnerType={'pulse'} isSocketSpinner={true}/>
+     
     <View style={[appContainerStyles.screenContainer, themeStyles.primaryBackground]}>
       <NotificationNotifier />
       {portalBannerVisible && (
@@ -208,6 +213,7 @@ const index = () => {
         )}
       </View>
     </View>
+    </>
   );
 };
 

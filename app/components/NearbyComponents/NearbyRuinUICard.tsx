@@ -79,7 +79,7 @@ const NearbyRuinUICard = ({
         <DirectionSquare
           locationDirection={directionDegree}
           size={80}
-          opacity={0.6}
+          opacity={0.7}
           color={themeStyles.primaryText.color}
         />
         
@@ -111,19 +111,24 @@ const NearbyRuinUICard = ({
       <View
         style={{
           flexDirection: "column",
-          top: 10,
-          left: 10,
+          paddingVertical: 20,
+          paddingHorizontal: 16,
           height: 'auto',
           width: "100%",
           justifyContent: "flex-start",
+          
+          
         }}
       >
-        <Text style={[themeStyles.primaryText, appFontStyles.bannerHeaderText]}>
+        <View style={{width: '100%'}}>
+          
+        <Text   numberOfLines={1}
+  ellipsizeMode="tail" style={[themeStyles.primaryText, appFontStyles.bannerHeaderText]}>
           {bestNameOption}
         </Text>
 
         <View style={{ flexDirection: "row", width: "100%" }}>
-          <Text style={[themeStyles.primaryText]}>
+          <Text style={[themeStyles.primaryText, {fontSize: 15, lineHeight: 28}]}>
             {milesAway} miles {direction.toLowerCase()} of portal
           </Text>
         </View>
@@ -133,8 +138,9 @@ const NearbyRuinUICard = ({
           <Text
             style={[themeStyles.primaryText, appFontStyles.windCompassText]}
           >
-            {windCompass}
+            {windHarmony && 'The wind is going in this direction.'}
           </Text>
+        </View>
         </View>
       </View>
 

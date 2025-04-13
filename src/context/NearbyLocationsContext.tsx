@@ -72,10 +72,12 @@ export const NearbyLocationsProvider: React.FC<NearbyLocationsProviderProps> = (
 
   useEffect(() => {
     if (lastLocationId && nearbyLocations && nearbyLocations.length > 0) {
+      console.log(lastLocationId);
       
       console.log('FILTERING NEARBY LOCATIONS');
       const filteredData = nearbyLocations.filter(item => item.id !== lastLocationId);
       setCenteredNearbyLocations(filteredData);
+      console.log('FILTERED DATA', filteredData[7]);
 
 
     } else {

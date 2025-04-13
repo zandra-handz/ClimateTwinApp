@@ -106,23 +106,27 @@ export const InteractiveElementsProvider: React.FC<
   const { lastLocationId } = useSurroundingsWS();
   const queryClient = useQueryClient();
 
-  const {
-    data: itemChoicesResponse,
-    isLoading,
-    isError,
-  } = useQuery<ItemChoicesResponse | null>({
-    queryKey: ["itemChoices", lastLocationId],
+  const queryKey = ["itemChoices", lastLocationId];
+
+  const queryOptions = {
+    queryKey,
     queryFn: getItemChoices,
     enabled: !!isAuthenticated && !isInitializing && !!lastLocationId,
-    onError: (err) => {
-      console.error("Error fetching location data:", err);
+    onError: (err: Error) => {
+      console.error("Error fetching location data:", err.message);
     },
-    onSuccess: (data) => {
+    onSuccess: (data: ItemChoicesResponse | null) => {
       if (data) {
         console.log("getItemChoices success:", data);
       }
     },
-  });
+  };
+  
+  const {
+    data: itemChoicesResponse,
+    isLoading,
+  } = useQuery<ItemChoicesResponse | null, Error>(queryOptions);
+  
 
   // Convert itemChoices.choices (object) into an array of key-value pairs
   const itemChoices = itemChoicesResponse?.choices
@@ -214,14 +218,14 @@ export const InteractiveElementsProvider: React.FC<
   useEffect(() => {
     const unsubscribe = queryClient.getQueryCache().subscribe((event) => {
       if (event.query.queryKey[0] === "itemChoices") {
-        console.log(
-          "itemChoices cache updated."
-          // queryClient.getQueryData([
-          //   'itemChoices',
-          //   currentSurroundings?.explore_location?.id ?? null,
-          //   currentSurroundings?.twin_location?.id ?? null,
-          // ]),
-        );
+        // console.log(
+        //   "itemChoices cache updated."
+        //   // queryClient.getQueryData([
+        //   //   'itemChoices',
+        //   //   currentSurroundings?.explore_location?.id ?? null,
+        //   //   currentSurroundings?.twin_location?.id ?? null,
+        //   // ]),
+        // );
       }
     });
 

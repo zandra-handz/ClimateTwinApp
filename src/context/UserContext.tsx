@@ -4,7 +4,7 @@ import React, {
   useState,
   useEffect,
   useRef,
-  AccessibilityInfo,
+ // AccessibilityInfo,
 } from "react";
 import * as SecureStore from "expo-secure-store";
 import * as Notifications from "expo-notifications";
@@ -39,6 +39,7 @@ interface UserContextType {
   appSettings: Record<string, any>;
   userNotificationSettings: Record<string, any>;
   onSignin: (username: string, password: string) => Promise<void>;
+  onSignOut: () => (void);
   onSignUp: (
     username: string,
     email: string,

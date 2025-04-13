@@ -17,7 +17,11 @@ const ScrollDetailPanel = ({ label, value, opacity, images, isLoading=false }) =
       style={[
         appContainerStyles.groqHistoryScrollContainer,
         themeStyles.darkerBackground,
-        { opacity: opacity || 1, height: ruinsSurroundings.id? 270 : 360 },
+        { opacity: opacity || 1,       height: ruinsSurroundings.id
+          ? ruinsSurroundings.streetViewImage
+            ? 270
+            : 518 // height if there are no images
+          : 360, },
       ]}
     >
               {isLoading && (
@@ -32,26 +36,13 @@ const ScrollDetailPanel = ({ label, value, opacity, images, isLoading=false }) =
       <ScrollView
         contentContainerStyle={{
           flexDirection: "column",
-          paddingHorizontal: 10,
-          paddingVertical: 8,
+          paddingHorizontal: 13,
+          paddingVertical: 13,
 
           width: "100%",
           justifyContent: "flex-start",
         }}
-      >
-        {images && (
-          <View
-            style={{
-              width: "100%",
-              flex: 1,
-              flexDirection: "row",
-              justifyContent: "center",
-              height: "auto",
-            }}
-          >
-            <GroqImageCard value={images[0]} />
-          </View>
-        )}
+      > 
         <View style={appContainerStyles.groqHeaderRow}>
           <Text style={[themeStyles.primaryText, appFontStyles.groqHeaderText]}>
             {" "}

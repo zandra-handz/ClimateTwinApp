@@ -9,10 +9,11 @@ import WebSocketSearchingLocations from "../../components/WebSocketSearchingLoca
 import WindyWindSquare from "@/app/components/SurroundingsComponents/WindyWindSquare";
 import Temperatures from "@/app/animations/Temperatures";
 import * as Sentry from "@sentry/react-native"; 
+import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
 
 const index = () => {
   const { deviceLocation } = useDeviceLocationContext();
-  const { themeStyles, appContainerStyles } = useGlobalStyles();
+  const { themeStyles, appContainerStyles, constantColorsStyles } = useGlobalStyles();
   const { isSearchingForTwin } = useActiveSearch(); 
 
  
@@ -26,6 +27,7 @@ const index = () => {
 
   return (
     <>
+     <ComponentSpinner backgroundColor={themeStyles.primaryBackground.backgroundColor} spinnerType={'pulse'} isSocketSpinner={true}/>
       <View
         style={[
           appContainerStyles.screenContainer,

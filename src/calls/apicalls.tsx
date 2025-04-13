@@ -1,4 +1,4 @@
-import axios from 'axios';  
+import axios, { AxiosError } from "axios";
 import { useState } from 'react';
 import * as SecureStore from 'expo-secure-store'; 
 //export const API_URL = 'https://ac67e9fa-7838-487d-a3bc-e7a176f4bfbf-dev.e1-us-cdp-2.choreoapis.dev/hellofriend/hellofriend/rest-api-be2/v1.0/';
@@ -582,23 +582,32 @@ export const updateUserSettings = async (userId, updatedSettings) => {
 };
 
 
-export const getExploreLocation = async () => {
-    try {
-      //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+
+import { CurrentSurroundings } from "../types/CurrentSurroundingsContextTypes";  
+
+ 
+export const getExploreLocation = async (): Promise<CurrentSurroundings> => {
+    try { 
         const response = await axios.get('/climatevisitor/currently-exploring/v2/');
         console.log('API GET Call getExploreLocation');//, response.data);
-        return response.data;
-    } catch (error) {
-        if (error.response) {
-            console.error('Error response for /climatevisitor/currently-exploring/v2/:', error.response.data);
-        } else if (error.request) {
-            console.error('Error request for /climatevisitor/currently-exploring/v2/, add console logging in api file for more details');
-        } else {
-            console.error('Error message for /climatevisitor/currently-exploring/v2/, add console logging in api file for more details');
+ 
+        return response.data as CurrentSurroundings;  
+    } catch (error: unknown) {   
+        if (axios.isAxiosError(error)) { 
+            if (error.response) {
+                console.error('Error response for /climatevisitor/currently-exploring/v2/:', error.response.data);
+            } else if (error.request) {
+                console.error('Error request for /climatevisitor/currently-exploring/v2/, add console logging in api file for more details');
+            } else {
+                console.error('Error message for /climatevisitor/currently-exploring/v2/, add console logging in api file for more details');
+            }
+        } else { 
+            console.error('An unexpected error occurred:', error);
         }
-        throw error;
+        throw error;  
     }
 };
+
 
 export const getItemChoices = async () => {
     try {

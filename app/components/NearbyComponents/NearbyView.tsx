@@ -7,11 +7,13 @@ import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
 import NearbyRuinUICard from "./NearbyRuinUICard";
 import NearbyPortalUICard from "./NearbyPortalUICard";
 import { useFocusEffect } from "expo-router"; 
+
+import ComponentSpinner from "../Scaffolding/ComponentSpinner";
  
 const NearbyView = () => {
-  const { appContainerStyles } = useGlobalStyles();
+  const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { centeredNearbyLocations, nearbyLocations } = useNearbyLocations();
-  const { handlePickNewSurroundings } = useSurroundings();
+  const { handlePickNewSurroundings, pickNewSurroundingsMutation } = useSurroundings();
   const { lastLocationId, baseLocationId } = useSurroundingsWS();
   const [copiedCenteredNearbyLocations, setCopiedCenteredNearbyLocations] = useState<NearbyLocation[]>([]);
   
@@ -28,9 +30,15 @@ const NearbyView = () => {
 //   setCopiedCenteredNearbyLocations(centeredNearbyLocations)
 //  }, [centeredNearbyLocations]);
 
+
+ 
+
   return (
-    <>
-    {centeredNearbyLocations.length > 0 && (
+    
+      <>
+      {/* {pickNewSurroundingsMutation.isPending && (
+        <ComponentSpinner showSpinner={true} offsetStatusBarHeight={true} backgroundColor={themeStyles.primaryBackground.backgroundColor}/>
+      )} */}
       
     <View style={[appContainerStyles.dataListContainer]}>
      
@@ -88,14 +96,14 @@ const NearbyView = () => {
             )}
           </View>
         )}
-        contentContainerStyle={{ paddingBottom: 0, height: 400 }}
+        contentContainerStyle={{ paddingBottom: 0 }}
         ListFooterComponent={<View style={{ height: 100 }} />}
       />
 
     </View>
     
-  )}
-  </>
+    </>
+     
   );
 };
 

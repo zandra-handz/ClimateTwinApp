@@ -123,7 +123,7 @@ export default Sentry.wrap(function Layout() {
                   <SurroundingsWSProvider>
                     <GroqProvider>
                       <CurrentSurroundingsProvider>
-                      <ComponentSpinner spinnerType={'circle'} spinnerSize={60}  useGradientBackground={true} isInitializerSpinner={true} />
+                      <ComponentSpinner spinnerSize={60}   isInitializerSpinner={true} />
                  
                         <ActiveSearchProvider>
                           <NearbyLocationsProvider>

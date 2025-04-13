@@ -30,60 +30,80 @@ const spinners = {
   wave: Wave,
 };
 
-const ComponentSpinner = (
-  { spinnerSize = 90, spinnerType = "flow", showSpinner = false, backgroundColor='transparent', useGradientBackground=false, isInitializerSpinner=false  },
- 
-) => {
+const ComponentSpinner = ({
+  spinnerSize = 40,
+  spinnerType = "circleFade", //flow",
+  showSpinner = false,
+  backgroundColor = "transparent",
+  useGradientBackground = false,
+  isInitializerSpinner = false,
+  isSocketSpinner = false,
+  offsetStatusBarHeight = false,
+}) => {
   const { themeStyles, constantColorsStyles } = useGlobalStyles();
-  const { isInitializing } = useUser();
-  const { isLocationSocketOpen } = useSurroundingsWS();
+  const { isAuthenticated, isInitializing } = useUser();
+  const { isLocationSocketOpen, lastState } = useSurroundingsWS();
 
   // if (!showSpinner) return null;
+
+  const offset = -100;
 
   const Spinner = spinners[spinnerType] || Circle;
 
   return (
     <>
-    {useGradientBackground && (isInitializing || !isLocationSocketOpen) && (
-      
-      <LinearGradient
-        colors={[
-          // 'teal', 
-          // constantColorsStyles.v1LogoColor.backgroundColor,
-          'transparent', 'transparent'
-          
-        ]}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-        style={[styles.container]}
-      >
-      {(isInitializing || !isLocationSocketOpen) ? (
-         
-          <Spinner
-            size={spinnerSize}
-            color={constantColorsStyles.v1LogoColor.backgroundColor}
-          /> 
-      ) : null}
-    </LinearGradient>
-    )}
-
-{!useGradientBackground && (
-      
-      <View
-        style={[
-          styles.container, {backgroundColor: backgroundColor}//themeStyles.darkerBackground
-        ]}
-      >
-        {showSpinner ? (
-           
+      {isInitializerSpinner && (isInitializing || (!lastState && isAuthenticated)) && (
+        <LinearGradient
+          colors={[
+            'teal',
+            constantColorsStyles.v1LogoColor.backgroundColor,
+            // "transparent",
+            // "transparent",
+          ]}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+          style={[styles.container, {top: offsetStatusBarHeight ? offset : 0}]}
+        >
+          {(isInitializing || (!lastState && isAuthenticated)) ? (
             <Spinner
               size={spinnerSize}
               color={constantColorsStyles.v1LogoColor.backgroundColor}
-            /> 
-        ) : null}
-      </View>
+            />
+          ) : null}
+        </LinearGradient>
       )}
-    
+
+{isSocketSpinner && !isLocationSocketOpen && isAuthenticated && !isInitializing && (
+        <View
+        style={[
+          styles.container,
+          { backgroundColor: backgroundColor, top: offsetStatusBarHeight ? offset : 0 }, //themeStyles.darkerBackground
+        ]}
+      >
+          {!isLocationSocketOpen && isAuthenticated && !isInitializing ? (
+            <Spinner
+              size={spinnerSize}
+              color={constantColorsStyles.v1LogoColor.backgroundColor}
+            />
+          ) : null}
+        </View>
+      )}
+
+      {!isInitializerSpinner && !isSocketSpinner && (
+        <View
+          style={[
+            styles.container,
+            { backgroundColor: backgroundColor, top: offsetStatusBarHeight ? offset : 0 }, //themeStyles.darkerBackground
+          ]}
+        >
+          {showSpinner ? (
+            <Spinner
+              size={spinnerSize}
+              color={constantColorsStyles.v1LogoColor.backgroundColor}
+            />
+          ) : null}
+        </View>
+      )}
     </>
   );
 };
@@ -93,7 +113,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject, // This ensures it fills the entire parent container
     justifyContent: "center",
     alignItems: "center",
-    zIndex: 10000,
+    zIndex: 10000, 
     //backgroundColor: "red",
   },
 
@@ -117,10 +137,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   spinnerContainer: {
-    backgroundColor: 'pink',
+    backgroundColor: "pink",
     justifyContent: "center",
-    alignItems: "center", 
-    width: '100%',
+    alignItems: "center",
+    width: "100%",
   },
   loadingTextBold: {
     fontSize: 22,
