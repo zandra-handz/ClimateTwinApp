@@ -60,7 +60,7 @@ const WindyWindFriendsView = ({
           {formatDescription(description)}
         </Text>
         <Text style={[ themeStyles.primaryText]}>
-            {windFriends} 
+            {windFriends === 'Same-Heart' && windFriends} 
           </Text>
   
         </View>

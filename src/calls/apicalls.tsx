@@ -590,8 +590,9 @@ export const getExploreLocation = async (): Promise<CurrentSurroundings> => {
     try { 
         const response = await axios.get('/climatevisitor/currently-exploring/v2/');
         console.log('API GET Call getExploreLocation');//, response.data);
- 
+        //console.log(response.data); 
         return response.data as CurrentSurroundings;  
+      
     } catch (error: unknown) {   
         if (axios.isAxiosError(error)) { 
             if (error.response) {
@@ -1015,11 +1016,11 @@ export const getNearbyLocations = async () => {
 };
 
 
-export const pickNewSurroundings = async (locationId) => {
-    console.log(locationId);
+export const pickNewSurroundings = async (locationData: { [key: string]: number }) => {
+    
     try {
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
-        const response = await axios.post('/climatevisitor/explore/v2/', locationId); //, locationId);
+        const response = await axios.post('/climatevisitor/explore/v2/', locationData); //, locationId);
         console.log('API GET Call pickNewSurroundings'); //, response.data);
         return response.data;
     } catch (error) {

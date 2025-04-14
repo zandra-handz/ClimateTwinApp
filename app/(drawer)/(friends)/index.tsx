@@ -37,7 +37,7 @@ const index = () => {
         style={[
           appContainerStyles.screenContainer,
           themeStyles.primaryBackground,
-          { paddingTop: 10 },
+          // { paddingTop: 10 },
         ]}
       >
  

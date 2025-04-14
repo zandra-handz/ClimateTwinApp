@@ -36,8 +36,7 @@ const index = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const [surroundingsViews, setSurroundingsViews] = useState({}); 
 
-  const [portalBannerVisible, setPortalBannerVisible] = useState(true);
-  const [triggerRerender, setTriggerRerender] = useState(false);
+  const [portalBannerVisible, setPortalBannerVisible] = useState(true); 
 
   const [groqVisible, setGroqVisible] = useState(false);
   const opacity = useRef(new Animated.Value(1)).current; // Animated opacity for the banner

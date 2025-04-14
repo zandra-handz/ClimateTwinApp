@@ -53,7 +53,7 @@ export const CurrentSurroundingsProvider: React.FC<CurrentSurroundingsProviderPr
   const { extendGroqStaleTime, logGroqState } = useGroqContext();
   const segments = useSegments();
   const queryClient = useQueryClient();
-  const { lastLocationName, lastLocationId } = useSurroundingsWS();
+  const { lastState, lastLocationId } = useSurroundingsWS();
   const timeoutRef = useRef(null); 
 
   // Use the types directly from the imports
@@ -65,7 +65,7 @@ export const CurrentSurroundingsProvider: React.FC<CurrentSurroundingsProviderPr
   const [lastAccessed, setLastAccessed] = useState<string | null>(null);
   const [isExploring, setIsExploring] = useState<boolean>(false);
   const [wasPrevExploring, setWasPrevExploring] = useState<boolean>(false);
-  const [isInitializingLocation, setIsInitializingLocation] = useState<boolean>(true);
+  const [isInitializingLocation, setIsInitializingLocation] = useState<boolean>(false);
 
   const router = useRouter();
 
@@ -76,14 +76,15 @@ const {
   data: currentSurroundings,
   isLoading,
   isFetching,
+  isPending, //isPending is what works, isLoading and isFetching don't do anything in the useEffect
   isError,
   error,
   isSuccess,
 } = useQuery<CurrentSurroundings | null>({
-  queryKey: ["currentSurroundings", lastLocationId, lastLocationName],
+  queryKey: ["currentSurroundings", lastLocationId, lastState],
   queryFn: getExploreLocation,
-  enabled: !!isAuthenticated && !isInitializing && lastLocationName !== 'You are home' && lastLocationName !== 'You are searching',
-  staleTime: 0,
+  enabled: !!isAuthenticated && !isInitializing && (lastState !== 'home') && (lastState !== 'searching for twin'),
+ // staleTime: 0,
 
   // DEPRECATED!!
 
@@ -98,33 +99,40 @@ const {
 });
 
 
-useEffect(() => {
 
-  if (isError) {
-    console.log('current surroundings is error!');
-  }
-}, [isError]);
+// FOR DEBUGGING
+// useEffect(() => { 
+//   if (isError) {
+//     console.log('current surroundings is error!');
+//   }
+// }, [isError]);
 
-useEffect(() => {
 
-  if (isSuccess) {
-    console.log('current surroundings is success!');
-  }
-}, [isSuccess]);
+// FOR DEBUGGING
+// useEffect(() => {
+//   if (isSuccess) {
+//     console.log('current surroundings is success!');
+//   }
+// }, [isSuccess]);
+
 
   useEffect(() => {
-    if (isFetching) { 
-      
+    if (isPending) { 
+
+      // FOR DEBUGGING
+      // console.log('seeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeetting is initializing current surroundings to true!');
       setIsInitializingLocation(true);
        
     }
-  }, [isFetching]);
+  }, [isPending]);
 
+
+  // RESET
 useEffect(() => {
   if (!isAuthenticated) {
     
    // queryClient.removeQueries({ queryKey: ["currentSurroundings", lastLocationId, lastLocationName] });
-    queryClient.removeQueries({ queryKey: ["currentSurroundings", lastLocationId, lastLocationName] });
+    queryClient.removeQueries({ queryKey: ["currentSurroundings", lastLocationId, lastState] });
     setPortalSurroundings(null);
     setRuinsSurroundings(null);
     setHomeSurroundings(null);
@@ -139,7 +147,7 @@ useEffect(() => {
   useEffect(() => {
     console.log('main initializer use effect in surroundings triggered');
   
-    //setIsInitializingLocation(true); moved this to a useEffect that tracks isFetching
+    //setIsInitializingLocation(true); now in isPending useEffect so that this sets when call is made not adter it succeeds
     let portalSurroundingsData: PortalSurroundings | null = null;
     let ruinsSurroundingsData: RuinsSurroundings | null = null;
     let homeSurroundingsData: HomeSurroundings | null = null;
@@ -270,7 +278,6 @@ useEffect(() => {
         ruinsSurroundingsData = {
           name: explore_location.name || "",
           id: explore_location.id || 0,
-
           directionDegree: explore_location.direction_degree || 0,
           direction: explore_location.direction || "",
           milesAway: explore_location.miles_away || 0,
@@ -339,8 +346,7 @@ useEffect(() => {
 
       ruinsSurroundingsData = {
         name: "",
-        id: null,
-
+        id: null, 
         directionDegree: 0,
         direction: "",
         milesAway: 0,
@@ -387,7 +393,7 @@ useEffect(() => {
     }
   };
   const pickNewSurroundingsMutation = useMutation({
-    mutationFn: (locationData) => pickNewSurroundings(locationData),
+    mutationFn: (locationData: { [key: string]: number }) => pickNewSurroundings(locationData),
     onMutate: () => {
       setWasPrevExploring(true);
       setIsInitializingLocation(true); 
@@ -424,9 +430,9 @@ useEffect(() => {
  
 
   const triggerSurroundingsRefetch = () => {
-    console.log("Triggering explore locationrefetch");
-    queryClient.invalidateQueries({ queryKey: ["currentSurroundings", lastLocationId, lastLocationName] });
-    queryClient.refetchQueries({ queryKey: ["currentSurroundings", lastLocationId, lastLocationName] }); // Force refetch
+    console.log("Triiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiggering explore locationrefetch");
+    queryClient.invalidateQueries({ queryKey: ["currentSurroundings", lastLocationId, lastState] });
+    queryClient.refetchQueries({ queryKey: ["currentSurroundings", lastLocationId, lastState] }); // Force refetch
   }; 
 
   return (

@@ -32,7 +32,7 @@ const spinners = {
 
 const ComponentSpinner = ({
   spinnerSize = 40,
-  spinnerType = "circleFade", //flow",
+  spinnerType = "pulse", //flow",
   showSpinner = false,
   backgroundColor = "transparent",
   useGradientBackground = false,

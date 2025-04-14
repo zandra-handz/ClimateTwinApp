@@ -1,63 +1,56 @@
 import { Animated, View, Text, ScrollView } from "react-native";
 import React from "react";
 import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
- 
-import GroqImageCard from "./GroqComponents/GroqImageCard";
 
 import ComponentSpinner from "./Scaffolding/ComponentSpinner";
 import { useSurroundings } from "../../src/context/CurrentSurroundingsContext";
 
-const ScrollDetailPanel = ({ label, value, opacity, images, isLoading=false }) => {
+const ScrollDetailPanel = ({ label, value, opacity, isLoading = false }) => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const { ruinsSurroundings, portalSurroundings } = useSurroundings(); // used to change the height of the groq Container
-
 
   return (
     <Animated.View
       style={[
         appContainerStyles.groqHistoryScrollContainer,
         themeStyles.darkerBackground,
-        { opacity: opacity || 1,       height: ruinsSurroundings.id
-          ? ruinsSurroundings.streetViewImage
-            ? 270
-            : 518 // height if there are no images
-          : 360, },
+        {
+          opacity: opacity || 1,
+          height: ruinsSurroundings?.id
+            ? ruinsSurroundings?.streetViewImage
+              ? 270
+              : 518 // height if there are no images
+            : 360,
+        },
       ]}
     >
-              {isLoading && (
-          
-          <ComponentSpinner showSpinner={true} />
-          
-         )}
+      {isLoading && <ComponentSpinner showSpinner={true} />}
 
-         {value && (
-          
+      {value && (
+        <ScrollView
+          contentContainerStyle={{
+            flexDirection: "column",
+        
 
-      <ScrollView
-        contentContainerStyle={{
-          flexDirection: "column",
-          paddingHorizontal: 13,
-          paddingVertical: 13,
-
-          width: "100%",
-          justifyContent: "flex-start",
-        }}
-      > 
-        <View style={appContainerStyles.groqHeaderRow}>
-          <Text style={[themeStyles.primaryText, appFontStyles.groqHeaderText]}>
-            {" "}
-            {label}
-          </Text>
-        </View>
-        <Text
-          selectable={true}
-          style={[themeStyles.primaryText, appFontStyles.groqResponseText]}
+            width: "100%",
+            justifyContent: "flex-start",
+          }}
         >
-          {value}
-        </Text>
-      </ScrollView>
-      
-    )}
+          <View style={appContainerStyles.groqHeaderRow}>
+            <Text
+              style={[themeStyles.primaryText, appFontStyles.groqHeaderText]}
+            > 
+              {label}
+            </Text>
+          </View>
+          <Text
+            selectable={true}
+            style={[themeStyles.primaryText, appFontStyles.groqResponseText]}
+          >
+            {value}
+          </Text>
+        </ScrollView>
+      )}
     </Animated.View>
   );
 };

@@ -225,12 +225,13 @@ const containerStyles = StyleSheet.create({
   portalBannerContainer: {
     paddingHorizontal: 10,
     marginBottom: 10,
-    height: 80,  
+    height: 70,  
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
     alignContent: 'center', 
     justifyContent: "center",
+    backgroundColor: 'gray',
 
   },
 
@@ -565,7 +566,7 @@ const containerStyles = StyleSheet.create({
     gap: 4,
   },
   exploreTabBarContainer: {
-   height: 66,
+   height: 60, // 66
    width: '100%',
     position: "absolute",
     bottom: 0,
@@ -574,7 +575,11 @@ const containerStyles = StyleSheet.create({
     alignItems: "center",
     // borderTopWidth: StyleSheet.hairlineWidth,
     marginHorizontal: 0,
-    paddingVertical: 12,
+    paddingTop: 6,
+    paddingBottom: 4,
+    borderTopWidth: StyleSheet.hairlineWidth,
+  
+    
     //width: '90%',
     // borderRadius: 25,
     borderRadius: 0,
@@ -591,7 +596,7 @@ const containerStyles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    gap: 4,
+    gap: 1, // 'gap' between icon and label! 
     
   },
   mapContainer: {
@@ -747,9 +752,9 @@ const containerStyles = StyleSheet.create({
     alignItems: 'center',
     alignContent: 'center',
     flexDirection: 'row',
-    justifyContent: 'flex-start',
-      
-    paddingBottom: 10,
+    justifyContent: 'flex-start', 
+     
+   // paddingBottom: 10,
 
   },
   windFriendsCardContainer: { 
@@ -758,7 +763,7 @@ const containerStyles = StyleSheet.create({
     width: '100%',  
     alignItems: 'center',
     justifyContent: 'center', 
-    //flexGrow: 1,
+    //flexGrow: 1, 
     height: 230,
     overflow: 'hidden',
 
@@ -953,7 +958,7 @@ const containerStyles = StyleSheet.create({
   },
   groqHistoryScrollContainer: {
     borderRadius: 20, 
-    padding: 10,  
+    padding: 20,  
     width: '100%', 
     alignSelf: 'center', 
     alignItems: 'center',
@@ -964,6 +969,7 @@ const containerStyles = StyleSheet.create({
     zIndex: 100,
     position: 'absolute',
     bottom: 78,
+    borderColor: 'teal',
     borderWidth: StyleSheet.hairlineWidth
   },
   groqScrollFullScreenContainer: {
@@ -973,7 +979,7 @@ const containerStyles = StyleSheet.create({
     alignSelf: 'center', 
     alignItems: 'center',
     justifyContent: 'center', 
-  
+ 
     overflow: 'hidden', 
     zIndex: 100,
     borderWidth: StyleSheet.hairlineWidth
@@ -1128,7 +1134,7 @@ const fontStyles = StyleSheet.create({
 
   },
   goButtonPortalSize: {
-    fontSize: 60,
+    fontSize: 50,
   },
   magNavText: {
     fontSize: 20,
@@ -1137,12 +1143,12 @@ const fontStyles = StyleSheet.create({
   },
   groqHeaderText: {
 
-    fontSize: 15,
-    lineHeight: 20,
+    fontSize: 16,
+    lineHeight: 24,
     fontWeight: 'bold',
   },
   groqResponseText: {
-    fontSize: 14,
+    fontSize: 15,
     lineHeight: 20,
 
   },
@@ -1201,8 +1207,8 @@ const fontStyles = StyleSheet.create({
     width: 22,
   },
   exploreTabBarText: {
-    fontSize: 11,
-    fontWeight: "bold",
+    fontSize: 12,
+  //  fontWeight: "bold",
   },
   exploreTabBarIcon: {
     height: 22,

@@ -1,7 +1,6 @@
 import { View, Text,  TouchableOpacity } from "react-native";
 import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
-import React from "react";
-import SingleDetailPanel from "./SingleDetailPanel";
+import React from "react"; 
 import NavBox from "./NavBox";
 import { AntDesign, Feather } from "@expo/vector-icons";
 

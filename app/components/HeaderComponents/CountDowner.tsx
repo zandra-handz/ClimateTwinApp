@@ -38,10 +38,10 @@ const CountDowner = () => {
   // }, [lastLocationAccessTime, timeSharedValue]);
 
   const resetCountdown = () => {
-    console.log('reset countdown triggered!');
+    // console.log('reset countdown triggered!');
     if (!isResetting.current && lastLocationAccessTime) {
       isResetting.current = true;
-      console.log("Resetting countdown");
+      // console.log("Resetting countdown");
       const timeDifference = getTimeDifferenceInSeconds(lastLocationAccessTime);
       timeSharedValue.value = timeDifference > 0 ? timeDifference : 0;
 
@@ -53,7 +53,7 @@ const CountDowner = () => {
 
   // Reset countdown when lastLocationAccessTime changes
   useEffect(() => {
-    console.log('use effect triggering resetCountdown triggered by alwaysReRender');
+   // console.log('use effect triggering resetCountdown triggered by alwaysReRender');
     resetCountdown();
   }, [alwaysReRender]);
  

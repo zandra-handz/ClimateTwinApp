@@ -13,7 +13,7 @@ const PortalBanner = () => {
  
   return (
     <View
-      style={[portalSurroundings?.id !== null ? appContainerStyles.portalBannerContainer : appContainerStyles.emptyBannerContainer, themeStyles.primaryBackground]} > 
+      style={[portalSurroundings?.id !== null ? appContainerStyles.portalBannerContainer : appContainerStyles.emptyBannerContainer, themeStyles.darkerBackground]} > 
       {portalSurroundings?.id !== null && locationId !== null && (
         <>
         <View style={[appContainerStyles.portalTempsAndSvgContainer]}>

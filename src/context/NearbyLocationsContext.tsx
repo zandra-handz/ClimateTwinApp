@@ -60,24 +60,33 @@ export const NearbyLocationsProvider: React.FC<NearbyLocationsProviderProps> = (
     queryFn: getNearbyLocations,
     enabled: !!isAuthenticated && !isInitializing && !!lastLocationId && (lastState === 'exploring'), 
     //staleTime: 0,
-    onError: (err) => {
-      console.error('Error fetching location data:', err);
-    },
-    onSuccess: (data) => {
-      if (data) {
-        console.log('getTwinLocation query success:', data); 
-      }
-    },
+ 
   });
+
+
+  useEffect(() => {
+  
+    if (isError) {
+      console.log('nearby locations is error!');
+    }
+  }, [isError]);
+
+  
+  useEffect(() => {
+  
+    if (isSuccess) {
+      console.log('nearby locations is success!');
+    }
+  }, [isSuccess]);
 
   useEffect(() => {
     if (lastLocationId && nearbyLocations && nearbyLocations.length > 0) {
-      console.log(lastLocationId);
+     // console.log(lastLocationId);
       
-      console.log('FILTERING NEARBY LOCATIONS');
+     /// console.log('FILTERING NEARBY LOCATIONS');
       const filteredData = nearbyLocations.filter(item => item.id !== lastLocationId);
       setCenteredNearbyLocations(filteredData);
-      console.log('FILTERED DATA', filteredData[7]);
+     // console.log('FILTERED DATA', filteredData[7]);
 
 
     } else {

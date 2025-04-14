@@ -44,7 +44,7 @@ function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled, openD
   return (
     <>
 
-    <View style={[themeStyles.darkerBackground, appContainerStyles.exploreTabBarContainer]}>
+    <View style={[themeStyles.darkerBackground, appContainerStyles.exploreTabBarContainer, { borderColor: 'teal'}]}>
   
       {state.routes.map((route, index) => {
         const { options } = descriptors[route.key];

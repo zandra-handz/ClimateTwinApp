@@ -1,22 +1,18 @@
 import React from "react";
 import { View } from "react-native";
-import { useSurroundings } from "../../../src/context/CurrentSurroundingsContext";
-import SingleDetailPanel from "@/app/components/SingleDetailPanel";
-import WindFriendsView from "@/app/components/SurroundingsComponents/WindFriendsView";
+import { useSurroundings } from "../../../src/context/CurrentSurroundingsContext"; 
 import MagnifiedNavButton from "../MagnifiedNavButton";
-import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
-import { useInteractiveElements } from "@/src/context/InteractiveElementsContext";
+import { useGlobalStyles } from "@/src/context/GlobalStylesContext"; 
 import WindyWindFriendsView from "./WindyWindFriendsView";
 
-const PortalSurroundingsView = ({ height, triggerParentAutoScroll }) => {
+const PortalSurroundingsView = ({ height  }) => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const {
     portalSurroundings,
     ruinsSurroundings,
     homeSurroundings,
     handlePickNewSurroundings,
-  } = useSurroundings();
-  const { triggerItemChoicesRefetch } = useInteractiveElements();
+  } = useSurroundings(); 
   const isDisabled = !!ruinsSurroundings?.id;
 
   const handleExploreLocation = async () => {
@@ -34,8 +30,7 @@ const PortalSurroundingsView = ({ height, triggerParentAutoScroll }) => {
   return (
     <View style={{ flex: 1, height, position: "relative" }}>
       <View style={{ height: 90, width: "100%" }} />
-
-      {/* Main content container */}
+ 
       <View
         style={{
           // backgroundColor: "gray",
@@ -84,17 +79,21 @@ const PortalSurroundingsView = ({ height, triggerParentAutoScroll }) => {
         <SingleDetailPanel label="Wind speed interaction" value={portalSurroundings.windSpeedInteraction} />
       */}
 
-        {isDisabled && (
+
+      </View>
+
+      {isDisabled && (
           <View
             style={[
               appContainerStyles.dimmer,
               { backgroundColor: overlayColor },
             ]}
-          >
+          > <View style={{paddingTop: 280}}>
             <MagnifiedNavButton
               message={"Go back to portal location"}
               onPress={handleExploreLocation}
-            />
+            /> 
+            </View>
             {/* <View
             style={{
               backgroundColor: "rgba(0, 0, 0, 0.6)",
@@ -106,10 +105,10 @@ const PortalSurroundingsView = ({ height, triggerParentAutoScroll }) => {
           </View> */}
           </View>
         )}
-      </View>
 
       {/* Overlay to disable interactions */}
     </View>
+    
   );
 };
 
