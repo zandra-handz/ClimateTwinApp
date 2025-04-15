@@ -20,9 +20,9 @@ export default () => {
   return (
     <>
     <CustomStatusBar/> 
-       {pickNewSurroundingsMutation.isPending && (
+       {/* {pickNewSurroundingsMutation.isPending && (
         <ComponentSpinner showSpinner={true} spinnerSize={50} spinnerType={'circleFade'} backgroundColor={themeStyles.primaryBackground.backgroundColor}/>
-      )}
+      )} */}
   
     <Tabs 
     tabBar={props=> <ExploreTabBar {...props} openDoubleChecker={openDoubleChecker}  />}

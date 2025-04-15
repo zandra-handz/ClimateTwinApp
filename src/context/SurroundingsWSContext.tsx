@@ -20,6 +20,7 @@ interface SurroundingsWSContextType {
   lastLocationId: string | null;
   lastLocationAccessTime: string | null;
   lastLatAndLong: [string, string] | null;
+  lastLocationIsSame: string | null;
   isLocationSocketOpen: boolean;
   locationSocketColor: string;
   lastSearchProgress: string | null;
@@ -57,6 +58,7 @@ export const SurroundingsWSProvider: React.FC<SurroundingsWSProviderProps> = ({
     null
   ); // guessing it's a string too
   const [lastState, setLastState] = useState<string | null>(null); // same here
+  const [lastLocationIsSame, setLastLocationIsSame] = useState<string | null>(null); // same here
   const [lastLocationId, setLastLocationId] = useState<string | null>(null);
   const [lastLocationAccessTime, setLastLocationAccessTime] = useState<
     string | null
@@ -78,6 +80,7 @@ export const SurroundingsWSProvider: React.FC<SurroundingsWSProviderProps> = ({
       setLastNotification(null);
       setLastSearchProgress(null);
       setLastState(null);
+      setLastLocationIsSame(null);
       setLastLocationName(null);
       setLastLocationAccessTime(null);
       setLastLocationId(null);
@@ -181,6 +184,10 @@ export const SurroundingsWSProvider: React.FC<SurroundingsWSProviderProps> = ({
 
       if ("state" in update) {
         setLastState(update.state);
+      }
+
+      if ("location_same_as_last_update" in update) { // either "yes" or None
+        setLastLocationIsSame(update.location_same_as_last_update);
       }
 
       //added to backend specifically for reducing triggering nearby locations fetch
@@ -370,6 +377,7 @@ export const SurroundingsWSProvider: React.FC<SurroundingsWSProviderProps> = ({
         lastNotification,
         lastSearchProgress,
         lastState,
+        lastLocationIsSame,
         lastLocationName,
         lastLocationId,
         lastLocationAccessTime,

@@ -1,11 +1,11 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useState} from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import useDateTimeFunctions from "../../hooks/useDateTimeFunctions";
-import CuteDetailBox from "../CuteDetailBox";
-import SingleDetailPanel from "../SingleDetailPanel";
-import GoToItemButton from "../GoToItemButton";
-import { Image } from "expo-image";
+import CuteDetailBox from "../CuteDetailBox"; 
+import GoToItemButton from "../GoToItemButton"; 
+import DeleteItemButton from "../Scaffolding/DeleteItemButton";
+import DoubleChecker from "../Scaffolding/DoubleChecker";
 import Avatar from "./Avatar";
 
 import useFriends from "@/app/hooks/useFriends";
@@ -15,16 +15,21 @@ const FriendsUICard = ({ data, onViewFriendPress, isFullView }) => {
   const { formatUTCToMonthDayYear } = useDateTimeFunctions();
   const { friends } = useFriends();
 
+  const [ isDoubleCheckerVisible, setDoubleCheckerVisible ] = useState(false);
+
   const image = data?.friend_profile?.avatar || null;
 
-  const renderFriendName = (id) => {
-    if (friends) {
-      const friend = friends.find((friend) => friend.id === id);
-      return friend?.nickname || null;
-    } else {
-      return null;
-    }
-  };
+
+
+const handleToggleDoubleChecker = () => {
+  setDoubleCheckerVisible(prev => !prev);
+
+};
+
+ const handleDeleteFriend = () => {
+  console.log(`handleDeleteFriend function has yet to be written`);
+
+ };
 
   const handlePress = () => {
     if (onViewFriendPress) {
@@ -147,6 +152,17 @@ const FriendsUICard = ({ data, onViewFriendPress, isFullView }) => {
 
   return (
     <>
+    {isDoubleCheckerVisible && (
+      <DoubleChecker
+      isVisible={isDoubleCheckerVisible}
+      toggleVisible={handleToggleDoubleChecker}
+      singleQuestionText={`Unfriend ${data?.username || ''}?`}
+
+      optionalText="(They won't be notified.)"
+      noButtonText="Back"
+      yesButtonText="Yes"
+      onPress={handleDeleteFriend} />
+    )}
       <View
         style={[
           themeStyles.darkerBackground,
@@ -180,28 +196,7 @@ const FriendsUICard = ({ data, onViewFriendPress, isFullView }) => {
               {data?.friend_profile?.bio || "No bio"}
             </Text>
           </View>
-        )}
-        {/* {isFullView && (
-          
-          <View
-            style={[
-              appContainerStyles.itemDescriptionContainer,
-              themeStyles.darkestBackground,
-            ]}
-          >
-            <Text
-              style={[
-                appFontStyles.itemDescriptionText,
-                themeStyles.primaryText,
-              ]}
-            >
-              <Text style={{ fontWeight: "bold" }}>Additional data: </Text>
-              {data?.add_data || "None recorded"}
-            </Text>
-          </View>
-          
-        )} */}
-
+        )} 
 
 
         <View style={[appContainerStyles.itemCollectionDetailsSubheader]}>
@@ -217,10 +212,19 @@ const FriendsUICard = ({ data, onViewFriendPress, isFullView }) => {
             //iconTwo={"map"}
             message={findDetails}
           />
+          
         </View>
 
         {onViewFriendPress && (
+          <>
           <GoToItemButton onPress={() => handlePress()} label={"See profile"} />
+         
+          </>
+        )}
+        {isFullView && (
+          
+         <DeleteItemButton onPress={() => handleToggleDoubleChecker()} label={"Unfriend"} />
+       
         )}
       </View>
     </>

@@ -3,7 +3,7 @@ import React from "react";
 import { useGlobalStyles } from "../../src/context/GlobalStylesContext";  
 import PortalPixellySvg from "../assets/svgs/portal-pixelly.svg";
 import { useSurroundings } from "../../src/context/CurrentSurroundingsContext"; 
-import GoHomeButton from './GoHomeButton';
+ 
 
 // Only meant to be visible when currently exploring a location; no longer has go button
 const PortalBanner = () => { 

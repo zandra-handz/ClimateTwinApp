@@ -7,7 +7,7 @@ import React, {
   ReactNode,
 } from "react";
 import { useUser } from "./UserContext";
-import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+import { useQuery, useQueryClient, useMutation,  UseMutationResult } from "@tanstack/react-query";
 import { useRouter, useSegments } from "expo-router";
 import { getExploreLocation, pickNewSurroundings } from "../calls/apicalls";
 
@@ -17,6 +17,12 @@ import { CurrentSurroundings, PortalSurroundings, RuinsSurroundings, HomeSurroun
 import { useSurroundingsWS } from "./SurroundingsWSContext";
 import { useGroqContext } from "./GroqContext";
 
+
+type SurroundingData = {
+  explore_type: string;
+  id: any;
+};
+
 interface CurrentSurroundingsContextType {
   currentSurroundings: CurrentSurroundings | null | undefined;
   locationId: number | null;
@@ -25,11 +31,11 @@ interface CurrentSurroundingsContextType {
   homeSurroundings: HomeSurroundings | null;    // Use the transformed HomeLocation type
   ruinsSurroundings: RuinsSurroundings | null;   
   lastAccessed: string | null;                 // Or the appropriate type for lastAccessed
-  handlePickNewSurroundings: () => void;      
-  pickNewSurroundingsMutation: () => void;    
+  handlePickNewSurroundings: (data: SurroundingData) => Promise<void>;     
+  pickNewSurroundingsMutation: UseMutationResult<any, Error, { [key: string]: number }, void>; 
   triggerSurroundingsRefetch: () => void;      
   isInitializingLocation: boolean;
-  setTriggerFetch: React.Dispatch<React.SetStateAction<boolean>>;
+//  setTriggerFetch: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CurrentSurroundingsContext = createContext<CurrentSurroundingsContextType | undefined>(undefined);
@@ -53,8 +59,8 @@ export const CurrentSurroundingsProvider: React.FC<CurrentSurroundingsProviderPr
   const { extendGroqStaleTime, logGroqState } = useGroqContext();
   const segments = useSegments();
   const queryClient = useQueryClient();
-  const { lastState, lastLocationId } = useSurroundingsWS();
-  const timeoutRef = useRef(null); 
+  const { lastState, lastLocationId, lastLocationIsSame } = useSurroundingsWS();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Use the types directly from the imports
   const [portalSurroundings, setPortalSurroundings] = useState<PortalSurroundings | null>(null);
@@ -81,9 +87,11 @@ const {
   error,
   isSuccess,
 } = useQuery<CurrentSurroundings | null>({
-  queryKey: ["currentSurroundings", lastLocationId, lastState],
+  queryKey: ["currentSurroundings", lastLocationId],
   queryFn: getExploreLocation,
-  enabled: !!isAuthenticated && !isInitializing && (lastState !== 'home') && (lastState !== 'searching for twin'),
+ 
+  enabled: !!isAuthenticated && !isInitializing && !!lastLocationId && (lastState !== 'home') && (lastState !== 'searching for twin') && (lastLocationIsSame !== 'yes'),
+   
  // staleTime: 0,
 
   // DEPRECATED!!
@@ -132,7 +140,7 @@ useEffect(() => {
   if (!isAuthenticated) {
     
    // queryClient.removeQueries({ queryKey: ["currentSurroundings", lastLocationId, lastLocationName] });
-    queryClient.removeQueries({ queryKey: ["currentSurroundings", lastLocationId, lastState] });
+    queryClient.removeQueries({ queryKey: ["currentSurroundings", lastLocationId] });
     setPortalSurroundings(null);
     setRuinsSurroundings(null);
     setHomeSurroundings(null);
@@ -386,7 +394,6 @@ useEffect(() => {
       try {
         locationType = data.explore_type === 'discovery_location' ? 'explore_location' : 'twin_location';
         await pickNewSurroundingsMutation.mutateAsync({ [locationType]: data.id });
-        // Optionally set loading state or other state as needed
       } catch (error) {
         console.error("Error updating location:", error);
       }
@@ -410,7 +417,8 @@ useEffect(() => {
       const isOnNearbyScreen = segments[2] === "nearby"; 
       if (isOnNearbyScreen) {
         
-      router.replace("(drawer)/(exploretabs)");
+      //router.replace("(drawer)/(exploretabs)");  // TS complained
+      router.replace("/(exploretabs)");
       
     }
      // triggerRefetch(); //active state + websocket
@@ -429,10 +437,9 @@ useEffect(() => {
   });
  
 
-  const triggerSurroundingsRefetch = () => {
-    console.log("Triiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiggering explore locationrefetch");
-    queryClient.invalidateQueries({ queryKey: ["currentSurroundings", lastLocationId, lastState] });
-    queryClient.refetchQueries({ queryKey: ["currentSurroundings", lastLocationId, lastState] }); // Force refetch
+  const triggerSurroundingsRefetch = () => { 
+    queryClient.invalidateQueries({ queryKey: ["currentSurroundings", lastLocationId] });
+    queryClient.refetchQueries({ queryKey: ["currentSurroundings", lastLocationId] }); // Force refetch
   }; 
 
   return (

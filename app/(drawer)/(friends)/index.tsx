@@ -6,14 +6,10 @@ import { useRouter } from "expo-router";
 import { useAppMessage } from "../../../src/context/AppMessageContext";
 import useFriends from "../../hooks/useFriends";
 
-import FriendsView from "@/app/components/FriendsComponents/FriendsView";
-import GoToItemButton from "@/app/components/GoToItemButton";
+import FriendsView from "@/app/components/FriendsComponents/FriendsView"; 
 import ActionsFooter from "@/app/components/ActionsFooter";
 
-
-
-import DataList from "../../components/Scaffolding/DataList";
-import FriendsUICard from "@/app/components/FriendsComponents/FriendsUICard";
+ 
 const index = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const { showAppMessage } = useAppMessage();

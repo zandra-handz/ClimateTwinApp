@@ -1,13 +1,17 @@
-import React, { useState, useLayoutEffect } from 'react';
-import { View, StyleSheet } from 'react-native'; 
-import ArrowPixellySvg from '../../assets/svgs/arrow-pixelly.svg';
+import React, { useState, useLayoutEffect } from 'react'; 
 import WindyMap from '../WindyMap';
 import ComponentSpinner from '../Scaffolding/ComponentSpinner';
 import { useGlobalStyles } from '@/src/context/GlobalStylesContext';
 
+interface WindyWindSquareProps {
+  lat: number;   
+  lon: number;   
+  zoom?: number;  // optional because defaults to 8 below
+  size?: number;  // optional because defaults to 100 below
+}
 
-
-const WindyWindSquare = ({ lat, lon, zoom=8, size=100 }) => {
+const WindyWindSquare: React.FC<WindyWindSquareProps> = ({ lat, lon, zoom = 8, size = 100 }) => {
+ 
     const [isLoading, setIsLoading] = useState(true);
     const { themeStyles } = useGlobalStyles();
 

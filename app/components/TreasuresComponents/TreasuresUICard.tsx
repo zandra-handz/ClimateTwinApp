@@ -1,37 +1,41 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import useDateTimeFunctions from "../../hooks/useDateTimeFunctions";
 import CuteDetailBox from "../CuteDetailBox";
 import SingleDetailPanel from "../SingleDetailPanel";
 import GoToItemButton from "../GoToItemButton";
+import DeleteItemButton from "../Scaffolding/DeleteItemButton";
+import DoubleChecker from "../Scaffolding/DoubleChecker";
 
 import useFriends from "@/app/hooks/useFriends";
 
-const TreasuresUICard = ({
-  data, 
-  onOpenTreasurePress,
-  isFullView,
-}) => {
+const TreasuresUICard = ({ data, onOpenTreasurePress, isFullView }) => {
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
   const { formatUTCToMonthDayYear } = useDateTimeFunctions();
   const { friends } = useFriends();
+  const [isDoubleCheckerVisible, setDoubleCheckerVisible] = useState(false);
+
+  const handleToggleDoubleChecker = () => {
+    setDoubleCheckerVisible((prev) => !prev);
+  };
+
+  const handleDeleteTreasure = () => {
+    console.log(`handleDeleteTreasure function has yet to be written`);
+  };
 
   const renderFriendName = (id) => {
     if (friends) {
-      
-    const friend = friends.find((friend) => friend.id === id);
-    return friend?.nickname || null;
-    
-  } else {
-    return null;
-  }
+      const friend = friends.find((friend) => friend.id === id);
+      return friend?.nickname || null;
+    } else {
+      return null;
+    }
   };
 
   const handlePress = () => {
     if (onOpenTreasurePress) {
       onOpenTreasurePress(data.id, data.descriptor);
-
     }
   };
 
@@ -161,13 +165,25 @@ const TreasuresUICard = ({
         You have owned this since{" "}
         {formatUTCToMonthDayYear(data?.owned_since) ||
           formatUTCToMonthDayYear(data?.created_on) ||
-          "unknown date"}.
+          "unknown date"}
+        .
       </Text>
     </>
   );
 
   return (
     <>
+      {isDoubleCheckerVisible && (
+        <DoubleChecker
+          isVisible={isDoubleCheckerVisible}
+          toggleVisible={handleToggleDoubleChecker}
+          singleQuestionText={`Delete ${data?.descriptor || ""}?`}
+          optionalText="(You must be the original finder of this treasure to delete it.)"
+          noButtonText="Back"
+          yesButtonText="Yes"
+          onPress={handleDeleteTreasure}
+        />
+      )}
       {data?.pending != true && (
         <View
           style={[
@@ -187,78 +203,79 @@ const TreasuresUICard = ({
             </Text>
           </View>
           {isFullView && (
-            
-          <View
-            style={[
-              appContainerStyles.treasureDescriptionContainer,
-              themeStyles.darkestBackground,
-            ]}
-          >
-            <Text
+            <View
               style={[
-                appFontStyles.treasureDescriptionText,
-                themeStyles.primaryText,
+                appContainerStyles.treasureDescriptionContainer,
+                themeStyles.darkestBackground,
               ]}
             >
-              <Text style={{ fontWeight: "bold" }}>Description: </Text>
-              {data?.description || "No description given"}
-            </Text>
-          </View>
-          
-        )}
-        {isFullView && (
-          
-          <View
-            style={[
-              appContainerStyles.treasureDescriptionContainer,
-              themeStyles.darkestBackground,
-            ]}
-          >
-            <Text
+              <Text
+                style={[
+                  appFontStyles.treasureDescriptionText,
+                  themeStyles.primaryText,
+                ]}
+              >
+                <Text style={{ fontWeight: "bold" }}>Description: </Text>
+                {data?.description || "No description given"}
+              </Text>
+            </View>
+          )}
+          {isFullView && (
+            <View
               style={[
-                appFontStyles.treasureDescriptionText,
-                themeStyles.primaryText,
+                appContainerStyles.treasureDescriptionContainer,
+                themeStyles.darkestBackground,
               ]}
             >
-              <Text style={{ fontWeight: "bold" }}>Additional data: </Text>
-              {data?.add_data || "None recorded"}
-            </Text>
-          </View>
-          
-        )}
+              <Text
+                style={[
+                  appFontStyles.treasureDescriptionText,
+                  themeStyles.primaryText,
+                ]}
+              >
+                <Text style={{ fontWeight: "bold" }}>Additional data: </Text>
+                {data?.add_data || "None recorded"}
+              </Text>
+            </View>
+          )}
           <View style={[appContainerStyles.treasureCollectionDetailsSubheader]}>
             <CuteDetailBox
               iconOne={"heart"}
               iconTwo={"map"}
               message={findDetails}
-            /> 
+            />
 
-          {/* {Object.entries(data).map(([key, value]) => renderField(key, value))}
-           */}
-          {data && data.giver && isFullView && (
-               <CuteDetailBox
+            {/* {Object.entries(data).map(([key, value]) => renderField(key, value))}
+             */}
+            {data && data.giver && isFullView && (
+              <CuteDetailBox
                 iconOne={"gift"}
                 iconTwo={"heart"}
                 message={ownershipDetails}
                 backgroundColor={themeStyles.primaryBackground.backgroundColor}
               />
-          
-          )}
+            )}
             {data && !data.giver && isFullView && (
-              <CuteDetailBox 
+              <CuteDetailBox
                 iconTwo={"map"}
                 message={originalOwnerDetails}
                 backgroundColor={themeStyles.primaryBackground.backgroundColor}
-              /> 
-          )}
-          
-          </View> 
+              />
+            )}
+          </View>
 
-         {onOpenTreasurePress && (
-          
-          <GoToItemButton onPress={() => handlePress()} label={'Go to treasure'}/>
-          
-         )}
+          {onOpenTreasurePress && (
+            <GoToItemButton
+              onPress={() => handlePress()}
+              label={"Go to treasure"}
+            />
+          )}
+          {isFullView && (
+            <DeleteItemButton
+              onPress={() => handleToggleDoubleChecker()}
+              label={"Delete"}
+            />
+          )}
         </View>
       )}
     </>

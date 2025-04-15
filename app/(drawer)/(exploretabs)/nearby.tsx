@@ -5,9 +5,7 @@ import {
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext"; 
 import { useNearbyLocations } from "../../../src/context/NearbyLocationsContext";
  
-import { useRouter } from "expo-router"; 
-import { useFocusEffect } from "expo-router"; 
-import { useSurroundings } from "@/src/context/CurrentSurroundingsContext";
+import { useRouter } from "expo-router";  
 import NearbyView from "../../components/NearbyComponents/NearbyView";
 
  
@@ -18,31 +16,8 @@ const nearby = () => {
  
   const router = useRouter();
  
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     console.log("triggering nearby locations refetch");
-  //     triggerRefetch();
-  //     return () => {
-  //       console.log("nearby location screen is unfocused");
-  //     };
-  //   }, [])
-  // );
-
-  // useEffect(() => {
-  //   console.log('triggering neary locations refetch');
-  //   triggerRefetch();
-  // }, []);
-
-
-  // useEffect(() => {
-  //   if (pickNewSurroundingsMutation.isSuccess) {
-  //     router.push("(drawer)/(exploretabs)");
-
-  //   }
-
-  // }, [pickNewSurroundingsMutation.isSuccess]);
-
-  //wtf
+ 
+ 
 
   // backend is so confused on this lol, you need to submit {'explore_location' : [location id]} if data.explore_type is discovery_location
   // else you need to submit {'twin_location' : [the same id]}

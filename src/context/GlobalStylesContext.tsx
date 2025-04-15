@@ -998,6 +998,75 @@ const containerStyles = StyleSheet.create({
 
 
   },
+
+  // based on ruinsHarmony card in nearby ruins ui 
+  doubleCheckerContainer: { 
+    borderRadius: 20,
+    padding: 20,  
+    width: '100%',   
+    textAlign: 'left',
+    height: 170, 
+    overflow: 'hidden',
+
+  },
+  doubleCheckerQuestionContainer: {
+    flex: 1,
+    //backgroundColor: 'orange',
+    padding: 10,
+    width: '100%',
+    flexDirection: 'column',
+  //  flexWrap: 'flex',
+    //backgroundColor: 'pink',
+   // height: '5%', 
+
+  },
+  doubleCheckerButtonRow: {
+    width: '100%',
+   // backgroundColor: 'lightblue',
+    flexDirection: 'row',
+    height: 40,
+    justifyContent: 'space-between',
+    overflow: 'hidden',
+
+  },
+  dCNoButton: {
+    height: '100%',
+    width: '49%',
+    flex: 1,
+    flexDirection: 'row',
+    borderBottomLeftRadius: 30,  
+    justifyContent: 'center', 
+    alignItems: 'center',  
+    borderWidth: StyleSheet.hairlineWidth,
+    backgroundColor: 'lightblue',
+    //borderColor: 'hotpink',
+
+  },
+  dCYesButton: {
+    height: '100%',
+    width: '49%',
+    flex: 1,
+    flexDirection: 'row',
+    borderBottomRightRadius: 30,   
+    paddingHorizontal: '4%',
+    justifyContent: 'center', 
+    alignItems: 'center',
+    textAlign: 'center',
+    borderWidth: StyleSheet.hairlineWidth,
+ 
+  },
+  dCBackgroundContainer: {
+    flex: 1,
+    height: 200, 
+    margin: 0,
+    justifyContent: "center", 
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.84)", 
+    paddingHorizontal: '6%',
+    elevation: 1000,
+    zIndex: 1000, 
+
+  },
   goToItemButtonContainer: {  
     padding: 10,  
     width: '100%',  
@@ -1213,6 +1282,23 @@ const fontStyles = StyleSheet.create({
   exploreTabBarIcon: {
     height: 22,
     width: 22,
+  },
+  dCQuestionText: {
+    fontSize: 16,
+    lineHeight: 22,
+    fontWeight: 'bold',
+
+  },
+  dCOptionalText: {
+    fontSize: 16,
+    lineHeight: 22, 
+
+  },
+  dCButtonText: {
+    fontSize: 15,
+    lineHeight: 22,
+    fontWeight: 'bold',
+
   },
   cuteDetailIcon: {
 

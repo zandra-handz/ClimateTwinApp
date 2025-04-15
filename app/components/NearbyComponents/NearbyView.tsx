@@ -36,9 +36,9 @@ const NearbyView = () => {
   return (
     
       <>
-      {/* {pickNewSurroundingsMutation.isPending && (
-        <ComponentSpinner showSpinner={true} offsetStatusBarHeight={true} backgroundColor={themeStyles.primaryBackground.backgroundColor}/>
-      )} */}
+       {pickNewSurroundingsMutation.isPending && (
+        <ComponentSpinner offsetStatusBarHeight={true} showSpinner={true} spinnerSize={50} spinnerType={'circleFade'} backgroundColor={themeStyles.primaryBackground.backgroundColor}/>
+      )}
       
     <View style={[appContainerStyles.dataListContainer]}>
      

@@ -28,6 +28,7 @@ const ScrollDetailPanel = ({ label, value, opacity, isLoading = false }) => {
 
       {value && (
         <ScrollView
+        showsVerticalScrollIndicator={false} 
           contentContainerStyle={{
             flexDirection: "column",
         
