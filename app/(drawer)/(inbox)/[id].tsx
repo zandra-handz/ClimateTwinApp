@@ -8,21 +8,28 @@ import { useAppMessage } from "../../../src/context/AppMessageContext";
 import useInbox from "../../hooks/useInbox";
 import useTreasures from "@/app/hooks/useTreasures";
 import useFriends from "@/app/hooks/useFriends";
- 
 
-import DataList from "../../components/Scaffolding/DataList"; 
+import DataList from "../../components/Scaffolding/DataList";
 
 import ActionsFooter from "@/app/components/ActionsFooter";
 
 const read = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { messageId } = useLocalSearchParams<{ messageId: string }>();
   const { contentType } = useLocalSearchParams<{ contentType: string }>();
   const { senderName } = useLocalSearchParams<{ senderName: string }>();
   const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { handleAcceptTreasureGift, acceptTreasureGiftMutation } =
-    useTreasures();
-  const { handleAcceptFriendship, acceptFriendshipMutation } = useFriends();
+  const {
+    handleAcceptTreasureGift,
+    acceptTreasureGiftMutation,
+    handleDeclineTreasureGift,
+    declineTreasureGiftMutation,
+  } = useTreasures();
+  const {
+    handleAcceptFriendship,
+    acceptFriendshipMutation,
+    handleDeclineFriendship,
+    declineFriendshipMutation,
+  } = useFriends();
   const { showAppMessage } = useAppMessage();
   const {
     handleGetInboxItem,
@@ -34,6 +41,18 @@ const read = () => {
 
   const fetchInboxItem = async (id) => {
     await handleGetInboxItem(id);
+  };
+
+  const handleDecline = () => {
+    console.log("handle decline pressed!");
+    if (viewingMessage?.content_object.special_type === "gift request") {
+      handleDeclineTreasureGift(viewingMessage?.content_object.id);
+      triggerInboxItemsRefetch();
+    }
+    if (viewingMessage?.content_object.special_type === "friend request") {
+      handleDeclineFriendship(viewingMessage?.content_object.id);
+      triggerInboxItemsRefetch();
+    }
   };
 
   const handleAccept = () => {
@@ -77,14 +96,38 @@ const read = () => {
   }, [acceptFriendshipMutation.isError]);
 
   useEffect(() => {
+    if (declineFriendshipMutation.isSuccess) {
+      showAppMessage(true, null, "Friendship declined");
+      router.back();
+    }
+  }, [declineFriendshipMutation.isSuccess]);
+
+  useEffect(() => {
+    if (declineFriendshipMutation.isError) {
+      showAppMessage(true, null, "Oops! Friendship was not declined.");
+      router.back();
+    }
+  }, [declineFriendshipMutation.isError]);
+
+  useEffect(() => {
+    if (declineTreasureGiftMutation.isSuccess) {
+      showAppMessage(true, null, "Treasure declined");
+      router.back();
+    }
+  }, [declineTreasureGiftMutation.isSuccess]);
+
+  useEffect(() => {
+    if (declineTreasureGiftMutation.isError) {
+      showAppMessage(true, null, "Oops! Treasure was not declined.");
+      router.back();
+    }
+  }, [declineTreasureGiftMutation.isError]);
+
+  useEffect(() => {
     if (id) {
       fetchInboxItem(id);
     }
   }, [id]);
-
-  const handleOpenInboxItem = () => {
-    console.log(`Inbox Item ${id} ${messageId} pressed!`);
-  };
 
   return (
     <>
@@ -99,21 +142,21 @@ const read = () => {
           {viewingInboxItem && (
             <DataList
               listData={[viewingInboxItem]}
-              onCardButtonPress={handleOpenInboxItem}
+              onCardButtonPress={() => {}}
             />
           )}
 
           {viewingMessage && (
             <DataList
               listData={[viewingMessage.content_object]}
-              onCardButtonPress={handleOpenInboxItem}
+              onCardButtonPress={() => {}}
             />
           )}
         </View>
         <ActionsFooter
           onPressLeft={() => router.back()}
           labelLeft={"Back"}
-          onPressCenter={() => console.log("Left footer botton pressed!")}
+          onPressCenter={handleDecline}
           labelCenter={"Decline"}
           onPressRight={handleAccept}
           labelRight={"Accept"}

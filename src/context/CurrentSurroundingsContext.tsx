@@ -6,17 +6,31 @@ import React, {
   useRef,
   ReactNode,
 } from "react";
-import { useUser } from "./UserContext";
-import { useQuery, useQueryClient, useMutation,  UseMutationResult } from "@tanstack/react-query";
+import { useUser } from "./UserContext"; // depends on
+import { useSurroundingsWS } from "./SurroundingsWSContext"; // depends on
+import { useGroqContext } from "./GroqContext"; // runs functions in onSuccess of pick mutation
+
+import {
+  useQuery,
+  useQueryClient,
+  useMutation,
+  UseMutationResult,
+} from "@tanstack/react-query";
 import { useRouter, useSegments } from "expo-router";
+
 import { getExploreLocation, pickNewSurroundings } from "../calls/apicalls";
 
-// Import types from your shared types file
-import { CurrentSurroundings, PortalSurroundings, RuinsSurroundings, HomeSurroundings, RawTwinLocation, RawHomeLocation, RawRuinsLocation } from "../types/CurrentSurroundingsContextTypes"; 
+// TYPES
 
-import { useSurroundingsWS } from "./SurroundingsWSContext";
-import { useGroqContext } from "./GroqContext";
-
+import {
+  CurrentSurroundings,
+  PortalSurroundings,
+  RuinsSurroundings,
+  HomeSurroundings,
+  RawTwinLocation,
+  RawHomeLocation,
+  RawRuinsLocation,
+} from "../types/CurrentSurroundingsContextTypes";
 
 type SurroundingData = {
   explore_type: string;
@@ -25,20 +39,25 @@ type SurroundingData = {
 
 interface CurrentSurroundingsContextType {
   currentSurroundings: CurrentSurroundings | null | undefined;
-  locationId: number | null;
-  isExploring: boolean;
-  portalSurroundings: PortalSurroundings | null;  // Assuming this is the transformed type
-  homeSurroundings: HomeSurroundings | null;    // Use the transformed HomeLocation type
-  ruinsSurroundings: RuinsSurroundings | null;   
-  lastAccessed: string | null;                 // Or the appropriate type for lastAccessed
-  handlePickNewSurroundings: (data: SurroundingData) => Promise<void>;     
-  pickNewSurroundingsMutation: UseMutationResult<any, Error, { [key: string]: number }, void>; 
-  triggerSurroundingsRefetch: () => void;      
-  isInitializingLocation: boolean;
-//  setTriggerFetch: React.Dispatch<React.SetStateAction<boolean>>;
+  locationId: number | null; 
+  portalSurroundings: PortalSurroundings | null; // Assuming this is the transformed type
+  homeSurroundings: HomeSurroundings | null; // Use the transformed HomeLocation type
+  ruinsSurroundings: RuinsSurroundings | null;
+  lastAccessed: string | null; // Or the appropriate type for lastAccessed
+  handlePickNewSurroundings: (data: SurroundingData) => Promise<void>;
+  pickNewSurroundingsMutation: UseMutationResult<
+    any,
+    Error,
+    { [key: string]: number },
+    void
+  >;
+  triggerSurroundingsRefetch: () => void;
+  isInitializingLocation: boolean; 
 }
 
-const CurrentSurroundingsContext = createContext<CurrentSurroundingsContextType | undefined>(undefined);
+const CurrentSurroundingsContext = createContext<
+  CurrentSurroundingsContextType | undefined
+>(undefined);
 
 export const useSurroundings = (): CurrentSurroundingsContextType => {
   const context = useContext(CurrentSurroundingsContext);
@@ -54,7 +73,9 @@ interface CurrentSurroundingsProviderProps {
   children: ReactNode;
 }
 
-export const CurrentSurroundingsProvider: React.FC<CurrentSurroundingsProviderProps> = ({ children }) => {
+export const CurrentSurroundingsProvider: React.FC<
+  CurrentSurroundingsProviderProps
+> = ({ children }) => {
   const { user, isAuthenticated, isInitializing } = useUser();
   const { extendGroqStaleTime, logGroqState } = useGroqContext();
   const segments = useSegments();
@@ -62,105 +83,92 @@ export const CurrentSurroundingsProvider: React.FC<CurrentSurroundingsProviderPr
   const { lastState, lastLocationId, lastLocationIsSame } = useSurroundingsWS();
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  // Use the types directly from the imports
-  const [portalSurroundings, setPortalSurroundings] = useState<PortalSurroundings | null>(null);
-  const [ruinsSurroundings, setRuinsSurroundings] = useState<RuinsSurroundings | null>(null);
-  const [homeSurroundings, setHomeSurroundings] = useState<HomeSurroundings | null>(null);
+  const [portalSurroundings, setPortalSurroundings] =
+    useState<PortalSurroundings | null>(null);
+  const [ruinsSurroundings, setRuinsSurroundings] =
+    useState<RuinsSurroundings | null>(null);
+  const [homeSurroundings, setHomeSurroundings] =
+    useState<HomeSurroundings | null>(null);
 
   const [locationId, setLocationId] = useState<number | null>(null);
-  const [lastAccessed, setLastAccessed] = useState<string | null>(null);
-  const [isExploring, setIsExploring] = useState<boolean>(false);
-  const [wasPrevExploring, setWasPrevExploring] = useState<boolean>(false);
-  const [isInitializingLocation, setIsInitializingLocation] = useState<boolean>(false);
+  const [lastAccessed, setLastAccessed] = useState<string | null>(null);  
+  const [isInitializingLocation, setIsInitializingLocation] =
+    useState<boolean>(false);
 
   const router = useRouter();
 
- 
+  const {
+    data: currentSurroundings,
+    isLoading,
+    isFetching,
+    isPending, //isPending is what works, isLoading and isFetching don't do anything in the useEffect
+    isError,
+    error,
+    isSuccess,
+  } = useQuery<CurrentSurroundings | null>({
+    queryKey: ["currentSurroundings", lastLocationId],
+    queryFn: getExploreLocation,
 
+    enabled:
+      !!isAuthenticated &&
+      !isInitializing &&
+      !!lastLocationId &&
+      lastState !== "home" &&
+      lastState !== "searching for twin" &&
+      lastLocationIsSame !== "yes",
+    // staleTime: 0,
+  });
 
-const {
-  data: currentSurroundings,
-  isLoading,
-  isFetching,
-  isPending, //isPending is what works, isLoading and isFetching don't do anything in the useEffect
-  isError,
-  error,
-  isSuccess,
-} = useQuery<CurrentSurroundings | null>({
-  queryKey: ["currentSurroundings", lastLocationId],
-  queryFn: getExploreLocation,
- 
-  enabled: !!isAuthenticated && !isInitializing && !!lastLocationId && (lastState !== 'home') && (lastState !== 'searching for twin') && (lastLocationIsSame !== 'yes'),
-   
- // staleTime: 0,
-
-  // DEPRECATED!!
-
-  // onError: (err: Error) => {
-  //   console.error("Error fetching location data:", err);
-  // },
-  // onSuccess: (data) => {
-  //   if (data) {
-  //     console.log("Data fetched successfully", data);
+  // FOR DEBUGGING
+  // useEffect(() => {
+  //   if (isError) {
+  //     console.log('current surroundings is error!');
   //   }
-  // },
-});
+  // }, [isError]);
 
-
-
-// FOR DEBUGGING
-// useEffect(() => { 
-//   if (isError) {
-//     console.log('current surroundings is error!');
-//   }
-// }, [isError]);
-
-
-// FOR DEBUGGING
-// useEffect(() => {
-//   if (isSuccess) {
-//     console.log('current surroundings is success!');
-//   }
-// }, [isSuccess]);
-
+  // FOR DEBUGGING
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     console.log('current surroundings is success!');
+  //   }
+  // }, [isSuccess]);
 
   useEffect(() => {
-    if (isPending) { 
-
+    if (isPending) {
       // FOR DEBUGGING
       // console.log('seeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeetting is initializing current surroundings to true!');
       setIsInitializingLocation(true);
-       
     }
   }, [isPending]);
 
-
   // RESET
-useEffect(() => {
-  if (!isAuthenticated) {
-    
-   // queryClient.removeQueries({ queryKey: ["currentSurroundings", lastLocationId, lastLocationName] });
-    queryClient.removeQueries({ queryKey: ["currentSurroundings", lastLocationId] });
-    setPortalSurroundings(null);
-    setRuinsSurroundings(null);
-    setHomeSurroundings(null);
-    setLocationId(null);
-    setLastAccessed(null);
-    setIsExploring(false);
-    setWasPrevExploring(false);
-  }
-}, [isAuthenticated]);
- 
+  useEffect(() => {
+    if (!isAuthenticated) {
+      // queryClient.removeQueries({ queryKey: ["currentSurroundings", lastLocationId, lastLocationName] });
+      queryClient.removeQueries({
+        queryKey: ["currentSurroundings", lastLocationId],
+      });
+      setPortalSurroundings(null);
+      setRuinsSurroundings(null);
+      setHomeSurroundings(null);
+      setLocationId(null);
+      setLastAccessed(null); 
+    }
+  }, [isAuthenticated]);
 
   useEffect(() => {
-    console.log('main initializer use effect in surroundings triggered');
-  
+    console.log("main initializer use effect in surroundings triggered");
+
     //setIsInitializingLocation(true); now in isPending useEffect so that this sets when call is made not adter it succeeds
     let portalSurroundingsData: PortalSurroundings | null = null;
     let ruinsSurroundingsData: RuinsSurroundings | null = null;
     let homeSurroundingsData: HomeSurroundings | null = null;
- 
-    if (currentSurroundings && currentSurroundings?.last_accessed && !currentSurroundings.is_expired) { 
+
+    if (
+      currentSurroundings &&
+      currentSurroundings?.last_accessed &&
+      !currentSurroundings.is_expired
+    ) {
       setLastAccessed(currentSurroundings.last_accessed);
       const { twin_location, explore_location } = currentSurroundings;
 
@@ -171,26 +179,26 @@ useEffect(() => {
           id: twin_location.id,
           lastAccessed: twin_location.last_accessed || "",
           temperature: twin_location.temperature || 0,
-          description: twin_location.description || "",  
-          windSpeed: twin_location.wind_speed || 0,  
-          windDirection: twin_location.wind_direction || 0, 
-          humidity: twin_location.humidity || 0, 
-          pressure: twin_location.pressure || 0, 
-          cloudiness: twin_location.cloudiness || 0, 
-          sunriseTimestamp: twin_location.sunrise_timestamp || 0, 
-          sunsetTimestamp: twin_location.sunset_timestamp || 0, 
-          latitude: twin_location.latitude || 0, 
-          longitude: twin_location.longitude || 0, 
-          windFriends: twin_location.wind_friends || "", 
-          specialHarmony: twin_location.special_harmony || false, 
-          details: twin_location.details || "", 
-          experience: twin_location.experience || "", 
-          windSpeedInteraction: twin_location.wind_speed_interaction || "", 
-          pressureInteraction: twin_location.pressure_interaction || "", 
-          humidityInteraction: twin_location.humidity_interaction || "", 
+          description: twin_location.description || "",
+          windSpeed: twin_location.wind_speed || 0,
+          windDirection: twin_location.wind_direction || 0,
+          humidity: twin_location.humidity || 0,
+          pressure: twin_location.pressure || 0,
+          cloudiness: twin_location.cloudiness || 0,
+          sunriseTimestamp: twin_location.sunrise_timestamp || 0,
+          sunsetTimestamp: twin_location.sunset_timestamp || 0,
+          latitude: twin_location.latitude || 0,
+          longitude: twin_location.longitude || 0,
+          windFriends: twin_location.wind_friends || "",
+          specialHarmony: twin_location.special_harmony || false,
+          details: twin_location.details || "",
+          experience: twin_location.experience || "",
+          windSpeedInteraction: twin_location.wind_speed_interaction || "",
+          pressureInteraction: twin_location.pressure_interaction || "",
+          humidityInteraction: twin_location.humidity_interaction || "",
           strongerWindInteraction:
-            twin_location.stronger_wind_interaction || "", 
-          expired: twin_location.expired || false, 
+            twin_location.stronger_wind_interaction || "",
+          expired: twin_location.expired || false,
         };
 
         homeSurroundingsData = {
@@ -228,11 +236,9 @@ useEffect(() => {
         };
         setPortalSurroundings(portalSurroundingsData);
         setRuinsSurroundings(ruinsSurroundingsData);
-        setHomeSurroundings(homeSurroundingsData); 
-        
-        setLocationId(twin_location.id);
-        setIsExploring(!!twin_location.id);
+        setHomeSurroundings(homeSurroundingsData);
 
+        setLocationId(twin_location.id); 
       } else if (explore_location && explore_location?.id) {
         const { origin_location } = explore_location;
         const { home_location } = origin_location;
@@ -240,29 +246,29 @@ useEffect(() => {
         // Fields for PortalLocation if explore_location is present (can leave null if not used)
         portalSurroundingsData = {
           name: origin_location.name || "N/A",
-          id: origin_location.id, 
-          lastAccessed: origin_location.last_accessed || "", 
-          temperature: origin_location.temperature || 0, 
-          description: origin_location.description || "", 
-          windSpeed: origin_location.wind_speed || 0, 
-          windDirection: origin_location.wind_direction || 0, 
-          humidity: origin_location.humidity || 0, 
-          pressure: origin_location.pressure || 0, 
-          cloudiness: origin_location.cloudiness || 0, 
-          sunriseTimestamp: origin_location.sunrise_timestamp || 0, 
-          sunsetTimestamp: origin_location.sunset_timestamp || 0, 
-          latitude: origin_location.latitude || 0, 
-          longitude: origin_location.longitude || 0, 
-          windFriends: origin_location.wind_friends || "", 
-          specialHarmony: origin_location.special_harmony || false, 
-          details: origin_location.details || "", 
-          experience: origin_location.experience || "", 
-          windSpeedInteraction: origin_location.wind_speed_interaction || "", 
-          pressureInteraction: origin_location.pressure_interaction || "", 
-          humidityInteraction: origin_location.humidity_interaction || "", 
+          id: origin_location.id,
+          lastAccessed: origin_location.last_accessed || "",
+          temperature: origin_location.temperature || 0,
+          description: origin_location.description || "",
+          windSpeed: origin_location.wind_speed || 0,
+          windDirection: origin_location.wind_direction || 0,
+          humidity: origin_location.humidity || 0,
+          pressure: origin_location.pressure || 0,
+          cloudiness: origin_location.cloudiness || 0,
+          sunriseTimestamp: origin_location.sunrise_timestamp || 0,
+          sunsetTimestamp: origin_location.sunset_timestamp || 0,
+          latitude: origin_location.latitude || 0,
+          longitude: origin_location.longitude || 0,
+          windFriends: origin_location.wind_friends || "",
+          specialHarmony: origin_location.special_harmony || false,
+          details: origin_location.details || "",
+          experience: origin_location.experience || "",
+          windSpeedInteraction: origin_location.wind_speed_interaction || "",
+          pressureInteraction: origin_location.pressure_interaction || "",
+          humidityInteraction: origin_location.humidity_interaction || "",
           strongerWindInteraction:
-            origin_location.stronger_wind_interaction || "", 
-          expired: origin_location.expired || false, 
+            origin_location.stronger_wind_interaction || "",
+          expired: origin_location.expired || false,
         };
 
         homeSurroundingsData = {
@@ -300,18 +306,16 @@ useEffect(() => {
         };
         setPortalSurroundings(portalSurroundingsData);
         setRuinsSurroundings(ruinsSurroundingsData);
-        setHomeSurroundings(homeSurroundingsData); 
+        setHomeSurroundings(homeSurroundingsData);
 
-        setLocationId(explore_location.id);
-        setIsExploring(!!explore_location.id);
+        setLocationId(explore_location.id); 
       }
-     
     } else {
       // Reset both data objects if currentSurroundings is null or undefined
       portalSurroundingsData = {
         name: "N/A",
         id: null,
-        lastAccessed: "", 
+        lastAccessed: "",
         temperature: 0,
         description: "",
         windSpeed: 0,
@@ -354,7 +358,7 @@ useEffect(() => {
 
       ruinsSurroundingsData = {
         name: "",
-        id: null, 
+        id: null,
         directionDegree: 0,
         direction: "",
         milesAway: 0,
@@ -367,61 +371,52 @@ useEffect(() => {
         windHarmony: false,
         streetViewImage: "",
       };
-
       setPortalSurroundings(portalSurroundingsData);
       setRuinsSurroundings(ruinsSurroundingsData);
-      setHomeSurroundings(homeSurroundingsData); 
+      setHomeSurroundings(homeSurroundingsData);
 
       setLocationId(null);
-      setLastAccessed(null); 
-      if (!wasPrevExploring) {
-        setIsExploring(false);
-      } else {
-        setWasPrevExploring(false); //reset; will get toggled again if picking new location. this is here bc frontend pings endpoint faster than backend is ready with new loc, I THINK
-      }
-      
+      setLastAccessed(null);
+
     }
 
-
     setIsInitializingLocation(false);
-    
-  }, [currentSurroundings]); 
+  }, [currentSurroundings]);
 
-  const handlePickNewSurroundings = async (data: any) => { 
+  const handlePickNewSurroundings = async (data: any) => {
     let locationType;
     if (data && data.explore_type) {
       console.log(data);
       try {
-        locationType = data.explore_type === 'discovery_location' ? 'explore_location' : 'twin_location';
-        await pickNewSurroundingsMutation.mutateAsync({ [locationType]: data.id });
+        locationType =
+          data.explore_type === "discovery_location"
+            ? "explore_location"
+            : "twin_location";
+        await pickNewSurroundingsMutation.mutateAsync({
+          [locationType]: data.id,
+        });
       } catch (error) {
         console.error("Error updating location:", error);
       }
     }
   };
   const pickNewSurroundingsMutation = useMutation({
-    mutationFn: (locationData: { [key: string]: number }) => pickNewSurroundings(locationData),
-    onMutate: () => {
-      setWasPrevExploring(true);
-      setIsInitializingLocation(true); 
+    mutationFn: (locationData: { [key: string]: number }) =>
+      pickNewSurroundings(locationData),
+    onMutate: () => { 
+      setIsInitializingLocation(true);
       setLocationId(null);
       setLastAccessed(null);
-
     },
-    onSuccess: (data) => {
-      // setLocationId(null);
-      // setLastAccessed(null);
+    onSuccess: () => {
       logGroqState();
       extendGroqStaleTime(); // reset staleTime for portal location history script
       logGroqState();
-      const isOnNearbyScreen = segments[2] === "nearby"; 
+      const isOnNearbyScreen = segments[2] === "nearby";
       if (isOnNearbyScreen) {
-        
-      //router.replace("(drawer)/(exploretabs)");  // TS complained
-      router.replace("/(exploretabs)");
-      
-    }
-     // triggerRefetch(); //active state + websocket
+        //router.replace("(drawer)/(exploretabs)");  // TS complained
+        router.replace("/(exploretabs)");
+      }
     },
     onError: (error) => {
       console.error("Update failed:", error);
@@ -435,23 +430,25 @@ useEffect(() => {
       }, 2000);
     },
   });
- 
 
-  const triggerSurroundingsRefetch = () => { 
-    queryClient.invalidateQueries({ queryKey: ["currentSurroundings", lastLocationId] });
-    queryClient.refetchQueries({ queryKey: ["currentSurroundings", lastLocationId] }); // Force refetch
-  }; 
+  const triggerSurroundingsRefetch = () => {
+    queryClient.invalidateQueries({
+      queryKey: ["currentSurroundings", lastLocationId],
+    });
+    queryClient.refetchQueries({
+      queryKey: ["currentSurroundings", lastLocationId],
+    }); // Force refetch
+  };
 
   return (
     <CurrentSurroundingsContext.Provider
       value={{
         currentSurroundings,
-        locationId,
-        isExploring,
+        locationId, 
         portalSurroundings,
         homeSurroundings,
         ruinsSurroundings,
-        lastAccessed, 
+        lastAccessed,
         handlePickNewSurroundings,
         pickNewSurroundingsMutation,
         triggerSurroundingsRefetch,

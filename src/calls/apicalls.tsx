@@ -1,5 +1,4 @@
-import axios, { AxiosError } from "axios";
-import { useState } from 'react';
+import axios from "axios"; 
 import * as SecureStore from 'expo-secure-store'; 
 //export const API_URL = 'https://ac67e9fa-7838-487d-a3bc-e7a176f4bfbf-dev.e1-us-cdp-2.choreoapis.dev/hellofriend/hellofriend/rest-api-be2/v1.0/';
 
@@ -12,12 +11,10 @@ export const API_URL = 'https://climatetwin.com/';
 axios.defaults.baseURL = API_URL;
 
 import { Alert } from 'react-native'; 
-
  
 
-
 //websocket token needs to update when the headers do
-export const setAuthHeader = (token) => {
+export const setAuthHeader = (token : string | null) => {
     if (token) {
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
        
@@ -27,14 +24,13 @@ export const setAuthHeader = (token) => {
      
     }
 };
-
-
-const TOKEN_KEY = 'accessToken';
+  
  
 export const deleteTokens = async () => {
-    await SecureStore.deleteItemAsync(TOKEN_KEY);
+    await SecureStore.deleteItemAsync('accessToken');
     await SecureStore.deleteItemAsync('refreshToken');
     await SecureStore.deleteItemAsync('pushToken');
+    await SecureStore.deleteItemAsync('tokenExpiry');
 };
 // 
 
@@ -88,10 +84,12 @@ const refreshTokenFunct = async () => {
 
 export const signout = async () => {
     try {
-        await SecureStore.deleteItemAsync('accessToken');
-        await SecureStore.deleteItemAsync('refreshToken');
-        await SecureStore.deleteItemAsync('pushToken');
-        await SecureStore.deleteItemAsync('tokenExpiry');
+
+        await deleteTokens(); // does all the below:
+        // await SecureStore.deleteItemAsync('accessToken');
+        // await SecureStore.deleteItemAsync('refreshToken');
+        // await SecureStore.deleteItemAsync('pushToken');
+        // await SecureStore.deleteItemAsync('tokenExpiry');
         setAuthHeader(null); 
         console.log("API signout: Authorization header cleared");
         return true;
@@ -452,7 +450,7 @@ export const getAllUsers = async () => {
 };
 
 
-export const searchUsers = async (query) => {
+export const searchUsers = async (query : string) => {
     try {
        console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get(`/users/get/?search=${query}`);
@@ -834,11 +832,12 @@ export const acceptTreasureGift = async (itemViewId) => {
     }
 };
 
-export const declineTreasureGift = async (itemViewId) => {
+export const declineTreasureGift = async (itemViewId : number) => {
     try { 
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.put(`/users/inbox/accept-gift-request/${itemViewId}/`, {
-            "is_accepted": false,
+            "is_rejected": true, 
+
           //  "message": "Thank you!"  // Optional message
           });
         console.log('API PUT Call declineTreaureGift'); //, response.data);
@@ -933,11 +932,9 @@ export const getFriend = async (friendId) => {
 
 
 
-export const requestToAddFriend = async (data) => {
-    try {
-        console.log(data);
-      //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
-        const response = await axios.post(`/users/send-friend-request/`, data);
+export const requestToAddFriend = async (data : any) => {
+    try { 
+          const response = await axios.post(`/users/send-friend-request/`, data);
         console.log('API GET Call requestToAddFriend'); //, response.data);
         return response.data;
     } catch (error) {
@@ -952,7 +949,7 @@ export const requestToAddFriend = async (data) => {
     }
 };
 
-export const acceptFriendship = async (itemViewId) => {
+export const acceptFriendship = async (itemViewId : number) => {
     try { 
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.put(`/users/inbox/accept-friend-request/${itemViewId}/`, {
@@ -973,18 +970,35 @@ export const acceptFriendship = async (itemViewId) => {
     }
 };
 
-export const declineFriendship = async (itemViewId) => {
+export const declineFriendship = async (itemViewId : number) => {
     try { 
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.put(`/users/inbox/accept-friend-request/${itemViewId}/`, {
-            "is_accepted": false,
+            "is_rejected": true, 
+            //"is_accepted": false,
           //  "message": "Thank you!"  // Optional message
           });
         console.log('API PUT Call declineFriendship'); //, response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
-            console.error('Error response for /users/inbox/accept-gift-request/:', );
+            console.error('Error response for /users/inbox/accept-friend-request/:', );
+        } else if (error.request) {
+            console.error('Error request for /users/inbox/accept-friend-request/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /users/inbox/accept-friend-request/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
+export const deleteFriendship = async (itemViewId : number) => {
+    try { const response = await axios.delete(`/users/friend/${itemViewId}/delete/`);
+        console.log('API POST call deleteFriendship'); //, response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/friend/id/delete/:', );
         } else if (error.request) {
             console.error('Error request for /users/inbox/accept-gift-request/, add console logging in api file for more details');
         } else {
@@ -993,6 +1007,7 @@ export const declineFriendship = async (itemViewId) => {
         throw error;
     }
 };
+
 
 
 

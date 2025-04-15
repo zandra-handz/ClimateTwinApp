@@ -1,7 +1,7 @@
 import { Tabs } from "expo-router";
-import ExploreTabBar from '../../components/ExploreTabsComponents/ExploreTabBar';
-import CustomStatusBar from "../../components/CustomStatusBar";
-import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
+import ExploreTabBar from '../../components/ExploreTabsComponents/ExploreTabBar'; 
+
+
 
 export default () => {
   return (

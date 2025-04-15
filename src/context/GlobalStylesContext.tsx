@@ -473,13 +473,14 @@ const containerStyles = StyleSheet.create({
   },
   notifierButton: {
     height: '100%',
-    width: '50%',
-    flexGrow: 1,
-    flex: 1,
-    backgroundColor: 'pink', 
+    width: 'auto',
+    maxWidth: '31%',
+   // flexGrow: 1,
+    flex: 1,  
+
     justifyContent: "center",
     alignItems: "center",
-    borderRadius: 4,
+    borderRadius: 10,
 
   },
   messageBox: { //use with primaryLightBackground color
@@ -1007,10 +1008,13 @@ const containerStyles = StyleSheet.create({
     textAlign: 'left',
     height: 170, 
     overflow: 'hidden',
+    backgroundColor: 'orange',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
 
   },
   doubleCheckerQuestionContainer: {
-    flex: 1,
+   // flex: 1,
     //backgroundColor: 'orange',
     padding: 10,
     width: '100%',
@@ -1056,15 +1060,15 @@ const containerStyles = StyleSheet.create({
  
   },
   dCBackgroundContainer: {
-    flex: 1,
-    height: 200, 
+    flex: 1, 
+    //height: 200, 
     margin: 0,
     justifyContent: "center", 
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.84)", 
     paddingHorizontal: '6%',
-    elevation: 1000,
-    zIndex: 1000, 
+    elevation: 10000,
+    zIndex: 10000, 
 
   },
   goToItemButtonContainer: {  
@@ -1085,6 +1089,8 @@ const containerStyles = StyleSheet.create({
     zIndex: 10000,
     elevation: 10000,
     bottom: 0, 
+    right: 0,
+    left: 0,
     //height: 80,  managed in Footer component because it changes if keyboard is visible
     width: '100%',
     flexDirection: 'row',
@@ -1171,11 +1177,11 @@ const fontStyles = StyleSheet.create({
   },
   notifierText: {
 
-    fontSize: 20,
+    fontSize: 17,
   },
   notifierButtonText: {
     fontWeight: 'bold',
-    fontSize: 18,
+    fontSize: 15,
 
   },
   drawerLabelText: {

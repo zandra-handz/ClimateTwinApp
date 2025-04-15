@@ -1,15 +1,14 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
-import { useActiveSearch } from "../../src/context/ActiveSearchContext";
-import { useSurroundings } from "../../src/context/CurrentSurroundingsContext";
+import { useActiveSearch } from "../../src/context/ActiveSearchContext"; 
 
 import AnimatedCircle from "../animations/AnimatedCircle";
 
 const GoButton = ({ address, size=240  }) => {
   const { handleGo, remainingGoes, isSearchingForTwin } = useActiveSearch();
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
-  const { portalSurroundings } = useSurroundings();
+ 
 
   const handleButtonPress = () => {
     handleGo(address); //this will set search to active in the onMutate function

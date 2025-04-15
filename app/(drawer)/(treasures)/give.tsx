@@ -32,9 +32,7 @@ const give = () => {
   const { width, height } = Dimensions.get("window");
 
   const editedTextRef = useRef(null);
-
-  const oneThirdHeight = height / 3;
-  const oneHalfHeight = height / 2;
+ 
 
   const [selectedFriendProfile, setSelectedFriendProfile] = useState<Friend | null>(null);
 
@@ -42,7 +40,8 @@ const give = () => {
   useEffect(() => {
     if (giftTreasureMutation.isSuccess) {
       showAppMessage(true, null, `${descriptor} sent!`);
-      router.replace('(treasures)/');
+     // router.replace('/(treasures)');
+      router.back();
     }
 
   }, [giftTreasureMutation.isSuccess]);
@@ -127,7 +126,7 @@ const give = () => {
         </View>
  
         <ActionsFooter 
-          onPressLeft={() => router.replace("(treasures)")}
+          onPressLeft={() => router.back()}
           labelLeft={"Cancel"}
           onPressRight={handleGift}
           labelRight={"Send"}

@@ -29,8 +29,7 @@ const index = () => {
  // useGeolocationWatcher();
   const {
     portalSurroundings,
-    ruinsSurroundings,
-    locationId,
+    ruinsSurroundings, 
     isInitializingLocation,
   } = useSurroundings(); 
   const { themeStyles, appContainerStyles } = useGlobalStyles();

@@ -16,12 +16,12 @@ const index = () => {
 
 
   //Data coming from InboxItemUICard
-  const handleOpenInboxItem = (id, messageId, contentType, senderName) => {
+  const handleOpenInboxItem = (id, contentType, senderName) => {
  
-    if (id && messageId) {
+    if (id) {
       router.push({
-        pathname: "(inbox)/[id]",
-        params: { id: id, messageId: messageId, contentType: contentType, senderName: senderName },
+        pathname: "/(drawer)/(inbox)/[id]",
+        params: { id: id, contentType: contentType, senderName: senderName },
       });
     }
   };

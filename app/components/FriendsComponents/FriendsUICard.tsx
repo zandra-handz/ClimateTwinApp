@@ -1,6 +1,8 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import React, { useState} from "react";
+import { View, Text } from "react-native";
+import React, { useEffect, useState} from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
+import { useAppMessage } from "@/src/context/AppMessageContext";
+import { useRouter } from "expo-router";
 import useDateTimeFunctions from "../../hooks/useDateTimeFunctions";
 import CuteDetailBox from "../CuteDetailBox"; 
 import GoToItemButton from "../GoToItemButton"; 
@@ -11,9 +13,11 @@ import Avatar from "./Avatar";
 import useFriends from "@/app/hooks/useFriends";
 
 const FriendsUICard = ({ data, onViewFriendPress, isFullView }) => {
+  const { showAppMessage } = useAppMessage();
+  const router = useRouter();
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
   const { formatUTCToMonthDayYear } = useDateTimeFunctions();
-  const { friends } = useFriends();
+  const {  handleDeleteFriendship, deleteFriendshipMutation  } = useFriends();
 
   const [ isDoubleCheckerVisible, setDoubleCheckerVisible ] = useState(false);
 
@@ -27,9 +31,18 @@ const handleToggleDoubleChecker = () => {
 };
 
  const handleDeleteFriend = () => {
-  console.log(`handleDeleteFriend function has yet to be written`);
+  
+  handleDeleteFriendship(data?.friendship); 
 
  };
+
+ useEffect(() => {
+  if (deleteFriendshipMutation.isSuccess) {
+    showAppMessage(true, null, `${data?.username} was unfriended.`);
+    router.back();
+  }
+
+ }, [deleteFriendshipMutation.isSuccess]);
 
   const handlePress = () => {
     if (onViewFriendPress) {

@@ -2,14 +2,16 @@ import { View, FlatList } from 'react-native';
 import TreasuresUICard from './TreasuresUICard';
 import React from 'react';
 import { useGlobalStyles } from '../../../src/context/GlobalStylesContext';
+import useFriends from '@/app/hooks/useFriends';
 
-
+ 
 const TreasuresView = ({listData, onOpenTreasurePress}) => {
  
-
+  const { friends } = useFriends();
     const {  appContainerStyles  } = useGlobalStyles();
     return (
 <View style={[ appContainerStyles.dataListContainer]}>
+  
   <FlatList
     data={listData}
     keyExtractor={(item, index) => 

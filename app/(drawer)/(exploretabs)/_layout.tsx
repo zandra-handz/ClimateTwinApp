@@ -3,15 +3,12 @@ import React, { useState } from 'react';
 import ExploreTabBar from '../../components/ExploreTabsComponents/ExploreTabBar';
 import CustomStatusBar from "../../components/CustomStatusBar";
 import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
-import DoubleChecker from "@/app/components/Scaffolding/DoubleChecker"; 
-import { useSurroundings } from "@/src/context/CurrentSurroundingsContext";
-import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
+ 
 
 
 export default () => {
   const [ doubleCheckerVisible, setDoubleCheckerVisible ] = useState(false);
-  const { pickNewSurroundingsMutation } = useSurroundings();
-  const { themeStyles} = useGlobalStyles();
+ 
 
   const openDoubleChecker = () => {
     setDoubleCheckerVisible(true);

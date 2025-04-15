@@ -48,7 +48,7 @@ const details = () => {
   const handleGoToGiveScreen = (friendId) => {
     if (id) {
       router.push({
-        pathname: "give",
+        pathname: "/give",
         params: { id: id, descriptor: descriptor, friendId: friendId },
       });
     }

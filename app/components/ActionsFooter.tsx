@@ -1,21 +1,22 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React from "react";
+import React from "react"; 
 import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
 
 const ActionsFooter = ({
   height=46,  //managed here instead of in styles
-  onPressLeft,
-  onPressRight,
-  labelLeft = "Left button",
-  labelRight = "Right button",
-  onPressCenter,
-  labelCenter = "Center button",
+  onPressLeft=() => {},
+  onPressRight=() => {},
+  labelLeft = "",
+  labelRight = "",
+  onPressCenter=() => {},
+  labelCenter = "",
 }) => { 
 
 
   const { constantColorsStyles, appContainerStyles, appFontStyles } =
     useGlobalStyles();
   return (
+    
     <View
       style={[
         appContainerStyles.twoButtonFooterContainer,
@@ -23,7 +24,7 @@ const ActionsFooter = ({
       ]}
     >
       <>
-        {onPressLeft && (
+        {onPressLeft && labelLeft && (
           <TouchableOpacity
             style={appContainerStyles.footerButton}
             onPress={onPressLeft}
@@ -38,7 +39,7 @@ const ActionsFooter = ({
             </Text>
           </TouchableOpacity>
         )}
-                {onPressCenter && (
+                {onPressCenter && labelCenter && (
           <TouchableOpacity
             style={appContainerStyles.footerButton}
             onPress={onPressCenter}
@@ -53,7 +54,7 @@ const ActionsFooter = ({
             </Text>
           </TouchableOpacity>
         )}
-        {onPressRight && (
+        {onPressRight && labelRight && (
           <TouchableOpacity
             style={appContainerStyles.footerButton}
             onPress={onPressRight}

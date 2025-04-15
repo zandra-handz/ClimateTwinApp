@@ -21,8 +21,6 @@ const PortalSurroundingsView = ({ height  }) => {
       id: portalSurroundings?.id,
     };
     handlePickNewSurroundings(formattedData);
-    //triggerParentAutoScroll();
-    //triggerItemChoicesRefetch();
   };
 
   const overlayColor = `${themeStyles.primaryBackground.backgroundColor}CC`; //99 is slightly lighter
@@ -32,11 +30,9 @@ const PortalSurroundingsView = ({ height  }) => {
       <View style={{ height: 90, width: "100%" }} />
  
       <View
-        style={{
-          // backgroundColor: "gray",
+        style={{ 
           borderRadius: 20,
-          width: "100%",
-          //padding: 10,
+          width: "100%", 
           zIndex: 1, // Ensures this section is below the overlay
         }}
       > 

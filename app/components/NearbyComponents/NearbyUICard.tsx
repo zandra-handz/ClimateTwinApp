@@ -1,11 +1,10 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
-import { useSurroundings } from "../../../src/context/CurrentSurroundingsContext";
-import DirectionSquare from "../SurroundingsComponents/DirectionSquare";
+import { useSurroundings } from "../../../src/context/CurrentSurroundingsContext"; 
 
 const NearbyUICard = ({ data, onPress, onOpenPress, onOpenTreasurePress }) => {
-  const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
+  const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { locationId } = useSurroundings();
 
   // Function to recursively render object fields

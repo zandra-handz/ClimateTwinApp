@@ -4,7 +4,7 @@ import React from 'react';
 import { useGlobalStyles } from '../../../src/context/GlobalStylesContext';
 import InboxItemUICard
  from './InboxItemUICard';
-const InboxView = ({listData,   onOpenButtonPress }) => {
+const InboxView = ({listData,   onOpenButtonPress=() => {} }) => {
  
 
     const {  appContainerStyles  } = useGlobalStyles();

@@ -6,7 +6,10 @@ import {
   useMutation,
 } from "@tanstack/react-query";
 
+
+import { useRouter } from "expo-router";
 import { useUser } from "../../src/context/UserContext";
+import { useAppMessage } from "@/src/context/AppMessageContext";
 import {
   getFriends,
   getFriend,
@@ -15,45 +18,23 @@ import {
   requestToAddFriend,
   acceptFriendship,
   declineFriendship,
+  deleteFriendship,
 } from "../../src/calls/apicalls";
- 
-interface Friend {
-  id: number;
-  nickname: string;
-  created_on: string;
-  user: number;
-  friend: number;
-  friendship: number;
-  username: string; 
-  friend_profile: {
-    id: number;
-    first_name: string;
-    last_name: string;
-    avatar: string | null;
-    bio: string | null;
-    gender: string;
-    most_recent_visit: {
-      location_name: string;
-      latitude: number;
-      longitude: number;
-      visited_on: string;  
-    } | null;
-    total_visits: number;  
-  };
-}
 
 //not currently using dropdown
-interface DropdownOption {
-  label: string;
-  value: number;
-  friendshipNumber: number;
-}
+import {
+  AddFriendRequest,
+  Friend,
+  DropdownOption,
+} from "@/src/types/useFriendsTypes";
 
 //WARNING: The endpoint here returns the user's profiles for their friends
 //rather than just the friend object
 //So the top level id is for the profile
 // //To use the friend pk must specify .friend
 const useFriends = () => {
+  const router = useRouter();
+  const { showAppMessage } = useAppMessage();
   const { user, isAuthenticated, isInitializing } = useUser();
   const [friendsDropDown, setFriendsDropDown] = useState<DropdownOption[]>([]);
   const [viewingFriend, setViewingFriend] = useState<Friend | null>(null); //is this correct or do i need the friendship?
@@ -67,24 +48,36 @@ const useFriends = () => {
   // The return type of useQuery, assuming 'friends' is an array of Friend objects
   const {
     data: friends,
-    isLoading,
-    isFetching,
+    //isLoading,
+    //isFetching,
+    isPending,
     isSuccess,
     isError,
   }: UseQueryResult<Friend[], Error> = useQuery({
-    queryKey: ["friends"],
+    queryKey: ["friends", user?.id],
     queryFn: getFriends,
-    enabled: !!isAuthenticated && !isInitializing,
-    onSuccess: (data) => { 
-      // Convert the friends data into a dropdown array
-      const dropdownData = data.map((friend) => ({
-        label: friend.username,
-        value: friend.id,
-        friendshipNumber: friend.friendship,
-      }));
-      setFriendsDropDown(dropdownData);
-    },
+    enabled: !!(isAuthenticated && !isInitializing && user && user.id),
+
   });
+
+  // useEffect(() => {
+  //   if (isSuccess && friends && friends.length > 0) {
+  //     const dropdownData = friends.map((friend) => ({
+  //       label: friend.username,
+  //       value: friend.id,
+  //       friendshipNumber: friend.friendship,
+  //     }));
+  //     console.log(`friends call successful, setting dropdownData...`);
+  //     setFriendsDropDown(dropdownData);
+  //   }
+  // }, [isSuccess]);
+
+  // FOR DEBUGGING
+  useEffect(() => {
+    if (isError) {
+      console.log(`WARNING: friends call failed`);
+    }
+  }, [isError]);
 
   const extractUserIdFromNotification = (
     notification: string
@@ -105,28 +98,23 @@ const useFriends = () => {
   // Memoize the dropdown data to avoid unnecessary re-renders
   const memoizedDropDown = useMemo(() => friendsDropDown, [friendsDropDown]);
 
+  const handleGetFriend = async (id: number) => {
+    try {
+      const friend = await queryClient.fetchQuery<Friend>({
+        queryKey: ["friend", user?.id, id],
+        queryFn: () => getFriend(id),
+      });
 
-    const handleGetFriend = async (id: number) => {
-      try {
-        const friend = await queryClient.fetchQuery<Friend>({
-          queryKey: ["friends", user?.id, id],
-          queryFn: () => getFriend(id),
-        });
-  
-        if (friend) {
-          setViewingFriend(friend); 
-        }
-      } catch (error) {
-        console.error("Error fetching friend: ", error);
+      if (friend) {
+        setViewingFriend(friend);
       }
-    };
+    } catch (error) {
+      console.error("Error fetching friend: ", error);
+    }
+  };
 
-
-
-
- 
   const searchUsersMutation = useMutation({
-    mutationFn: (query) => searchUsers(query),
+    mutationFn: (query: string) => searchUsers(query),
     onSuccess: (data) => {
       console.log("User search results successful!", data);
       setUserSearchResults(data);
@@ -151,27 +139,24 @@ const useFriends = () => {
     },
   });
 
-  const handleSearchUsers = (query) => {
-    console.log('handleSearchUsers');
+  const handleSearchUsers = (query: string) => {
+    console.log("handleSearchUsers");
     searchUsersMutation.mutate(query);
   };
-
 
   const getAllUsersMutation = useMutation({
     mutationFn: () => getAllUsers(),
     onSuccess: (data) => {
-      console.log("User search results successful!");
       setAllUsers(data);
 
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
-
       timeoutRef.current = setTimeout(() => {
         getAllUsersMutation.reset();
       }, 2000);
     },
-    onError: (error) => {
+    onError: () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -187,100 +172,155 @@ const useFriends = () => {
   };
 
   const handleSendFriendRequest = (recipientId: number, message: string) => {
-    
-    if (!recipientId) {
-      console.error("Treasure ID or recipient ID is missing.");
+    if (!recipientId || !user?.id) {
+      console.error("User ID or recipient ID is missing.");
       return;
     }
- 
-    const friendRequestData = { 
-      message: message || 'None',
-      sender: user?.id,
-      recipient: recipientId,  // Include recipient's ID
+
+    const friendRequestData: AddFriendRequest = {
+      message: message || "None",
+      sender: user.id,
+      recipient: recipientId,
     };
- 
+
     friendRequestMutation.mutate(friendRequestData);
   };
 
-      const friendRequestMutation = useMutation({
-        mutationFn: (data) => requestToAddFriend(data),
-        onSuccess: (data) => {
-          //console.log("Gift sent successfully:", data); 
-    
-          triggerFriendsRefetch();
-    
-          if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current);
-          }
-    
-          timeoutRef.current = setTimeout(() => {
-            friendRequestMutation.reset();
-          }, 2000); 
-        },
-        onError: (error) => {
-          if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current);
-          }
-    
-          timeoutRef.current = setTimeout(() => {
-            friendRequestMutation.reset();
-          }, 2000); 
-        },
-      });
+  const friendRequestMutation = useMutation({
+    mutationFn: (data: AddFriendRequest) => requestToAddFriend(data),
+    onSuccess: () => {
+      //Do we need?
+      triggerFriendsRefetch();
 
-      const triggerFriendsRefetch = () => { 
-        console.log('Refreshing friends list..');
-        queryClient.invalidateQueries({ queryKey: ["friends"] });
-        queryClient.refetchQueries({ queryKey: ["friends"] });  
-      };
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
 
-        
-        const handleAcceptFriendship = (itemViewId) => {
-            
-          if (!itemViewId) {
-            console.error("Item view id is missing.");
-            return;
-          }
-        
-       
-          acceptFriendshipMutation.mutate(itemViewId);
-        };
-        
-      const acceptFriendshipMutation = useMutation({
-        mutationFn: (itemViewId) => acceptFriendship(itemViewId),
-        onSuccess: (itemViewId) => { 
-      
-          triggerFriendsRefetch();
-      
-          if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current);
-          }
-      
-          timeoutRef.current = setTimeout(() => {
-            acceptFriendshipMutation.reset();
-          }, 2000); 
-        },
-        onError: (error) => {
-          if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current);
-          }
-      
-          timeoutRef.current = setTimeout(() => {
-            acceptFriendshipMutation.reset();
-          }, 2000); 
-        },
-      });
+      timeoutRef.current = setTimeout(() => {
+        friendRequestMutation.reset();
+      }, 2000);
+    },
+    onError: () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
 
- 
-    
+      timeoutRef.current = setTimeout(() => {
+        friendRequestMutation.reset();
+      }, 2000);
+    },
+  });
 
+  const triggerFriendsRefetch = () => {
+    console.log('triggerFriendsRefetch triggered');
+    queryClient.invalidateQueries({ queryKey: ["friends", user?.id] });
+    queryClient.refetchQueries({ queryKey: ["friends", user?.id] });
+  };
+
+  const handleAcceptFriendship = (itemViewId: number) => {
+    if (!itemViewId) {
+      console.error("Item view id is missing.");
+      return;
+    }
+    acceptFriendshipMutation.mutate(itemViewId);
+  };
+
+  const acceptFriendshipMutation = useMutation({
+    mutationFn: (itemViewId: number) => acceptFriendship(itemViewId),
+    onSuccess: () => {
+      triggerFriendsRefetch();
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        acceptFriendshipMutation.reset();
+      }, 2000);
+    },
+    onError: (error) => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        acceptFriendshipMutation.reset();
+      }, 2000);
+    },
+  });
+
+  const handleDeclineFriendship = (itemViewId: number) => {
+    if (!itemViewId) {
+      console.error("Item view id is missing.");
+      return;
+    }
+    declineFriendshipMutation.mutate(itemViewId);
+  };
+
+  const declineFriendshipMutation = useMutation({
+    mutationFn: (itemViewId: number) => declineFriendship(itemViewId),
+    onSuccess: () => {
+      // triggerFriendsRefetch();
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        declineFriendshipMutation.reset();
+      }, 2000);
+    },
+    onError: (error) => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      console.log(`declineFriendshipMutation error: ${error}`);
+
+      timeoutRef.current = setTimeout(() => {
+        declineFriendshipMutation.reset();
+      }, 2000);
+    },
+  });
+
+  const deleteFriendshipMutation = useMutation({
+    mutationFn: (itemViewId: number) => deleteFriendship(itemViewId),
+    onSuccess: () => { 
+      triggerFriendsRefetch();
+      // moved to friend ui card
+     // router.replace('/(friends)');
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        deleteFriendshipMutation.reset();
+      }, 2000);
+    },
+    onError: (error) => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      console.log(`deleteFriendshipMutation error: ${error}`);
+
+      timeoutRef.current = setTimeout(() => {
+        deleteFriendshipMutation.reset();
+      }, 2000);
+    },
+  });
+
+  const handleDeleteFriendship = (itemViewId: number) => {
+    if (!itemViewId) {
+      console.error("Item view id is missing.");
+      return;
+    }
+    deleteFriendshipMutation.mutate(itemViewId);
+  };
 
   return {
     friends,
-    isLoading,
-    isFetching,
-    isSuccess,
-    isError,
     handleGetFriend,
     friendsDropDown: memoizedDropDown,
     replaceUserIdWithFriendName, //this is for the notification update from the websocket
@@ -292,6 +332,10 @@ const useFriends = () => {
     handleSendFriendRequest,
     handleAcceptFriendship,
     acceptFriendshipMutation,
+    handleDeclineFriendship,
+    declineFriendshipMutation,
+    handleDeleteFriendship,
+    deleteFriendshipMutation,
     viewingFriend,
   };
 };

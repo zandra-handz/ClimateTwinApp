@@ -1,16 +1,14 @@
 import React from "react";
 import { View } from "react-native";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
-import { useGeolocationWatcher } from "../../hooks/useCurrentLocationWatcher";
-import useHomeLocation from "../../hooks/useHomeLocation";
+import { useGeolocationWatcher } from "../../hooks/useCurrentLocationWatcher"; 
 import { useActiveSearch } from "../../../src/context/ActiveSearchContext"; 
 import HomeSurroundingsView from "@/app/components/HomeSurroundingsComponents/HomeSurroundingsView";
  
 import { useSurroundings } from "../../../src/context/CurrentSurroundingsContext";
 
 const home = () => {
-  useGeolocationWatcher();
-  const { homeLocation } = useHomeLocation(); 
+  useGeolocationWatcher(); 
   const { themeStyles, appContainerStyles } = useGlobalStyles(); 
   const { homeSurroundings } = useSurroundings();
   const { isSearchingForTwin } = useActiveSearch(); 
@@ -28,8 +26,7 @@ const home = () => {
         ]}
       >
         <View style={appContainerStyles.innerFlexStartContainer}>
-        {/* <PortalBanner address={homeLocation?.address || "Manchester, NH"} />
-          */}
+ 
           {homeSurroundings && !isSearchingForTwin && (
             <HomeSurroundingsView /> 
           )} 

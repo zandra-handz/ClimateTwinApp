@@ -27,7 +27,7 @@ const TreasuresUICard = ({ data, onOpenTreasurePress, isFullView }) => {
   const renderFriendName = (id) => {
     if (friends) {
       const friend = friends.find((friend) => friend.id === id);
-      return friend?.nickname || null;
+      return friend?.username || null;
     } else {
       return null;
     }

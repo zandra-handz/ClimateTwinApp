@@ -7,7 +7,7 @@ import { useSurroundings } from "../../src/context/CurrentSurroundingsContext";
 
 const ScrollDetailPanel = ({ label, value, opacity, isLoading = false }) => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
-  const { ruinsSurroundings, portalSurroundings } = useSurroundings(); // used to change the height of the groq Container
+  const { ruinsSurroundings  } = useSurroundings(); // used to change the height of the groq Container
 
   return (
     <Animated.View

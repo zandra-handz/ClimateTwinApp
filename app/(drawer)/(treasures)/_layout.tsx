@@ -5,9 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
 import { useRouter } from "expo-router";
 import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
-
-import { useFriends } from "../../../src/context/FriendsContext";
-
+ 
 import { Stack } from "expo-router"; // Expo Router's Stack component
 
 export default () => {

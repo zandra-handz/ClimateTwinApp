@@ -11,23 +11,17 @@ import Temperatures from "@/app/animations/Temperatures";
 import * as Sentry from "@sentry/react-native"; 
 import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
 
+import NotificationNotifier from "@/app/components/NotificationNotifier";
+
 const index = () => {
   const { deviceLocation } = useDeviceLocationContext();
-  const { themeStyles, appContainerStyles, constantColorsStyles } = useGlobalStyles();
+  const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { isSearchingForTwin } = useActiveSearch(); 
-
- 
-  
-
-  // useEffect(() => {
-  //   if (deviceLocation) {
-  //     console.log(`DEVICE LOCATION ADDRESS: `, deviceLocation.address);
-  //   }
-  // }, [deviceLocation]);
 
   return (
     <>
      <ComponentSpinner backgroundColor={themeStyles.primaryBackground.backgroundColor} spinnerType={'pulse'} isSocketSpinner={true}/>
+       <NotificationNotifier />
       <View
         style={[
           appContainerStyles.screenContainer,

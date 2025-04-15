@@ -1,12 +1,11 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
-import { useActiveSearch } from "../../src/context/ActiveSearchContext";
-import { useSurroundings } from "../../src/context/CurrentSurroundingsContext";
-const GoHomeButton = ({ address }) => {
+import { useActiveSearch } from "../../src/context/ActiveSearchContext"; 
+const GoHomeButton = () => {
   const { handleGoHome, remainingGoes, isSearchingForTwin } = useActiveSearch();
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
-  const { isExploring, portalSurroundings } = useSurroundings();
+ 
 
   const handleButtonPress = () => {
     console.log('handle go home pressed!');
@@ -15,44 +14,7 @@ const GoHomeButton = ({ address }) => {
   return (
     <>
       {remainingGoes && remainingGoes !== "0" ? (
-        // !portalSurroundings || portalSurroundings?.id === null ? (
-        //   <TouchableOpacity
-        //     onPress={!isSearchingForTwin ? handleButtonPress : () => {}}
-        //     style={[
-        //       appContainerStyles.goButtonContainer,
-        //       themeStyles.primaryOverlayBackground,
-        //       { borderColor: themeStyles.tabBarHighlightedText.color },
-        //     ]}
-        //   >
-        //     <>
-        //       <Text
-        //         style={[themeStyles.primaryText, appFontStyles.goButtonText]}
-        //       >
-        //         go home
-        //       </Text>
-        //       {remainingGoes != "No limit" && (
-        //         <Text
-        //           style={[
-        //             themeStyles.primaryText,
-        //             appFontStyles.remainingTripsText,
-        //           ]}
-        //         >
-        //           {`${remainingGoes} left`}
-        //         </Text>
-        //       )}
-        //       {remainingGoes === "No limit" && (
-        //         <Text
-        //           style={[
-        //             themeStyles.primaryText,
-        //             appFontStyles.remainingTripsText,
-        //           ]}
-        //         >
-        //           {`${remainingGoes}`}
-        //         </Text>
-        //       )}
-        //     </>
-        //   </TouchableOpacity>
-        // ) : (
+
           <>
             <TouchableOpacity
               onPress={!isSearchingForTwin ? handleButtonPress : () => {}}

@@ -7,8 +7,7 @@ import React, {
 } from "react";
 import { useUser } from "./UserContext";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { getItemChoices } from "../calls/apicalls";
-import { useSurroundings } from "./CurrentSurroundingsContext";
+import { getItemChoices } from "../calls/apicalls"; 
 import { useSurroundingsWS } from "./SurroundingsWSContext";
 
 interface LocationDetails {
@@ -101,8 +100,7 @@ interface InteractiveElementsProviderProps {
 export const InteractiveElementsProvider: React.FC<
   InteractiveElementsProviderProps
 > = ({ children }) => {
-  const { user, isAuthenticated, isInitializing } = useUser();
-  const { currentSurroundings, locationId } = useSurroundings();
+  const { isAuthenticated, isInitializing } = useUser(); 
   const { lastLocationId } = useSurroundingsWS();
   const queryClient = useQueryClient();
 
