@@ -3,7 +3,7 @@ import React from 'react'
 import { useGlobalStyles } from '../../../src/context/GlobalStylesContext'
 import { AntDesign, Feather } from '@expo/vector-icons'
 
-const DeleteItemButton = ({  onPress}) => {
+const SendButton = ({ onPress}) => {
     const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
   
   
@@ -22,14 +22,14 @@ const DeleteItemButton = ({  onPress}) => {
                 <TouchableOpacity
                   style={[
                     appContainerStyles.floatingIconButtonContainer,
-                    { borderColor: 'red'},
+                    { borderColor: themeStyles.primaryText.color},
                   ]}
                   onPress={onPress}
                 >
                   <Feather
-                    name="delete"
+                    name="send"
                     size={appFontStyles.exploreTabBarIcon.width}
-                    color={'red'}
+                    color={themeStyles.primaryText.color}
                     // onPress={handleCaptureImage}
                   />
                 </TouchableOpacity>
@@ -39,4 +39,4 @@ const DeleteItemButton = ({  onPress}) => {
   )
 }
 
-export default DeleteItemButton;
+export default SendButton;

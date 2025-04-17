@@ -830,9 +830,7 @@ const containerStyles = StyleSheet.create({
   treasureDescriptionContainer: {
     width: '100%',
     textAlign: 'left',
-    height: 40,
-    marginVertical: 4, 
-    //flexWrap: 'flex',
+    height: 100, 
     borderRadius: 16, 
     padding: 20,
 
@@ -905,7 +903,7 @@ const containerStyles = StyleSheet.create({
 
 
   singleDetailPanelContainer: {
-    borderRadius: 20, 
+    borderRadius: 20, // matching: userBioContainer
     padding: 10,  
     width: '100%',  
     alignItems: 'center',
@@ -1069,6 +1067,15 @@ const containerStyles = StyleSheet.create({
     paddingHorizontal: '6%',
     elevation: 10000,
     zIndex: 10000, 
+
+  },
+
+  userBioContainer: {
+    width: '100%',
+    textAlign: 'left',  
+    height: 'auto', 
+    borderRadius: 20, // matching: singleDetailPanelContainer
+    padding: 20,
 
   },
   goToItemButtonContainer: {  

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, ScrollView } from "react-native";
+import { View, ScrollView, TouchableOpacity } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import useFriends from "@/app/hooks/useFriends";
@@ -10,7 +10,7 @@ import Picker from "@/app/components/Picker";
 import ActionsFooter from "@/app/components/ActionsFooter";
 import useTreasures from "@/app/hooks/useTreasures";
 import TreasuresUICard from "@/app/components/TreasuresComponents/TreasuresUICard";
-
+import GoToItemButton from "@/app/components/GoToItemButton";
 
 interface Friend {
   id: number;
@@ -21,17 +21,32 @@ const details = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { descriptor } = useLocalSearchParams<{ descriptor: string | null }>();
   const router = useRouter();
-  const { friends, friendsDropDown } = useFriends();  
+  const { friends, friendsDropDown } = useFriends();
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { showAppMessage } = useAppMessage();
-  const { treasures, handleGetTreasure, viewingTreasure } = useTreasures();
+  const {
+    treasures,
+    handleGetTreasure,
+    handleGetOwnerChangeRecords,
+    viewingTreasure,
+  } = useTreasures();
 
+  const [selectedFriendProfile, setSelectedFriendProfile] =
+    useState<Friend | null>(null);
 
-   const [selectedFriendProfile, setSelectedFriendProfile] = useState<Friend | null>(null);
+  
+  const handleViewTreasureHistory = () => {
+    if (id) { 
+      router.push({
+        pathname: "(treasures)/history",
+        params: { id: id, descriptor: descriptor },
+      });
+    }
+  };
 
-   const handleFriendSelect = (selectedValue: Friend) => {
+  const handleFriendSelect = (selectedValue: Friend) => {
     handleGoToGiveScreen(selectedValue.friend);
-    setSelectedFriendProfile(selectedValue); 
+    setSelectedFriendProfile(selectedValue);
   };
   const fetchTreasure = async (id) => {
     await handleGetTreasure(id);
@@ -43,8 +58,6 @@ const details = () => {
     }
   }, [id]);
 
- 
-
   const handleGoToGiveScreen = (friendId) => {
     if (id) {
       router.push({
@@ -55,7 +68,7 @@ const details = () => {
   };
 
   return (
-    <> 
+    <>
       <View
         style={[
           appContainerStyles.screenContainer,
@@ -63,19 +76,23 @@ const details = () => {
           { paddingTop: 10 },
         ]}
       >
-                    <Picker
-                      items={friends} // Passing label/value pairs (friendsDropDown)
-                      onSelect={handleFriendSelect} // Handling the selection
-                    />
+
+        <Picker
+          items={friends} // Passing label/value pairs (friendsDropDown)
+          onSelect={handleFriendSelect} // Handling the selection
+        />
         <ScrollView>
           {viewingTreasure && (
             <TreasuresUICard data={viewingTreasure} isFullView={true} />
           )}
+                  <View style={{ height: 60 }}>
+          <GoToItemButton
+            label={"View history"}
+            onPress={handleViewTreasureHistory}
+          />
+        </View>
         </ScrollView>
-        <ActionsFooter
-          onPressLeft={() => router.back()}
-          labelLeft={"Back"} 
-        />
+        <ActionsFooter onPressLeft={() => router.back()} labelLeft={"Back"} />
       </View>
     </>
   );

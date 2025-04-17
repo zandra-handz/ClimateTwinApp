@@ -6,18 +6,28 @@ import CuteDetailBox from "../CuteDetailBox";
 import SingleDetailPanel from "../SingleDetailPanel";
 import GoToItemButton from "../GoToItemButton";
 import DeleteItemButton from "../Scaffolding/DeleteItemButton";
+import SendButton from "../Scaffolding/SendButton";
 import DoubleChecker from "../Scaffolding/DoubleChecker";
+import useTreasures from "@/app/hooks/useTreasures";
 
 import useFriends from "@/app/hooks/useFriends";
+import { router } from "expo-router";
 
 const TreasuresUICard = ({ data, onOpenTreasurePress, isFullView }) => {
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
   const { formatUTCToMonthDayYear } = useDateTimeFunctions();
   const { friends } = useFriends();
   const [isDoubleCheckerVisible, setDoubleCheckerVisible] = useState(false);
+  const { handleGiftTreasureBackToFinder } = useTreasures();
 
   const handleToggleDoubleChecker = () => {
     setDoubleCheckerVisible((prev) => !prev);
+  };
+
+  const handleGiftTreasureBack = () => {
+    handleGiftTreasureBackToFinder(data?.id);
+    handleToggleDoubleChecker();
+    router.back();
   };
 
   const handleDeleteTreasure = () => {
@@ -177,13 +187,25 @@ const TreasuresUICard = ({ data, onOpenTreasurePress, isFullView }) => {
         <DoubleChecker
           isVisible={isDoubleCheckerVisible}
           toggleVisible={handleToggleDoubleChecker}
+          singleQuestionText={`Send ${data?.descriptor || ""} back to original finder :)?`}
+          optionalText="(They can accept or decline.)"
+          noButtonText="Back"
+          yesButtonText="Yes"
+          onPress={handleGiftTreasureBack}
+        />
+      )}
+
+      {/* {isDoubleCheckerVisible && (
+        <DoubleChecker
+          isVisible={isDoubleCheckerVisible}
+          toggleVisible={handleToggleDoubleChecker}
           singleQuestionText={`Delete ${data?.descriptor || ""}?`}
           optionalText="(You must be the original finder of this treasure to delete it.)"
           noButtonText="Back"
           yesButtonText="Yes"
           onPress={handleDeleteTreasure}
         />
-      )}
+      )} */}
       {data?.pending != true && (
         <View
           style={[
@@ -220,6 +242,42 @@ const TreasuresUICard = ({ data, onOpenTreasurePress, isFullView }) => {
               </Text>
             </View>
           )}
+                    {isFullView && (
+            <View
+              style={[
+                appContainerStyles.treasureDescriptionContainer,
+                themeStyles.darkestBackground,
+              ]}
+            >
+              <Text
+                style={[
+                  appFontStyles.treasureDescriptionText,
+                  themeStyles.primaryText,
+                ]}
+              >
+                <Text style={{ fontWeight: "bold" }}>Original user: </Text>
+                {data?.original_user || "No original user"}
+              </Text>
+            </View>
+          )}
+                              {isFullView && (
+            <View
+              style={[
+                appContainerStyles.treasureDescriptionContainer,
+                themeStyles.darkestBackground,
+              ]}
+            >
+              <Text
+                style={[
+                  appFontStyles.treasureDescriptionText,
+                  themeStyles.primaryText,
+                ]}
+              >
+                <Text style={{ fontWeight: "bold" }}>Finder: </Text>
+                {data?.finder || "No finder found!"}
+              </Text>
+            </View>
+          )}
           {isFullView && (
             <View
               style={[
@@ -245,8 +303,6 @@ const TreasuresUICard = ({ data, onOpenTreasurePress, isFullView }) => {
               message={findDetails}
             />
 
-            {/* {Object.entries(data).map(([key, value]) => renderField(key, value))}
-             */}
             {data && data.giver && isFullView && (
               <CuteDetailBox
                 iconOne={"gift"}
@@ -271,10 +327,11 @@ const TreasuresUICard = ({ data, onOpenTreasurePress, isFullView }) => {
             />
           )}
           {isFullView && (
-            <DeleteItemButton
-              onPress={() => handleToggleDoubleChecker()}
-              label={"Delete"}
-            />
+            // <DeleteItemButton
+            //   onPress={() => handleToggleDoubleChecker()}
+            //   label={"Delete"}
+            // />
+            <SendButton onPress={() => handleToggleDoubleChecker()} />
           )}
         </View>
       )}

@@ -8,6 +8,8 @@ import useFriends from '@/app/hooks/useFriends';
 import DebouncedUserSearch from '@/app/components/DebouncedUserSearch';
 import DataList from '@/app/components/Scaffolding/DataList';
 
+import SearchResultsView from '@/app/components/FriendsComponents/SearchResultsView';
+
 
 const search = () => {
      const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
@@ -23,12 +25,12 @@ const search = () => {
       };
 
 
-      useEffect(() => {
-        if (userSearchResults) {
-            console.log(`user search results in search screen: `, userSearchResults);
-        }
+      // useEffect(() => {
+      //   if (userSearchResults) {
+      //       console.log(`user search results in search screen: `, userSearchResults);
+      //   }
 
-      }, [userSearchResults]);
+      // }, [userSearchResults]);
     
  
      return (
@@ -46,7 +48,9 @@ const search = () => {
 
         <View style={appContainerStyles.innerFlexStartContainer}>
         {userSearchResults && (
-            <DataList listData={userSearchResults} onCardButtonPress={handleFriendRequest} />
+
+          <SearchResultsView data={userSearchResults} onViewUserPress={handleFriendRequest} />
+            // <DataList listData={userSearchResults} onCardButtonPress={handleFriendRequest} />
           )}
  
         </View>

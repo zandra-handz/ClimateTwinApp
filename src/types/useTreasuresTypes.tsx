@@ -39,6 +39,13 @@ export interface GiftTreasureRequest {
 }
 
 
+export interface GiftTreasureBackToFinderRequest {
+  treasure: number;
+  message: string | '';
+ // sender: string; 
+}
+
+
 export interface Message {
     
 }

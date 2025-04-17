@@ -454,7 +454,7 @@ export const searchUsers = async (query : string) => {
     try {
        console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get(`/users/get/?search=${query}`);
-        console.log('API GET Call searchUsers', response.data);
+       // console.log('API GET Call searchUsers', response.data);
         return response.data.results;
     } catch (error) {
         if (error.response) {
@@ -652,7 +652,7 @@ export const getTreasures = async () => {
     try {
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/users/treasures/');
-        console.log('API GET Call getTreaures'); //, response.data);
+        console.log('API GET Call getTreaures');//, response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
@@ -661,6 +661,24 @@ export const getTreasures = async () => {
             console.error('Error request for /users/treasures/, add console logging in api file for more details');
         } else {
             console.error('Error message for /users/treasures/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
+export const getOwnerChangeRecords = async (treasureId : string) => {
+    try {
+      //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.get(`/users/treasure/${treasureId}/history/`);
+        console.log('API GET Call getOwnerChangeRecords: ', response.data); //, response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/treasure/${treasureId}/history/:', error.response.data);
+        } else if (error.request) {
+            console.error('Error request for /users/treasure/${treasureId}/history/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /users/treasure/${treasureId}/history/, add console logging in api file for more details');
         }
         throw error;
     }
@@ -700,6 +718,26 @@ export const requestToGiftTreasure = async (data) => {
             console.error('Error request for /users/send-gift-request/, add console logging in api file for more details');
         } else {
             console.error('Error message for /users/send-gift-request/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
+
+export const requestToGiftTreasureBackToFinder = async (data) => {
+    try {
+        console.log(data);
+      //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.post(`/users/send-gift-request-back-to-finder/`, data);
+        console.log('API GET Call getTreaure'); //, response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/send-gift-request-back-to-finder/:');
+        } else if (error.request) {
+            console.error('Error request for /users/send-gift-request-back-to-finder/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /users/send-gift-request-back-to-finder/, add console logging in api file for more details');
         }
         throw error;
     }

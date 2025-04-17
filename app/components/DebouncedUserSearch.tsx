@@ -13,7 +13,7 @@ const DebouncedUserSearch = ({onEnter}) => {
 
   const handleSearch = (text) => {
     setSearchQuery(text);
-    console.log(text); 
+   // console.log(text); 
   };
 
 
@@ -22,7 +22,7 @@ const DebouncedUserSearch = ({onEnter}) => {
 
   const debouncedOnEnter = useCallback(
     debounce((query) => {
-      console.log("Debounced search query:", query);
+    //  console.log("Debounced search query:", query);
       //stableOnEnter(query);
       onEnter(query);
     }, 500),

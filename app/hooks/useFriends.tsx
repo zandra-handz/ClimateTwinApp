@@ -330,6 +330,7 @@ const useFriends = () => {
     handleSearchUsers,
     userSearchResults,
     handleSendFriendRequest,
+    friendRequestMutation,
     handleAcceptFriendship,
     acceptFriendshipMutation,
     handleDeclineFriendship,

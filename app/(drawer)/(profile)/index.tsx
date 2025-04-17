@@ -15,6 +15,8 @@ import useImageUploadFunctions from "@/app/hooks/useImageUploadFunction";
 import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
 import ActionsFooter from "@/app/components/ActionsFooter";
 
+import DeleteItemButton from "@/app/components/Scaffolding/DeleteItemButton";
+
 import useProfile from "@/app/hooks/useProfile";
 
 const index = () => {
@@ -227,8 +229,9 @@ const index = () => {
                   </View>
                   <View
                     style={[
-                      appContainerStyles.itemDescriptionContainer,
+                      appContainerStyles.userBioContainer,
                       themeStyles.darkestBackground,
+                      { marginVertical: 3}
                     ]}
                   >
                     <Text
@@ -276,7 +279,9 @@ const index = () => {
               }}
             >
               <View style={{ marginHorizontal: 3 }}>
-                <TouchableOpacity
+
+                <DeleteItemButton onPress={handleCaptureImage} />
+                {/* <TouchableOpacity
                   style={[
                     appContainerStyles.floatingIconButtonContainer,
                     { borderColor: themeStyles.primaryText.color },
@@ -289,7 +294,7 @@ const index = () => {
                     color={themeStyles.exploreTabBarText.color}
                     // onPress={handleCaptureImage}
                   />
-                </TouchableOpacity>
+                </TouchableOpacity> */}
               </View>
             </View>
 

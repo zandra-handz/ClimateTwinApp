@@ -74,8 +74,8 @@ const { showAppMessage } = useAppMessage();
     <View style={{ height: "auto" }}>
       <DrawerItem
         icon={() => (
-          <AntDesign
-            name={'notification'}
+          <Feather
+            name={ appSettings?.receive_notifications ? 'bell' : 'bell-off'}
             size={appFontStyles.exploreTabBarIcon.width}
             color={themeStyles.exploreTabBarText.color}
           />

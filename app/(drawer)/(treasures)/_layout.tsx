@@ -5,7 +5,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
 import { useRouter } from "expo-router";
 import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
- 
+
 import { Stack } from "expo-router"; // Expo Router's Stack component
 
 export default () => {
@@ -54,6 +54,35 @@ export default () => {
             options={({ route }) => ({
               headerShown: true,
               headerTitle: route.params?.descriptor || "Treasure", // Using `title` from params, fallback to "Treasure"
+              headerTitleStyle: {
+                color: constantColorsStyles.v1LogoColor.color,
+              },
+              headerStyle: {
+                backgroundColor:
+                  constantColorsStyles.v1LogoColor.backgroundColor,
+              },
+              headerLeft: () => (
+                <TouchableOpacity
+                  onPress={() => router.back()}
+                  style={{ paddingLeft: 10, paddingRight: 10 }}
+                >
+                  <AntDesign
+                    name="gift"
+                    size={appFontStyles.exploreTabBarIcon.width}
+                    color={constantColorsStyles.v1LogoColor.color}
+                  />
+                </TouchableOpacity>
+              ),
+              gestureEnabled: true,
+            })}
+          />
+             <Stack.Screen
+            name="history"
+            options={({ route }) => ({
+              headerShown: true,
+              headerTitle: `${route.params?.descriptor || "Treasure"} History`,
+
+             
               headerTitleStyle: {
                 color: constantColorsStyles.v1LogoColor.color,
               },

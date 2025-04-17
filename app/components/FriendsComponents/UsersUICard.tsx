@@ -5,49 +5,74 @@ import { useAppMessage } from "@/src/context/AppMessageContext";
 import { useRouter } from "expo-router";
 import useDateTimeFunctions from "../../hooks/useDateTimeFunctions";
 import CuteDetailBox from "../CuteDetailBox"; 
-import GoToItemButton from "../GoToItemButton"; 
-import DeleteItemButton from "../Scaffolding/DeleteItemButton";
+import GoToItemButton from "../GoToItemButton";  
 import UnfriendButton from "../Scaffolding/UnfriendButton";
+import AddFriendButton from "../Scaffolding/AddFriendButton";
 import DoubleChecker from "../Scaffolding/DoubleChecker";
 import Avatar from "./Avatar";
 
 import useFriends from "@/app/hooks/useFriends";
 
-const FriendsUICard = ({ data, onViewFriendPress, isFullView }) => {
+
+// NEED TO ALSO CHECK THAT A FRIEND REQUEST ISN'T ALREADY PENDING
+const UsersUICard = ({ data, onViewUserPress, isFullView }) => {
   const { showAppMessage } = useAppMessage();
   const router = useRouter();
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
   const { formatUTCToMonthDayYear } = useDateTimeFunctions();
-  const {  handleDeleteFriendship, deleteFriendshipMutation  } = useFriends();
+  const { friends, friendRequestMutation } = useFriends();
+  const [ isAlreadyFriend, setIsAlreadyFriend ] = useState(false);
 
   const [ isDoubleCheckerVisible, setDoubleCheckerVisible ] = useState(false);
 
-  const image = data?.friend_profile?.avatar || null;
+  const image = data?.profile?.avatar || null;
 
 
+  useEffect(() => {
+    if (data && friends) {
+      const checkForFriendship = friends?.find((friend) => (friend.friend === data.id));
+ 
+      setIsAlreadyFriend(!!checkForFriendship);
+    }
+
+  }, [data, friends]); 
 
 const handleToggleDoubleChecker = () => {
   setDoubleCheckerVisible(prev => !prev);
 
 };
 
- const handleDeleteFriend = () => {
-  
-  handleDeleteFriendship(data?.friendship); 
+
+
+ const handleAddFriend = () => {
+  onViewUserPress(data);
+  handleToggleDoubleChecker();
+  //handleDeleteFriendship(data?.friendship); 
 
  };
 
+
+ // Not working?
  useEffect(() => {
-  if (deleteFriendshipMutation.isSuccess) {
-    showAppMessage(true, null, `${data?.username} was unfriended.`);
+  if (friendRequestMutation.isSuccess) {
+    showAppMessage(true, null, `Friend request has been sent to ${data?.username}!`);
     router.back();
   }
 
- }, [deleteFriendshipMutation.isSuccess]);
+ }, [friendRequestMutation.isSuccess]);
+
+ // Not working?
+ useEffect(() => {
+  if (friendRequestMutation.isError) {
+    showAppMessage(true, null, `Oops! Did you already send a friend request to ${data?.username}?`);
+    router.back();
+  }
+
+ }, [friendRequestMutation.isError]);
 
   const handlePress = () => {
-    if (onViewFriendPress) {
-      onViewFriendPress(data.id, data.username);
+    if (onViewUserPress) {
+      onViewUserPress(data.id, data.username);
     }
   };
   // Function to recursively render object fields
@@ -100,27 +125,27 @@ const handleToggleDoubleChecker = () => {
     );
   };
 
-  const findDetails = (
-    <>
-      <Text
-        style={[
-          appFontStyles.itemCollectionDetailsText,
-          themeStyles.primaryText,
-        ]}
-      >
-        Friends since
-      </Text>
-      <Text
-        style={[
-          appFontStyles.itemCollectionDetailsText,
-          themeStyles.primaryText,
-        ]}
-      >
-        {" "}
-        {formatUTCToMonthDayYear(data?.created_on) || "unknown date"}.
-      </Text>
-    </>
-  );
+//   const findDetails = (
+//     <>
+//       <Text
+//         style={[
+//           appFontStyles.itemCollectionDetailsText,
+//           themeStyles.primaryText,
+//         ]}
+//       >
+//         Friends since
+//       </Text>
+//       <Text
+//         style={[
+//           appFontStyles.itemCollectionDetailsText,
+//           themeStyles.primaryText,
+//         ]}
+//       >
+//         {" "}
+//         {formatUTCToMonthDayYear(data?.created_on) || "unknown date"}.
+//       </Text>
+//     </>
+//   );
 
   const findLastVisit = (
     <>
@@ -139,9 +164,9 @@ const handleToggleDoubleChecker = () => {
         ]}
       >
         {" "}
-        {data?.friend_profile?.most_recent_visit?.location_name || ""}{" "}
+        {data?.profile?.most_recent_visit?.location_name || ""}{" "}
         {formatUTCToMonthDayYear(
-          data?.friend_profile?.most_recent_visit?.visited_on
+          data?.profile?.most_recent_visit?.visited_on
         ) || "No trips"}
       </Text>
     </>
@@ -170,12 +195,12 @@ const handleToggleDoubleChecker = () => {
       <DoubleChecker
       isVisible={isDoubleCheckerVisible}
       toggleVisible={handleToggleDoubleChecker}
-      singleQuestionText={`Unfriend ${data?.username || ''}?`}
+      singleQuestionText={`Add ${data?.username || ''}?`}
 
-      optionalText="(They won't be notified.)"
+     // optionalText=""
       noButtonText="Back"
       yesButtonText="Yes"
-      onPress={handleDeleteFriend} />
+      onPress={handleAddFriend} />
     )}
       <View
         style={[
@@ -219,30 +244,24 @@ const handleToggleDoubleChecker = () => {
             iconTwo={"map"}
             message={findLastVisit}
           />
-        </View>
-        <View style={[appContainerStyles.itemCollectionDetailsSubheader]}>
-          <CuteDetailBox
-            iconOne={"heart"}
-            //iconTwo={"map"}
-            message={findDetails}
-          />
-          
-        </View>
+        </View> 
 
-        {onViewFriendPress && (
+        {!isFullView && (
           <>
           <GoToItemButton onPress={() => handlePress()} label={"See profile"} />
          
           </>
         )}
-        {isFullView && (
-          
-         <UnfriendButton onPress={() => handleToggleDoubleChecker()}  />
-       
+        {/* {isFullView && ( */} 
+            {data && (
+              
+         <AddFriendButton isAlreadyFriend={isAlreadyFriend} onPress={() => handleToggleDoubleChecker()}  />
+        
         )}
+        {/* )} */}
       </View>
     </>
   );
 };
 
-export default FriendsUICard;
+export default UsersUICard;
