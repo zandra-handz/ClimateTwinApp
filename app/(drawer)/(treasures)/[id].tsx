@@ -6,11 +6,15 @@ import useFriends from "@/app/hooks/useFriends";
 import { useAppMessage } from "../../../src/context/AppMessageContext";
 import { StatusBar } from "expo-status-bar";
 import DataList from "../../components/Scaffolding/DataList";
-import Picker from "@/app/components/Picker";
+import FriendPicker from "@/app/components/FriendPicker";
 import ActionsFooter from "@/app/components/ActionsFooter";
 import useTreasures from "@/app/hooks/useTreasures";
 import TreasuresUICard from "@/app/components/TreasuresComponents/TreasuresUICard";
 import GoToItemButton from "@/app/components/GoToItemButton";
+
+import ReturnItemButton from "@/app/components/Scaffolding/ReturnItemButton";
+import HistoryButton from "@/app/components/Scaffolding/HistoryButton";
+import DoubleChecker from "@/app/components/Scaffolding/DoubleChecker";
 
 interface Friend {
   id: number;
@@ -28,15 +32,31 @@ const details = () => {
     treasures,
     handleGetTreasure,
     handleGetOwnerChangeRecords,
+    handleGiftTreasureBackToFinder,
     viewingTreasure,
   } = useTreasures();
+  const [isDoubleCheckerVisible, setDoubleCheckerVisible] = useState(false);
 
   const [selectedFriendProfile, setSelectedFriendProfile] =
     useState<Friend | null>(null);
 
-  
+  const handleToggleDoubleChecker = () => {
+    setDoubleCheckerVisible((prev) => !prev);
+  };
+
+  const handleGiftTreasureBack = () => {
+    handleGiftTreasureBackToFinder(data?.id);
+    handleToggleDoubleChecker();
+    router.back();
+  };
+
+  const handleDeleteTreasure = () => {
+    console.log(`handleDeleteTreasure function has yet to be written`);
+  };
+
   const handleViewTreasureHistory = () => {
-    if (id) { 
+    console.log('handleViewTreasureHistory pressed');
+    if (id) {
       router.push({
         pathname: "(treasures)/history",
         params: { id: id, descriptor: descriptor },
@@ -69,6 +89,19 @@ const details = () => {
 
   return (
     <>
+      {isDoubleCheckerVisible && (
+        <DoubleChecker
+          isVisible={isDoubleCheckerVisible}
+          toggleVisible={handleToggleDoubleChecker}
+          singleQuestionText={`Send ${
+            viewingTreasure?.descriptor || ""
+          } back to original finder :)?`}
+          optionalText="(They can accept or decline.)"
+          noButtonText="Back"
+          yesButtonText="Yes"
+          onPress={handleGiftTreasureBack}
+        />
+      )}
       <View
         style={[
           appContainerStyles.screenContainer,
@@ -76,21 +109,22 @@ const details = () => {
           { paddingTop: 10 },
         ]}
       >
+                <View style={[appContainerStyles.nextToNextToPickerContainer]}>
+         
+          <HistoryButton onPress={() => handleViewTreasureHistory()} backgroundColor={themeStyles.darkerBackground.backgroundColor} />
+        
+        </View>
+        <View style={[appContainerStyles.nextToPickerContainer]}>
+          <ReturnItemButton onPress={() => handleToggleDoubleChecker()} backgroundColor={themeStyles.darkerBackground.backgroundColor} />
+         
+        </View>
+        <FriendPicker items={friends} onSelect={handleFriendSelect} />
 
-        <Picker
-          items={friends} // Passing label/value pairs (friendsDropDown)
-          onSelect={handleFriendSelect} // Handling the selection
-        />
         <ScrollView>
           {viewingTreasure && (
             <TreasuresUICard data={viewingTreasure} isFullView={true} />
           )}
-                  <View style={{ height: 60 }}>
-          <GoToItemButton
-            label={"View history"}
-            onPress={handleViewTreasureHistory}
-          />
-        </View>
+
         </ScrollView>
         <ActionsFooter onPressLeft={() => router.back()} labelLeft={"Back"} />
       </View>

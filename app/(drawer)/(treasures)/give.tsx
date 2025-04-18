@@ -1,4 +1,4 @@
-import { View, Text, Keyboard, Dimensions, KeyboardAvoidingView } from "react-native";
+import { View, Text, Keyboard, Dimensions, KeyboardAvoidingView, Platform } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import ActionsFooter from "@/app/components/ActionsFooter";
 import { StatusBar } from "expo-status-bar";
@@ -7,7 +7,7 @@ import useTreasures from "@/app/hooks/useTreasures";
 import { useAppMessage } from "../../../src/context/AppMessageContext";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import useFriends from "../../hooks/useFriends";
-import Picker from "@/app/components/Picker";
+import FriendPicker from "@/app/components/FriendPicker";
 import TextInputBlock from "@/app/components/TextInputBlock";
 
 
@@ -74,7 +74,7 @@ const give = () => {
   const updateNoteEditString = (text) => {
     if (editedTextRef && editedTextRef.current) {
       editedTextRef.current.setText(text);
-      console.log("in parent", editedTextRef.current.getText());
+    //  console.log("in parent", editedTextRef.current.getText());
     }
   };
 
@@ -106,14 +106,12 @@ const give = () => {
               onSelect={handleFriendSelect} // Handling the selection
             />
           )} */}
-          <View style={{ flex: 1,  marginBottom: 10 }}>
-            <TextInputBlock
-              width={"100%"}
-              height={'100%'}
+          <View style={{  height: 500 }}>
+            <TextInputBlock 
               ref={editedTextRef}
               autoFocus={true}
               title={"Add a message?"}
-              helperText={!isKeyboardVisible ? null : "Press enter to exit"}
+              helperText={!isKeyboardVisible ? "Press enter to exit" : "Press enter to exit"}
               iconColor={
                 !isKeyboardVisible ? themeStyles.primaryText.color : "red"
               }
@@ -125,15 +123,18 @@ const give = () => {
   
         </View>
  
-        <ActionsFooter 
-          onPressLeft={() => router.back()}
-          labelLeft={"Cancel"}
-          onPressRight={handleGift}
-          labelRight={"Send"}
-        />
+
         
    
-      </View>
+      </View> 
+        
+
+  <ActionsFooter 
+    onPressLeft={() => router.back()}
+    labelLeft={"Cancel"}
+    onPressRight={handleGift}
+    labelRight={"Send"}
+  /> 
     </>
   );
 };

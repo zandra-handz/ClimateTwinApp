@@ -724,6 +724,27 @@ export const requestToGiftTreasure = async (data) => {
 };
 
 
+// FOR DEVELOPMENT, ONLY SUPERUSER IS AUTHORIZED TO MAKE THIS 
+export const cleanTreasuresData = async () => {
+    try { 
+      //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.post(`/users/clean-treasures-data/`);
+        console.log('API GET Call cleanTreasuresData'); //, response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/clean-treasures-data/:');
+        } else if (error.request) {
+            console.error('Error request for /users/clean-treasures-data/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for/users/clean-treasures-data/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
+ 
+
 export const requestToGiftTreasureBackToFinder = async (data) => {
     try {
         console.log(data);
@@ -1107,3 +1128,22 @@ export const expireSurroundings = async () => {
     }
 };
  
+
+
+export const deleteUserAccount = async () => {
+    try { 
+      //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.delete(`/users/delete-account/`);
+        console.log('API GET Call deleteUserAccount');  
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/delete-account/:');
+        } else if (error.request) {
+            console.error('Error request for /users/delete-account/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /users/delete-account/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};

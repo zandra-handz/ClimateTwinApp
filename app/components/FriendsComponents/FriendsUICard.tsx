@@ -1,11 +1,11 @@
 import { View, Text } from "react-native";
-import React, { useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { useAppMessage } from "@/src/context/AppMessageContext";
 import { useRouter } from "expo-router";
 import useDateTimeFunctions from "../../hooks/useDateTimeFunctions";
-import CuteDetailBox from "../CuteDetailBox"; 
-import GoToItemButton from "../GoToItemButton"; 
+import CuteDetailBox from "../CuteDetailBox";
+import GoToItemButton from "../GoToItemButton";
 import DeleteItemButton from "../Scaffolding/DeleteItemButton";
 import UnfriendButton from "../Scaffolding/UnfriendButton";
 import DoubleChecker from "../Scaffolding/DoubleChecker";
@@ -18,32 +18,26 @@ const FriendsUICard = ({ data, onViewFriendPress, isFullView }) => {
   const router = useRouter();
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
   const { formatUTCToMonthDayYear } = useDateTimeFunctions();
-  const {  handleDeleteFriendship, deleteFriendshipMutation  } = useFriends();
+  const { handleDeleteFriendship, deleteFriendshipMutation } = useFriends();
 
-  const [ isDoubleCheckerVisible, setDoubleCheckerVisible ] = useState(false);
+  const [isDoubleCheckerVisible, setDoubleCheckerVisible] = useState(false);
 
   const image = data?.friend_profile?.avatar || null;
 
+  const handleToggleDoubleChecker = () => {
+    setDoubleCheckerVisible((prev) => !prev);
+  };
 
+  const handleDeleteFriend = () => {
+    handleDeleteFriendship(data?.friendship);
+  };
 
-const handleToggleDoubleChecker = () => {
-  setDoubleCheckerVisible(prev => !prev);
-
-};
-
- const handleDeleteFriend = () => {
-  
-  handleDeleteFriendship(data?.friendship); 
-
- };
-
- useEffect(() => {
-  if (deleteFriendshipMutation.isSuccess) {
-    showAppMessage(true, null, `${data?.username} was unfriended.`);
-    router.back();
-  }
-
- }, [deleteFriendshipMutation.isSuccess]);
+  useEffect(() => {
+    if (deleteFriendshipMutation.isSuccess) {
+      showAppMessage(true, null, `${data?.username} was unfriended.`);
+      router.back();
+    }
+  }, [deleteFriendshipMutation.isSuccess]);
 
   const handlePress = () => {
     if (onViewFriendPress) {
@@ -166,17 +160,17 @@ const handleToggleDoubleChecker = () => {
 
   return (
     <>
-    {isDoubleCheckerVisible && (
-      <DoubleChecker
-      isVisible={isDoubleCheckerVisible}
-      toggleVisible={handleToggleDoubleChecker}
-      singleQuestionText={`Unfriend ${data?.username || ''}?`}
-
-      optionalText="(They won't be notified.)"
-      noButtonText="Back"
-      yesButtonText="Yes"
-      onPress={handleDeleteFriend} />
-    )}
+      {isDoubleCheckerVisible && (
+        <DoubleChecker
+          isVisible={isDoubleCheckerVisible}
+          toggleVisible={handleToggleDoubleChecker}
+          singleQuestionText={`Unfriend ${data?.username || ""}?`}
+          optionalText="(They won't be notified.)"
+          noButtonText="Back"
+          yesButtonText="Yes"
+          onPress={handleDeleteFriend}
+        />
+      )}
       <View
         style={[
           themeStyles.darkerBackground,
@@ -190,9 +184,7 @@ const handleToggleDoubleChecker = () => {
           </Text>
         </View>
 
-        {image && ( 
-            <Avatar image={image} size={100}/>
-        )}
+        {image && <Avatar image={image} size={100} />}
         {isFullView && (
           <View
             style={[
@@ -210,8 +202,7 @@ const handleToggleDoubleChecker = () => {
               {data?.friend_profile?.bio || "No bio"}
             </Text>
           </View>
-        )} 
-
+        )}
 
         <View style={[appContainerStyles.itemCollectionDetailsSubheader]}>
           <CuteDetailBox
@@ -226,19 +217,18 @@ const handleToggleDoubleChecker = () => {
             //iconTwo={"map"}
             message={findDetails}
           />
-          
         </View>
 
         {onViewFriendPress && (
           <>
-          <GoToItemButton onPress={() => handlePress()} label={"See profile"} />
-         
+            <GoToItemButton
+              onPress={() => handlePress()}
+              label={"See profile"}
+            />
           </>
         )}
         {isFullView && (
-          
-         <UnfriendButton onPress={() => handleToggleDoubleChecker()}  />
-       
+          <UnfriendButton onPress={() => handleToggleDoubleChecker()} />
         )}
       </View>
     </>

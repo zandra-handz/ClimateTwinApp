@@ -5,6 +5,8 @@ import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { useRouter } from "expo-router";
 import { Feather } from "@expo/vector-icons";
 
+import { cleanTreasuresData } from "@/src/calls/apicalls";
+
 import Avatar from "@/app/components/FriendsComponents/Avatar";
 
 import useDateTimeFunctions from "@/app/hooks/useDateTimeFunctions";
@@ -16,8 +18,10 @@ import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
 import ActionsFooter from "@/app/components/ActionsFooter";
 
 import DeleteItemButton from "@/app/components/Scaffolding/DeleteItemButton";
-
+import GoToItemButton from "@/app/components/GoToItemButton";
 import useProfile from "@/app/hooks/useProfile";
+
+import DoubleChecker from "@/app/components/Scaffolding/DoubleChecker";
 
 const index = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
@@ -27,7 +31,19 @@ const index = () => {
 
   const router = useRouter();
   const { profile, avatar } = useProfile();
-  const { user } = useUser();
+  const { user, handleDeleteUserAccount } = useUser();
+
+  const [isDoubleCheckerVisible, setDoubleCheckerVisible] = useState(false);
+
+  const handleToggleDoubleChecker = () => {
+    setDoubleCheckerVisible((prev) => !prev);
+  };
+
+  const handleDelete = () => {
+    if (!user?.is_superuser) { // PURELY A CHECK FOR MYSELF TO PREVENT MYSELF FROM DOING SOMETHING DUMB WHILE TESTING
+      handleDeleteUserAccount();
+    }
+  };
 
   useEffect(() => {
     if (imageUri) {
@@ -122,6 +138,17 @@ const index = () => {
 
   return (
     <>
+      {isDoubleCheckerVisible && (
+        <DoubleChecker
+          isVisible={isDoubleCheckerVisible}
+          toggleVisible={handleToggleDoubleChecker}
+          singleQuestionText={`Delete account for ${user?.username} ?`}
+          optionalText="This cannot be undone."
+          noButtonText="Back"
+          yesButtonText="Yes"
+          onPress={handleDelete}
+        />
+      )}
       <View
         style={[
           appContainerStyles.screenContainer,
@@ -231,7 +258,7 @@ const index = () => {
                     style={[
                       appContainerStyles.userBioContainer,
                       themeStyles.darkestBackground,
-                      { marginVertical: 3}
+                      { marginVertical: 3 },
                     ]}
                   >
                     <Text
@@ -267,6 +294,14 @@ const index = () => {
                   </View>
                 </>
               )}
+              {user?.is_superuser && (
+                <View style={{ height: 60, marginVertical: 4 }}>
+                  <GoToItemButton
+                    label={"CLEAN TREASURE DATA"}
+                    onPress={cleanTreasuresData}
+                  />
+                </View>
+              )}
             </ScrollView>
             <View
               style={{
@@ -279,8 +314,7 @@ const index = () => {
               }}
             >
               <View style={{ marginHorizontal: 3 }}>
-
-                <DeleteItemButton onPress={handleCaptureImage} />
+                <DeleteItemButton onPress={handleToggleDoubleChecker} />
                 {/* <TouchableOpacity
                   style={[
                     appContainerStyles.floatingIconButtonContainer,

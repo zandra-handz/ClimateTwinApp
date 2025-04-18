@@ -96,11 +96,11 @@ import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
           </View>
           <View style={{ flex: 1 }}>
   
-          {helperText && (
+          {/* {helperText && (
               <Text style={[styles.helperText, themeStyles.primaryText]}>
                 {helperText}
               </Text>
-            )}
+            )} */}
             <TextInput
               ref={textInputRef}
               autoFocus={autoFocus}

@@ -3,7 +3,7 @@ import React from 'react'
 import { useGlobalStyles } from '../../../src/context/GlobalStylesContext'
 import { AntDesign, Feather } from '@expo/vector-icons'
 
-const SendButton = ({ onPress, backgroundColor }) => {
+const HistoryButton = ({ onPress, backgroundColor='transparent'}) => {
     const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
   
   
@@ -23,13 +23,13 @@ const SendButton = ({ onPress, backgroundColor }) => {
                   style={[
                     appContainerStyles.floatingIconButtonContainer,
                     { borderColor: themeStyles.primaryText.color,
-                      backgroundColor: backgroundColor
+                        backgroundColor: backgroundColor
                     },
                   ]}
                   onPress={onPress}
                 >
                   <Feather
-                    name="send"
+                    name="rewind" //"home"
                     size={appFontStyles.exploreTabBarIcon.width}
                     color={themeStyles.primaryText.color}
                     // onPress={handleCaptureImage}
@@ -41,4 +41,4 @@ const SendButton = ({ onPress, backgroundColor }) => {
   )
 }
 
-export default SendButton;
+export default HistoryButton;

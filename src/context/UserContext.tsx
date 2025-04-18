@@ -4,7 +4,7 @@ import React, {
   useState,
   useEffect,
   useRef,
- // AccessibilityInfo,
+  // AccessibilityInfo,
 } from "react";
 import * as SecureStore from "expo-secure-store";
 import * as Notifications from "expo-notifications";
@@ -22,15 +22,12 @@ import {
   getCurrentUser,
   getUserSettings,
   updateUserSettings,
+  deleteUserAccount,
 } from "../calls/apicalls";
 import { useAppMessage } from "./AppMessageContext";
-import { useNavigationContainerRef, useSegments } from "expo-router"; 
- 
-interface User {
-  id?: string;
-  username?: string;
-  email?: string; 
-}
+import { useNavigationContainerRef, useSegments } from "expo-router";
+
+import { User } from "../types/UserContextTypes";
 
 interface UserContextType {
   user: User | null;
@@ -39,14 +36,16 @@ interface UserContextType {
   appSettings: Record<string, any>;
   userNotificationSettings: Record<string, any>;
   onSignin: (username: string, password: string) => Promise<void>;
-  onSignOut: () => (void);
+  onSignOut: () => void;
   onSignUp: (
     username: string,
     email: string,
     password: string
   ) => Promise<void>;
   reInitialize: () => Promise<void>;
+  updateSettings: (newSettings: Record<string, any>) => Promise<void>
   deAuthUser: () => void;
+  handleDeleteUserAccount: () => void;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -81,21 +80,22 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
   const segments = useSegments();
-   const [isNavigationReady, setNavigationReady] = useState(false);
+  const [isNavigationReady, setNavigationReady] = useState(false);
   const isOnSignIn = segments[0] === "signin";
- 
-      useEffect(() => {
-        if (navigationRef.isReady()) {
-          setNavigationReady(true);
-        }
-    
-        const unsubscribe = navigationRef.addListener("state", () => {
-          setNavigationReady(true);
-        });
-    
-        return () => unsubscribe && unsubscribe();
-      }, [navigationRef.isReady()]);
-    
+
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  useEffect(() => {
+    if (navigationRef.isReady()) {
+      setNavigationReady(true);
+    }
+
+    const unsubscribe = navigationRef.addListener("state", () => {
+      setNavigationReady(true);
+    });
+
+    return () => unsubscribe && unsubscribe();
+  }, [navigationRef.isReady()]);
 
   useEffect(() => {
     const subscription = AppState.addEventListener("change", (nextAppState) => {
@@ -125,7 +125,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     isReinitializing = true;
     try {
       console.log("reinitializing!!!!");
-     // showAppMessage(true, null, "Initializing...");
+      // showAppMessage(true, null, "Initializing...");
       setLoading(true);
       //console.log("use loading --> true");
 
@@ -136,10 +136,10 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
         try {
           userData = await getCurrentUser();
-          // console.log(
-          //   "REINIT USER DATA ON OTHER SIDE OF INTERCEPTOR: ",
-          //   userData
-          // );
+          console.log(
+            "REINIT USER DATA ON OTHER SIDE OF INTERCEPTOR: ",
+            userData
+          );
         } catch (error) {
           console.error("Error fetching current user:", error);
           showAppMessage(true, null, "Token detected but cannot fetch user");
@@ -210,42 +210,34 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   }, [appSettings]);
 
   useEffect(() => {
-    if (
-      appStateVisible === "active" &&
-
-      isNavigationReady &&
-      !isOnSignIn
-    ) {
-     // console.log("Current segment:", segments[0]);
+    if (appStateVisible === "active" && isNavigationReady && !isOnSignIn) {
+      // console.log("Current segment:", segments[0]);
       console.log(
         "APP IN FOREGROUND, REINITTING IN USER CONTEXT!!!!!!!!!!!!!!!!!!!!!!!!"
       );
       reInitialize();
     }
   }, [appStateVisible, isNavigationReady]);
-  
 
-  const updateUserSettingsMutation = useMutation<Record<string, any>, Error, Record<string, any>>({
- 
+  const updateUserSettingsMutation = useMutation<
+    Record<string, any>,
+    Error,
+    Record<string, any>
+  >({
     mutationFn: (newSettings) => updateUserSettings(user?.id, newSettings),
     onSuccess: (data) => {
       setAppSettings((prev) => ({ ...prev, ...data }));
 
-      // queryClient.invalidateQueries(["userSettings", user?.id]);
-      // queryClient.refetchQueries(["userSettings", user?.id]).then(() => {
-      //   const updatedSettings = queryClient.getQueryData([
-      //     "userSettings",
-      //     user?.id,
-      //   ]);
-      //   console.log("Refetched user settings:", updatedSettings);
-      // });
-
       queryClient.invalidateQueries({ queryKey: ["userSettings", user?.id] });
-queryClient.refetchQueries({ queryKey: ["userSettings", user?.id] }).then(() => {
-  const updatedSettings = queryClient.getQueryData(["userSettings", user?.id]);
-  console.log("Refetched user settings:", updatedSettings);
-});
-
+      queryClient
+        .refetchQueries({ queryKey: ["userSettings", user?.id] })
+        .then(() => {
+          const updatedSettings = queryClient.getQueryData([
+            "userSettings",
+            user?.id,
+          ]);
+          console.log("Refetched user settings:", updatedSettings);
+        });
     },
     onError: (error) => {
       console.error("Error updating user settings:", error);
@@ -269,15 +261,31 @@ queryClient.refetchQueries({ queryKey: ["userSettings", user?.id] }).then(() => 
     mutationFn: signinWithoutRefresh,
     onSuccess: () => {
       console.log("Sign in mutation is running reInit");
-      reInitialize();  
+      reInitialize();
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        signinMutation.reset();
+      }, 2000);
     },
     onError: (error) => {
       console.error("Sign in mutation error:", error);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        signinMutation.reset();
+      }, 2000);
     },
   });
 
+
   const onSignin = async (username: string, password: string) => {
-    try { 
+    try {
       await signinMutation.mutateAsync({ username, password });
     } catch (error) {
       console.error("Sign in error", error);
@@ -291,10 +299,27 @@ queryClient.refetchQueries({ queryKey: ["userSettings", user?.id] }).then(() => 
       //     await SecureStore.setItemAsync(TOKEN_KEY, result.data.token);
       //     await reInitialize(); // Refetch user data after sign-up
       // }
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        signupMutation.reset();
+      }, 2000);
+    },
+    onError: () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        signupMutation.reset();
+      }, 2000);
+
     },
   });
 
-  const onSignUp = async (username, email, password) => {
+  const onSignUp = async (username: string, email: string, password: string) => {
     try {
       const credentials = { username, email, password };
       await signupMutation.mutateAsync(credentials);
@@ -305,7 +330,6 @@ queryClient.refetchQueries({ queryKey: ["userSettings", user?.id] }).then(() => 
   };
 
   const onSignOut = async () => {
-
     await signout();
     setUser(null);
     setAppSettings(null);
@@ -317,65 +341,112 @@ queryClient.refetchQueries({ queryKey: ["userSettings", user?.id] }).then(() => 
     queryClient.clear();
   };
 
-
   useEffect(() => {
-    console.log('usernotifs useEffect triggered in context: ', appSettings?.receive_notifications);
+    console.log(
+      "usernotifs useEffect triggered in context: ",
+      appSettings?.receive_notifications
+    );
     if (appSettings?.receive_notifications) {
-        console.log('registering for notifs');
-        registerForNotifications();
+      console.log("registering for notifs");
+      registerForNotifications();
     } else {
-        console.log('removing notifs permissions');
-        removeNotificationPermissions();
+      console.log("removing notifs permissions");
+      removeNotificationPermissions();
     }
-}, [appSettings]);
+  }, [appSettings]);
 
+  const getNotificationPermissionStatus = async () => {
+    const { status: existingStatus } =
+      await Notifications.getPermissionsAsync();
+    console.log(`existingStatus: `, existingStatus);
+    return existingStatus;
+  };
 
-const getNotificationPermissionStatus = async () => {
-  const { status: existingStatus } = await Notifications.getPermissionsAsync();
-  console.log(`existingStatus: `, existingStatus);
-  return existingStatus;
-};
-
-const registerForNotifications = async () => {
-  if (Platform.OS === "android") {
+  const registerForNotifications = async () => {
+    if (Platform.OS === "android") {
       await Notifications.setNotificationChannelAsync("default", {
-          name: "default",
-          importance: Notifications.AndroidImportance.MAX,
-          vibrationPattern: [0, 250, 250, 250],
-          lightColor: "#FF231F7C",
+        name: "default",
+        importance: Notifications.AndroidImportance.MAX,
+        vibrationPattern: [0, 250, 250, 250],
+        lightColor: "#FF231F7C",
       });
-  }
+    }
 
-  if (Device.isDevice) {
+    if (Device.isDevice) {
       let finalStatus = await getNotificationPermissionStatus();
 
       if (finalStatus !== "granted") {
-          const { status } = await Notifications.requestPermissionsAsync();
-          finalStatus = status;
-          console.log(`new status: `, status);
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+        console.log(`new status: `, status);
       }
 
       if (finalStatus === "granted" && user) {
-          const projectId = Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId;
-          const pushTokenString = (await Notifications.getExpoPushTokenAsync({ projectId })).data;
+        const projectId =
+          Constants?.expoConfig?.extra?.eas?.projectId ??
+          Constants?.easConfig?.projectId;
+        const pushTokenString = (
+          await Notifications.getExpoPushTokenAsync({ projectId })
+        ).data;
 
-          await SecureStore.setItemAsync('pushToken', pushTokenString);
-          await updateUserSettings(user.id, {
-              receive_notifications: true,
-              expo_push_token: pushTokenString,
-          });
+        await SecureStore.setItemAsync("pushToken", pushTokenString);
+        await updateUserSettings(user.id, {
+          receive_notifications: true,
+          expo_push_token: pushTokenString,
+        });
       } else {
-          removeNotificationPermissions();
+        removeNotificationPermissions();
       }
-  }
-};
+    }
+  };
 
-const removeNotificationPermissions = async () => {
-    await SecureStore.deleteItemAsync('pushToken');
+  const removeNotificationPermissions = async () => {
+    await SecureStore.deleteItemAsync("pushToken");
     if (user) {
-        await updateUserSettings(user.id, { receive_notifications: false, expo_push_token: null });
-    } 
-};
+      await updateUserSettings(user.id, {
+        receive_notifications: false,
+        expo_push_token: null,
+      });
+    }
+  };
+
+
+  const deleteUserAccountMutation = useMutation({
+    mutationFn: deleteUserAccount,
+    onSuccess: () => {
+      console.log("User deleted");
+      onSignOut();
+ 
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        deleteUserAccountMutation.reset();
+      }, 2000);
+    },
+    onError: (error) => {
+      console.error("Sign in mutation error:", error);
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        deleteUserAccountMutation.reset();
+      }, 2000);
+    },
+  });
+
+
+  const handleDeleteUserAccount = async () => {
+    try {
+      await deleteUserAccountMutation.mutateAsync();
+    } catch (error) {
+      console.error("Delete user error", error);
+    }
+  };
+
 
   return (
     <UserContext.Provider
@@ -389,10 +460,12 @@ const removeNotificationPermissions = async () => {
         onSignUp,
         onSignOut,
         reInitialize,
-        updateSettings, 
+        updateSettings,
         registerForNotifications,
         removeNotificationPermissions,
         getNotificationPermissionStatus,
+        handleDeleteUserAccount,
+        deleteUserAccountMutation,
       }}
     >
       {children}

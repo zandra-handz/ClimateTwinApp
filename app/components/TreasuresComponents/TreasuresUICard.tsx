@@ -3,15 +3,15 @@ import React, { useState } from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import useDateTimeFunctions from "../../hooks/useDateTimeFunctions";
 import CuteDetailBox from "../CuteDetailBox";
-import SingleDetailPanel from "../SingleDetailPanel";
 import GoToItemButton from "../GoToItemButton";
-import DeleteItemButton from "../Scaffolding/DeleteItemButton";
 import SendButton from "../Scaffolding/SendButton";
+import ReturnItemButton from "../Scaffolding/ReturnItemButton";
 import DoubleChecker from "../Scaffolding/DoubleChecker";
 import useTreasures from "@/app/hooks/useTreasures";
 
 import useFriends from "@/app/hooks/useFriends";
 import { router } from "expo-router";
+ 
 
 const TreasuresUICard = ({ data, onOpenTreasurePress, isFullView }) => {
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
@@ -30,6 +30,8 @@ const TreasuresUICard = ({ data, onOpenTreasurePress, isFullView }) => {
     router.back();
   };
 
+
+  
   const handleDeleteTreasure = () => {
     console.log(`handleDeleteTreasure function has yet to be written`);
   };
@@ -183,17 +185,20 @@ const TreasuresUICard = ({ data, onOpenTreasurePress, isFullView }) => {
 
   return (
     <>
-      {isDoubleCheckerVisible && (
+
+      {/* {isDoubleCheckerVisible && (
         <DoubleChecker
           isVisible={isDoubleCheckerVisible}
           toggleVisible={handleToggleDoubleChecker}
-          singleQuestionText={`Send ${data?.descriptor || ""} back to original finder :)?`}
+          singleQuestionText={`Send ${
+            data?.descriptor || ""
+          } back to original finder :)?`}
           optionalText="(They can accept or decline.)"
           noButtonText="Back"
           yesButtonText="Yes"
           onPress={handleGiftTreasureBack}
         />
-      )}
+      )} */}
 
       {/* {isDoubleCheckerVisible && (
         <DoubleChecker
@@ -229,6 +234,7 @@ const TreasuresUICard = ({ data, onOpenTreasurePress, isFullView }) => {
               style={[
                 appContainerStyles.treasureDescriptionContainer,
                 themeStyles.darkestBackground,
+                {marginVertical: 4}
               ]}
             >
               <Text
@@ -242,11 +248,12 @@ const TreasuresUICard = ({ data, onOpenTreasurePress, isFullView }) => {
               </Text>
             </View>
           )}
-                    {isFullView && (
+          {isFullView && (
             <View
               style={[
                 appContainerStyles.treasureDescriptionContainer,
                 themeStyles.darkestBackground,
+                {marginVertical: 4}
               ]}
             >
               <Text
@@ -260,11 +267,12 @@ const TreasuresUICard = ({ data, onOpenTreasurePress, isFullView }) => {
               </Text>
             </View>
           )}
-                              {isFullView && (
+          {isFullView && (
             <View
               style={[
                 appContainerStyles.treasureDescriptionContainer,
                 themeStyles.darkestBackground,
+                {marginVertical: 4}
               ]}
             >
               <Text
@@ -283,6 +291,7 @@ const TreasuresUICard = ({ data, onOpenTreasurePress, isFullView }) => {
               style={[
                 appContainerStyles.treasureDescriptionContainer,
                 themeStyles.darkestBackground,
+                {marginVertical: 4}
               ]}
             >
               <Text
@@ -326,13 +335,20 @@ const TreasuresUICard = ({ data, onOpenTreasurePress, isFullView }) => {
               label={"Go to treasure"}
             />
           )}
+
           {isFullView && (
+            <View style={{height: 80}}></View>
+          )}
+          {/* {isFullView && (
             // <DeleteItemButton
             //   onPress={() => handleToggleDoubleChecker()}
             //   label={"Delete"}
             // />
-            <SendButton onPress={() => handleToggleDoubleChecker()} />
-          )}
+            <View style={appContainerStyles}>
+
+            <ReturnItemButton onPress={() => handleToggleDoubleChecker()} />
+              </View>
+          )} */}
         </View>
       )}
     </>

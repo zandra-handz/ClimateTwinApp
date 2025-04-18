@@ -531,14 +531,50 @@ const containerStyles = StyleSheet.create({
     borderRadius: 20,
     position: 'absolute',
     width: 'auto',
-    top: 0,
-    right: 0,
+    backgroundColor: 'orange',
+    
+  //  top: 30, // DOWNWARD
+    bottom: 80, // UPWARD
+    right: 15,
     zIndex: 10,
 
   },
+
+  nextToPickerContainer: {
+    //flex: 1,
+    justifyContent: 'flex-start', 
+    alignItems: 'flex-end',     
+    padding: 10, 
+    borderRadius: 20,
+    position: 'absolute',
+    width: 'auto',
+    
+  //  top: 30, // DOWNWARD
+    bottom: 44, // UPWARD
+    right: 60,
+    zIndex: 20,
+
+  },
+  nextToNextToPickerContainer: {
+    //flex: 1,
+    justifyContent: 'flex-start', 
+    alignItems: 'flex-end',     
+    padding: 10, 
+    borderRadius: 20,
+    position: 'absolute',
+    width: 'auto',
+    
+  //  top: 30, // DOWNWARD
+    bottom: 44, // UPWARD
+    right: 117,
+    zIndex: 100,
+
+  },
+
   pickerButtonContainer: {
     padding: 10,
-    borderRadius: 20,
+    borderRadius: 20,  
+    justifyContent: 'center',
 
 
   },
@@ -609,8 +645,8 @@ const containerStyles = StyleSheet.create({
     zIndex: 0, // Adjust z-index if needed
   },
   innerFlexStartContainer: {
-    width: "100%",
-    paddingHorizontal: "2%",
+    width: "100%", 
+   // paddingHorizontal: "2%",
     flexDirection: "column", 
     flex: 1,
   //  backgroundColor: 'teal',
@@ -803,11 +839,11 @@ const containerStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',   
     height: "auto",
-    padding: 30,
+    padding: 10,
     borderRadius: 30, 
     flexDirection: "column",
     flex: 1,
-    borderWidth: StyleSheet.hairlineWidth,
+   // borderWidth: StyleSheet.hairlineWidth,
   },
   treasureHeaderRow: {
     width: '100%',
@@ -830,9 +866,10 @@ const containerStyles = StyleSheet.create({
   treasureDescriptionContainer: {
     width: '100%',
     textAlign: 'left',
-    height: 100, 
+    //height: 100, 
     borderRadius: 16, 
     padding: 20,
+    flexGrow: 1,
 
   },
   itemCardContainer: { 
@@ -1006,9 +1043,10 @@ const containerStyles = StyleSheet.create({
     textAlign: 'left',
     height: 170, 
     overflow: 'hidden',
-    backgroundColor: 'orange',
     flexDirection: 'column',
     justifyContent: 'space-between',
+    zIndex: 20000,
+    elevation: 20000,
 
   },
   doubleCheckerQuestionContainer: {
@@ -1059,14 +1097,15 @@ const containerStyles = StyleSheet.create({
   },
   dCBackgroundContainer: {
     flex: 1, 
+    width: '100%',
     //height: 200, 
     margin: 0,
     justifyContent: "center", 
     alignItems: "center",
     backgroundColor: "rgba(0, 0, 0, 0.84)", 
     paddingHorizontal: '6%',
-    elevation: 10000,
-    zIndex: 10000, 
+    elevation: 15000,
+    zIndex: 15000, 
 
   },
 
@@ -1090,9 +1129,8 @@ const containerStyles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
 
   },
-  twoButtonFooterContainer: {
-    // zIndex: 100,
-    position: 'absolute',
+  twoButtonFooterContainer: { 
+   position: 'absolute',
     zIndex: 10000,
     elevation: 10000,
     bottom: 0, 
