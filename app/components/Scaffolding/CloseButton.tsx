@@ -12,10 +12,7 @@ const CloseButton = ({ onPress, backgroundColor='transparent'}) => {
               style={{
                 flexDirection: "row",
                 justifyContent: "flex-end",
-                width: "100%",
-              //  position: "absolute",
-               // right: 10,
-               // bottom: 90,
+                width: "100%", 
               }}
             >
               <View style={{ marginHorizontal: 3 }}>

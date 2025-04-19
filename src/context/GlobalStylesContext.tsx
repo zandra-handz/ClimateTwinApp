@@ -530,13 +530,12 @@ const containerStyles = StyleSheet.create({
     padding: 10, 
     borderRadius: 20,
     position: 'absolute',
-    width: 'auto',
-    backgroundColor: 'orange',
-    
+    width: 'auto',  
   //  top: 30, // DOWNWARD
     bottom: 80, // UPWARD
-    right: 15,
-    zIndex: 10,
+    right: 10,
+    zIndex: 20,
+    elevation: 20,
 
   },
 
@@ -552,7 +551,7 @@ const containerStyles = StyleSheet.create({
   //  top: 30, // DOWNWARD
     bottom: 44, // UPWARD
     right: 60,
-    zIndex: 20,
+    zIndex: 40,
 
   },
   nextToNextToPickerContainer: {
@@ -566,16 +565,29 @@ const containerStyles = StyleSheet.create({
     
   //  top: 30, // DOWNWARD
     bottom: 44, // UPWARD
-    right: 117,
+    right: 121,
     zIndex: 100,
+
+  },
+
+  pickerButtonsHeaderContainer: {
+    padding: 10,
+    borderRadius: 20,  
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    alignItems:'center',
+    height: 40, 
 
   },
 
   pickerButtonContainer: {
     padding: 10,
     borderRadius: 20,  
-    justifyContent: 'center',
-
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    alignItems:'center',
+    height: 40,
+    //borderBottomWidth: StyleSheet.hairlineWidth,
 
   },
   tabBarContainer: {
@@ -883,6 +895,7 @@ const containerStyles = StyleSheet.create({
     width: "100%",
     flexDirection: "column",
     flex: 1,
+    zIndex: 10,
     borderWidth: StyleSheet.hairlineWidth,
   },
   itemHeaderRow: {
@@ -1040,6 +1053,7 @@ const containerStyles = StyleSheet.create({
     borderRadius: 20,
     padding: 20,  
     width: '100%',   
+   // width: 400, used when debugging friendpicker interfering with double checker modal
     textAlign: 'left',
     height: 170, 
     overflow: 'hidden',
@@ -1067,6 +1081,8 @@ const containerStyles = StyleSheet.create({
     height: 40,
     justifyContent: 'space-between',
     overflow: 'hidden',
+    zIndex: 20000,
+    elevation: 20000,
 
   },
   dCNoButton: {
@@ -1334,7 +1350,7 @@ const fontStyles = StyleSheet.create({
     height: 22,
     width: 22,
   },
-  dCQuestionText: {
+  dCQuestionText: { // also used in FriendPicker menu as header
     fontSize: 16,
     lineHeight: 22,
     fontWeight: 'bold',

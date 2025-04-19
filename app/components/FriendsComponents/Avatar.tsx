@@ -1,7 +1,6 @@
 import { View, Text } from 'react-native'
 import React from 'react'
-import { Image } from 'expo-image'
-import ComponentSpinner from '../Scaffolding/ComponentSpinner'
+import { Image } from 'expo-image' 
 
 const Avatar = ({image, size=100}) => {
   return (
@@ -30,6 +29,7 @@ const Avatar = ({image, size=100}) => {
                       backgroundColor: "pink",
                     }}
                     contentFit="cover" //change to contain to fit whole image
+                    cachePolicy="memory-disk"
                   />
                 </View>
               )}

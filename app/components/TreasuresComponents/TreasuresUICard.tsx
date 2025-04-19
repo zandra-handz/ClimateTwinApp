@@ -214,11 +214,13 @@ const TreasuresUICard = ({ data, onOpenTreasurePress, isFullView }) => {
       {data?.pending != true && (
         <View
           style={[
-            themeStyles.darkerBackground,
+            themeStyles.primaryBackground,
             appContainerStyles.treasureCardContainer,
             { borderColor: themeStyles.primaryBorder.color },
           ]}
         >
+          {!isFullView && (
+            
           <View style={appContainerStyles.treasureHeaderRow}>
             <Text
               style={[
@@ -229,6 +231,8 @@ const TreasuresUICard = ({ data, onOpenTreasurePress, isFullView }) => {
               {data?.descriptor || "unnamed Item"}
             </Text>
           </View>
+          
+        )}
           {isFullView && (
             <View
               style={[
