@@ -13,8 +13,7 @@ import { useUser } from "../../../src/context/UserContext";
 import { Image } from "expo-image";
 import ClimateTwinLogo from "../../assets/images/logo.png";
 import DarkLightSwitch from "./DarkLightSwitch";
-import { AntDesign, Feather  } from "@expo/vector-icons";
-import CustomStatusBar from "../CustomStatusBar";
+import { AntDesign, Feather  } from "@expo/vector-icons"; 
 import InboxWithNotifs from "./InboxWithNotifs";
 
 

@@ -1,8 +1,7 @@
 import { Tabs } from "expo-router";
 import React, { useState } from 'react';
 import ExploreTabBar from '../../components/ExploreTabsComponents/ExploreTabBar';
-import CustomStatusBar from "../../components/CustomStatusBar";
-import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
+import CustomStatusBar from "../../components/CustomStatusBar"; 
  
 
 
@@ -16,10 +15,7 @@ export default () => {
   
   return (
     <>
-    <CustomStatusBar/> 
-       {/* {pickNewSurroundingsMutation.isPending && (
-        <ComponentSpinner showSpinner={true} spinnerSize={50} spinnerType={'circleFade'} backgroundColor={themeStyles.primaryBackground.backgroundColor}/>
-      )} */}
+    {/* <CustomStatusBar/>   */}
   
     <Tabs 
     tabBar={props=> <ExploreTabBar {...props} openDoubleChecker={openDoubleChecker}  />}

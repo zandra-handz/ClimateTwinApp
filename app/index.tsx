@@ -5,23 +5,16 @@ import { useGlobalStyles } from "../src/context/GlobalStylesContext";
 import { useAppMessage } from "../src/context/AppMessageContext";
 import { useRouter } from "expo-router";
 import SignInButton from "./components/SignInButton";
-import { useFonts } from "expo-font";
-import * as SecureStore from "expo-secure-store"; 
-import { LinearGradient } from "expo-linear-gradient"; 
-import CustomStatusBar from "./components/CustomStatusBar"; 
+import { useFonts } from "expo-font"; 
+import { LinearGradient } from "expo-linear-gradient";
+import CustomStatusBar from "./components/CustomStatusBar";
 
-
-
-
-//a frienddate assistant for overwhelmed adults, and for people who just have a lot to talk about
-
-const TOKEN_KEY = "accessToken";
-
-const Index = () => { 
-  const { themeStyles, manualGradientColors, constantColorsStyles } = useGlobalStyles();
+const Index = () => {
+  const { themeStyles, manualGradientColors, constantColorsStyles } =
+    useGlobalStyles();
   const [showSignIn, setShowSignIn] = useState(false);
   const { reInitialize, isAuthenticated, isInitializing } = useUser();
-  const { showAppMessage } = useAppMessage(); 
+  const { showAppMessage } = useAppMessage();
 
   const router = useRouter();
   const usernameInputRef = useRef(null);
@@ -36,42 +29,23 @@ const Index = () => {
     "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
   });
 
-  // useEffect(() => {
-  //   if (usernameInputRef.current) {
-  //     setUsernameInputVisible(true);
-
-  //     usernameInputRef.current.focus();
-  //   }
-  // }, []);
-
-  // const handleNavigateToAuthScreen = (userHitCreateAccount) => {
-  //   navigation.navigate("Auth", { createNewAccount: !!userHitCreateAccount });
-  // };
-
-
   //implement here: pass in prop to tell signin if creating new account
   const handleNavigateToSignIn = () => {
     router.push("/signin");
   };
 
-  const handleNavigateToHome = () => {
-    router.push("(tabs)");
-  };
-  
+  // const handleNavigateToHome = () => {
+  //   router.push("/(tabs)");
+  // };
 
   //i think i should do a condiitional check for user.authenticated at a higher level to ensure
   // app screens can't be viewed at all if user logged out
 
-useEffect(() => {
-  if (!isAuthenticated && !isInitializing) {
-    setShowSignIn(true);
-  }
-
-}, [isAuthenticated, isInitializing]);
-
-  // useEffect(() => {
-  //   checkIfSignedIn();
-  // }, []);
+  useEffect(() => {
+    if (!isAuthenticated && !isInitializing) {
+      setShowSignIn(true);
+    }
+  }, [isAuthenticated, isInitializing]);
 
   const handleCreateAccountInitialFocus = () => {
     if (emailInputRef.current) {
@@ -81,13 +55,12 @@ useEffect(() => {
 
   return (
     <>
-    <CustomStatusBar /> 
+      {/* <CustomStatusBar /> */}
       <LinearGradient
         colors={[
-          'teal',
+          "teal",
           //manualGradientColors.lightColor,
           constantColorsStyles.v1LogoColor.backgroundColor,
-          
         ]}
         start={{ x: 0, y: 1 }} // REVERSED:  start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }} //end={{ x: 1, y: 1 }}
@@ -101,35 +74,31 @@ useEffect(() => {
             justifyContent: "center",
           }}
         >
-          <> 
-              <>
-                <View
-                  style={{
-                    width: "100%",
-                    paddingBottom: "20%",
-                    paddingHorizontal: "3%",
-                  }}
-                >
-                  {/* <GoToItemButton label='Upload image'  onPress={handleSelectImage} />
-                  <GoToItemButton label='Take photo'  onPress={handleCaptureImage} /> */}
-
-                  {/* <LogoSmaller
+          <>
+            <>
+              <View
+                style={{
+                  width: "100%",
+                  paddingBottom: "20%",
+                  paddingHorizontal: "3%",
+                }}
+              >
+                {/* <LogoSmaller
                     accessible={true} //field not in component
                     accessibilityLabel="App Logo" //field not in component
                     accessibilityHint="This is the logo of the app" //field not in component
                   /> */}
-                </View>
-                <View
-                  style={{
-                    bottom: "3%",
-                    paddingHorizontal: "3%",
-                    width: "100%",
-                    right: 0,
-                    position: "absolute",
-                  }}
-                >
-                  {!isAuthenticated && !isInitializing && (
-                    
+              </View>
+              <View
+                style={{
+                  bottom: "3%",
+                  paddingHorizontal: "3%",
+                  width: "100%",
+                  right: 0,
+                  position: "absolute",
+                }}
+              >
+                {!isAuthenticated && !isInitializing && (
                   <SignInButton
                     onPress={() => handleNavigateToSignIn()}
                     title={"Sign in"}
@@ -144,11 +113,9 @@ useEffect(() => {
                     accessibilityLabel={"Sign in button"}
                     accessibilityHint="Press to sign in or create an account"
                   />
-                  
                 )}
- 
-                </View>
-              </> 
+              </View>
+            </>
           </>
         </View>
       </LinearGradient>
@@ -223,8 +190,7 @@ const styles = StyleSheet.create({
     color: "black",
     marginTop: 2,
     textAlign: "center",
-    fontFamily: "Poppins-Bold",
-    //fontWeight: "bold",
+    fontFamily: "Poppins-Bold", 
     fontSize: 14,
     lineHeight: 21,
   },
