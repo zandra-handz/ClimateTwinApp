@@ -9,7 +9,9 @@ export interface Friend {
     friend_profile: FriendProfile;
   }
 
-export interface FriendProfile {
+
+// NOT USING
+  export interface FriendProfile {
     id: number;
     first_name: string;
     last_name: string;
@@ -26,6 +28,22 @@ export interface FriendProfile {
 
 }
 
+export interface PublicProfile {
+  avatar: string;
+  bio: string | null;
+  date_of_birth: string; // ISO format, e.g. "1989-07-13"
+  first_name: string;
+  id: number;
+  last_name: string;
+  most_recent_visit: {
+    latitude: number;
+    longitude: number;
+    location_name: string;
+    visited_on: string; // ISO datetime format, e.g. "2025-04-18T23:26:16.568164Z"
+  };
+  total_visits: number;
+  user: number;
+}
 
 export interface AddFriendRequest {
     message: string,

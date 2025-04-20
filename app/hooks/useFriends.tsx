@@ -19,12 +19,14 @@ import {
   acceptFriendship,
   declineFriendship,
   deleteFriendship,
+  getPublicProfile,
 } from "../../src/calls/apicalls";
 
 //not currently using dropdown
 import {
   AddFriendRequest,
   Friend,
+  PublicProfile,
   DropdownOption,
 } from "@/src/types/useFriendsTypes";
 
@@ -38,6 +40,7 @@ const useFriends = () => {
   const { user, isAuthenticated, isInitializing } = useUser();
   const [friendsDropDown, setFriendsDropDown] = useState<DropdownOption[]>([]);
   const [viewingFriend, setViewingFriend] = useState<Friend | null>(null); //is this correct or do i need the friendship?
+  const [viewingPublicProfile, setViewingPublicProfile] = useState<PublicProfile | null>(null); //is this correct or do i need the friendship?
 
   const [userSearchResults, setUserSearchResults] = useState(null);
   const [allUsers, setAllUsers] = useState(null);
@@ -169,6 +172,35 @@ const useFriends = () => {
 
   const handleGetAllUsers = () => {
     getAllUsersMutation.mutate();
+  };
+
+
+
+  const getPublicProfileMutation = useMutation<PublicProfile[], Error, number>({
+    mutationFn: (userId: number) => getPublicProfile(userId),
+    onSuccess: (data) => {
+      setViewingPublicProfile(data);
+
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      timeoutRef.current = setTimeout(() => {
+        getPublicProfileMutation.reset();
+      }, 2000);
+    },
+    onError: () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+
+      timeoutRef.current = setTimeout(() => {
+        getPublicProfileMutation.reset();
+      }, 2000);
+    },
+  });
+
+  const handleGetPublicProfile = (userId : number) => {
+    getPublicProfileMutation.mutate(userId);
   };
 
   const handleSendFriendRequest = (recipientId: number, message: string) => {
@@ -328,6 +360,7 @@ const useFriends = () => {
     getAllUsersMutation,
     allUsers,
     handleSearchUsers,
+    searchUsersMutation,
     userSearchResults,
     handleSendFriendRequest,
     friendRequestMutation,
@@ -338,6 +371,9 @@ const useFriends = () => {
     handleDeleteFriendship,
     deleteFriendshipMutation,
     viewingFriend,
+    handleGetPublicProfile,
+    getPublicProfileMutation,
+    viewingPublicProfile,
   };
 };
 

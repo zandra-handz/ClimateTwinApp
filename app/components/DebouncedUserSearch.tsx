@@ -1,32 +1,20 @@
 import { View, Text, TextInput } from "react-native";
-import React, { useState, useRef, useEffect, useCallback } from "react";
-import { searchUsers } from "../../src/calls/apicalls";
-import useFriends from "../hooks/useFriends";
+import React, { useState, useRef, useEffect, useCallback } from "react"; 
 import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
 import { debounce } from 'lodash';
 
 const DebouncedUserSearch = ({onEnter}) => {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filteredData, setFilteredData] = useState([]);
-  const { handleSearchUsers } = useFriends();
+  const [searchQuery, setSearchQuery] = useState("");  
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
 
   const handleSearch = (text) => {
-    setSearchQuery(text);
-   // console.log(text); 
+    setSearchQuery(text); 
   };
-
-
-  //const stableOnEnter = useCallback(onEnter, []);
-
-
+ 
   const debouncedOnEnter = useCallback(
-    debounce((query) => {
-    //  console.log("Debounced search query:", query);
-      //stableOnEnter(query);
+    debounce((query) => { 
       onEnter(query);
-    }, 500),
-   // [stableOnEnter]
+    }, 500), 
     []
   );
  
@@ -38,30 +26,29 @@ const DebouncedUserSearch = ({onEnter}) => {
   }, [searchQuery, debouncedOnEnter]);
 
   const handleEnterPress = () => {
-    console.log('enter press detected, searchQuery in memory is:', searchQuery);
+    //console.log('enter press detected, searchQuery in memory is:', searchQuery);
     onEnter(searchQuery);
   }
 
-  return (
-    //  <View style={[appContainerStyles.goToItemButtonContainer, themeStyles.primaryBackground, {borderColor: themeStyles.primaryText.color}]}>
-
+  return ( 
     <TextInput
       style={[
         appContainerStyles.goToItemButtonContainer,
         themeStyles.primaryBackground,
-        { borderColor: themeStyles.primaryText.color },
-      ]}
-      style={[themeStyles.primaryText]}
+        appFontStyles.dCButtonText,
+        
+        { borderColor: themeStyles.primaryText.color,
+        
+         },
+      ]} 
       placeholder={`Search users`}
-      // placeholderTextColor={textAndIconColor}
-      // color={textAndIconColor}
+       placeholderTextColor={themeStyles.primaryText.color}
+       color={themeStyles.primaryText.color}
       autoFocus={true}
       value={searchQuery}
       onChangeText={handleSearch}
-      onSubmitEditing={handleEnterPress}
-      //   onBlur={handleBlur}  // Clear when the user moves away from the input
-    />
-    // </View>
+      onSubmitEditing={handleEnterPress} 
+    /> 
   );
 };
 

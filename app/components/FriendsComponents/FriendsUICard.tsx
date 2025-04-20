@@ -183,7 +183,7 @@ const FriendsUICard = ({ data, onViewFriendPress, isFullView }) => {
           </Text>
         </View>
 
-        {image && <Avatar image={image} size={100} />}
+        <Avatar image={image} size={100} />
         {isFullView && (
           <View
             style={[

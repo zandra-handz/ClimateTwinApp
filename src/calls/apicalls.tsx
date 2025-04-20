@@ -364,6 +364,24 @@ export const getUserProfile = async () => {
     }
 };
 
+export const getPublicProfile = async (userId) => {
+    try {
+       // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.get(`/users/get/${userId}/public-profile/`);
+        console.log('API GET Call getPublicProfile', response.data);
+        return response.data[0];
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/get/${userId}/public-profile/:', error.response.data);
+        } else if (error.request) {
+            console.error('Error request for /users/get/${userId}/public-profile/:');
+        } else {
+            console.error('Error message for /users/get/${userId}/public-profile/:');
+        }
+        throw error;
+    }
+};
+
 
 export const updateUserProfile = async (userId, updatedProfile) => {
     console.log(userId);
@@ -728,7 +746,8 @@ export const requestToGiftTreasure = async (data) => {
 export const cleanTreasuresData = async () => {
     try { 
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
-        const response = await axios.post(`/users/clean-treasures-data/`);
+       // const response = await axios.post(`/users/clean-treasures-data/`);
+        const response = await axios.post(`/climatevisitor/clean-discoveries-data/`); //TEMP
         console.log('API GET Call cleanTreasuresData'); //, response.data);
         return response.data;
     } catch (error) {

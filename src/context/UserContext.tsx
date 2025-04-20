@@ -337,6 +337,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     setAuthenticated(false);
     setLoading(false);
     showAppMessage(true, null, "Signed out.");
+    
 
     queryClient.clear();
   };

@@ -131,7 +131,7 @@ const index = () => {
         ]}
       >
         {" "}
-        {formatUTCToMonthDayYear(user?.created_on) || "No trips"}
+        {formatUTCToMonthDayYear(user?.created_on) || "Unknown"}
       </Text>
     </>
   );

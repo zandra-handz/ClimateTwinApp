@@ -5,8 +5,6 @@ import SendButton from "./Scaffolding/SendButton";
 import CloseButton from "./Scaffolding/CloseButton";
 import Avatar from "./FriendsComponents/Avatar";
 
-import UserListItem from "./FriendsComponents/UserListItem";
-
 interface PickerProps {
   items: { label: string; value: string; username: string; id: string }[];
   onSelect: (selectedItem: any) => void;
@@ -67,7 +65,7 @@ const FriendPicker = forwardRef((props: PickerProps, ref) => {
           style={{
             flex: 1,
             justifyContent: "flex-end",
-            backgroundColor: "rgba(0,0,0,0.2)",
+            backgroundColor: "rgba(0,0,0,0.5)",
           }}
         >
           <View
@@ -105,14 +103,21 @@ const FriendPicker = forwardRef((props: PickerProps, ref) => {
               contentContainerStyle={{ paddingBottom: 20 }}
               renderItem={({ item }) => (
                 <View style={{ marginVertical: 2 }}>
-
-
-                  <UserListItem 
-                  user={item}
-                  avatar={item.friend_profile?.avatar}
-                  size={30}
-                  onPress={handleButtonPress}
-                  /> 
+                  <TouchableOpacity
+                    style={[
+                      appContainerStyles.pickerButtonContainer,
+                      themeStyles.darkerBackground,
+                      { borderColor: themeStyles.primaryText.color },
+                    ]}
+                    onPress={() => handleButtonPress(item)}
+                  >
+                    {item.friend_profile?.avatar && (
+                      <View style={{ paddingRight: 10 }}>
+                        <Avatar image={item.friend_profile.avatar} size={26} />
+                      </View>
+                    )}
+                    <Text style={themeStyles.primaryText}>{item.username}</Text>
+                  </TouchableOpacity>
                 </View>
               )}
               ListEmptyComponent={

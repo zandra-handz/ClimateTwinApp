@@ -1,5 +1,6 @@
 import { View, FlatList } from "react-native"; 
-import FriendsUICard from "./FriendsUICard";
+
+import UserListItem from '@/app/components/FriendsComponents/UserListItem';
 import UsersUICard from "./UsersUICard";
 import React from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext"; 
@@ -17,11 +18,18 @@ const SearchResultsView = ({
           item.id ? `${item.id}-${item.timestamp || index}` : index.toString()
         }
         renderItem={({ item }) => (
-          <View style={{ marginVertical: "2%" }}>
-            <UsersUICard
+          <View style={{ marginVertical: "4" }}>
+            <UserListItem
+            user={item}
+            avatar={item.profile?.avatar}
+            onPress={onViewUserPress}
+            size={40}
+            showIsFriend={true}
+            />
+            {/* <UsersUICard
               data={item}
               onViewUserPress={onViewUserPress}
-            />
+            /> */}
           </View>
         )}
         contentContainerStyle={{ paddingBottom: 60 }}

@@ -581,12 +581,13 @@ const containerStyles = StyleSheet.create({
   },
 
   pickerButtonContainer: {
-    padding: 10,
-    borderRadius: 20,  
+    paddingHorizontal: 10,
+    borderRadius: 10,  
     justifyContent: 'flex-start',
     flexDirection: 'row',
     alignItems:'center',
-    height: 40,
+    
+   //pass height in in components
     //borderBottomWidth: StyleSheet.hairlineWidth,
 
   },
@@ -1139,7 +1140,7 @@ const containerStyles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',  
     height: "auto", 
-    borderRadius: 16, 
+    borderRadius: 10, 
     flexDirection: "column",
     flex: 1,
     borderWidth: StyleSheet.hairlineWidth,
@@ -1361,7 +1362,7 @@ const fontStyles = StyleSheet.create({
     lineHeight: 22, 
 
   },
-  dCButtonText: {
+  dCButtonText: { // used in DebounceUserSearch and UserListItem too
     fontSize: 15,
     lineHeight: 22,
     fontWeight: 'bold',

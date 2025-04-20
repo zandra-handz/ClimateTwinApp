@@ -106,11 +106,12 @@ export default () => {
               gestureEnabled: true,
             }}
           />
-          {/* <Stack.Screen
-            name="[id]"
-            options={{
+
+<Stack.Screen
+            name="user"
+            options={({ route }) => ({
               headerShown: true,
-              headerTitle: "Message",
+              headerTitle: route.params?.username || "Profile",
               headerTitleStyle: {
                 color: constantColorsStyles.v1LogoColor.color,
               },
@@ -118,50 +119,22 @@ export default () => {
                 backgroundColor:
                   constantColorsStyles.v1LogoColor.backgroundColor,
               },
-
               headerLeft: () => (
                 <TouchableOpacity
                   onPress={() => router.back()}
                   style={{ paddingLeft: 10, paddingRight: 10 }}
                 >
                   <AntDesign
-                    name="mail"
+                    name="user"
                     size={appFontStyles.exploreTabBarIcon.width}
                     color={constantColorsStyles.v1LogoColor.color}
                   />
                 </TouchableOpacity>
               ),
               gestureEnabled: true,
-            }}
+            })}
           />
-                      <Stack.Screen
-            name="compose"
-            options={{
-              headerShown: true,
-              headerTitle: "Compose",
-              headerTitleStyle: {
-                color: constantColorsStyles.v1LogoColor.color,
-              },
-              headerStyle: {
-                backgroundColor:
-                  constantColorsStyles.v1LogoColor.backgroundColor,
-              },
-
-              headerLeft: () => (
-                <TouchableOpacity
-                  onPress={() => router.back()}
-                  style={{ paddingLeft: 10, paddingRight: 10 }}
-                >
-                  <MaterialIcons
-                    name="add"
-                    size={appFontStyles.exploreTabBarIcon.width}
-                    color={constantColorsStyles.v1LogoColor.color}
-                  />
-                </TouchableOpacity>
-              ),
-              gestureEnabled: true,
-            }}
-          /> */}
+        
         </Stack>
       </SafeAreaView>
     </GestureHandlerRootView>

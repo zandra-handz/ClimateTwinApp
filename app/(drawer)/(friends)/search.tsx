@@ -1,71 +1,81 @@
-import React, { useEffect } from 'react'
-import { View, Text } from 'react-native'
+import React , { useEffect } from "react";
+import { View } from "react-native";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import ActionsFooter from "@/app/components/ActionsFooter";
 import { useRouter } from "expo-router";
-import useFriends from '@/app/hooks/useFriends';
-
-import DebouncedUserSearch from '@/app/components/DebouncedUserSearch';
-import DataList from '@/app/components/Scaffolding/DataList';
-
-import SearchResultsView from '@/app/components/FriendsComponents/SearchResultsView';
-
+import useFriends from "@/app/hooks/useFriends";
+import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
+import DebouncedUserSearch from "@/app/components/DebouncedUserSearch";
+import SearchResultsView from "@/app/components/FriendsComponents/SearchResultsView";
+import DoubleChecker from "@/app/components/Scaffolding/DoubleChecker";
+ 
 
 const search = () => {
-     const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
-    const router = useRouter();
-    const { userSearchResults, handleSearchUsers, handleSendFriendRequest } = useFriends();
+  const { themeStyles, appContainerStyles } = useGlobalStyles();
+  const router = useRouter();
+  const { userSearchResults, handleSearchUsers, handleSendFriendRequest, searchUsersMutation } =
+    useFriends();
 
+  const handleFriendRequest = (friendObject) => {
+    if (friendObject) {
+      handleSendFriendRequest(
+        friendObject.id,
+        "Friend request message placeholder!"
+      );
+    }
+  };
 
-    const handleFriendRequest = (friendObject) => {
-        if (friendObject) {
-          console.log("attempting to send friend request", friendObject);
-          handleSendFriendRequest(friendObject.id, 'Friend request message placeholder!');
-        }
-      };
+  const handleViewUser = (user) => {
+    if (user.id) {
+      router.push({
+        pathname: "(friends)/user",
+        params: { id: user.id, username: user.username },
+      });
+    }
+  };
 
+  // useEffect(() => {
+  //   if search
 
-      // useEffect(() => {
-      //   if (userSearchResults) {
-      //       console.log(`user search results in search screen: `, userSearchResults);
-      //   }
+  // }, [searchUsersMutation.isPending]);
 
-      // }, [userSearchResults]);
-    
- 
-     return (
+  return (
     <>
       <View
         style={[
           appContainerStyles.screenContainer,
           themeStyles.primaryBackground,
-          { paddingTop: 10 },
+        
         ]}
       >
-        <View style={{ height: 90, paddingHorizontal: 20, width: "100%" }}>
+        <View style={{ height: 50,  width: "100%", marginVertical: 6 }}>
           <DebouncedUserSearch onEnter={handleSearchUsers} />
         </View>
 
         <View style={appContainerStyles.innerFlexStartContainer}>
-        {userSearchResults && (
-
-          <SearchResultsView data={userSearchResults} onViewUserPress={handleFriendRequest} />
-            // <DataList listData={userSearchResults} onCardButtonPress={handleFriendRequest} />
+          {searchUsersMutation.isPending && (
+            <ComponentSpinner showSpinner={true} spinnerSize={30} spinnerType={'circle'}/>
           )}
- 
+
+          {userSearchResults && !searchUsersMutation.isPending && (
+            <SearchResultsView
+              data={userSearchResults}
+              onViewUserPress={handleViewUser}
+            />
+          )}
         </View>
-        
-              <ActionsFooter 
-                onPressLeft={() => router.back()}
-                labelLeft={"Back"}
-                // onPressRight={() => router.push('search/')}
-                // labelRight={"Search"}
-                // onPressCenter={isMinimized ? handleFullScreenToggle : null}
-                // labelCenter={"Groq"}
-              />
+
+        <ActionsFooter
+          onPressLeft={() => router.back()}
+          labelLeft={"Back"}
+          // onPressRight={() => router.push('search/')}
+          // labelRight={"Search"}
+          // onPressCenter={isMinimized ? handleFullScreenToggle : null}
+          // labelCenter={"Groq"}
+        />
       </View>
     </>
-  )
-}
+  );
+};
 
-export default search
+export default search;

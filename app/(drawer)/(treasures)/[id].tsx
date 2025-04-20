@@ -28,6 +28,7 @@ const details = () => {
   const { friends, friendsDropDown } = useFriends();
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { showAppMessage } = useAppMessage();
+   const [isListVisible, setIsListVisible] = useState<boolean>(false);
   const {
     treasures,
     handleGetTreasure,
@@ -44,6 +45,16 @@ const details = () => {
     setDoubleCheckerVisible((prev) => !prev);
   };
 
+  const openFriendPicker = () => {
+    setIsListVisible(true);
+
+  };
+
+  const closeFriendPicker = () => {
+    setIsListVisible(false);
+
+  };
+
   const handleGiftTreasureBack = () => {
     handleGiftTreasureBackToFinder(data?.id);
     handleToggleDoubleChecker();
@@ -55,7 +66,7 @@ const details = () => {
   };
 
   const handleViewTreasureHistory = () => {
-    console.log('handleViewTreasureHistory pressed');
+    console.log("handleViewTreasureHistory pressed");
     if (id) {
       router.push({
         pathname: "(treasures)/history",
@@ -109,25 +120,32 @@ const details = () => {
           { paddingTop: 10 },
         ]}
       >
-                <View style={[appContainerStyles.nextToNextToPickerContainer]}>
-         
-          <HistoryButton onPress={() => handleViewTreasureHistory()} backgroundColor={themeStyles.darkerBackground.backgroundColor} />
         
+
+        <View style={[appContainerStyles.nextToNextToPickerContainer]}>
+          <HistoryButton
+            onPress={() => handleViewTreasureHistory()}
+            backgroundColor={themeStyles.darkerBackground.backgroundColor}
+          />
         </View>
         <View style={[appContainerStyles.nextToPickerContainer]}>
-          <ReturnItemButton onPress={() => handleToggleDoubleChecker()} backgroundColor={themeStyles.darkerBackground.backgroundColor} />
-         
+          <ReturnItemButton
+            onPress={() => handleToggleDoubleChecker()}
+            backgroundColor={themeStyles.darkerBackground.backgroundColor}
+          />
         </View>
-        <FriendPicker items={friends} onSelect={handleFriendSelect} />
 
-        <ScrollView>
+        <ScrollView nestedScrollEnabled={true}
+        pointerEvents={isListVisible ? 'none' : 'auto'}>
+          
           {viewingTreasure && (
             <TreasuresUICard data={viewingTreasure} isFullView={true} />
           )}
-
         </ScrollView>
+        <FriendPicker items={friends} onSelect={handleFriendSelect} isVisible={isListVisible} open={openFriendPicker} close={closeFriendPicker} />
         <ActionsFooter onPressLeft={() => router.back()} labelLeft={"Back"} />
       </View>
+     
     </>
   );
 };

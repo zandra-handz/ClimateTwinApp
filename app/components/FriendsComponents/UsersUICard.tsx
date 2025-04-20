@@ -1,5 +1,5 @@
-import { View, Text } from "react-native";
-import React, { useEffect, useState} from "react";
+import { View, Text,  TouchableOpacity, ScrollView } from "react-native";
+import React, { useEffect, useState } from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { useAppMessage } from "@/src/context/AppMessageContext";
 import { useRouter } from "expo-router";
@@ -9,23 +9,29 @@ import GoToItemButton from "../GoToItemButton";
 import UnfriendButton from "../Scaffolding/UnfriendButton";
 import AddFriendButton from "../Scaffolding/AddFriendButton";
 import DoubleChecker from "../Scaffolding/DoubleChecker";
-import Avatar from "./Avatar";
+import Avatar from "./Avatar"; 
+import { Feather } from "@expo/vector-icons";
+
+import ActionsFooter from "../ActionsFooter";
+import ComponentSpinner from "../Scaffolding/ComponentSpinner";
 
 import useFriends from "@/app/hooks/useFriends";
 
 
 // NEED TO ALSO CHECK THAT A FRIEND REQUEST ISN'T ALREADY PENDING
-const UsersUICard = ({ data, onViewUserPress, isFullView }) => {
+const UsersUICard = ({ data, onViewUserPress  }) => {
   const { showAppMessage } = useAppMessage();
   const router = useRouter();
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
   const { formatUTCToMonthDayYear } = useDateTimeFunctions();
-  const { friends, friendRequestMutation } = useFriends();
+  const { friends, friendRequestMutation, getPublicProfileMutation } = useFriends();
   const [ isAlreadyFriend, setIsAlreadyFriend ] = useState(false);
 
   const [ isDoubleCheckerVisible, setDoubleCheckerVisible ] = useState(false);
 
-  const image = data?.profile?.avatar || null;
+  const profile = data;
+  const image = data?.avatar || null;
+  const bio = data?.bio || null;
 
 
   useEffect(() => {
@@ -95,6 +101,8 @@ const handleToggleDoubleChecker = () => {
       );
     }
 
+
+
     return (
       <View
         key={key}
@@ -125,27 +133,7 @@ const handleToggleDoubleChecker = () => {
     );
   };
 
-//   const findDetails = (
-//     <>
-//       <Text
-//         style={[
-//           appFontStyles.itemCollectionDetailsText,
-//           themeStyles.primaryText,
-//         ]}
-//       >
-//         Friends since
-//       </Text>
-//       <Text
-//         style={[
-//           appFontStyles.itemCollectionDetailsText,
-//           themeStyles.primaryText,
-//         ]}
-//       >
-//         {" "}
-//         {formatUTCToMonthDayYear(data?.created_on) || "unknown date"}.
-//       </Text>
-//     </>
-//   );
+ 
 
   const findLastVisit = (
     <>
@@ -164,101 +152,149 @@ const handleToggleDoubleChecker = () => {
         ]}
       >
         {" "}
-        {data?.profile?.most_recent_visit?.location_name || ""}{" "}
+        {data?.most_recent_visit?.location_name || ""}{" "}
         {formatUTCToMonthDayYear(
-          data?.profile?.most_recent_visit?.visited_on
+          data?.most_recent_visit?.visited_on
         ) || "No trips"}
       </Text>
     </>
   );
 
-  //   const ownershipDetails = (
-  //     <>
-  //       <Text
-  //         style={[
-  //           appFontStyles.itemCollectionDetailsText,
-  //           themeStyles.primaryText,
-  //         ]}
-  //       >
-  //         This was given to you by {renderFriendName(data?.giver)} on{" "}
-  //         {formatUTCToMonthDayYear(data?.owned_since) ||
-  //           formatUTCToMonthDayYear(data?.created_on) ||
-  //           "unknown date"}
-  //         !
-  //       </Text>
-  //     </>
-  //   );
+  const findTotalVisits = (
+    <>
+      <Text
+        style={[
+          appFontStyles.itemCollectionDetailsBoldText,
+          themeStyles.primaryText,
+        ]}
+      >
+        Trips taken:
+      </Text>
+      <Text
+        style={[
+          appFontStyles.itemCollectionDetailsText,
+          themeStyles.primaryText,
+        ]}
+      >
+        {" "}
+        {profile?.total_visits || ""}{" "}
+      </Text>
+    </>
+  );
+
+    const findCreatedOn = (
+      <>
+        <Text
+          style={[
+            appFontStyles.itemCollectionDetailsBoldText,
+            themeStyles.primaryText,
+          ]}
+        >
+          Account created:
+        </Text>
+        <Text
+          style={[
+            appFontStyles.itemCollectionDetailsText,
+            themeStyles.primaryText,
+          ]}
+        >
+          {" "}
+          {formatUTCToMonthDayYear(profile.created_on) || "Unknown"}
+        </Text>
+      </>
+    );
+ 
 
   return (
     <>
-    {isDoubleCheckerVisible && (
+   {isDoubleCheckerVisible && (
       <DoubleChecker
       isVisible={isDoubleCheckerVisible}
       toggleVisible={handleToggleDoubleChecker}
       singleQuestionText={`Add ${data?.username || ''}?`}
-
-     // optionalText=""
+ 
       noButtonText="Back"
       yesButtonText="Yes"
       onPress={handleAddFriend} />
     )}
+     {getPublicProfileMutation.isPending && <ComponentSpinner showSpinner={true} />}
+      
       <View
-        style={[
-          themeStyles.darkerBackground,
-          appContainerStyles.itemCardContainer,
-          { borderColor: themeStyles.primaryBorder.color },
-        ]}
+        style={{flex: 1}}
       >
-        <View style={appContainerStyles.friendHeaderRow}>
-          <Text style={[appFontStyles.itemHeaderText, themeStyles.primaryText]}>
-            {data?.username || "Friend name is missing"}
-          </Text>
-        </View>
-
-        {image && ( 
-            <Avatar image={image} size={100}/>
-        )}
-        {isFullView && (
-          <View
-            style={[
-              appContainerStyles.itemDescriptionContainer,
-              themeStyles.darkestBackground,
-            ]}
-          >
-            <Text
-              style={[
-                appFontStyles.itemDescriptionText,
-                themeStyles.primaryText,
+         {profile && !getPublicProfileMutation.isPending && (
+        
+            <ScrollView
+              contentContainerStyle={[
+                appContainerStyles.innerFlexStartContainer,
               ]}
             >
-              <Text style={{ fontWeight: "bold" }}>Bio: </Text>
-              {data?.friend_profile?.bio || "No bio"}
-            </Text>
-          </View>
-        )} 
-
-
-        <View style={[appContainerStyles.itemCollectionDetailsSubheader]}>
-          <CuteDetailBox
-            //iconOne={"heart"}
-            iconTwo={"map"}
-            message={findLastVisit}
-          />
-        </View> 
-
-        {!isFullView && (
-          <>
-          <GoToItemButton onPress={() => handlePress()} label={"See profile"} />
-         
-          </>
+              <View style={{ width: "100%", height: 170 }}>
+                <Avatar image={image} size={140} />
+              </View>
+              <View
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "center",
+                  width: "100%",
+                  height: 'auto',
+                  marginBottom: 10,
+                
+                }}
+              >
+                <Text
+                  style={[
+                    appFontStyles.profileHeaderText,
+                    themeStyles.primaryText,
+                  ]}
+                >
+                  {profile.username || 'No name'}
+                </Text>
+              </View> 
+              {profile && (
+                <> 
+                  <View
+                    style={[
+                      appContainerStyles.userBioContainer,
+                      themeStyles.darkestBackground,
+                      { marginVertical: 3 },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        appFontStyles.itemDescriptionText,
+                        themeStyles.primaryText,
+                      ]}
+                    >
+                      <Text style={{ fontWeight: "bold" }}>Bio: </Text>
+                      {profile.bio || "No bio"}
+                    </Text>
+                  </View>
+                  <View style={{ marginVertical: 3 }}>
+                    <CuteDetailBox
+                      //iconOne={"heart"}
+                      iconTwo={"map"}
+                      message={findTotalVisits}
+                    />
+                  </View>
+                  <View style={{ marginVertical: 3 }}>
+                    <CuteDetailBox
+                      iconOne={"heart"}
+                      //iconTwo={"map"}
+                      message={findLastVisit}
+                    />
+                  </View>
+                  <View style={{ marginVertical: 3 }}>
+                    <CuteDetailBox
+                      iconOne={"heart"}
+                      //iconTwo={"map"}
+                      message={findCreatedOn}
+                    />
+                  </View>
+                </>
+              )} 
+            </ScrollView> 
         )}
-        {/* {isFullView && ( */} 
-            {data && (
-              
-         <AddFriendButton isAlreadyFriend={isAlreadyFriend} onPress={() => handleToggleDoubleChecker()}  />
-        
-        )}
-        {/* )} */}
       </View>
     </>
   );
