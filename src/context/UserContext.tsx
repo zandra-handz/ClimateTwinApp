@@ -136,10 +136,10 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
         try {
           userData = await getCurrentUser();
-          console.log(
-            "REINIT USER DATA ON OTHER SIDE OF INTERCEPTOR: ",
-            userData
-          );
+          // console.log(
+          //   "REINIT USER DATA ON OTHER SIDE OF INTERCEPTOR: ",
+          //   userData
+          // );
         } catch (error) {
           console.error("Error fetching current user:", error);
           showAppMessage(true, null, "Token detected but cannot fetch user");
@@ -196,16 +196,16 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       appSettings &&
       Object.keys(appSettings).length > 0
     ) {
-      console.log("!!!!!!!!!!!!!!!!!!!!!!!APP SETTINGS", appSettings);
+      // console.log("!!!!!!!!!!!!!!!!!!!!!!!APP SETTINGS", appSettings);
     }
 
     const cachedSettings = queryClient.getQueryData(["userSettings", user?.id]);
 
     if (cachedSettings) {
-      console.log(
-        "!!!!!!!!!!!!!!!!!!!!!!! REACT QUERY CACHE: ",
-        cachedSettings
-      );
+      // console.log(
+      //   "!!!!!!!!!!!!!!!!!!!!!!! REACT QUERY CACHE: ",
+      //   cachedSettings
+      // );
     }
   }, [appSettings]);
 
@@ -330,6 +330,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   };
 
   const onSignOut = async () => {
+    setLoading(true);
     await signout();
     setUser(null);
     setAppSettings(null);
@@ -359,7 +360,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const getNotificationPermissionStatus = async () => {
     const { status: existingStatus } =
       await Notifications.getPermissionsAsync();
-    console.log(`existingStatus: `, existingStatus);
+   // console.log(`existingStatus: `, existingStatus);
     return existingStatus;
   };
 

@@ -230,8 +230,7 @@ export const SurroundingsWSProvider: React.FC<SurroundingsWSProviderProps> = ({
         setLastLocationName(update.name);
       }
 
-      if ("location_id" in update) {
-        console.log("update location id!", update.location_id);
+      if ("location_id" in update) { 
         setLastLocationId(update.location_id);
       }
 

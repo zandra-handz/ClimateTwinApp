@@ -51,10 +51,34 @@ export interface AddFriendRequest {
     recipient: number,
 }
 
+
+
+// not in use
 export interface DropdownOption {
     label: string;
     value: number;
     friendshipNumber: number;
   }
 
- 
+
+  export interface FriendRequest {
+    id: number;
+    message: string;
+    recipient: number;
+    sender: number;
+    special_type: "friend request";
+  }
+  
+  export interface GiftRequest {
+    id: number;
+    message: string;
+    recipient: number;
+    sender: number;
+    treasure?: number;
+    special_type: "gift request" | "gift_request"; // support both just in case
+  }
+  
+  export interface PendingRequestsResponse {
+    pending_friend_requests: FriendRequest[];
+    pending_gift_requests: GiftRequest[];
+  }

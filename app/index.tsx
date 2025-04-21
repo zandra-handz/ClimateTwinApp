@@ -55,7 +55,7 @@ const Index = () => {
 
   return (
     <>
-      {/* <CustomStatusBar /> */}
+      <CustomStatusBar />
       <LinearGradient
         colors={[
           "teal",

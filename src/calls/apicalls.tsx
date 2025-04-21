@@ -331,8 +331,8 @@ export const getUserSettings = async () => {
     try {
        // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/users/settings/');
-        console.log('API GET Call getUserSettings'); //, response.data);
-        return response.data[0];
+        //console.log('API GET Call getUserSettings', response.data);
+        return response.data;
     } catch (error) {
         if (error.response) {
             console.error('Error response for /auth/users/:', error.response.data);
@@ -345,13 +345,30 @@ export const getUserSettings = async () => {
     }
 };
 
+export const getUserPendingRequests = async () => {
+    try {
+       // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.get('/users/pending-requests/');
+      // console.log('API GET Call getUserPendingRequests', response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/pending-requests/:', error.response.data);
+        } else if (error.request) {
+            console.error('Error request for /users/pending-requests/:');
+        } else {
+            console.error('Error message for /users/pending-requests/:');
+        }
+        throw error;
+    }
+};
 
 export const getUserProfile = async () => {
     try {
        // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/users/profile/');
         console.log('API GET Call getUserProfile', response.data);
-        return response.data[0];
+        return response.data;
     } catch (error) {
         if (error.response) {
             console.error('Error response for /users/profile/:', error.response.data);
@@ -364,12 +381,12 @@ export const getUserProfile = async () => {
     }
 };
 
-export const getPublicProfile = async (userId) => {
+export const getPublicProfile = async (userId : string) => {
     try {
        // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get(`/users/get/${userId}/public-profile/`);
         console.log('API GET Call getPublicProfile', response.data);
-        return response.data[0];
+        return response.data;
     } catch (error) {
         if (error.response) {
             console.error('Error response for /users/get/${userId}/public-profile/:', error.response.data);
@@ -545,7 +562,7 @@ export const getRemainingGoes = async () => {
 export const updateUserSettings = async (userId, updatedSettings) => {
     try {
         const response = await axios.patch(`/users/change-settings/${userId}/`, updatedSettings);
-        console.log('API PATCH CALL updateUserSettings', response.data);
+        //console.log('API PATCH CALL updateUserSettings', response.data);
         //console.log('API response:', response.data); // Log the response data
         return response.data; // Ensure this returns the expected structure
     } catch (error) {

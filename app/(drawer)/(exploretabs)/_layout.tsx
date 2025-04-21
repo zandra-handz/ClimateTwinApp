@@ -15,7 +15,7 @@ export default () => {
   
   return (
     <>
-    {/* <CustomStatusBar/>   */}
+    <CustomStatusBar/>  
   
     <Tabs 
     tabBar={props=> <ExploreTabBar {...props} openDoubleChecker={openDoubleChecker}  />}

@@ -52,7 +52,7 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
   const [isSearchingForTwin, setIsSearchingForTwin] = useState<boolean>(false);
   const [isExploring, setIsExploring] = useState<boolean>(false);
   const [isHome, setIsHome] = useState<boolean>(false);
-  const { locationUpdateWSIsOpen, lastState } = useSurroundingsWS();
+  const { locationUpdateWSIsOpen, lastLocationId, lastState } = useSurroundingsWS();
 
   useEffect(() => {
     if (!isAuthenticated) {
@@ -75,15 +75,15 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
     isSuccess,
     isError,
   } = useQuery({
-    queryKey: ["remainingGoes"],
+    queryKey: ["remainingGoes", user?.id],
     queryFn: () => getRemainingGoes(),
-    enabled: !!isAuthenticated && !isInitializing,
+    enabled: !!isAuthenticated && !isInitializing && !!lastState,
     onSuccess: (data) => {},
   });
 
   const refetchRemainingGoes = () => {
-    queryClient.invalidateQueries({ queryKey: ["remainingGoes"] });
-    queryClient.refetchQueries({ queryKey: ["remainingGoes"] });
+    queryClient.invalidateQueries({ queryKey: ["remainingGoes", user?.id] });
+    queryClient.refetchQueries({ queryKey: ["remainingGoes", user?.id] });
   };
 
   const handleGo = (address) => {
