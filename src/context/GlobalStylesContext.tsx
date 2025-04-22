@@ -1064,14 +1064,31 @@ const containerStyles = StyleSheet.create({
     elevation: 20000,
 
   },
+  doubleCheckerWithMessageContainer: { 
+    borderRadius: 20,
+    padding: 20,  
+    width: '100%',   
+   // width: 400, used when debugging friendpicker interfering with double checker modal
+    textAlign: 'left',
+    height: 270, 
+    overflow: 'hidden',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    zIndex: 20000,
+    elevation: 20000,
+
+  },
   doubleCheckerQuestionContainer: {
-   // flex: 1,
+   flexShrink: 1,
     //backgroundColor: 'orange',
-    padding: 10,
+    padding: 0,
+    justifyContent: 'center',
+    alignContent: 'center',
+    height: 'auto',
     width: '100%',
     flexDirection: 'column',
   //  flexWrap: 'flex',
-    //backgroundColor: 'pink',
+   // backgroundColor: 'pink',
    // height: '5%', 
 
   },
@@ -1080,6 +1097,7 @@ const containerStyles = StyleSheet.create({
    // backgroundColor: 'lightblue',
     flexDirection: 'row',
     height: 40,
+    
     justifyContent: 'space-between',
     overflow: 'hidden',
     zIndex: 20000,
@@ -1284,7 +1302,7 @@ const fontStyles = StyleSheet.create({
     lineHeight: 24,
     fontWeight: 'bold',
   },
-  groqResponseText: {
+  groqResponseText: { // using for NothingHere subMessage too
     fontSize: 15,
     lineHeight: 20,
 
@@ -1405,6 +1423,11 @@ const fontStyles = StyleSheet.create({
   GoToItemButtonText: {
     fontSize: 17,
     // fontWeight: 'bold',
+
+  },
+  friendingFunctionsButtonText: {
+    fontSize: 14,
+    fontWeight: 'bold',
 
   },
  

@@ -47,8 +47,8 @@ const details = () => {
         <ActionsFooter
           onPressLeft={() => router.back()}
           labelLeft={"Back"}
-          onPressRight={handleGoToGiveScreen}
-          labelRight={"Gift"}
+          // onPressRight={handleGoToGiveScreen}
+          // labelRight={"Gift"}
         />
       </View>
     </>

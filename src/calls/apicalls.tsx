@@ -1028,6 +1028,7 @@ export const getFriend = async (friendId) => {
 
 
 export const requestToAddFriend = async (data : any) => {
+    console.log(`friend request data: `, data);
     try { 
           const response = await axios.post(`/users/send-friend-request/`, data);
         console.log('API GET Call requestToAddFriend'); //, response.data);

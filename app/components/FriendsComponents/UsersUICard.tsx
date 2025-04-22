@@ -17,6 +17,8 @@ import ComponentSpinner from "../Scaffolding/ComponentSpinner";
 
 import useFriends from "@/app/hooks/useFriends";
 
+import FriendingFunctionsButton from "./FriendingFunctionsButton";
+
 
 // NEED TO ALSO CHECK THAT A FRIEND REQUEST ISN'T ALREADY PENDING
 const UsersUICard = ({ data, onViewUserPress  }) => {
@@ -113,6 +115,7 @@ const handleToggleDoubleChecker = () => {
           flexWrap: "wrap",
         }}
       >
+             
         <Text
           style={[
             themeStyles.primaryText,
@@ -222,6 +225,7 @@ const handleToggleDoubleChecker = () => {
       <View
         style={{flex: 1}}
       >
+        
          {profile && !getPublicProfileMutation.isPending && (
         
             <ScrollView
@@ -229,6 +233,10 @@ const handleToggleDoubleChecker = () => {
                 appContainerStyles.innerFlexStartContainer,
               ]}
             >
+              <View style={{position: 'absolute', width: 110, height: 60, right: 10, top: 10}}>
+              <FriendingFunctionsButton cTUserId={data.id} cTUsername={data.username} size={40} />
+         
+              </View>
               <View style={{ width: "100%", height: 170 }}>
                 <Avatar image={image} size={140} />
               </View>

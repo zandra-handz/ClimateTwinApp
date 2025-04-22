@@ -1,11 +1,11 @@
-import { View, Text } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { useAppMessage } from "@/src/context/AppMessageContext";
 import { useRouter } from "expo-router";
 import useDateTimeFunctions from "../../hooks/useDateTimeFunctions";
 import CuteDetailBox from "../CuteDetailBox";
-import GoToItemButton from "../GoToItemButton"; 
+import GoToItemButton from "../GoToItemButton";
 import UnfriendButton from "../Scaffolding/UnfriendButton";
 import DoubleChecker from "../Scaffolding/DoubleChecker";
 import Avatar from "./Avatar";
@@ -170,65 +170,74 @@ const FriendsUICard = ({ data, onViewFriendPress, isFullView }) => {
           onPress={handleDeleteFriend}
         />
       )}
-      <View
-        style={[
-          themeStyles.darkerBackground,
-          appContainerStyles.itemCardContainer,
-          { borderColor: themeStyles.primaryBorder.color },
-        ]}
-      >
-        <View style={appContainerStyles.friendHeaderRow}>
-          <Text style={[appFontStyles.itemHeaderText, themeStyles.primaryText]}>
-            {data?.username || "Friend name is missing"}
-          </Text>
-        </View>
-
-        <Avatar image={image} size={100} />
-        {isFullView && (
+      <View style={{ flex: 1 }}>
+        <ScrollView
+          contentContainerStyle={[appContainerStyles.innerFlexStartContainer]}
+        >
+          <View style={{ width: "100%", height: 170 }}>
+            <Avatar image={image} size={140} />
+          </View>
           <View
-            style={[
-              appContainerStyles.itemDescriptionContainer,
-              themeStyles.darkestBackground,
-            ]}
+            style={{
+              flexDirection: "row",
+              justifyContent: "center",
+              width: "100%",
+              height: "auto",
+              marginBottom: 10,
+            }}
           >
             <Text
-              style={[
-                appFontStyles.itemDescriptionText,
-                themeStyles.primaryText,
-              ]}
+              style={[appFontStyles.profileHeaderText, themeStyles.primaryText]}
             >
-              <Text style={{ fontWeight: "bold" }}>Bio: </Text>
-              {data?.friend_profile?.bio || "No bio"}
+              {data.username || "No name"}
             </Text>
           </View>
-        )}
+ 
+                  <View
+                    style={[
+                      appContainerStyles.userBioContainer,
+                      themeStyles.darkestBackground,
+                      { marginVertical: 3 },
+                    ]}
+                  >
+                    <Text
+                      style={[
+                        appFontStyles.itemDescriptionText,
+                        themeStyles.primaryText,
+                      ]}
+                    >
+                      <Text style={{ fontWeight: "bold" }}>Bio: </Text>
+                      {data?.friend_profile.bio || "No bio"}
+                    </Text>
+                  </View>
 
-        <View style={[appContainerStyles.itemCollectionDetailsSubheader]}>
-          <CuteDetailBox
-            //iconOne={"heart"}
-            iconTwo={"map"}
-            message={findLastVisit}
-          />
-        </View>
-        <View style={[appContainerStyles.itemCollectionDetailsSubheader]}>
-          <CuteDetailBox
-            iconOne={"heart"}
-            //iconTwo={"map"}
-            message={findDetails}
-          />
-        </View>
-
-        {onViewFriendPress && (
-          <>
-            <GoToItemButton
-              onPress={() => handlePress()}
-              label={"See profile"}
+          <View style={[appContainerStyles.itemCollectionDetailsSubheader]}>
+            <CuteDetailBox
+              //iconOne={"heart"}
+              iconTwo={"map"}
+              message={findLastVisit}
             />
-          </>
-        )}
-        {isFullView && (
-          <UnfriendButton onPress={() => handleToggleDoubleChecker()} />
-        )}
+          </View>
+          <View style={[appContainerStyles.itemCollectionDetailsSubheader]}>
+            <CuteDetailBox
+              iconOne={"heart"}
+              //iconTwo={"map"}
+              message={findDetails}
+            />
+          </View>
+
+          {onViewFriendPress && (
+            <>
+              <GoToItemButton
+                onPress={() => handlePress()}
+                label={"See profile"}
+              />
+            </>
+          )}
+          {isFullView && (
+            <UnfriendButton onPress={() => handleToggleDoubleChecker()} />
+          )}
+        </ScrollView>
       </View>
     </>
   );

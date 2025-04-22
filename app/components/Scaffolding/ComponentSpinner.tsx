@@ -129,25 +129,7 @@ const styles = StyleSheet.create({
   //   backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent overlay
   //   zIndex: 5000, // High zIndex to stay on top
   //   elevation: 5000, // Ensures Android rendering priority
-  // },
-  textContainer: {
-    position: "absolute",
-    top: "36%",
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  spinnerContainer: {
-    backgroundColor: "pink",
-    justifyContent: "center",
-    alignItems: "center",
-    width: "100%",
-  },
-  loadingTextBold: {
-    fontSize: 22,
-    fontFamily: "Poppins-Regular",
-    textAlign: "center",
-    paddingBottom: 20,
-  },
+  // },  
 });
 
 export default ComponentSpinner;

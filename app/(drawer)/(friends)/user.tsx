@@ -9,6 +9,7 @@ import { useAppMessage } from "../../../src/context/AppMessageContext";
 import ActionsFooter from "@/app/components/ActionsFooter";
 
 import DoubleChecker from "@/app/components/Scaffolding/DoubleChecker";
+import FriendingFunctionsButton from "@/app/components/FriendsComponents/FriendingFunctionsButton";
  
 // This accesses friends and checks for friendships so that i can move it if needed or 
 // or link from multiple places
@@ -106,8 +107,8 @@ const handleAddFriend = () => {
         <ActionsFooter
           onPressLeft={() => router.back()}
           labelLeft={"Back"}
-          onPressRight={isFriend ? () => {} : handleToggleDoubleChecker}
-          labelRight={isFriend ? "Friends" : "Add friend"}
+          // onPressRight={isFriend ? () => {} : handleToggleDoubleChecker}
+          // labelRight={isFriend ? "Friends" : "Add friend"}
         />
       </View>
     </>

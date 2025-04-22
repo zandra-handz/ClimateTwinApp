@@ -8,6 +8,7 @@ import useFriends from "../../hooks/useFriends";
 
 import FriendsView from "@/app/components/FriendsComponents/FriendsView";
 import ActionsFooter from "@/app/components/ActionsFooter";
+import NothingHere from "@/app/components/Scaffolding/NothingHere";
 
 const index = () => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
@@ -33,19 +34,27 @@ const index = () => {
           // { paddingTop: 10 },
         ]}
       >
+         
+      
         <View style={appContainerStyles.innerFlexStartContainer}>
-          {friends && (
+          {friends && friends.length > 0 && (
             <FriendsView
               listData={friends}
               onViewFriendPress={handleViewFriend}
             />
           )}
+          {friends && !friends.length && (
+            <NothingHere message={'No friends yet!'} subMessage={'search users to find friends!'} offsetStatusBarHeight={true} />
+          ) }
         </View>
+   
+
+
         <ActionsFooter
           onPressLeft={() => router.back()}
           labelLeft={"Back"}
           onPressRight={() => router.push("/search")}
-          labelRight={"Add new"}
+          labelRight={"Search users"}
         />
       </View>
     </>

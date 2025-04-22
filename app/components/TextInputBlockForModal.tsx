@@ -9,11 +9,11 @@ import React, {
 import { View, Text, TextInput, StyleSheet } from "react-native";
 import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
 // Forwarding ref to the parent to expose the TextInput value
-const TextInputBlock = forwardRef(
+const TextInputBlockForModal = forwardRef(
   //width and height are original settings being used in location notes
   (
     {
-      title = "title",
+      title = "",
       mountingText = "",
       onTextChange,
       helperText,
@@ -22,10 +22,11 @@ const TextInputBlock = forwardRef(
       height = "60%",
       multiline = true,
       onSubmitEditing,
+      timedAutoFocus,
     },
     ref
   ) => {
-    const { themeStyles } = useGlobalStyles();
+    const { themeStyles, appContainerStyles } = useGlobalStyles();
     const [editedMessage, setEditedMessage] = useState(mountingText); // Use the starting text passed as prop
     const textInputRef = useRef();
 
@@ -35,6 +36,20 @@ const TextInputBlock = forwardRef(
         setEditedMessage(mountingText);
       }
     }, []);
+
+
+    // useEffect(() => {
+    //   if (timedAutoFocus && textInputRef.current) {
+    //     console.log("focusing in textinputbloc");
+    
+    //     const timeout = setTimeout(() => {
+    //       textInputRef.current?.focus();
+    //     }, 100); // small delay for safety
+    
+    //     return () => clearTimeout(timeout);
+    //   }
+    // }, [timedAutoFocus]);
+    
 
     // Expose the current value of the TextInput via the ref
     useImperativeHandle(ref, () => ({
@@ -53,7 +68,7 @@ const TextInputBlock = forwardRef(
       focusText: () => {
         if (textInputRef.current) {
           textInputRef.current.focus();
-        //  setEditedMessage("");
+          //  setEditedMessage("");
         }
       },
       getText: () => editedMessage,
@@ -64,7 +79,7 @@ const TextInputBlock = forwardRef(
     }, [mountingText]);
 
     const handleTextInputChange = (text) => {
-     // console.log(text);
+      // console.log(text);
       setEditedMessage(text);
       onTextChange(text);
     };
@@ -72,9 +87,10 @@ const TextInputBlock = forwardRef(
     return (
       <View
         style={[
-          styles.container,
-          themeStyles.darkerBackground,
-          { width: width, height: height },
+          appContainerStyles.goToItemButtonContainer,
+          themeStyles.primaryBackground,
+          { borderColor: themeStyles.primaryText.color },
+          // { width: width, height: height },
         ]}
       >
         <View
@@ -83,37 +99,52 @@ const TextInputBlock = forwardRef(
             justifyContent: "space-between",
             width: "100%",
             height: "auto",
-            alignItems: 'center',
+            alignItems: "center",
           }}
         >
-          <View style={{flexDirection: 'row', height: '100%', alignItems: 'center'}}>
-          <Text style={[styles.title, themeStyles.primaryText]}>
-            {title}
-          </Text>
+          <View
+            style={{
+              flexDirection: "row",
+              height: "100%",
+              alignItems: "center",
+            }}
+          >
+            {title && (
+              <Text style={[styles.title, themeStyles.primaryText]}>
+                {title}
+              </Text>
+            )}
           </View>
-
-          {/* <EditPencilOutlineSvg height={30} width={30} color={iconColor} /> */}
         </View>
-        <View style={{ flex: 1 }}>
-
-        {/* {helperText && (
-            <Text style={[styles.helperText, themeStyles.primaryText]}>
-              {helperText}
-            </Text>
-          )} */}
+        <View style={{ flex: 1, width: "100%" }}>
+          {/* {helperText && (
+              <Text style={[styles.helperText, themeStyles.primaryText]}>
+                {helperText}
+              </Text>
+            )} */}
+            {timedAutoFocus && (
+              
           <TextInput
             ref={textInputRef}
-            autoFocus={autoFocus}
+            autoFocus={true}
             style={[
-              styles.textInput,
               themeStyles.primaryText,
-              themeStyles.darkerBackground,
+              // themeStyles.darkerBackground,
+              {
+                textAlignVertical: "top",
+                borderRadius: 10,
+                paddingVertical: 10,
+                flex: 1,
+                width: "100%",
+              },
             ]}
             value={editedMessage}
             onChangeText={handleTextInputChange} // Update local state
             multiline={multiline}
             onSubmitEditing={onSubmitEditing}
           />
+          
+        )}
         </View>
       </View>
     );
@@ -121,15 +152,6 @@ const TextInputBlock = forwardRef(
 );
 
 const styles = StyleSheet.create({
-  outerContainer: {
-    flex: 1,
-    padding: "4%",
-  },
-  container: {
-    borderRadius: 30,
-    alignSelf: "center",
-    padding: 20,
-  },
   title: {
     fontSize: 15,
     lineHeight: 21,
@@ -138,16 +160,10 @@ const styles = StyleSheet.create({
   helperText: {
     fontSize: 16,
     lineHeight: 20,
-    opacity: .5,
+    opacity: 0.5,
     //marginLeft: '6%'
     //textTransform: "uppercase",
   },
-  textInput: {
-    textAlignVertical: "top",
-    borderRadius: 20,
-    paddingVertical: 10,
-    flex: 1,
-  },
 });
 
-export default TextInputBlock;
+export default TextInputBlockForModal;
