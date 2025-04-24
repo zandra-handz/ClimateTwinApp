@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { View, ScrollView, TouchableOpacity } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
-import useFriends from "@/app/hooks/useFriends";
+ 
+import { useFriends } from "@/src/context/FriendsContext";
 import { useAppMessage } from "../../../src/context/AppMessageContext";
 import { StatusBar } from "expo-status-bar";
 import DataList from "../../components/Scaffolding/DataList";

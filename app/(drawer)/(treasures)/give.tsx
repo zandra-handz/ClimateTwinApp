@@ -5,8 +5,8 @@ import { StatusBar } from "expo-status-bar";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import useTreasures from "@/app/hooks/useTreasures";
 import { useAppMessage } from "../../../src/context/AppMessageContext";
-import { useLocalSearchParams, useRouter } from "expo-router";
-import useFriends from "../../hooks/useFriends";
+import { useLocalSearchParams, useRouter } from "expo-router"; 
+import { useFriends } from "@/src/context/FriendsContext";
 import FriendPicker from "@/app/components/FriendPicker";
 import TextInputBlock from "@/app/components/TextInputBlock";
 

@@ -6,42 +6,22 @@ import { DrawerItem } from "@react-navigation/drawer";
 import {  Feather } from "@expo/vector-icons";
 import NewItemsDot from "./NewItemsDot";
 import { useRouter } from "expo-router";
+import { useFriends } from "@/src/context/FriendsContext";
 
-const InboxWithNotifs = () => {
+const FriendsWithNotifs = () => {
     const router = useRouter();
+    const { friendRequests } = useFriends();
   const { appSettings, updateSettings } = useUser();
   const { lightOrDark, themeStyles, appContainerStyles, appFontStyles } =
     useGlobalStyles();
-
-
-  const currentMode =
-    lightOrDark === "dark" ? {  mode: 'Light', icon: "sun" } : { mode: 'Dark', icon: "moon" };
-  //const pressColor = lightOrDark === "dark" ? "white" : "black";
-  const pressColor = themeStyles.primaryText.color;
-  const handlePress = () => {
-    if (appSettings?.manual_dark_mode == null) {
-      console.log("lightDark handlePress PRESSED");
-      updateSettings({ manual_dark_mode: false });
-    } else if (appSettings?.manual_dark_mode === false) {
-      console.log("lightDark handlePress PRESSED");
-      updateSettings({ manual_dark_mode: true });
-    } else if (appSettings?.manual_dark_mode === true) {
-      console.log("lightDark handlePress PRESSED");
-      updateSettings({ manual_dark_mode: false });
-    }
-  };
-
-  const handleReset = () => {
-    // Just pass the settings, no need to pass the user ID
-    updateSettings({ manual_dark_mode: null });
-  };
-
+ 
+ 
   return (
     <View style={{ height: "auto" }}>
         <DrawerItem
           icon={() => (
             <Feather
-              name="mail"
+              name="users"
               size={appFontStyles.exploreTabBarIcon.width}
               color={themeStyles.exploreTabBarText.color}
             
@@ -54,25 +34,25 @@ const InboxWithNotifs = () => {
             appContainerStyles.drawerButtonContainer,
             { borderBottomColor: themeStyles.primaryText.color },
           ]}
-          label="Inbox"
-          onPress={() => router.push("(inbox)")}
+          label="Friends"
+          onPress={() => router.push("/(friends)")}
         />
  
         <View
           style={{
             position: "absolute",
-            left: 110,
+            left: 120, // adjust manually
             height: "100%",
             justifyContent: "center",
             zIndex: 200,
           }}
         >
 
-            <NewItemsDot showUnread={'all'}/>
+            <NewItemsDot showUnread={'friends'}/>
  
         </View> 
     </View>
   );
 };
 
-export default InboxWithNotifs;
+export default FriendsWithNotifs;

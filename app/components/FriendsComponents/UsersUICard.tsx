@@ -14,8 +14,8 @@ import { Feather } from "@expo/vector-icons";
 
 import ActionsFooter from "../ActionsFooter";
 import ComponentSpinner from "../Scaffolding/ComponentSpinner";
-
-import useFriends from "@/app/hooks/useFriends";
+ 
+import { useFriends } from "@/src/context/FriendsContext";
 
 import FriendingFunctionsButton from "./FriendingFunctionsButton";
 

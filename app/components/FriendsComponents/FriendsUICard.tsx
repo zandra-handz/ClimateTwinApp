@@ -9,8 +9,8 @@ import GoToItemButton from "../GoToItemButton";
 import UnfriendButton from "../Scaffolding/UnfriendButton";
 import DoubleChecker from "../Scaffolding/DoubleChecker";
 import Avatar from "./Avatar";
-
-import useFriends from "@/app/hooks/useFriends";
+ 
+import { useFriends } from "@/src/context/FriendsContext";
 
 const FriendsUICard = ({ data, onViewFriendPress, isFullView }) => {
   const { showAppMessage } = useAppMessage();

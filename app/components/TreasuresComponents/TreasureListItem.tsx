@@ -5,10 +5,10 @@ import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
 import { useFriends } from "@/src/context/FriendsContext";
 import Avatar from "../FriendsComponents/Avatar";  
 import useDateTimeFunctions from "@/app/hooks/useDateTimeFunctions";
-import FriendingFunctionsButton from "./FriendingFunctionsButton";
+import FriendingFunctionsButton from "../FriendsComponents/FriendingFunctionsButton";
 import CuteDetailBox from "../CuteDetailBox";
 
-const FriendListItem = ({
+const TreasureListItem = ({
   user,
   avatar,
   size,
@@ -105,4 +105,4 @@ const FriendListItem = ({
   );
 };
 
-export default FriendListItem;
+export default TreasureListItem;

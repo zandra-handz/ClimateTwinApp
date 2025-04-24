@@ -954,7 +954,7 @@ const containerStyles = StyleSheet.create({
 
 
   singleDetailPanelContainer: {
-    borderRadius: 20, // matching: userBioContainer
+    borderRadius: 6, // matching: userBioContainer
     padding: 10,  
     width: '100%',  
     alignItems: 'center',
@@ -1078,6 +1078,20 @@ const containerStyles = StyleSheet.create({
     elevation: 20000,
 
   },
+  doubleCheckerWithMessageDisplayContainer: { 
+    borderRadius: 20,
+    padding: 20,  
+    width: '100%',   
+   // width: 400, used when debugging friendpicker interfering with double checker modal
+    textAlign: 'left',
+    height: 200, 
+    overflow: 'hidden',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    zIndex: 20000,
+    elevation: 20000,
+
+  },
   doubleCheckerQuestionContainer: {
    flexShrink: 1,
     //backgroundColor: 'orange',
@@ -1148,7 +1162,7 @@ const containerStyles = StyleSheet.create({
     width: '100%',
     textAlign: 'left',  
     height: 'auto', 
-    borderRadius: 20, // matching: singleDetailPanelContainer
+    borderRadius: 6, // matching: singleDetailPanelContainer
     padding: 20,
 
   },

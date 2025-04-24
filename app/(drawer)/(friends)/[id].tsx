@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { View, ScrollView } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
-
-import useFriends from "@/app/hooks/useFriends";
+import { useFriends } from "@/src/context/FriendsContext";
+ 
 import FriendsUICard from "@/app/components/FriendsComponents/FriendsUICard";
 
 import { useAppMessage } from "../../../src/context/AppMessageContext";

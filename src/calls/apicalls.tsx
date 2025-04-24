@@ -349,7 +349,7 @@ export const getUserPendingRequests = async () => {
     try {
        // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/users/pending-requests/');
-      // console.log('API GET Call getUserPendingRequests', response.data);
+     // console.log('API GET Call getUserPendingRequests', response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
@@ -381,7 +381,7 @@ export const getUserProfile = async () => {
     }
 };
 
-export const getPublicProfile = async (userId : string) => {
+export const getPublicProfile = async (userId : number) => {
     try {
        // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get(`/users/get/${userId}/public-profile/`);
@@ -873,7 +873,7 @@ export const getInboxItems = async () => {
     try {
        // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/users/inbox/items/');
-        console.log('API GET Call getInboxItems'); //, response.data);
+        console.log('API GET Call getInboxItems', response.data);
         return response.data;
     } catch (error) {
         if (error.response) {

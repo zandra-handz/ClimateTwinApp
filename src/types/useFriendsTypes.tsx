@@ -1,3 +1,6 @@
+import { User } from "./UserContextTypes";
+
+
 export interface Friend {
     id: number;
     nickname: string;
@@ -31,15 +34,17 @@ export interface Friend {
 export interface PublicProfile {
   avatar: string;
   bio: string | null;
-  date_of_birth: string; // ISO format, e.g. "1989-07-13"
+  created_on: string; // ISO datetime
+  date_of_birth: string | null; // ISO date or null
   first_name: string;
   id: number;
   last_name: string;
+  username: string;
   most_recent_visit: {
     latitude: number;
     longitude: number;
     location_name: string;
-    visited_on: string; // ISO datetime format, e.g. "2025-04-18T23:26:16.568164Z"
+    visited_on: string; // ISO datetime
   };
   total_visits: number;
   user: number;
@@ -64,16 +69,16 @@ export interface DropdownOption {
   export interface FriendRequest {
     id: number;
     message: string;
-    recipient: number;
-    sender: number;
+    recipient: User;
+    sender: User;
     special_type: "friend request";
   }
   
   export interface GiftRequest {
     id: number;
     message: string;
-    recipient: number;
-    sender: number;
+    recipient: User;
+    sender: User;
     treasure?: number;
     special_type: "gift request" | "gift_request"; // support both just in case
   }

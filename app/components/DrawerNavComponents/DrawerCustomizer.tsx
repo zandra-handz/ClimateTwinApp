@@ -15,7 +15,8 @@ import ClimateTwinLogo from "../../assets/images/logo.png";
 import DarkLightSwitch from "./DarkLightSwitch";
 import { AntDesign, Feather  } from "@expo/vector-icons"; 
 import InboxWithNotifs from "./InboxWithNotifs";
-
+import FriendsWithNotifs from "./FriendsWithNotifs";
+import TreasuresWithNotifs from "./TreasuresWithNotifs";
 
 //Remove for production (?)
 import DeviceLocationSwitch from "./DeviceLocationSwitch";
@@ -123,45 +124,9 @@ const DrawerCustomizer = (props) => {
           label="Go!"
           onPress={() => router.push("/(exploretabs)")}
         />
-        <DrawerItem
-          icon={() => (
-            <Feather
-              name="users"
-              size={appFontStyles.exploreTabBarIcon.width}
-              color={themeStyles.exploreTabBarText.color}
-              {...props}
-            />
-          )}
-          labelStyle={[themeStyles.primaryText, appFontStyles.drawerLabelText]}
-          pressColor={"lightblue"}
-          style={[
-            themeStyles.darkerBackground,
-            appContainerStyles.drawerButtonContainer,
-            { borderBottomColor: themeStyles.primaryText.color },
-          ]}
-          label="Friends"
-          onPress={() => router.push("/(friends)")}
-        />
+        <FriendsWithNotifs />
         <InboxWithNotifs/> 
-        <DrawerItem
-          icon={() => (
-            <AntDesign
-              name="gift"
-              size={appFontStyles.exploreTabBarIcon.width}
-              color={themeStyles.exploreTabBarText.color}
-              {...props}
-            />
-          )}
-          labelStyle={[themeStyles.primaryText, appFontStyles.drawerLabelText]}
-          pressColor={"lightblue"}
-          style={[
-            themeStyles.darkerBackground,
-            appContainerStyles.drawerButtonContainer,
-            { borderBottomColor: themeStyles.primaryText.color },
-          ]}
-          label="Treasures"
-          onPress={() => router.push("/(treasures)")}
-        />
+        <TreasuresWithNotifs />
         <DrawerItem
           icon={() => (
             <Feather

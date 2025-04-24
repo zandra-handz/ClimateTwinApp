@@ -1,18 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Modal, FlatList, Keyboard } from "react-native";
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
-import useFriends from "@/app/hooks/useFriends";
-import Avatar from "../FriendsComponents/Avatar";
+ 
+import { useFriends } from "@/src/context/FriendsContext";
 import { AntDesign, Feather } from "@expo/vector-icons";
 
 import { useRouter } from "expo-router";
 import { useAppMessage } from "@/src/context/AppMessageContext";
-import useInbox from "@/app/hooks/useInbox";
+import useInbox from "@/app/hooks/useInbox"; 
 
-import AddFriendButton from "../Scaffolding/AddFriendButton";
-import UnfriendButton from "../Scaffolding/UnfriendButton";
-
-import DoubleCheckerWithMessage from "../Scaffolding/DoubleCheckerWithMessage";
+import DoubleCheckerWithMessageInput from "../Scaffolding/DoubleCheckerWithMessageInput";
 
 const FriendingFunctionsButton = ({ cTUserId, cTUsername, size }) => {
   const router = useRouter();
@@ -139,7 +136,7 @@ const FriendingFunctionsButton = ({ cTUserId, cTUsername, size }) => {
   return (
     <> 
     {isDoubleCheckerVisible && (
-      <DoubleCheckerWithMessage
+      <DoubleCheckerWithMessageInput
       isVisible={isDoubleCheckerVisible}
       toggleVisible={handleToggleDoubleChecker}
       singleQuestionText={`Add ${cTUsername || ''}?`}
@@ -177,6 +174,7 @@ const FriendingFunctionsButton = ({ cTUserId, cTUsername, size }) => {
               width: "90%",
               height: "40%",
               alignItems: "center",
+              justifyContent: 'center',
               backgroundColor: themeStyles.darkerBackground.backgroundColor,
             }}
           >
@@ -189,6 +187,7 @@ const FriendingFunctionsButton = ({ cTUserId, cTUsername, size }) => {
               width: "90%",
               height: "40%",
               alignItems: "center",
+              justifyContent: 'center',
               backgroundColor: themeStyles.darkerBackground.backgroundColor,
             }}
           >

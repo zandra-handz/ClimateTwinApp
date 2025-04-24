@@ -42,39 +42,48 @@ const useInbox = () => {
   const [viewingMessage, setViewingMessage] = useState<Message | null>(null);
 
   const [unreadCount, setUnreadCount] = useState(0);
+  const [ unreadFriendReqCount, setUnreadFriendReqCount ] = useState(0);
+  const [ unreadGiftReqCount, setUnreadGiftReqCount ] = useState(0);
 
   const {
     data: inboxItems,
-    isLoading,
-    isFetching,
+    isPending,
     isSuccess,
     isError,
   } = useQuery<InboxItem[]>({
-    queryKey: ["inboxItems"],
+    queryKey: ["inboxItems", user?.id],
     queryFn: getInboxItems,
     enabled: !!isAuthenticated && !isInitializing,
-    onSuccess: (data) => {
-
-
-      //not working
-      // let count;
-      // count = data?.filter(item => item.is_read === false).length;
-      // setUnreadCount(count);
-
-      // Handle successful fetch
-    },
+ 
   });
 
 
   useEffect(() => {
-    if (inboxItems) {
-      const unread = inboxItems?.filter(item => item.is_read === false).length || 0;
-      setUnreadCount(unread);
+    if (isSuccess) {
+      
+      const unreadFriends = inboxItems?.filter(item =>
+        item.is_read === false &&
+        item?.content_type === 'Users | friend request'
+      ).length || 0;
+  
+      setUnreadFriendReqCount(unreadFriends);
+
+      const unreadGifts = inboxItems?.filter(item =>
+        item.is_read === false &&
+         item?.content_type === 'Users | gift request'
+      ).length || 0;
+
+      // const unread = inboxItems?.filter(item =>
+      //   item.is_read === false ).length || 0;
+  
+      setUnreadGiftReqCount(unreadGifts);
+      setUnreadCount(unreadFriends + unreadGifts)
     } else {
+      setUnreadFriendReqCount(0);
+      setUnreadGiftReqCount(0);
       setUnreadCount(0);
     }
-
-  }, [inboxItems]);
+  }, [isSuccess, inboxItems]);
 
   const handleGetInboxItem = async (id: number) => {
     try {
@@ -95,8 +104,8 @@ const useInbox = () => {
  
 
   const triggerInboxItemsRefetch = () => {  
-    queryClient.invalidateQueries({ queryKey: ["inboxItems"] });
-    queryClient.refetchQueries({ queryKey: ["inboxItems"] });  
+    queryClient.invalidateQueries({ queryKey: ["inboxItems", user?.id] });
+    queryClient.refetchQueries({ queryKey: ["inboxItems", user?.id] });  
   };
 
 
@@ -104,6 +113,8 @@ const useInbox = () => {
   return {
     inboxItems,
     unreadCount,
+    unreadFriendReqCount,
+    unreadGiftReqCount,
     viewingInboxItem,
     handleGetInboxItem,
     viewingMessage,

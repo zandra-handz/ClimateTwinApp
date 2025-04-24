@@ -1,15 +1,11 @@
-import { View, FlatList } from "react-native"; 
-
-import UserListItem from '@/app/components/FriendsComponents/UserListItem';
- 
-import React from "react";
+import { View, Text, FlatList } from 'react-native'
+import React from 'react'
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext"; 
 
-const SearchResultsView = ({
-  data, 
-  onViewUserPress,
-}) => {
-  const { appContainerStyles } = useGlobalStyles();
+import UserListItem from '@/app/components/FriendsComponents/UserListItem';
+
+const FriendRequestsView = ({data, onViewUserPress}) => {
+ const { appContainerStyles } = useGlobalStyles();
   return (
     <View style={[appContainerStyles.dataListContainer]}>
       <FlatList
@@ -36,6 +32,6 @@ const SearchResultsView = ({
       />
     </View>
   );
-};
+}
 
-export default SearchResultsView;
+export default FriendRequestsView;

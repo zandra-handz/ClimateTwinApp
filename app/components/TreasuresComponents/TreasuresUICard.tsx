@@ -8,8 +8,8 @@ import SendButton from "../Scaffolding/SendButton";
 import ReturnItemButton from "../Scaffolding/ReturnItemButton";
 import DoubleChecker from "../Scaffolding/DoubleChecker";
 import useTreasures from "@/app/hooks/useTreasures";
-
-import useFriends from "@/app/hooks/useFriends";
+ 
+import { useFriends } from "@/src/context/FriendsContext";
 import { router } from "expo-router";
  
 

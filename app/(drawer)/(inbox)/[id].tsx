@@ -6,8 +6,8 @@ import { useRouter } from "expo-router";
 
 import { useAppMessage } from "../../../src/context/AppMessageContext";
 import useInbox from "../../hooks/useInbox";
-import useTreasures from "@/app/hooks/useTreasures";
-import useFriends from "@/app/hooks/useFriends";
+import useTreasures from "@/app/hooks/useTreasures"; 
+import { useFriends } from "@/src/context/FriendsContext";
 
 import DataList from "../../components/Scaffolding/DataList";
 

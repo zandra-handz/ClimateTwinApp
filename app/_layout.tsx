@@ -27,6 +27,7 @@ import { GlobalStylesProvider } from "../src/context/GlobalStylesContext";
 import { UserProvider } from "../src/context/UserContext";
 import { DeviceLocationProvider } from "../src/context/DeviceLocationContext";
 import { AppStateProvider } from "../src/context/AppStateContext";
+import { FriendsProvider } from "@/src/context/FriendsContext";
 import { CurrentSurroundingsProvider } from "../src/context/CurrentSurroundingsContext";
 import { NearbyLocationsProvider } from "../src/context/NearbyLocationsContext";
 import { ActiveSearchProvider } from "../src/context/ActiveSearchContext";
@@ -120,6 +121,9 @@ export default Sentry.wrap(function Layout() {
                   <AppMessage />
                   <CustomStatusBar />
 
+                  <FriendsProvider>
+                    
+
                   <SurroundingsWSProvider>
                     <GroqProvider>
                       <CurrentSurroundingsProvider>
@@ -169,6 +173,8 @@ export default Sentry.wrap(function Layout() {
                       </CurrentSurroundingsProvider>
                     </GroqProvider>
                   </SurroundingsWSProvider>
+                  
+                  </FriendsProvider>
                 </GlobalStylesProvider>
               </AppStateProvider>
             </DeviceLocationProvider>

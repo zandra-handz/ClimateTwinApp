@@ -10,7 +10,7 @@ import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
 import TextInputLine from "@/app/components/TextInputLine";
 import TextInputBlockForModal from "@/app/components/TextInputBlockForModal";
 
-const DoubleCheckerWithMessage = ({
+const DoubleCheckerWithMessageInput = ({
   isVisible = false,
   toggleVisible,
   singleQuestionText = "single question goes here",
@@ -123,4 +123,4 @@ const [ timedAutoFocus, setTimedAutoFocus ] = useState<boolean>(false);
   );
 };
 
-export default DoubleCheckerWithMessage;
+export default DoubleCheckerWithMessageInput;

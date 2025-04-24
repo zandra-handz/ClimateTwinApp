@@ -5,7 +5,8 @@ import { useUser } from "@/src/context/UserContext";
 import { useSurroundingsWS } from "../../src/context/SurroundingsWSContext";
 import { useActiveSearch } from "../../src/context/ActiveSearchContext";
 import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
-import useFriends from "../hooks/useFriends";
+ 
+import { useFriends } from "@/src/context/FriendsContext";
 import useInbox from "../hooks/useInbox";
 import { clearNotificationCache } from "../../src/calls/apicalls";
 
