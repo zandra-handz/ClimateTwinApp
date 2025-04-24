@@ -71,6 +71,8 @@ export interface PortalSurroundings {
     sunset_timestamp: number;
     latitude: number;
     longitude: number;
+    country: string;
+    city_name: string;
     wind_friends: string;
     special_harmony: boolean;
     details: string;
@@ -93,6 +95,9 @@ export interface PortalSurroundings {
     miles_away: number;
     latitude: number;
     longitude: number;
+    country: string;
+    state: string;
+    city_name: string;
     tags: Record<string, any>;  // Adjust the type based on the expected format of `tags`
     wind_compass: string;
     wind_agreement_score: number;

@@ -1,10 +1,25 @@
-import { View, FlatList } from "react-native";
+import { View, FlatList, Text } from "react-native";
 import TreasuresUICard from "./TreasuresUICard";
-import React from "react";
+import React, { useEffect } from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
+import TreasureListItem from "./TreasureListItem";
+import TreasureRequestListItem from "./TreasureRequestListItem";
+import { useFriends } from "@/src/context/FriendsContext";
+import { useUser } from "@/src/context/UserContext";
+
 
 const TreasuresView = ({ listData, onOpenTreasurePress }) => {
-  const { appContainerStyles } = useGlobalStyles();
+  const { user } = useUser();
+  const { giftRequests, giftRequestsReceived, giftRequestsSent } = useFriends();
+  const { appContainerStyles, themeStyles } = useGlobalStyles();
+  
+
+  // useEffect(() => {
+  //   if (giftRequests && giftRequestsSent) {
+  //     console.log(`GIFT REQUESTS: `, giftRequestsSent);
+  //   }
+  // }, [giftRequests, giftRequestsSent]);
+
   return (
     <View style={[appContainerStyles.dataListContainer]}>
       <FlatList
@@ -13,11 +28,28 @@ const TreasuresView = ({ listData, onOpenTreasurePress }) => {
           item.id ? `${item.id}-${item.timestamp || index}` : index.toString()
         }
         renderItem={({ item }) => (
-          <View style={{ marginVertical: "2%" }}>
-            <TreasuresUICard
+          <View style={{ marginVertical: 4 }}>
+            {item.special_type &&
+              item.recipient &&
+              item.recipient === user?.id && ( 
+                  <TreasureRequestListItem treasure={item.treasure_data} treasureId={item.treasure} isSender={true} avatar={item.sender_avatar} size={20} message={item.message} onPress={onOpenTreasurePress}/> 
+            
+              )}
+            {item.special_type && item.sender && item.sender === user?.id && (
+              <TreasureRequestListItem treasure={item.treasure_data} treasureId={item.treasure} isSender={false} avatar={item.recipient_avatar} size={20} message={item.message} onPress={onOpenTreasurePress}/> 
+            
+            )}
+            {!item.special_type && (
+              <TreasureListItem
+                treasure={item}
+                size={40}
+                onPress={onOpenTreasurePress}
+              />
+            )}
+            {/* <TreasuresUICard
               data={item}
               onOpenTreasurePress={onOpenTreasurePress}
-            />
+            /> */}
           </View>
         )}
         contentContainerStyle={{ paddingBottom: 60 }}

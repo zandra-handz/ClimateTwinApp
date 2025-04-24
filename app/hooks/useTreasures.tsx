@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { useQuery, useQueryClient, UseQueryResult, useMutation } from '@tanstack/react-query';
 import { useUser } from '../../src/context/UserContext';
 import { getTreasures, getTreasure, getOwnerChangeRecords, collectTreasure, acceptTreasureGift, declineTreasureGift, requestToGiftTreasure, requestToGiftTreasureBackToFinder } from '../../src/calls/apicalls';
@@ -9,6 +9,7 @@ const useTreasures = () => {
   const queryClient = useQueryClient();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
    const [viewingTreasure, setViewingTreasure] = useState<Treasure | null>(null);
+   const [ nonPendingTreasures, setNonPendingTreasures ] = useState([]);
    const [testData, setTestData] = useState(null);
   
 
@@ -18,6 +19,16 @@ const useTreasures = () => {
     enabled: !!(isAuthenticated && !isInitializing && user && user.id),
 
   });
+
+  useEffect(() => {
+    if (isSuccess) {
+      const filtered = treasures.filter((treasure) => (treasure.pending === false));
+
+      setNonPendingTreasures(filtered);
+      
+    }
+
+  }, [isSuccess]);
 
     const handleGetTreasure = async (id: number) => {
       try {
@@ -307,6 +318,7 @@ const ownerChangeRecordsMutation = useMutation({
     isPending,
     isSuccess,
     isError,
+    nonPendingTreasures, // USE THIS FOR TREASURES LIST
     handleGetTreasure,
     handleGetOwnerChangeRecords,
     handleCollectTreasure,

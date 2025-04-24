@@ -1,12 +1,12 @@
 import React, {
   createContext,
-  useContext, 
+  useContext,
   useRef,
   useState,
   useEffect,
 } from "react";
 import {
-    UseMutationResult,
+  UseMutationResult,
   useQuery,
   useQueryClient,
   UseQueryResult,
@@ -18,7 +18,7 @@ import { useUser } from "../../src/context/UserContext";
 import { useAppMessage } from "@/src/context/AppMessageContext";
 import {
   getFriends,
-  getFriend, 
+  getFriend,
   searchUsers,
   requestToAddFriend,
   acceptFriendship,
@@ -27,11 +27,11 @@ import {
   getPublicProfile,
   getUserPendingRequests,
 } from "../../src/calls/apicalls";
- 
+
 import {
   AddFriendRequest,
   Friend,
-  PublicProfile, 
+  PublicProfile,
   FriendRequest,
   GiftRequest,
   PendingRequestsResponse,
@@ -43,68 +43,73 @@ import {
 // //To use the friend pk must specify .friend
 
 export interface FriendsContextType {
-    friends: Friend[] | undefined;  
-    handleGetFriend: (id: number) => Promise<void>; 
-    replaceUserIdWithFriendName: (text: string) => string;
-    // handleGetAllUsers: () => Promise<void>;
-    // getAllUsersMutation: UseMutationResult<any, unknown>;  
-    // allUsers: any; 
-    handleSearchUsers: (searchText: string) => void;
-    searchUsersMutation: UseMutationResult<any, unknown>; // Replace with your real mutation result type
-    userSearchResults: any; // Replace with actual search result type
-    handleSendFriendRequest: (userId: string) => void;
-    friendRequestMutation: UseMutationResult<any, unknown>; // Replace with appropriate mutation type
-    handleAcceptFriendship: (friendshipId: string) => void;
-    acceptFriendshipMutation: UseMutationResult<any, unknown>;
-    handleDeclineFriendship: (friendshipId: string) => void;
-    declineFriendshipMutation: UseMutationResult<any, unknown>;
-    handleDeleteFriendship: (friendshipId: string) => void;
-    deleteFriendshipMutation: UseMutationResult<any, unknown>;
-    viewingFriend: Friend | null;
-    handleGetPublicProfile: (userId: string) => void;
-    getPublicProfileMutation: UseMutationResult<any, unknown>;
-    viewingPublicProfile: PublicProfile | null;
-    friendRequests: FriendRequest[];
-    giftRequests: GiftRequest[];
-    friendRequestsReceived: any[];  
-    friendRequestsSent: any[];  
-  }
+  friends: Friend[] | undefined;
+  handleGetFriend: (id: number) => Promise<void>;
+  replaceUserIdWithFriendName: (text: string) => string;
+  // handleGetAllUsers: () => Promise<void>;
+  // getAllUsersMutation: UseMutationResult<any, unknown>;
+  // allUsers: any;
+  handleSearchUsers: (searchText: string) => void;
+  searchUsersMutation: UseMutationResult<any, unknown>; // Replace with your real mutation result type
+  userSearchResults: any; // Replace with actual search result type
+  handleSendFriendRequest: (userId: string) => void;
+  friendRequestMutation: UseMutationResult<any, unknown>; // Replace with appropriate mutation type
+  handleAcceptFriendship: (friendshipId: string) => void;
+  acceptFriendshipMutation: UseMutationResult<any, unknown>;
+  handleDeclineFriendship: (friendshipId: string) => void;
+  declineFriendshipMutation: UseMutationResult<any, unknown>;
+  handleDeleteFriendship: (friendshipId: string) => void;
+  deleteFriendshipMutation: UseMutationResult<any, unknown>;
+  viewingFriend: Friend | null;
+  handleGetPublicProfile: (userId: string) => void;
+  getPublicProfileMutation: UseMutationResult<any, unknown>;
+  viewingPublicProfile: PublicProfile | null;
+  friendRequests: FriendRequest[];
+  giftRequests: GiftRequest[];
+  friendRequestsReceived: any[];
+  friendRequestsSent: any[];
+  giftRequestsReceived: any[];
+  giftRequestsSent: any[];
+}
 
 const FriendsContext = createContext<FriendsContextType | undefined>(undefined);
 
 export const useFriends = () => {
-      const context = useContext(FriendsContext);
-      if (!context) {
-        throw new Error("useFriends must be used within a FriendsProvider");
-      }
-      return context;
-    };
+  const context = useContext(FriendsContext);
+  if (!context) {
+    throw new Error("useFriends must be used within a FriendsProvider");
+  }
+  return context;
+};
 
-    interface FriendsProviderProps {
-        children: React.ReactNode;
-    }
+interface FriendsProviderProps {
+  children: React.ReactNode;
+}
 
-export const FriendsProvider: React.FC<FriendsProviderProps> = ({ children }) => {
-
+export const FriendsProvider: React.FC<FriendsProviderProps> = ({
+  children,
+}) => {
   const router = useRouter();
   const { showAppMessage } = useAppMessage();
-  const { user, isAuthenticated, isInitializing } = useUser(); 
+  const { user, isAuthenticated, isInitializing } = useUser();
   const [viewingFriend, setViewingFriend] = useState<Friend | null>(null); //is this correct or do i need the friendship?
   const [giftRequests, setGiftRequests] = useState<GiftRequest[]>([]);
   const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([]);
   const [friendRequestsSent, setFriendRequestsSent] = useState([]);
   const [friendRequestsReceived, setFriendRequestsReceived] = useState([]);
+  const [giftRequestsSent, setGiftRequestsSent] = useState([]);
+  const [giftRequestsReceived, setGiftRequestsReceived] = useState([]);
   const [viewingPublicProfile, setViewingPublicProfile] =
     useState<PublicProfile | null>(null); //is this correct or do i need the friendship?
 
   const [userSearchResults, setUserSearchResults] = useState(null);
 
   // was only making a getAllUsers call for dev stuff
-//   const [allUsers, setAllUsers] = useState(null);
+  //   const [allUsers, setAllUsers] = useState(null);
 
   const queryClient = useQueryClient();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
- 
+
   const {
     data: friends,
     isPending,
@@ -149,15 +154,27 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({ children }) =>
     }
   }, [friendRequests, user]);
 
- 
+    useEffect(() => { 
+  
+      if (giftRequests && giftRequests.length > 0 && user) {
+        const received = giftRequests?.filter(
+          (request) => request.recipient === user?.id
+        );
+        const sent = giftRequests?.filter(
+          (request) => request.sender === user?.id
+        ); 
+  
+        setGiftRequestsReceived(received);
+        setGiftRequestsSent(sent);
+      }
+    }, [giftRequests, user]);
 
   // FOR DEBUGGING
-//   useEffect(() => {
-//     if (isError) {
-//       console.log(`WARNING: friends call failed`);
-//     }
-//   }, [isError]);
- 
+  //   useEffect(() => {
+  //     if (isError) {
+  //       console.log(`WARNING: friends call failed`);
+  //     }
+  //   }, [isError]);
 
   const handleGetFriend = async (id: number) => {
     try {
@@ -219,8 +236,6 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({ children }) =>
     console.log("handleSearchUsers");
     searchUsersMutation.mutate(query);
   };
-
- 
 
   const getPublicProfileMutation = useMutation<PublicProfile, Error, number>({
     mutationFn: (userId: number) => getPublicProfile(userId),
@@ -339,8 +354,6 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({ children }) =>
     declineFriendshipMutation.mutate(itemViewId);
   };
 
-
-
   const declineFriendshipMutation = useMutation({
     mutationFn: (itemViewId: number) => declineFriendship(itemViewId),
     onSuccess: () => {
@@ -357,14 +370,12 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({ children }) =>
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
-    //   console.log(`declineFriendshipMutation error: ${error}`);
+      //   console.log(`declineFriendshipMutation error: ${error}`);
       timeoutRef.current = setTimeout(() => {
         declineFriendshipMutation.reset();
       }, 2000);
     },
   });
-
-
 
   const deleteFriendshipMutation = useMutation({
     mutationFn: (itemViewId: number) => deleteFriendship(itemViewId),
@@ -404,33 +415,34 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({ children }) =>
 
   return (
     <FriendsContext.Provider
-    value={{
-    friends,
-    handleGetFriend,  
-    replaceUserIdWithFriendName,  
-    handleSearchUsers,
-    searchUsersMutation,
-    userSearchResults,
-    handleSendFriendRequest,
-    friendRequestMutation,
-    handleAcceptFriendship,
-    acceptFriendshipMutation,
-    handleDeclineFriendship,
-    declineFriendshipMutation,
-    handleDeleteFriendship,
-    deleteFriendshipMutation,
-    viewingFriend,
-    handleGetPublicProfile,
-    getPublicProfileMutation,
-    viewingPublicProfile,
-    friendRequests,
-    giftRequests,
-    friendRequestsReceived,
-    friendRequestsSent,
-}}
->
-  {children}
-</FriendsContext.Provider>
+      value={{
+        friends,
+        handleGetFriend,
+        replaceUserIdWithFriendName,
+        handleSearchUsers,
+        searchUsersMutation,
+        userSearchResults,
+        handleSendFriendRequest,
+        friendRequestMutation,
+        handleAcceptFriendship,
+        acceptFriendshipMutation,
+        handleDeclineFriendship,
+        declineFriendshipMutation,
+        handleDeleteFriendship,
+        deleteFriendshipMutation,
+        viewingFriend,
+        handleGetPublicProfile,
+        getPublicProfileMutation,
+        viewingPublicProfile,
+        friendRequests,
+        giftRequests,
+        friendRequestsReceived,
+        friendRequestsSent,
+        giftRequestsReceived,
+        giftRequestsSent,
+      }}
+    >
+      {children}
+    </FriendsContext.Provider>
   );
 };
- 

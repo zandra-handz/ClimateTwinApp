@@ -6,7 +6,6 @@ import {
   useMutation,
 } from "@tanstack/react-query";
 
-
 import { useRouter } from "expo-router";
 import { useUser } from "../../src/context/UserContext";
 import { useAppMessage } from "@/src/context/AppMessageContext";
@@ -44,11 +43,14 @@ const useFriends = () => {
   const { user, isAuthenticated, isInitializing } = useUser();
   const [friendsDropDown, setFriendsDropDown] = useState<DropdownOption[]>([]);
   const [viewingFriend, setViewingFriend] = useState<Friend | null>(null); //is this correct or do i need the friendship?
-  const [giftRequests, setGiftRequests ] = useState<GiftRequest[]>([]);
-  const [friendRequests, setFriendRequests ] = useState<FriendRequest[]>([]);
-  const [friendRequestsSent, setFriendRequestsSent ] = useState([]);
-  const [friendRequestsReceived, setFriendRequestsReceived ] = useState([]);
-  const [viewingPublicProfile, setViewingPublicProfile] = useState<PublicProfile | null>(null); //is this correct or do i need the friendship?
+  const [giftRequests, setGiftRequests] = useState<GiftRequest[]>([]);
+  const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([]);
+  const [friendRequestsSent, setFriendRequestsSent] = useState([]);
+  const [friendRequestsReceived, setFriendRequestsReceived] = useState([]);
+  const [giftRequestsSent, setGiftRequestsSent] = useState([]);
+  const [giftRequestsReceived, setGiftRequestsReceived] = useState([]);
+  const [viewingPublicProfile, setViewingPublicProfile] =
+    useState<PublicProfile | null>(null); //is this correct or do i need the friendship?
 
   const [userSearchResults, setUserSearchResults] = useState(null);
   const [allUsers, setAllUsers] = useState(null);
@@ -58,7 +60,7 @@ const useFriends = () => {
 
   // The return type of useQuery, assuming 'friends' is an array of Friend objects
   const {
-    data: friends, 
+    data: friends,
     isPending,
     isSuccess,
     isError,
@@ -66,32 +68,27 @@ const useFriends = () => {
     queryKey: ["friends", user?.id],
     queryFn: getFriends,
     enabled: !!(isAuthenticated && !isInitializing && user && user.id),
-
   });
 
+  const {
+    data: pendingRequests,
+    isPending: isPendingRequests,
+    isSuccess: isPendingRequestsSuccess,
+    isError: isPendingRequestsError,
+  }: UseQueryResult<PendingRequestsResponse, Error> = useQuery({
+    queryKey: ["pendingRequests", user?.id],
+    queryFn: getUserPendingRequests,
+    enabled: !!(isAuthenticated && !isInitializing && user && user.id),
+  });
 
-const {
-  data: pendingRequests,
-  isPending: isPendingRequests,
-  isSuccess: isPendingRequestsSuccess,
-  isError: isPendingRequestsError,
-}: UseQueryResult<PendingRequestsResponse, Error> = useQuery({
-  queryKey: ["pendingRequests", user?.id],
-  queryFn: getUserPendingRequests,
-  enabled: !!(isAuthenticated && !isInitializing && user && user.id),
-});
-
-
-    useEffect(() => {
+  useEffect(() => {
     if (pendingRequests && isPendingRequestsSuccess) {
       setGiftRequests(pendingRequests?.pending_gift_requests);
-      setFriendRequests(pendingRequests?.pending_friend_requests); 
+      setFriendRequests(pendingRequests?.pending_friend_requests);
     }
   }, [pendingRequests, isPendingRequestsSuccess]);
 
   useEffect(() => {
-    
-  
     if (friendRequests.length > 0 && user) {
       const received = friendRequests?.filter(
         (request) => request.recipient === user?.id
@@ -99,15 +96,26 @@ const {
       const sent = friendRequests?.filter(
         (request) => request.sender === user?.id
       );
- 
 
       setFriendRequestsReceived(received);
       setFriendRequestsSent(sent);
-
-
     }
-
   }, [friendRequests, user]);
+
+  useEffect(() => { 
+
+    if (giftRequests && giftRequests.length > 0 && user) {
+      const received = giftRequests?.filter(
+        (request) => request.recipient === user?.id
+      );
+      const sent = giftRequests?.filter(
+        (request) => request.sender === user?.id
+      ); 
+
+      setGiftRequestsReceived(received);
+      setGiftRequestsSent(sent);
+    }
+  }, [giftRequests, user]);
 
   // useEffect(() => {
   //   if (isSuccess && friends && friends.length > 0) {
@@ -164,8 +172,8 @@ const {
 
   const searchUsersMutation = useMutation({
     mutationFn: (query: string) => searchUsers(query),
-    onSuccess: (data) => { 
-      setUserSearchResults(data); 
+    onSuccess: (data) => {
+      setUserSearchResults(data);
 
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
@@ -218,8 +226,6 @@ const {
     getAllUsersMutation.mutate();
   };
 
-
-
   const getPublicProfileMutation = useMutation<PublicProfile[], Error, number>({
     mutationFn: (userId: number) => getPublicProfile(userId),
     onSuccess: (data) => {
@@ -243,7 +249,7 @@ const {
     },
   });
 
-  const handleGetPublicProfile = (userId : number) => {
+  const handleGetPublicProfile = (userId: number) => {
     getPublicProfileMutation.mutate(userId);
   };
 
@@ -289,17 +295,14 @@ const {
   });
 
   const triggerFriendsRefetch = () => {
-    console.log('triggerFriendsRefetch triggered');
+    console.log("triggerFriendsRefetch triggered");
     queryClient.invalidateQueries({ queryKey: ["friends", user?.id] });
     queryClient.refetchQueries({ queryKey: ["friends", user?.id] });
-
-
   };
 
   const triggerRequestsRefetch = () => {
     queryClient.invalidateQueries({ queryKey: ["pendingRequests", user?.id] });
     queryClient.refetchQueries({ queryKey: ["pendingRequests", user?.id] });
-
   };
 
   const handleAcceptFriendship = (itemViewId: number) => {
@@ -372,10 +375,10 @@ const {
 
   const deleteFriendshipMutation = useMutation({
     mutationFn: (itemViewId: number) => deleteFriendship(itemViewId),
-    onSuccess: () => { 
+    onSuccess: () => {
       triggerFriendsRefetch();
       // moved to friend ui card
-     // router.replace('/(friends)');
+      // router.replace('/(friends)');
 
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
@@ -433,6 +436,8 @@ const {
     giftRequests,
     friendRequestsReceived,
     friendRequestsSent,
+    giftRequestsReceived,
+    giftRequestsSent,
   };
 };
 

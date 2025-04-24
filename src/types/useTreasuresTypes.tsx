@@ -5,6 +5,9 @@ export interface Treasure {
   original_user: string;  // use this to determine if logged in user can delete the treasure
   miles_traveled_to_collect: number;
   location_name: string;
+  location_country: string;
+  location_city_name: string;
+  location_state: string;
   found_at_latitude: number;
   found_at_longitude: number;
   descriptor: string;

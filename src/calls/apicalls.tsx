@@ -349,7 +349,7 @@ export const getUserPendingRequests = async () => {
     try {
        // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/users/pending-requests/');
-     // console.log('API GET Call getUserPendingRequests', response.data);
+      //console.log('API GET Call getUserPendingRequests', response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
@@ -705,7 +705,7 @@ export const getOwnerChangeRecords = async (treasureId : string) => {
     try {
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get(`/users/treasure/${treasureId}/history/`);
-        console.log('API GET Call getOwnerChangeRecords: ', response.data); //, response.data);
+       // console.log('API GET Call getOwnerChangeRecords: ', response.data); //, response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
@@ -724,7 +724,7 @@ export const getTreasure = async (treasureId) => {
     try {
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get(`/users/treasure/${treasureId}/`);
-        console.log('API GET Call getTreaure'); //, response.data);
+       // console.log('API GET Call getTreaure', response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
@@ -763,8 +763,8 @@ export const requestToGiftTreasure = async (data) => {
 export const cleanTreasuresData = async () => {
     try { 
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
-       // const response = await axios.post(`/users/clean-treasures-data/`);
-        const response = await axios.post(`/climatevisitor/clean-discoveries-data/`); //TEMP
+        const response = await axios.post(`/users/clean-treasures-data/`);
+        //const response = await axios.post(`/climatevisitor/clean-discoveries-data/`); //TEMP
         console.log('API GET Call cleanTreasuresData'); //, response.data);
         return response.data;
     } catch (error) {
@@ -873,7 +873,7 @@ export const getInboxItems = async () => {
     try {
        // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/users/inbox/items/');
-        console.log('API GET Call getInboxItems', response.data);
+        console.log('API GET Call getInboxItems'); //, response.data);
         return response.data;
     } catch (error) {
         if (error.response) {

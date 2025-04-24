@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, ScrollView, TouchableOpacity } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
- 
+
 import { useFriends } from "@/src/context/FriendsContext";
 import { useAppMessage } from "../../../src/context/AppMessageContext";
 import { StatusBar } from "expo-status-bar";
@@ -29,12 +29,13 @@ const details = () => {
   const { friends, friendsDropDown } = useFriends();
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { showAppMessage } = useAppMessage();
-   const [isListVisible, setIsListVisible] = useState<boolean>(false);
+  const [isListVisible, setIsListVisible] = useState<boolean>(false);
   const {
     treasures,
     handleGetTreasure,
     handleGetOwnerChangeRecords,
     handleGiftTreasureBackToFinder,
+
     viewingTreasure,
   } = useTreasures();
   const [isDoubleCheckerVisible, setDoubleCheckerVisible] = useState(false);
@@ -48,12 +49,10 @@ const details = () => {
 
   const openFriendPicker = () => {
     setIsListVisible(true);
-
   };
 
   const closeFriendPicker = () => {
     setIsListVisible(false);
-
   };
 
   const handleGiftTreasureBack = () => {
@@ -121,8 +120,6 @@ const details = () => {
           { paddingTop: 10 },
         ]}
       >
-        
-
         <View style={[appContainerStyles.nextToNextToPickerContainer]}>
           <HistoryButton
             onPress={() => handleViewTreasureHistory()}
@@ -136,17 +133,23 @@ const details = () => {
           />
         </View>
 
-        <ScrollView nestedScrollEnabled={true}
-        pointerEvents={isListVisible ? 'none' : 'auto'}>
-          
+        <ScrollView
+          nestedScrollEnabled={true}
+          pointerEvents={isListVisible ? "none" : "auto"}
+        >
           {viewingTreasure && (
             <TreasuresUICard data={viewingTreasure} isFullView={true} />
           )}
         </ScrollView>
-        <FriendPicker items={friends} onSelect={handleFriendSelect} isVisible={isListVisible} open={openFriendPicker} close={closeFriendPicker} />
+        <FriendPicker
+          items={friends}
+          onSelect={handleFriendSelect}
+          isVisible={isListVisible}
+          open={openFriendPicker}
+          close={closeFriendPicker}
+        />
         <ActionsFooter onPressLeft={() => router.back()} labelLeft={"Back"} />
       </View>
-     
     </>
   );
 };
