@@ -5,8 +5,9 @@ import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
 import { useFriends } from "@/src/context/FriendsContext";
 import Avatar from "../FriendsComponents/Avatar";
 import useDateTimeFunctions from "@/app/hooks/useDateTimeFunctions";
-
+import GiftingFunctionsButton from "./GiftingFunctionsButton";
 import { AntDesign, Feather } from "@expo/vector-icons";
+import { useUser } from "@/src/context/UserContext";
 
 
 
@@ -17,6 +18,7 @@ const TreasureListItem = ({
   onPress,
   showIsFriend = false,
 }) => {
+  const { user } = useUser();
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const { formatUTCToMonthDayYear } = useDateTimeFunctions();
 
@@ -108,7 +110,7 @@ const TreasureListItem = ({
         themeStyles.darkerBackground,
         { borderColor: themeStyles.primaryText.color, height: size * 1.8 },
       ]}
-      onPress={() => onPress(treasure.id, treasure.username)} // different from userlistitem
+      onPress={() => onPress(treasure?.id, treasure.username)} // different from userlistitem
     >
       <View style={{ paddingRight: size / 3 }}>
         <Avatar image={avatar} size={size} />
@@ -132,7 +134,7 @@ const TreasureListItem = ({
         {findDetails}
       </Text> */}
       </View>
-      {/* {showIsFriend && (
+      {/* {showIsFriend && ( */}
         <View
           style={{
             position: "absolute",
@@ -142,13 +144,17 @@ const TreasureListItem = ({
             padding: 6,
           }}
         >
+          
           <GiftingFunctionsButton
-            cTUserId={user.id}
-            cTUsername={user.username}
+         
+            cTUserId={user?.id}
+            cTUsername={user?.username}
+            treasureId={treasure.id}
+            treasureName={treasure.descriptor}
             size={size}
           />
         </View>
-      )} */}
+      {/* )} */}
     </TouchableOpacity>
   );
 };

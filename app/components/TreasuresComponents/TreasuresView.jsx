@@ -32,11 +32,11 @@ const TreasuresView = ({ listData, onOpenTreasurePress }) => {
             {item.special_type &&
               item.recipient &&
               item.recipient === user?.id && ( 
-                  <TreasureRequestListItem treasure={item.treasure_data} treasureId={item.treasure} isSender={true} avatar={item.sender_avatar} size={20} message={item.message} onPress={onOpenTreasurePress}/> 
+                  <TreasureRequestListItem treasure={item.treasure_data} treasureId={item.treasure_data.id} isSender={false} avatar={item.sender_avatar} size={40} message={item.message} onPress={onOpenTreasurePress}/> 
             
               )}
             {item.special_type && item.sender && item.sender === user?.id && (
-              <TreasureRequestListItem treasure={item.treasure_data} treasureId={item.treasure} isSender={false} avatar={item.recipient_avatar} size={20} message={item.message} onPress={onOpenTreasurePress}/> 
+              <TreasureRequestListItem treasure={item.treasure_data} treasureId={item.treasure_data.id} isSender={true} avatar={item.recipient_avatar} size={40} message={item.message} onPress={onOpenTreasurePress}/> 
             
             )}
             {!item.special_type && (

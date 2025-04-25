@@ -19,12 +19,15 @@ import useInbox from "@/app/hooks/useInbox";
 import useTreasures from "@/app/hooks/useTreasures"; 
 
 import DoubleCheckerWithMessageInput from "../Scaffolding/DoubleCheckerWithMessageInput";
+import { ConstantColorFactor } from "three";
 
-const GiftingFunctionsButton = ({ requestId, cTUserId, cTUsername, size }) => {
+
+const GiftingFunctionsButton = ({ cTUserId, cTUsername, treasureId, treasureName, size }) => {
   const router = useRouter();
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const [isDoubleCheckerVisible, setDoubleCheckerVisible] = useState(false);
   const [isFriend, setIsFriend] = useState<boolean>(false);
+  const [isOwner, setIsOwner ] = useState<boolean>(false);
   const [isPending, setIsPending] = useState<boolean>(false);
   const [isSent, setIsSent] = useState<boolean>(false);
   const [messageId, setMessageId] = useState<Number>(0);
@@ -41,10 +44,7 @@ const GiftingFunctionsButton = ({ requestId, cTUserId, cTUsername, size }) => {
   const {
     friends,
     giftRequests,
-    handleSendFriendRequest,
-    handleAcceptFriendship,
-    acceptFriendshipMutation,
-    handleDeclineFriendship,
+    handleSendFriendRequest,  
     declineFriendshipMutation,
   } = useFriends();
   const { triggerInboxItemsRefetch } = useInbox();
@@ -73,29 +73,31 @@ const GiftingFunctionsButton = ({ requestId, cTUserId, cTUsername, size }) => {
 
   const handleAccept = () => {
     if (messageId) {
-      handleAcceptFriendship(messageId);
+      handleAcceptTreasureGift(messageId);
+      triggerTreasuresRefetch();
       triggerInboxItemsRefetch();
     }
   };
 
   const handleDecline = () => {
     if (messageId) {
-      handleDeclineFriendship(messageId);
+      handleDeclineTreasureGift(messageId);
+      triggerTreasuresRefetch();
       triggerInboxItemsRefetch();
     }
   };
 
   useEffect(() => {
-    if (acceptFriendshipMutation.isSuccess) {
-      showAppMessage(true, null, "Friendship accepted!");
+    if (acceptTreasureGiftMutation.isSuccess) {
+      showAppMessage(true, null, "Treasure accepted!");
     }
-  }, [acceptFriendshipMutation.isSuccess]);
+  }, [acceptTreasureGiftMutation.isSuccess]);
 
   useEffect(() => {
-    if (acceptFriendshipMutation.isError) {
+    if (acceptTreasureGiftMutation.isError) {
       showAppMessage(true, null, "Oops! Friendship was not accepted.");
     }
-  }, [acceptFriendshipMutation.isError]);
+  }, [acceptTreasureGiftMutation.isError]);
 
   useEffect(() => {
     if (declineFriendshipMutation.isSuccess) {
@@ -109,27 +111,36 @@ const GiftingFunctionsButton = ({ requestId, cTUserId, cTUsername, size }) => {
     }
   }, [declineFriendshipMutation.isError]);
 
-  // useEffect(() => {
-  //   if (treasures) {
-  //     const checkForOwnership = treasures?.find(
-  //       (treasure) => treasure.owner === cTUserId
-  //     );
-  //     setIsOwner(!!checkForOwnership);
+  useEffect(() => {
+    if (treasures) {
+      const checkForOwnership = treasures?.find((treasure) => {
+        // console.log("Checking treasure:", treasure);
+        // console.log("Comparing treasure.id:", treasure.id, "with treasureId:", treasureId);
+        // console.log("Comparing treasure.user.id:", treasure.user, "with cTUserId:", cTUserId);
+      
+        return treasure.id === treasureId && treasure.user === cTUserId;
+      });
+      
+      setIsOwner(!!checkForOwnership);
 
-  //     if (!checkForFriendship) {
-  //       const checkForSentRequest = giftRequests?.find(
-  //         (request) => request.recipient === cTUserId
-  //       );
-  //       const checkForPendingRequest = giftRequests?.find(
-  //         (request) => request.sender === cTUserId
-  //       );
+      const checkForSentRequest = giftRequests?.find(
+        (request) => request.sender === cTUserId && request.treasure_data.id === treasureId
+      );
 
-  //       setIsSent(!!checkForSentRequest);
-  //       setIsPending(!!checkForPendingRequest);
-  //       setMessageId(checkForPendingRequest?.id);
-  //     }
-  //   }
-  // }, [ cTUserId, giftRequests, treasures]);
+    //  console.log(`TREASURE ID`, treasureId);
+
+      // if (!checkForOwnership) {
+
+        const checkForPendingRequest = giftRequests?.find(
+          (request) => request.recipient === cTUserId && request.treasure_data.id === treasureId
+        ); 
+
+        setIsSent(!!checkForSentRequest);
+        setIsPending(!!checkForPendingRequest);
+        setMessageId(checkForPendingRequest?.id);
+      // }
+    }
+  }, [ cTUserId, giftRequests, treasures]);
 
   return (
     <>
@@ -137,10 +148,10 @@ const GiftingFunctionsButton = ({ requestId, cTUserId, cTUsername, size }) => {
         <DoubleCheckerWithMessageInput
           isVisible={isDoubleCheckerVisible}
           toggleVisible={handleToggleDoubleChecker}
-          singleQuestionText={`Add ${cTUsername || ""}?`}
+          singleQuestionText={`Send ${treasureName|| ""} to a friend?`}
           noButtonText="Back"
           yesButtonText="Send"
-          onPress={handleAddFriend}
+          onPress={() => {}}
         />
       )}
       <View
@@ -151,7 +162,7 @@ const GiftingFunctionsButton = ({ requestId, cTUserId, cTUsername, size }) => {
           justifyContent: "center",
         }}
       >
-        {!isFriend && isPending && (
+        {!isOwner && isPending && (
           <View
             style={{
               borderRadius: 10,
@@ -194,7 +205,7 @@ const GiftingFunctionsButton = ({ requestId, cTUserId, cTUsername, size }) => {
           </View>
         )}
 
-        {!isFriend && !isPending && !isSent && (
+        {isOwner && !isPending && !isSent && (
           <TouchableOpacity
             onPress={handleToggleDoubleChecker}
             style={{
@@ -210,7 +221,7 @@ const GiftingFunctionsButton = ({ requestId, cTUserId, cTUsername, size }) => {
             }}
           >
             <Feather
-              name="user-plus"
+              name="send"
               size={size / 2}
               color={themeStyles.primaryText.color}
               style={{
@@ -230,7 +241,7 @@ const GiftingFunctionsButton = ({ requestId, cTUserId, cTUsername, size }) => {
             </Text> */}
           </TouchableOpacity>
         )}
-        {!isFriend && isSent && (
+        {isOwner && isSent && (
           <View
             style={{
               borderRadius: 6,
@@ -248,7 +259,7 @@ const GiftingFunctionsButton = ({ requestId, cTUserId, cTUsername, size }) => {
           </View>
         )}
 
-        {isFriend && (
+        {/* {isOwner && (
           <View
             style={{
               borderRadius: 10,
@@ -272,7 +283,7 @@ const GiftingFunctionsButton = ({ requestId, cTUserId, cTUsername, size }) => {
               }}
             />
           </View>
-        )}
+        )} */}
       </View>
     </>
   );

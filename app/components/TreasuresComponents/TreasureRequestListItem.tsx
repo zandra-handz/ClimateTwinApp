@@ -7,6 +7,7 @@ import useDateTimeFunctions from "@/app/hooks/useDateTimeFunctions";
 import GiftingFunctionsButton from "./GiftingFunctionsButton";  
 import DoubleCheckerWithMessageDisplay from "../Scaffolding/DoubleCheckerWithMessageDisplay";
 import { AntDesign, Feather } from "@expo/vector-icons";
+import { useUser } from "@/src/context/UserContext";
 
 
 const TreasureRequestListItem = ({
@@ -20,6 +21,7 @@ const TreasureRequestListItem = ({
   isSender = false,
   senderName,
 }) => {
+  const { user } = useUser();
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const { formatUTCToMonthDayYear } = useDateTimeFunctions();
   const [isDoubleCheckerVisible, setDoubleCheckerVisible] = useState(false);
@@ -115,12 +117,14 @@ const TreasureRequestListItem = ({
             padding: 6,
           }}
         >
-          {/* <GiftingFunctionsButton
-            // cTUserId={userId}
+          <GiftingFunctionsButton
+             cTUserId={user?.id}
 
             cTUsername={username}
+            treasureId={treasureId}
+            treasureName={treasure.descriptor}
             size={size}
-          /> */}
+          />
         </View>
       </TouchableOpacity>
     </>
