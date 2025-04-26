@@ -8,6 +8,8 @@ import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 const SearchResultsView = ({
   data, 
   onViewUserPress,
+  recFriendRequests,
+  sentFriendRequests
 }) => {
   const { appContainerStyles } = useGlobalStyles();
   return (
@@ -28,6 +30,8 @@ const SearchResultsView = ({
             onPress={onViewUserPress}
             size={40}
             showIsFriend={true}
+            recFriendRequests={recFriendRequests}
+            sentFriendRequests={sentFriendRequests}
             /> 
           </View>
         )}

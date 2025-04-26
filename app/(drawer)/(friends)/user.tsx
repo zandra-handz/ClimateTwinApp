@@ -9,14 +9,16 @@ import { useAppMessage } from "../../../src/context/AppMessageContext";
 import ActionsFooter from "@/app/components/ActionsFooter";
 
 import DoubleChecker from "@/app/components/Scaffolding/DoubleChecker";
-import FriendingFunctionsButton from "@/app/components/FriendsComponents/FriendingFunctionsButton";
-
+import { usePendingRequests } from "@/src/context/PendingRequestsContext";
+import useInlineComputations from "@/app/hooks/useInlineComputations";
+import { useUser } from "@/src/context/UserContext";
 // This accesses friends and checks for friendships so that i can move it if needed or
 // or link from multiple places
 
 const userdetails = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { username } = useLocalSearchParams<{ username: string }>();
+  const { user } = useUser();
   const router = useRouter();
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const {
@@ -24,16 +26,24 @@ const userdetails = () => {
     getPublicProfileMutation,
     viewingPublicProfile,
   } = useFriends();
-  const [isFriend, setIsFriend] = useState<boolean>(false);
   const {
     friends,
     handleSendFriendRequest,
     friendRequestMutation,
     searchUsersMutation,
   } = useFriends();
+
+  const { pendingRequests } = usePendingRequests();
+  const { sortPendingFriendRequests } = useInlineComputations();
+
+  const allFriendRequests = pendingRequests?.pending_friend_requests;
+  const { recFriendRequests, sentFriendRequests } = sortPendingFriendRequests(
+    allFriendRequests,
+    user?.id
+  );
+
   const [isDoubleCheckerVisible, setDoubleCheckerVisible] = useState(false);
   const { showAppMessage } = useAppMessage();
-  const [userProfileData, setUserProfileData] = useState(null);
 
   const handleToggleDoubleChecker = () => {
     setDoubleCheckerVisible((prev) => !prev);
@@ -72,19 +82,6 @@ const userdetails = () => {
   };
 
   useEffect(() => {
-    if (friends) {
-      const checkForFriendship = friends?.find(
-        (friend) => friend.friend === Number(id)
-      );
-      setIsFriend(!!checkForFriendship);
-    }
-  }, [friends]);
-
-  const handleGoToGiveScreen = () => {
-    console.log("removed");
-  };
-
-  useEffect(() => {
     if (id) {
       handleGetPublicProfile(id);
     }
@@ -110,14 +107,14 @@ const userdetails = () => {
         ]}
       >
         {viewingPublicProfile && (
-          <UsersUICard data={viewingPublicProfile} isFullView={true} />
+          <UsersUICard
+            data={viewingPublicProfile}
+            isFullView={true}
+            recFriendRequests={recFriendRequests}
+            sentFriendRequests={sentFriendRequests}
+          />
         )}
-        <ActionsFooter
-          onPressLeft={() => router.back()}
-          labelLeft={"Back"}
-          // onPressRight={isFriend ? () => {} : handleToggleDoubleChecker}
-          // labelRight={isFriend ? "Friends" : "Add friend"}
-        />
+        <ActionsFooter onPressLeft={() => router.back()} labelLeft={"Back"} />
       </View>
     </>
   );

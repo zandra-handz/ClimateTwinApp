@@ -9,45 +9,57 @@ import { useRouter } from "expo-router";
 import { useAppMessage } from "@/src/context/AppMessageContext";
 import useInbox from "@/app/hooks/useInbox"; 
 
+import { useUser } from "@/src/context/UserContext";
+ 
+import useInlineComputations from "@/app/hooks/useInlineComputations";
+
 import DoubleCheckerWithMessageInput from "../Scaffolding/DoubleCheckerWithMessageInput";
 
-const FriendingFunctionsButton = ({ cTUserId, cTUsername, size }) => {
+
+//sort sent and rec higher and pass in to this
+const FriendingFunctionsButton = ({ cTUserId, cTUsername, size, recFriendRequests, sentFriendRequests }) => {
   const router = useRouter();
+  const { user } = useUser();
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
     const [ isDoubleCheckerVisible, setDoubleCheckerVisible ] = useState(false);
-  const [isFriend, setIsFriend] = useState<boolean>(false);
-  const [isPending, setIsPending] = useState<boolean>(false);
-  const [isSent, setIsSent] = useState<boolean>(false);
-  const [messageId, setMessageId] = useState<Number>(0);
+  // const [isFriend, setIsFriend] = useState<boolean>(false); 
   const { showAppMessage } = useAppMessage();
-
-
   const {
-    friends,
-    friendRequests,
+    friends, 
     handleSendFriendRequest,
     handleAcceptFriendship,
     acceptFriendshipMutation,
     handleDeclineFriendship,
     declineFriendshipMutation,
   } = useFriends();
+
+
+  // const { pendingRequests } = usePendingRequests();
+  const { sortPendingFriendRequests, checkForExistingFriendship, otherUserRecFriendRequest, otherUserSentFriendRequest } = useInlineComputations();
+ 
+// const allFriendRequests = pendingRequests?.pending_friend_requests;
+  // const { recFriendRequests, sentFriendRequests } = sortPendingFriendRequests(allFriendRequests, user?.id);
+ 
+ 
+const isFriend = checkForExistingFriendship(friends, cTUserId);
+//  console.log(`FRIEND REQS`, sentFriendRequests, cTUserId);
+//  console.log(isFriend);
+  const recFriendRequest = otherUserRecFriendRequest(isFriend, sentFriendRequests, cTUserId);
+
+  const sentFriendRequestItem = otherUserSentFriendRequest(isFriend, recFriendRequests, cTUserId);
+  const messageId = sentFriendRequestItem?.id || null;
+
+ const sentFriendRequest = !!sentFriendRequestItem;
+//  console.log(sentFriendRequest);
+//  console.log(recFriendRequest);
   const { triggerInboxItemsRefetch } = useInbox();
 
-  const handleToggleDoubleChecker = () => {
-    console.log('add friend pressed');
-    console.log(`is visible`, isDoubleCheckerVisible);
-    //this works but the modal also opens without dismissing the keyboard
-    // and the keyboard opens again when go back, which is nice?
-    // however not sure if this will cause a bug in future
-    // if (!isDoubleCheckerVisible) {
-    //     Keyboard.dismiss();
-    // }
+  const handleToggleDoubleChecker = () => {  
     setDoubleCheckerVisible(prev => !prev);
   
-  };
-
+  };  
  
-  const handleAddFriend = (message) => { //this is set inside DoubleCheckerWithMessage
+  const handleAddFriend = (message) => {  
     if (cTUserId) {
       const numberId = Number(cTUserId);
       
@@ -72,66 +84,8 @@ const FriendingFunctionsButton = ({ cTUserId, cTUsername, size }) => {
     }
   };
 
-  useEffect(() => {
-    if (acceptFriendshipMutation.isSuccess) {
-      showAppMessage(true, null, "Friendship accepted!");
-    }
-  }, [acceptFriendshipMutation.isSuccess]);
 
-  useEffect(() => {
-    if (acceptFriendshipMutation.isError) {
-      showAppMessage(true, null, "Oops! Friendship was not accepted.");
-    }
-  }, [acceptFriendshipMutation.isError]);
-
-  useEffect(() => {
-    if (declineFriendshipMutation.isSuccess) {
-      showAppMessage(true, null, "Friendship declined");
-    }
-  }, [declineFriendshipMutation.isSuccess]);
-
-  useEffect(() => {
-    if (declineFriendshipMutation.isError) {
-      showAppMessage(true, null, "Oops! Friendship was not declined.");
-    }
-  }, [declineFriendshipMutation.isError]);
-
-  useEffect(() => {
-    if (friends) {
-      const checkForFriendship = friends?.find(
-        (friend) => friend.friend === cTUserId
-      );
-      setIsFriend(!!checkForFriendship);
-
-      if (!checkForFriendship) {
-        const checkForSentRequest = friendRequests?.find(
-          (request) => request.recipient === cTUserId
-        );
-        const checkForPendingRequest = friendRequests?.find(
-          (request) => request.sender === cTUserId
-        );
-
-        setIsSent(!!checkForSentRequest);
-        setIsPending(!!checkForPendingRequest);
-        setMessageId(checkForPendingRequest?.id);
-        // console.log(`message id: ${checkForPendingRequest?.id}`);
-
-        // Check if the request exists and log the matching request
-        // if (checkForPendingRequest) {
-        //   console.log("pending request found:", checkForPendingRequest);
-        //   // Or stringify it for better readability
-        //   console.log(
-        //     "pending request JSON:",
-        //     JSON.stringify(checkForPendingRequest, null, 2)
-        //   );
-        // }
-
-        // else {
-        //   console.log("No pending request found.");
-        // }
-      }
-    }
-  }, [friends, cTUserId, friendRequests]);
+ 
 
   return (
     <> 
@@ -153,7 +107,7 @@ const FriendingFunctionsButton = ({ cTUserId, cTUsername, size }) => {
         justifyContent: "center",
       }}
     >
-      {!isFriend && isPending && (
+      {!isFriend && sentFriendRequest && (
         <View
           style={{
             borderRadius: 10,
@@ -196,7 +150,7 @@ const FriendingFunctionsButton = ({ cTUserId, cTUsername, size }) => {
         </View>
       )}
 
-      {!isFriend && !isPending && !isSent && (
+      {!isFriend && !sentFriendRequest && !recFriendRequest && (
         <TouchableOpacity
           onPress={handleToggleDoubleChecker}
           style={{
@@ -232,7 +186,7 @@ const FriendingFunctionsButton = ({ cTUserId, cTUsername, size }) => {
             </Text> */}
         </TouchableOpacity>
       )}
-      {!isFriend && isSent && (
+      {!isFriend && recFriendRequest && (
         <View
         style={{
             borderRadius: 6,

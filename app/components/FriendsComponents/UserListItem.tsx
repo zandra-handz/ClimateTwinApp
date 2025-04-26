@@ -11,6 +11,8 @@ const UserListItem = ({
   size,
   onPress,
   showIsFriend = false,
+  recFriendRequests,
+  sentFriendRequests
 }) => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
 
@@ -44,6 +46,8 @@ const UserListItem = ({
             cTUserId={user.id}
             cTUsername={user.username}
             size={size}
+            recFriendRequests={recFriendRequests}
+            sentFriendRequests={sentFriendRequests}
           />
         </View>
       )}

@@ -3,15 +3,12 @@ import { View, ScrollView, TouchableOpacity } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 
-import { useFriends } from "@/src/context/FriendsContext";
-import { useAppMessage } from "../../../src/context/AppMessageContext";
-import { StatusBar } from "expo-status-bar";
-import DataList from "../../components/Scaffolding/DataList";
+import { useFriends } from "@/src/context/FriendsContext"; 
 import FriendPicker from "@/app/components/FriendPicker";
 import ActionsFooter from "@/app/components/ActionsFooter";
 import useTreasures from "@/app/hooks/useTreasures";
 import TreasuresUICard from "@/app/components/TreasuresComponents/TreasuresUICard";
-import GoToItemButton from "@/app/components/GoToItemButton";
+ 
 
 import ReturnItemButton from "@/app/components/Scaffolding/ReturnItemButton";
 import HistoryButton from "@/app/components/Scaffolding/HistoryButton";
@@ -26,14 +23,11 @@ const details = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
   const { descriptor } = useLocalSearchParams<{ descriptor: string | null }>();
   const router = useRouter();
-  const { friends, friendsDropDown } = useFriends();
-  const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { showAppMessage } = useAppMessage();
+  const { friends  } = useFriends();
+  const { themeStyles, appContainerStyles } = useGlobalStyles(); 
   const [isListVisible, setIsListVisible] = useState<boolean>(false);
-  const {
-    treasures,
-    handleGetTreasure,
-    handleGetOwnerChangeRecords,
+  const { 
+    handleGetTreasure, 
     handleGiftTreasureBackToFinder,
 
     viewingTreasure,

@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Modal, FlatList } from "react-native";
+import React  from "react";
+import { View, Text, TouchableOpacity } from "react-native";
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
- 
-import { useFriends } from "@/src/context/FriendsContext";
+  
 import Avatar from "../FriendsComponents/Avatar";  
 import useDateTimeFunctions from "@/app/hooks/useDateTimeFunctions";
-import FriendingFunctionsButton from "./FriendingFunctionsButton";
-import CuteDetailBox from "../CuteDetailBox";
+import FriendingFunctionsButton from "./FriendingFunctionsButton"; 
 
 const FriendListItem = ({
   user,
   avatar,
   size,
   onPress,
-  showIsFriend = false,
+  // NOT USING RIGHT NOW
+  // showIsFriend = false,
+  // recFriendRequests,
+  // sentFriendRequests,
 }) => { 
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const { formatUTCToMonthDayYear } = useDateTimeFunctions();
@@ -94,13 +95,14 @@ const FriendListItem = ({
      
       
       </View>
-      {showIsFriend && (
+      {/* {showIsFriend && (
         <View style={{ position: "absolute", height: '100%', width: 110, right: 10, padding: 6 }}>
           
-        <FriendingFunctionsButton cTUserId={user.id} cTUsername={user.username} size={size} />
+        <FriendingFunctionsButton cTUserId={user.id} cTUsername={user.username} size={size} recFriendRequests={recFriendRequests}
+          sentFriendRequests={sentFriendRequests} />
         
         </View>
-      )}
+      )} */}
     </TouchableOpacity>
   );
 };

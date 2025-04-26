@@ -2,8 +2,7 @@ import React, {
   createContext,
   useContext,
   useRef,
-  useState,
-  useEffect,
+  useState, 
 } from "react";
 import {
   UseMutationResult,
@@ -12,8 +11,7 @@ import {
   UseQueryResult,
   useMutation,
 } from "@tanstack/react-query";
-
-import { useRouter } from "expo-router";
+ 
 import { useUser } from "../../src/context/UserContext";
 import { useAppMessage } from "@/src/context/AppMessageContext";
 import {
@@ -24,17 +22,13 @@ import {
   acceptFriendship,
   declineFriendship,
   deleteFriendship,
-  getPublicProfile,
-  getUserPendingRequests,
+  getPublicProfile, 
 } from "../../src/calls/apicalls";
-
+import { usePendingRequests } from "./PendingRequestsContext";
 import {
   AddFriendRequest,
   Friend,
-  PublicProfile,
-  FriendRequest,
-  GiftRequest,
-  PendingRequestsResponse,
+  PublicProfile, 
 } from "@/src/types/useFriendsTypes";
 
 //WARNING: The endpoint here returns the user's profiles for their friends
@@ -64,12 +58,7 @@ export interface FriendsContextType {
   handleGetPublicProfile: (userId: string) => void;
   getPublicProfileMutation: UseMutationResult<any, unknown>;
   viewingPublicProfile: PublicProfile | null;
-  friendRequests: FriendRequest[];
-  giftRequests: GiftRequest[];
-  friendRequestsReceived: any[];
-  friendRequestsSent: any[];
-  giftRequestsReceived: any[];
-  giftRequestsSent: any[];
+ 
 }
 
 const FriendsContext = createContext<FriendsContextType | undefined>(undefined);
@@ -88,17 +77,11 @@ interface FriendsProviderProps {
 
 export const FriendsProvider: React.FC<FriendsProviderProps> = ({
   children,
-}) => {
-  const router = useRouter();
+}) => { 
   const { showAppMessage } = useAppMessage();
   const { user, isAuthenticated, isInitializing } = useUser();
-  const [viewingFriend, setViewingFriend] = useState<Friend | null>(null); //is this correct or do i need the friendship?
-  const [giftRequests, setGiftRequests] = useState<GiftRequest[]>([]);
-  const [friendRequests, setFriendRequests] = useState<FriendRequest[]>([]);
-  const [friendRequestsSent, setFriendRequestsSent] = useState([]);
-  const [friendRequestsReceived, setFriendRequestsReceived] = useState([]);
-  const [giftRequestsSent, setGiftRequestsSent] = useState([]);
-  const [giftRequestsReceived, setGiftRequestsReceived] = useState([]);
+  const { triggerRequestsRefetch } = usePendingRequests();
+  const [viewingFriend, setViewingFriend] = useState<Friend | null>(null);  
   const [viewingPublicProfile, setViewingPublicProfile] =
     useState<PublicProfile | null>(null); //is this correct or do i need the friendship?
 
@@ -120,54 +103,8 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
     queryFn: getFriends,
     enabled: !!(isAuthenticated && !isInitializing && user && user.id),
   });
-
-  // shouldn't depend on friends data because you need to send /get a request to friend
-  const {
-    data: pendingRequests,
-    isPending: isPendingRequests,
-    isSuccess: isPendingRequestsSuccess,
-    isError: isPendingRequestsError,
-  }: UseQueryResult<PendingRequestsResponse, Error> = useQuery({
-    queryKey: ["pendingRequests", user?.id],
-    queryFn: getUserPendingRequests,
-    enabled: !!(isAuthenticated && !isInitializing && user && user.id),
-  });
-
-  useEffect(() => {
-    if (pendingRequests && isPendingRequestsSuccess) {
-      setGiftRequests(pendingRequests?.pending_gift_requests);
-      setFriendRequests(pendingRequests?.pending_friend_requests);
-    }
-  }, [pendingRequests, isPendingRequestsSuccess]);
-
-  useEffect(() => {
-    if (friendRequests.length > 0 && user) {
-      const received = friendRequests?.filter(
-        (request) => request.recipient === user?.id
-      );
-      const sent = friendRequests?.filter(
-        (request) => request.sender === user?.id
-      );
-
-      setFriendRequestsReceived(received);
-      setFriendRequestsSent(sent);
-    }
-  }, [friendRequests, user]);
-
-    useEffect(() => { 
   
-      if (giftRequests && giftRequests.length > 0 && user) {
-        const received = giftRequests?.filter(
-          (request) => request.recipient === user?.id
-        );
-        const sent = giftRequests?.filter(
-          (request) => request.sender === user?.id
-        ); 
   
-        setGiftRequestsReceived(received);
-        setGiftRequestsSent(sent);
-      }
-    }, [giftRequests, user]);
 
   // FOR DEBUGGING
   //   useEffect(() => {
@@ -233,7 +170,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
   };
 
   const handleSearchUsers = (query: string) => {
-    console.log("handleSearchUsers");
+  
     searchUsersMutation.mutate(query);
   };
 
@@ -283,8 +220,8 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
     mutationFn: (data: AddFriendRequest) => requestToAddFriend(data),
     onSuccess: () => {
       //Do we need?
-      triggerFriendsRefetch();
       triggerRequestsRefetch();
+      triggerFriendsRefetch(); 
 
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
@@ -310,11 +247,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
     queryClient.invalidateQueries({ queryKey: ["friends", user?.id] });
     queryClient.refetchQueries({ queryKey: ["friends", user?.id] });
   };
-
-  const triggerRequestsRefetch = () => {
-    queryClient.invalidateQueries({ queryKey: ["pendingRequests", user?.id] });
-    queryClient.refetchQueries({ queryKey: ["pendingRequests", user?.id] });
-  };
+ 
 
   const handleAcceptFriendship = (itemViewId: number) => {
     if (!itemViewId) {
@@ -327,8 +260,9 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
   const acceptFriendshipMutation = useMutation({
     mutationFn: (itemViewId: number) => acceptFriendship(itemViewId),
     onSuccess: () => {
-      triggerFriendsRefetch();
-      triggerRequestsRefetch();
+      showAppMessage(true, null, "Friendship accepted!");
+     triggerRequestsRefetch();
+     triggerFriendsRefetch(); 
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -337,6 +271,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
       }, 2000);
     },
     onError: (error) => {
+      showAppMessage(true, null, "Oops! Friendship was not accepted.");
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -356,8 +291,8 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
 
   const declineFriendshipMutation = useMutation({
     mutationFn: (itemViewId: number) => declineFriendship(itemViewId),
-    onSuccess: () => {
-      // triggerFriendsRefetch();
+    onSuccess: () => { 
+     showAppMessage(true, null, "Friendship declined");
       triggerRequestsRefetch();
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
@@ -367,6 +302,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
       }, 2000);
     },
     onError: (error) => {
+    showAppMessage(true, null, "Oops! Friendship was not declined.");
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -413,6 +349,13 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
     deleteFriendshipMutation.mutate(itemViewId);
   };
 
+
+
+  
+  
+ 
+ 
+
   return (
     <FriendsContext.Provider
       value={{
@@ -433,13 +376,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
         viewingFriend,
         handleGetPublicProfile,
         getPublicProfileMutation,
-        viewingPublicProfile,
-        friendRequests,
-        giftRequests,
-        friendRequestsReceived,
-        friendRequestsSent,
-        giftRequestsReceived,
-        giftRequestsSent,
+        viewingPublicProfile, 
       }}
     >
       {children}

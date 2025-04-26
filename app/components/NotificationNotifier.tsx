@@ -129,32 +129,32 @@ const NotificationNotifier = () => {
       }
     }, [acceptTreasureGiftMutation.isError]);
 
-      useEffect(() => {
-        if (acceptFriendshipMutation.isSuccess) {
-          showAppMessage(true, null, "Friendship accepted!");
-        }
-      }, [acceptFriendshipMutation.isSuccess]);
+      // useEffect(() => {
+      //   if (acceptFriendshipMutation.isSuccess) {
+      //     showAppMessage(true, null, "Friendship accepted!");
+      //   }
+      // }, [acceptFriendshipMutation.isSuccess]);
 
 
-      useEffect(() => {
-        if (acceptFriendshipMutation.isError) {
-          showAppMessage(true, null, "Oops! Friendship was not accepted.");
-        }
-      }, [acceptFriendshipMutation.isError]);
+      // useEffect(() => {
+      //   if (acceptFriendshipMutation.isError) {
+      //     showAppMessage(true, null, "Oops! Friendship was not accepted.");
+      //   }
+      // }, [acceptFriendshipMutation.isError]);
 
 
-      useEffect(() => {
-        if (declineFriendshipMutation.isSuccess) {
-          showAppMessage(true, null, "Friendship declined");
-        }
-      }, [declineFriendshipMutation.isSuccess]);
+      // useEffect(() => {
+      //   if (declineFriendshipMutation.isSuccess) {
+      //     showAppMessage(true, null, "Friendship declined");
+      //   }
+      // }, [declineFriendshipMutation.isSuccess]);
 
 
-            useEffect(() => {
-        if (declineFriendshipMutation.isError) {
-          showAppMessage(true, null, "Oops! Friendship was not declined.");
-        }
-      }, [declineFriendshipMutation.isError]);
+      //       useEffect(() => {
+      //   if (declineFriendshipMutation.isError) {
+      //     showAppMessage(true, null, "Oops! Friendship was not declined.");
+      //   }
+      // }, [declineFriendshipMutation.isError]);
 
 
             useEffect(() => {

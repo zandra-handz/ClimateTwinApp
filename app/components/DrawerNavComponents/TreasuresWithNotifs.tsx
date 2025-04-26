@@ -1,17 +1,13 @@
 import { View } from "react-native";
 import React from "react";
-import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
-import { useUser } from "../../../src/context/UserContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext"; 
 import { DrawerItem } from "@react-navigation/drawer";
-import {  AntDesign, Feather } from "@expo/vector-icons";
+import {  AntDesign  } from "@expo/vector-icons";
 import NewItemsDot from "./NewItemsDot";
-import { useRouter } from "expo-router";
-import { useFriends } from "@/src/context/FriendsContext";
+import { useRouter } from "expo-router"; 
 
 const TreasuresWithNotifs = () => {
-    const router = useRouter();
-    const { friendRequests } = useFriends();
-  const { appSettings, updateSettings } = useUser();
+    const router = useRouter(); 
   const { lightOrDark, themeStyles, appContainerStyles, appFontStyles } =
     useGlobalStyles();
  

@@ -8,18 +8,35 @@ import { useAppMessage } from "../../../src/context/AppMessageContext";
 import { useFriends } from "@/src/context/FriendsContext";
 import FriendsView from "@/app/components/FriendsComponents/FriendsView";
 
+import { usePendingRequests } from "@/src/context/PendingRequestsContext";
+import useInlineComputations from "@/app/hooks/useInlineComputations";
+
 // MOVED INSIDE FRIENDSVIEW TO INCLUDE IN THE SAME FLATLIST
 // import FriendRequestsView from "@/app/components/FriendsComponents/FriendRequestsView";
 
 import ActionsFooter from "@/app/components/ActionsFooter";
 import NothingHere from "@/app/components/Scaffolding/NothingHere";
+import { useUser } from "@/src/context/UserContext";
+
+
 
 
 const index = () => {
-  const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
-  const { showAppMessage } = useAppMessage();
-  const { friends, friendRequests, friendRequestsReceived, friendRequestsSent } =
+  const { themeStyles,  appContainerStyles } = useGlobalStyles();
+ 
+  const { friends } =
     useFriends();
+
+    const { user } = useUser();
+
+    const { pendingRequests } = usePendingRequests();
+    const { sortPendingFriendRequests, checkForExistingFriendship, otherUserRecFriendRequest, otherUserSentFriendRequest } = useInlineComputations();
+   
+   
+    const allFriendRequests = pendingRequests?.pending_friend_requests;
+    const { recFriendRequests, sentFriendRequests } = sortPendingFriendRequests(allFriendRequests, user?.id);
+   
+
   const router = useRouter();
 
   const handleViewFriend = (id, friendName) => {
@@ -52,18 +69,20 @@ const index = () => {
       
         <View style={appContainerStyles.innerFlexStartContainer}>
 
-        {((friends && friends?.length > 0) || (friendRequests && friendRequests?.length > 0)) && (
+        {((friends && friends?.length > 0) || (allFriendRequests && allFriendRequests?.length > 0)) && (
             <FriendsView
             listData={[
-              ...(friendRequestsReceived ?? []),
-              ...(friendRequestsSent ?? []),
+              ...(recFriendRequests ?? []),
+              ...(sentFriendRequests ?? []),
               ...(friends ?? [])
             ]}
               onViewFriendPress={handleViewFriend}
               onViewUserPress={handleViewUser}
+            recFriendRequests={recFriendRequests}
+            sentFriendRequests={sentFriendRequests}
             />
           )}
-          {friends && !friends.length && !friendRequests?.length && (
+          {friends && !friends.length && !allFriendRequests?.length && (
             <NothingHere message={'No friends yet!'} subMessage={'search users to find friends!'} offsetStatusBarHeight={true} />
           ) }
         </View>

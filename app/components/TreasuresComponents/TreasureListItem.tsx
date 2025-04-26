@@ -17,6 +17,8 @@ const TreasureListItem = ({
   size,
   onPress,
   showIsFriend = false,
+  recGiftRequests,
+  sentGiftRequests,
 }) => {
   const { user } = useUser();
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
@@ -152,6 +154,8 @@ const TreasureListItem = ({
             treasureId={treasure.id}
             treasureName={treasure.descriptor}
             size={size}
+            recGiftRequests={recGiftRequests}
+            sentGiftRequests={sentGiftRequests}
           />
         </View>
       {/* )} */}

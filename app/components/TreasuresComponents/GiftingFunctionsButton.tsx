@@ -11,47 +11,75 @@ import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
 
 import { useFriends } from "@/src/context/FriendsContext";
 import { AntDesign, Feather } from "@expo/vector-icons";
-
+import { useUser } from "@/src/context/UserContext";
 import { useRouter } from "expo-router";
 import { useAppMessage } from "@/src/context/AppMessageContext";
 import useInbox from "@/app/hooks/useInbox";
-
-import useTreasures from "@/app/hooks/useTreasures"; 
+import { usePendingRequests } from "@/src/context/PendingRequestsContext";
+import useInlineComputations from "@/app/hooks/useInlineComputations";
+import useTreasures from "@/app/hooks/useTreasures";
 
 import DoubleCheckerWithMessageInput from "../Scaffolding/DoubleCheckerWithMessageInput";
 import { ConstantColorFactor } from "three";
 
-
-const GiftingFunctionsButton = ({ cTUserId, cTUsername, treasureId, treasureName, size }) => {
+const GiftingFunctionsButton = ({
+  cTUserId,
+  cTUsername,
+  treasureId,
+  treasureName,
+  size,
+  recGiftRequests,
+  sentGiftRequests,
+}) => {
   const router = useRouter();
+  const { user } = useUser();
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const [isDoubleCheckerVisible, setDoubleCheckerVisible] = useState(false);
   const [isFriend, setIsFriend] = useState<boolean>(false);
-  const [isOwner, setIsOwner ] = useState<boolean>(false);
   const [isPending, setIsPending] = useState<boolean>(false);
   const [isSent, setIsSent] = useState<boolean>(false);
-  const [messageId, setMessageId] = useState<Number>(0);
   const { showAppMessage } = useAppMessage();
-
   const {
     handleAcceptTreasureGift,
     acceptTreasureGiftMutation,
-    handleDeclineTreasureGift, 
+    handleDeclineTreasureGift,
     triggerTreasuresRefetch,
     treasures,
   } = useTreasures();
+ 
+  console.log(recGiftRequests.length); 
+  console.log(sentGiftRequests.length);
 
-  const {
-    friends,
-    giftRequests,
-    handleSendFriendRequest,  
-    declineFriendshipMutation,
-  } = useFriends();
+  const { 
+    checkForTreasureOwnership,
+    otherUserRecGiftRequest,
+    otherUserSentGiftRequest,
+  } = useInlineComputations();
+ 
+
+  const isOwner = checkForTreasureOwnership(treasureId, treasures, cTUserId);
+
+  const recGiftRequest = otherUserRecGiftRequest(
+    treasureId,
+    recGiftRequests,
+    cTUserId
+  );
+
+  const  sentGiftRequestItem  = otherUserSentGiftRequest(
+    treasureId,
+    sentGiftRequests,
+    cTUserId
+  );
+  // console.log(sentGiftRequestItem);
+  const messageId = sentGiftRequestItem?.id || null;
+
+  const sentGiftRequest = !!sentGiftRequestItem;
+ 
   const { triggerInboxItemsRefetch } = useInbox();
 
   const handleToggleDoubleChecker = () => {
-    console.log("add friend pressed");
-    console.log(`is visible`, isDoubleCheckerVisible);
+    // console.log("add friend pressed");
+    // console.log(`is visible`, isDoubleCheckerVisible);
     //this works but the modal also opens without dismissing the keyboard
     // and the keyboard opens again when go back, which is nice?
     // however not sure if this will cause a bug in future
@@ -61,22 +89,14 @@ const GiftingFunctionsButton = ({ cTUserId, cTUsername, treasureId, treasureName
     setDoubleCheckerVisible((prev) => !prev);
   };
 
-  const handleAddFriend = (message) => {
-    //this is set inside DoubleCheckerWithMessage
-    if (cTUserId) {
-      const numberId = Number(cTUserId);
-
-      handleSendFriendRequest(numberId, message);
-      handleToggleDoubleChecker();
-    }
-  };
-
   const handleAccept = () => {
     if (messageId) {
       handleAcceptTreasureGift(messageId);
       triggerTreasuresRefetch();
       triggerInboxItemsRefetch();
-    }
+    } else {
+    console.log('no message id');
+    };
   };
 
   const handleDecline = () => {
@@ -87,60 +107,17 @@ const GiftingFunctionsButton = ({ cTUserId, cTUsername, treasureId, treasureName
     }
   };
 
-  useEffect(() => {
-    if (acceptTreasureGiftMutation.isSuccess) {
-      showAppMessage(true, null, "Treasure accepted!");
-    }
-  }, [acceptTreasureGiftMutation.isSuccess]);
+  // useEffect(() => {
+  //   if (acceptTreasureGiftMutation.isSuccess) {
+  //     showAppMessage(true, null, "Treasure accepted!");
+  //   }
+  // }, [acceptTreasureGiftMutation.isSuccess]);
 
-  useEffect(() => {
-    if (acceptTreasureGiftMutation.isError) {
-      showAppMessage(true, null, "Oops! Friendship was not accepted.");
-    }
-  }, [acceptTreasureGiftMutation.isError]);
-
-  useEffect(() => {
-    if (declineFriendshipMutation.isSuccess) {
-      showAppMessage(true, null, "Friendship declined");
-    }
-  }, [declineFriendshipMutation.isSuccess]);
-
-  useEffect(() => {
-    if (declineFriendshipMutation.isError) {
-      showAppMessage(true, null, "Oops! Friendship was not declined.");
-    }
-  }, [declineFriendshipMutation.isError]);
-
-  useEffect(() => {
-    if (treasures) {
-      const checkForOwnership = treasures?.find((treasure) => {
-        // console.log("Checking treasure:", treasure);
-        // console.log("Comparing treasure.id:", treasure.id, "with treasureId:", treasureId);
-        // console.log("Comparing treasure.user.id:", treasure.user, "with cTUserId:", cTUserId);
-      
-        return treasure.id === treasureId && treasure.user === cTUserId;
-      });
-      
-      setIsOwner(!!checkForOwnership);
-
-      const checkForSentRequest = giftRequests?.find(
-        (request) => request.sender === cTUserId && request.treasure_data.id === treasureId
-      );
-
-    //  console.log(`TREASURE ID`, treasureId);
-
-      // if (!checkForOwnership) {
-
-        const checkForPendingRequest = giftRequests?.find(
-          (request) => request.recipient === cTUserId && request.treasure_data.id === treasureId
-        ); 
-
-        setIsSent(!!checkForSentRequest);
-        setIsPending(!!checkForPendingRequest);
-        setMessageId(checkForPendingRequest?.id);
-      // }
-    }
-  }, [ cTUserId, giftRequests, treasures]);
+  // useEffect(() => {
+  //   if (acceptTreasureGiftMutation.isError) {
+  //     showAppMessage(true, null, "Oops! Friendship was not accepted.");
+  //   }
+  // }, [acceptTreasureGiftMutation.isError]);
 
   return (
     <>
@@ -148,7 +125,7 @@ const GiftingFunctionsButton = ({ cTUserId, cTUsername, treasureId, treasureName
         <DoubleCheckerWithMessageInput
           isVisible={isDoubleCheckerVisible}
           toggleVisible={handleToggleDoubleChecker}
-          singleQuestionText={`Send ${treasureName|| ""} to a friend?`}
+          singleQuestionText={`Send ${treasureName || ""} to a friend?`}
           noButtonText="Back"
           yesButtonText="Send"
           onPress={() => {}}
@@ -162,7 +139,7 @@ const GiftingFunctionsButton = ({ cTUserId, cTUsername, treasureId, treasureName
           justifyContent: "center",
         }}
       >
-        {!isOwner && isPending && (
+        {!isOwner && recGiftRequest && (
           <View
             style={{
               borderRadius: 10,
@@ -205,7 +182,7 @@ const GiftingFunctionsButton = ({ cTUserId, cTUsername, treasureId, treasureName
           </View>
         )}
 
-        {isOwner && !isPending && !isSent && (
+        {isOwner && !recGiftRequest && !sentGiftRequest && (
           <TouchableOpacity
             onPress={handleToggleDoubleChecker}
             style={{
@@ -241,7 +218,7 @@ const GiftingFunctionsButton = ({ cTUserId, cTUsername, treasureId, treasureName
             </Text> */}
           </TouchableOpacity>
         )}
-        {isOwner && isSent && (
+        {isOwner && sentGiftRequest && (
           <View
             style={{
               borderRadius: 6,

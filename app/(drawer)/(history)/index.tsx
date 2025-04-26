@@ -1,47 +1,22 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
-import {
-  SafeAreaView,
-  View, 
-} from "react-native"; 
-import { useGlobalStyles } from "../../../src/context/GlobalStylesContext"; 
+import React from "react";
+import { View } from "react-native";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 
-import { useAppMessage } from "../../../src/context/AppMessageContext";
 import useHistory from "../../hooks/useHistory";
 
-import { StatusBar } from "expo-status-bar";
+import DataList from "../../components/Scaffolding/DataList";
 
-import DataList from "../../components/Scaffolding/DataList"; 
-  
 const index = () => {
-  const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles(); 
-  const { showAppMessage } = useAppMessage();
+  const { themeStyles, appContainerStyles } = useGlobalStyles();
+
   const { history } = useHistory();
- 
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     console.log("Nearby location screen is focused");
-  //     triggerRefetch();
-  //     return () => {
-  //       console.log("nearby location screen is unfocused"); 
-  //     };
-  //   }, [])
-  // );
- 
 
-const handlePress = () => {
-  console.log('History handlePress pressed!');
+  const handlePress = () => {
+    console.log("History handlePress pressed!");
+  };
 
-};
- 
- 
-  
   return (
-    <>
-      {/* <StatusBar
-        barStyle={themeStyles.primaryBackground.backgroundColor}
-        translucent={true}
-        backgroundColor="transparent"
-      /> */}
+    <> 
       <View
         style={[
           appContainerStyles.screenContainer,
@@ -50,10 +25,10 @@ const handlePress = () => {
         ]}
       >
         <View style={appContainerStyles.innerFlexStartContainer}>
-        
-        {history && <DataList listData={history} onCardButtonPress={handlePress} />}
- 
-          </View>
+          {history && (
+            <DataList listData={history} onCardButtonPress={handlePress} />
+          )}
+        </View>
       </View>
     </>
   );

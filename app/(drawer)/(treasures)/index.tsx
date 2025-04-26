@@ -7,12 +7,23 @@ import useTreasures from "../../hooks/useTreasures";
 import TreasuresView from "../../components/TreasuresComponents/TreasuresView";
 import ActionsFooter from "@/app/components/ActionsFooter";
 import NothingHere from "@/app/components/Scaffolding/NothingHere";
+import { usePendingRequests } from "@/src/context/PendingRequestsContext";
+import useInlineComputations from "@/app/hooks/useInlineComputations";
+import { useUser } from "@/src/context/UserContext";
 
 const index = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { treasures, nonPendingTreasures } = useTreasures();
-  const { friends, giftRequests, giftRequestsReceived, giftRequestsSent } =
-    useFriends();
+  const { user } = useUser();
+
+  const { pendingRequests } = usePendingRequests();
+   const { sortPendingGiftRequests, checkForTreasureOwnership, otherUserRecGiftRequest,
+    otherUserSentGiftRequest  } = useInlineComputations();
+   const allGiftRequests = pendingRequests?.pending_gift_requests;
+
+   const { recGiftRequests, sentGiftRequests } = sortPendingGiftRequests(allGiftRequests, user?.id);
+  
+    
   const router = useRouter();
 
   const handlePress = () => {
@@ -39,18 +50,20 @@ const index = () => {
       >
         <View style={appContainerStyles.innerFlexStartContainer}>
           {((nonPendingTreasures && nonPendingTreasures?.length > 0) ||
-            (giftRequests && giftRequests?.length > 0)) && (
+            (allGiftRequests && allGiftRequests?.length > 0)) && (
             <TreasuresView
               listData={[
-                ...(giftRequestsReceived ?? []),
-                ...(giftRequestsSent ?? []),
+                ...( recGiftRequests ?? []),
+                ...(sentGiftRequests ?? []),
                 ...(nonPendingTreasures ?? []),
               ]}
               onCardButtonPress={handlePress}
               onOpenTreasurePress={handleViewTreasure}
+              recGiftRequests={recGiftRequests}
+              sentGiftRequests={sentGiftRequests}
             />
           )}
-          {treasures && !treasures.length && !giftRequests?.length && (
+          {treasures && !treasures.length && !allGiftRequests?.length && (
             <NothingHere
               message={"No friends yet!"}
               subMessage={"search users to find friends!"}

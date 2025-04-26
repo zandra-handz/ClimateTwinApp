@@ -21,7 +21,8 @@ import FriendingFunctionsButton from "./FriendingFunctionsButton";
 
 
 // NEED TO ALSO CHECK THAT A FRIEND REQUEST ISN'T ALREADY PENDING
-const UsersUICard = ({ data, onViewUserPress  }) => {
+const UsersUICard = ({ data, onViewUserPress, recFriendRequests,
+  sentFriendRequests }) => {
   const { showAppMessage } = useAppMessage();
   const router = useRouter();
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
@@ -234,7 +235,8 @@ const handleToggleDoubleChecker = () => {
               ]}
             >
               <View style={{position: 'absolute', width: 110, height: 60, right: 10, top: 10}}>
-              <FriendingFunctionsButton cTUserId={data.id} cTUsername={data.username} size={40} />
+              <FriendingFunctionsButton cTUserId={data.id} cTUsername={data.username} size={40}   recFriendRequests={recFriendRequests}
+                  sentFriendRequests={sentFriendRequests} />
          
               </View>
               <View style={{ width: "100%", height: 170 }}>

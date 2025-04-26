@@ -17,6 +17,8 @@ const FriendRequestListItem = ({
   onPress,
   message,
   isSender = false,
+  recFriendRequests,
+  sentFriendRequests,
 }) => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
   const { formatUTCToMonthDayYear } = useDateTimeFunctions();
@@ -112,6 +114,8 @@ const FriendRequestListItem = ({
             cTUserId={userId}
             cTUsername={username}
             size={size}
+            recFriendRequests={recFriendRequests}
+            sentFriendRequests={sentFriendRequests}
           />
         </View>
       </TouchableOpacity>

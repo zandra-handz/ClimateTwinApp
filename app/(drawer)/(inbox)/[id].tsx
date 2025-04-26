@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useEffect, useRef } from "react";
-import { SafeAreaView, View } from "react-native";
+import React, { useEffect } from "react";
+import { View } from "react-native";
 import { useLocalSearchParams } from "expo-router";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { useRouter } from "expo-router";
@@ -43,8 +43,7 @@ const read = () => {
     await handleGetInboxItem(id);
   };
 
-  const handleDecline = () => {
-    console.log("handle decline pressed!");
+  const handleDecline = () => { 
     if (viewingMessage?.content_object.special_type === "gift request") {
       handleDeclineTreasureGift(viewingMessage?.content_object.id);
       triggerInboxItemsRefetch();
@@ -81,33 +80,33 @@ const read = () => {
     }
   }, [acceptTreasureGiftMutation.isError]);
 
-  useEffect(() => {
-    if (acceptFriendshipMutation.isSuccess) {
-      showAppMessage(true, null, "Friendship accepted!");
-      router.back();
-    }
-  }, [acceptFriendshipMutation.isSuccess]);
+  // useEffect(() => {
+  //   if (acceptFriendshipMutation.isSuccess) {
+  //     showAppMessage(true, null, "Friendship accepted!");
+  //     router.back();
+  //   }
+  // }, [acceptFriendshipMutation.isSuccess]);
 
-  useEffect(() => {
-    if (acceptFriendshipMutation.isError) {
-      showAppMessage(true, null, "Oops! Friendship was not accepted.");
-      router.back();
-    }
-  }, [acceptFriendshipMutation.isError]);
+  // useEffect(() => {
+  //   if (acceptFriendshipMutation.isError) {
+  //     showAppMessage(true, null, "Oops! Friendship was not accepted.");
+  //     router.back();
+  //   }
+  // }, [acceptFriendshipMutation.isError]);
 
-  useEffect(() => {
-    if (declineFriendshipMutation.isSuccess) {
-      showAppMessage(true, null, "Friendship declined");
-      router.back();
-    }
-  }, [declineFriendshipMutation.isSuccess]);
+  // useEffect(() => {
+  //   if (declineFriendshipMutation.isSuccess) {
+  //     showAppMessage(true, null, "Friendship declined");
+  //     router.back();
+  //   }
+  // }, [declineFriendshipMutation.isSuccess]);
 
-  useEffect(() => {
-    if (declineFriendshipMutation.isError) {
-      showAppMessage(true, null, "Oops! Friendship was not declined.");
-      router.back();
-    }
-  }, [declineFriendshipMutation.isError]);
+  // useEffect(() => {
+  //   if (declineFriendshipMutation.isError) {
+  //     showAppMessage(true, null, "Oops! Friendship was not declined.");
+  //     router.back();
+  //   }
+  // }, [declineFriendshipMutation.isError]);
 
   useEffect(() => {
     if (declineTreasureGiftMutation.isSuccess) {

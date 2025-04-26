@@ -13,8 +13,7 @@ import useTreasures from "@/app/hooks/useTreasures";
 import { useAppMessage } from "../../../src/context/AppMessageContext";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import TextInputLine from "@/app/components/TextInputLine";
-import TextInputBlock from "@/app/components/TextInputBlock";
-import GroqItem from "@/app/components/GroqComponents/GroqItem";
+import TextInputBlock from "@/app/components/TextInputBlock"; 
 import { useFocusEffect } from "expo-router"; 
   
 
@@ -46,8 +45,7 @@ const collect = () => {
 //   }
   
 // }, []);
-
-  const iNaturalistIndex = index ? Number(index) : null; 
+ 
 
   const locationData = { name, topic, base };
 
@@ -56,8 +54,8 @@ const collect = () => {
   
   
 
-  const { themeStyles, appContainerStyles, avgPhotoColor, handleAvgPhotoColor } = useGlobalStyles();
-  const [isMinimized, setIsMinimized] = useState(false);
+  const { themeStyles, appContainerStyles, avgPhotoColor  } = useGlobalStyles();
+ 
   const { showAppMessage } = useAppMessage();
 
   const { handleCollectTreasure, collectTreasureMutation } = useTreasures();
@@ -67,8 +65,7 @@ const collect = () => {
   const descriptorTextRef = useRef(null);
   const additionalTextRef = useRef(null);
   const editedTextRef = useRef(null);
-
-  const [viewableIndex, setViewableIndex] = useState(null);
+ 
 
   useFocusEffect(
     React.useCallback(() => {
@@ -100,7 +97,7 @@ const collect = () => {
  
   
   useEffect(() => {
-    console.log('collect screen color animation triggered');
+    // console.log('collect screen color animation triggered');
     
     Animated.timing(fadeAnim, {
       toValue: avgPhotoColor ? 1 : 0,  
@@ -109,24 +106,19 @@ const collect = () => {
     }).start();
   }, [avgPhotoColor]);
  
-  // const openKeyboard = () => {
-  //   if (descriptorTextRef.current) {
-  //     descriptorTextRef.current.focusText();
-  //   }
-  // }; 
-
+ 
   useEffect(() => {
     if (collectTreasureMutation.isSuccess) {
-      showAppMessage(true, null, `Treasure collected!`);
+    //  showAppMessage(true, null, `Treasure collected!`);
       router.back();
     }
   }, [collectTreasureMutation.isSuccess]);
 
-  useEffect(() => {
-    if (collectTreasureMutation.isError) {
-      showAppMessage(true, null, `Oops! Treasure not collected.`);
-    }
-  }, [collectTreasureMutation.isError]);
+  // useEffect(() => {
+  //   if (collectTreasureMutation.isError) {
+  //     showAppMessage(true, null, `Oops! Treasure not collected.`);
+  //   }
+  // }, [collectTreasureMutation.isError]);
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -146,23 +138,23 @@ const collect = () => {
 
   const updateDescriptorString = (text) => {
     if (descriptorTextRef && descriptorTextRef.current) {
-      // console.log(text);
+  
       descriptorTextRef.current.setText(text);
     }
   };
 
   const updateAdditionalString = (text) => {
     if (additionalTextRef && additionalTextRef.current) {
-      //  console.log(text);
+   
       additionalTextRef.current.setText(text);
     }
   };
 
   const updateNoteEditString = (text) => {
     if (editedTextRef && editedTextRef.current) {
-      //  console.log(text);
+ 
       editedTextRef.current.setText(text);
-      //   console.log("in parent", editedTextRef.current.getText());
+     
     }
   };
 
@@ -234,8 +226,7 @@ const collect = () => {
   const handlePlaceSaver = (saved) => {
     setTimeout(() => {
     flatListRef.current?.scrollToIndex({ index: saved, animated: true,         // Using the callback to focus after scrolling
-      onScrollToIndexFailed: (error) => {
-        // Handle failure (if any) by logging or retrying
+      onScrollToIndexFailed: (error) => { 
         console.error("Scroll failed:", error);
       }, });
     

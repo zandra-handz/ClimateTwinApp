@@ -1,13 +1,10 @@
-import { View, Text, Keyboard, Dimensions, KeyboardAvoidingView, Platform } from "react-native";
+import { View, Text, Keyboard, Dimensions } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
-import ActionsFooter from "@/app/components/ActionsFooter";
-import { StatusBar } from "expo-status-bar";
+import ActionsFooter from "@/app/components/ActionsFooter"; 
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import useTreasures from "@/app/hooks/useTreasures";
 import { useAppMessage } from "../../../src/context/AppMessageContext";
-import { useLocalSearchParams, useRouter } from "expo-router"; 
-import { useFriends } from "@/src/context/FriendsContext";
-import FriendPicker from "@/app/components/FriendPicker";
+import { useLocalSearchParams, useRouter } from "expo-router";  
 import TextInputBlock from "@/app/components/TextInputBlock";
 
 
@@ -21,15 +18,13 @@ const give = () => {
   const { descriptor } = useLocalSearchParams<{ descriptor: string | null }>();
   const { friendId } = useLocalSearchParams<{ friendId: string | null }>();
 
-  const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { friends, friendsDropDown } = useFriends();  
+  const { themeStyles, appContainerStyles } = useGlobalStyles(); 
   const { showAppMessage } = useAppMessage();
   const router = useRouter();
-  const { viewingTreasure, handleGiftTreasure, giftTreasureMutation } = useTreasures();
+  const {   handleGiftTreasure, giftTreasureMutation } = useTreasures();
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
   
-
-  const { width, height } = Dimensions.get("window");
+ 
 
   const editedTextRef = useRef(null);
  
@@ -100,12 +95,7 @@ const give = () => {
         ]}
       >
         <View style={appContainerStyles.innerFlexStartContainer}>
-          {/* {!isKeyboardVisible && (
-            <Picker
-              items={friends} // Passing label/value pairs (friendsDropDown)
-              onSelect={handleFriendSelect} // Handling the selection
-            />
-          )} */}
+ 
           <View style={{  height: 500 }}>
             <TextInputBlock 
               ref={editedTextRef}

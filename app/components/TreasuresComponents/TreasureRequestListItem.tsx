@@ -20,6 +20,8 @@ const TreasureRequestListItem = ({
   message,
   isSender = false,
   senderName,
+  recGiftRequests,
+  sentGiftRequests,
 }) => {
   const { user } = useUser();
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
@@ -124,6 +126,8 @@ const TreasureRequestListItem = ({
             treasureId={treasureId}
             treasureName={treasure.descriptor}
             size={size}
+            recGiftRequests={recGiftRequests}
+            sentGiftRequests={sentGiftRequests}
           />
         </View>
       </TouchableOpacity>

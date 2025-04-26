@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from 'react';
 import { useQuery, useQueryClient, UseQueryResult, useMutation } from '@tanstack/react-query';
 import { useUser } from '../../src/context/UserContext';
 import { getTreasures, getTreasure, getOwnerChangeRecords, collectTreasure, acceptTreasureGift, declineTreasureGift, requestToGiftTreasure, requestToGiftTreasureBackToFinder } from '../../src/calls/apicalls';
-  
+import { useAppMessage } from '@/src/context/AppMessageContext';
 import { Treasure, CollectTreasureRequest, GiftTreasureRequest, GiftTreasureBackToFinderRequest } from '@/src/types/useTreasuresTypes'; 
 const useTreasures = () => {
   const { user, isAuthenticated, isInitializing } = useUser();
@@ -11,7 +11,7 @@ const useTreasures = () => {
    const [viewingTreasure, setViewingTreasure] = useState<Treasure | null>(null);
    const [ nonPendingTreasures, setNonPendingTreasures ] = useState([]);
    const [testData, setTestData] = useState(null);
-  
+  const { showAppMessage } = useAppMessage();
 
   const { data: treasures,  isPending, isSuccess, isError }: UseQueryResult<Treasure[], Error> = useQuery({
     queryKey: ["treasures", user?.id],
@@ -68,6 +68,7 @@ const useTreasures = () => {
   const collectTreasureMutation = useMutation({
     mutationFn: (data: CollectTreasureRequest) => collectTreasure(data),
     onSuccess: () => { 
+      showAppMessage(true, null, `Treasure collected!`);
       triggerTreasuresRefetch();
 
       if (timeoutRef.current) {
@@ -79,6 +80,7 @@ const useTreasures = () => {
       }, 2000); 
     },
     onError: (error) => {
+      showAppMessage(true, null, `Oops! Treasure not collected.`);
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }

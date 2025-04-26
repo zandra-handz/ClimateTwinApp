@@ -5,15 +5,14 @@ import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { useFriends } from "@/src/context/FriendsContext";
  
 import FriendsUICard from "@/app/components/FriendsComponents/FriendsUICard";
-
-import { useAppMessage } from "../../../src/context/AppMessageContext";
+ 
 import ActionsFooter from "@/app/components/ActionsFooter";
 
 const details = () => {
   const { id } = useLocalSearchParams<{ id: string }>(); 
   const router = useRouter();
   const { themeStyles, appContainerStyles } = useGlobalStyles(); 
-  const { friends, handleGetFriend, viewingFriend } = useFriends();
+  const {   handleGetFriend, viewingFriend } = useFriends();
 
   const fetchFriend = async (id) => {
     await handleGetFriend(id);

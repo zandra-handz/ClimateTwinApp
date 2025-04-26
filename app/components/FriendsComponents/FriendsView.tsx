@@ -5,7 +5,8 @@ import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import FriendListItem from "./FriendListItem";
 import FriendRequestListItem from "./FriendRequestListItem";
 
-const FriendsView = ({ listData, onViewFriendPress, onViewUserPress }) => {
+const FriendsView = ({ listData, onViewFriendPress, onViewUserPress, recFriendRequests,
+  sentFriendRequests }) => {
   const { appContainerStyles } = useGlobalStyles();
   const { user } = useUser();
 
@@ -35,6 +36,8 @@ const FriendsView = ({ listData, onViewFriendPress, onViewUserPress }) => {
                   onPress={onViewUserPress}
                   message={item.message}
                   isSender={false}
+                  recFriendRequests={recFriendRequests}
+                  sentFriendRequests={sentFriendRequests}
                 />
               )}
             {item.special_type && item.sender && item.sender === user?.id && (
@@ -47,6 +50,8 @@ const FriendsView = ({ listData, onViewFriendPress, onViewUserPress }) => {
                 onPress={onViewUserPress}
                 message={item.message}
                 isSender={true}
+                recFriendRequests={recFriendRequests}
+                sentFriendRequests={sentFriendRequests}
               />
             )}
             {!item.special_type && item.friend_profile && (
@@ -55,6 +60,8 @@ const FriendsView = ({ listData, onViewFriendPress, onViewUserPress }) => {
                 avatar={item.friend_profile.avatar}
                 size={60}
                 onPress={onViewFriendPress}
+                recFriendRequests={recFriendRequests}
+                sentFriendRequests={sentFriendRequests}
               />
             )}
             {/* <FriendsUICard
