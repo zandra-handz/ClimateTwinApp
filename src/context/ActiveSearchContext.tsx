@@ -1,24 +1,17 @@
 import React, {
   createContext,
   useContext,
-  useRef,
-  useState,
-  ReactNode,
-  useEffect,
+  useRef, 
+  ReactNode, 
 } from "react";
 import { useUser } from "./UserContext";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { go, getRemainingGoes, expireSurroundings } from "../calls/apicalls";
 
-import { useSurroundingsWS } from "./SurroundingsWSContext";
-import { useAppMessage } from "./AppMessageContext";
-
-import useExploreRoute from "../../app/hooks/useExploreRoute";
+ 
+ 
 interface ActiveSearchContextType {
-  isSearchingForTwin: boolean;
-  isSearchingForRuins: boolean;
-  isHome: boolean;
-  isExploring: boolean;
+  
   triggerActiveSearch: () => void;
 }
 
@@ -44,29 +37,13 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
   children,
 }) => {
   const { user, isAuthenticated, isInitializing } = useUser();
-  const { showAppMessage } = useAppMessage();
+
   const queryClient = useQueryClient();
-  const timeoutRef = useRef(null);
-  const [isSearchingForRuins, setIsSearchingForRuins] =
-    useState<boolean>(false);
-  const [isSearchingForTwin, setIsSearchingForTwin] = useState<boolean>(false);
-  const [isExploring, setIsExploring] = useState<boolean>(false);
-  const [isHome, setIsHome] = useState<boolean>(false);
-  const { locationUpdateWSIsOpen, lastLocationId, lastState } = useSurroundingsWS();
+  const timeoutRef = useRef(null);  
 
-  useEffect(() => {
-    if (!isAuthenticated) {
-      // console.log(
-      //   "isAuthenticated === false --> resetting ActiveSearch context"
-      // );
-      setIsSearchingForTwin(false);
-      setIsSearchingForRuins(false);
-      setIsExploring(false);
-      setIsHome(false);
-    }
-  }, [isAuthenticated]);
+ 
 
-  useExploreRoute(lastState, isAuthenticated);
+  // useExploreRoute(lastState, isAuthenticated);
 
   const {
     data: remainingGoes,
@@ -77,8 +54,8 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
   } = useQuery({
     queryKey: ["remainingGoes", user?.id],
     queryFn: () => getRemainingGoes(),
-    enabled: !!isAuthenticated && !isInitializing && !!lastState,
-    onSuccess: (data) => {},
+    enabled: !!isAuthenticated && !isInitializing,
+ 
   });
 
   const refetchRemainingGoes = () => {
@@ -139,6 +116,7 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
       }, 2000);
     },
     onSuccess: (data) => {
+      refetchRemainingGoes();
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -148,54 +126,17 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
       }, 2000);
     },
   });
+ 
 
-  useEffect(() => {
-    if (isExploring) {
-      refetchRemainingGoes();
-    }
-  }, [isExploring]);
-
-  useEffect(() => {
-    if (lastState) {
-      if (lastState === "searching for twin") {
-        setIsHome(false);
-        setIsSearchingForTwin(true);
-        setIsSearchingForRuins(false);
-        setIsExploring(false);
-        showAppMessage(true, null, "Searching for portal!");
-      } else if (lastState === "searching for ruins") {
-        setIsSearchingForTwin(false);
-        setIsSearchingForRuins(true);
-        setIsHome(false);
-        setIsExploring(false);
-        // showAppMessage(true, null, "Searching for ruins!");
-      } else if (lastState === "home") {
-        setIsSearchingForTwin(false);
-        setIsSearchingForRuins(false);
-        setIsHome(true);
-        setIsExploring(false);
-        // showAppMessage(true, null, "You are home");
-      } else if (lastState === "exploring") {
-        setIsSearchingForTwin(false);
-        setIsSearchingForRuins(false);
-        setIsHome(false);
-        setIsExploring(true);
-        // showAppMessage(true, null, "You are exploring!");
-      }
-    }
-  }, [lastState]);
+ 
 
   return (
     <ActiveSearchContext.Provider
-      value={{
-        isHome,
-        isSearchingForTwin,
-        isSearchingForRuins,
-        isExploring,
-        handleGo,
-        locationUpdateWSIsOpen,
+      value={{ 
+        handleGo, 
         remainingGoes,
         handleGoHome,
+        refetchRemainingGoes,
       }}
     >
       {children}

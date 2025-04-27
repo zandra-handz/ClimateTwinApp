@@ -1,17 +1,18 @@
 import React from "react";
 import { View } from "react-native";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
-import { useGeolocationWatcher } from "../../hooks/useCurrentLocationWatcher"; 
-import { useActiveSearch } from "../../../src/context/ActiveSearchContext"; 
+import { useGeolocationWatcher } from "../../hooks/useCurrentLocationWatcher";  
 import HomeSurroundingsView from "@/app/components/HomeSurroundingsComponents/HomeSurroundingsView";
- 
-import { useSurroundings } from "../../../src/context/CurrentSurroundingsContext";
+  
+import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
+
+import { useActiveSearch } from "@/src/context/ActiveSearchContext";
 
 const home = () => {
   useGeolocationWatcher(); 
-  const { themeStyles, appContainerStyles } = useGlobalStyles(); 
-  const { homeSurroundings } = useSurroundings();
-  const { isSearchingForTwin } = useActiveSearch(); 
+  const { themeStyles, appContainerStyles } = useGlobalStyles();  
+  const { lastState } = useSurroundingsWS();
+  const { remainingGoes, handleGoHome } = useActiveSearch();
 
  
 
@@ -27,8 +28,8 @@ const home = () => {
       >
         <View style={appContainerStyles.innerFlexStartContainer}>
  
-          {homeSurroundings && !isSearchingForTwin && (
-            <HomeSurroundingsView /> 
+          { (lastState !== 'searching for twin') && ( // removed check for homeSurroundings
+            <HomeSurroundingsView remainingGoes={remainingGoes} onPress={handleGoHome}/> 
           )} 
         </View>
       </View>

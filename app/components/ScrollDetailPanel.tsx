@@ -4,10 +4,15 @@ import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
 
 import ComponentSpinner from "./Scaffolding/ComponentSpinner";
 import { useSurroundings } from "../../src/context/CurrentSurroundingsContext";
+import useInlineComputations from "@/app/hooks/useInlineComputations";
 
 const ScrollDetailPanel = ({ label, value, opacity, isLoading = false }) => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
-  const { ruinsSurroundings  } = useSurroundings(); // used to change the height of the groq Container
+  const { currentSurroundings  } = useSurroundings(); // used to change the height of the groq Container
+  const { getSurroundingsData } = useInlineComputations();
+  const { 
+    ruinsSurroundings, 
+  } = getSurroundingsData(currentSurroundings);
 
   return (
     <Animated.View

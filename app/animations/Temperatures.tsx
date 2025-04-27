@@ -1,8 +1,7 @@
 import React from "react";
-import { View, TextInput } from "react-native";
-import { MaterialIcons } from "@expo/vector-icons";
-import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
-import { useActiveSearch } from "../../src/context/ActiveSearchContext";
+import { View, TextInput } from "react-native"; 
+import { useGlobalStyles } from "../../src/context/GlobalStylesContext"; 
+import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
 import Animated, {
   Easing,
   useSharedValue,
@@ -16,13 +15,13 @@ import Animated, {
 import useWebSocket from "@/app/hooks/useWebSocket";
 
 const Temperatures = () => {
-  const { themeStyles, appFontStyles } = useGlobalStyles();
-  const { isExploring, isSearchingForTwin } = useActiveSearch();
+  const { themeStyles } = useGlobalStyles();
+  const { lastState } = useSurroundingsWS(); 
 
   Animated.addWhitelistedNativeProps({ text: true });
   const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 
-  const { sharedValues } = useWebSocket(); // Getting shared values from the hook
+  const { sharedValues } = useWebSocket();  
 
   const { 
     temperatureSharedValue, 
@@ -76,41 +75,10 @@ const Temperatures = () => {
         { scale: scale.value },
       ],
     };
-  });
-  
-
-  // const animatedTemp = useAnimatedProps(() => {
-  //   const difference =
-  //     // temperatureDifference.value !== null &&
-  //     !isNaN(Number(temperatureDifference.value))
-  //       ? Number(temperatureDifference.value)
-  //       : null;
-
-  //   let color = null;
-  //   if (difference && difference < 2) {
-  //     color = "red";
-  //   } else if (difference && difference <= 30) {
-  //     const colorIndex = Math.floor(((difference - 2) / 28) * 8);
-  //     color = colorMap[colorIndex];
-  //   } else {
-  //     color = themeStyles.primaryText.color;
-  //   }
-
-  //   return {
-  //     text: `${temperatureSharedValue.value}°`,
-  //     defaultValue: `${temperatureSharedValue.value}°`,
-  //     color: color,
-  //     //fontSize: 2,
-  //     transform: [
-  //       { opacity: scale.value },
-  //       // { rotate: `${rotation.value}deg` }, // Apply rotation
-  //       { scale: scale.value }, 
-  //     ],
-  //   };
-  // });
+  }); 
 
   React.useEffect(() => {
-    if (!isExploring && isSearchingForTwin) { 
+    if ((lastState !== 'exploring') && (lastState === 'searching for twin')) { 
       rotation.value = withRepeat(
         withTiming(360, { duration: 2000, easing: Easing.linear }),  
         -1,  
@@ -136,7 +104,7 @@ const Temperatures = () => {
         easing: Easing.inOut(Easing.ease),
       }); 
     }
-  }, [isExploring, isSearchingForTwin]);
+  }, [lastState]);
  
   const animatedStyle = useAnimatedStyle(() => {
     return {
@@ -146,22 +114,11 @@ const Temperatures = () => {
       ],
     };
   });
+ 
 
-  const containerStyle = useAnimatedStyle(() => {
-    return {
-      marginTop: positionShift.value, // Move the container up
-    };
-  });
-
-  return (
-    // <Animated.View
-    //   style={[
-    //     containerStyle,
-    //     { justifyContent: "center", alignContent: "center" },
-    //   ]}
-    // >
+  return ( 
       <Animated.View style={animatedStyle}>
-        {isSearchingForTwin && (
+        {(lastState === 'searching for twin') && (
           <View
             style={[
               { 
@@ -183,8 +140,7 @@ const Temperatures = () => {
             />
           </View>
         )} 
-      </Animated.View>
-    // </Animated.View>
+      </Animated.View> 
   );
 };
 

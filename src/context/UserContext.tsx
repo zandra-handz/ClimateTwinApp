@@ -12,8 +12,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import * as Device from "expo-device";
 import Constants from "expo-constants";
 import { Platform, AppState } from "react-native";
-import useProtectedRoute from "../../app/hooks/useProtectedRoute";
-import useImageUploadFunctions from "../../app/hooks/useImageUploadFunction";
+import useProtectedRoute from "../../app/hooks/useProtectedRoute"; 
 import {
   signup,
   signin,
@@ -67,8 +66,7 @@ interface UserProviderProps {
 export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [authenticated, setAuthenticated] = useState(false);
-  const navigationRef = useNavigationContainerRef();
-  const { imageUri } = useImageUploadFunctions();
+  const navigationRef = useNavigationContainerRef(); 
   const [loading, setLoading] = useState(false);
   const [appSettings, setAppSettings] = useState<Record<string, any>>({});
   const [userNotificationSettings, setUserNotificationSettings] = useState<
@@ -107,27 +105,20 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     return () => subscription.remove();
   }, []);
 
-  useProtectedRoute(authenticated, loading);
+  // useProtectedRoute(authenticated, loading); // moved to main index file
 
   let isReinitializing = false;
 
   const reInitialize = async () => {
     if (isReinitializing) {
-      showAppMessage(
-        true,
-        null,
-        "Reinitializing already in progress, new attempt returned"
-      );
-      console.log("reInitialize already in progress");
+ 
       return;
     }
 
     isReinitializing = true;
     try {
-      console.log("reinitializing!!!!");
-      // showAppMessage(true, null, "Initializing...");
-      setLoading(true);
-      //console.log("use loading --> true");
+      console.log("reinitializing!!!!"); 
+      setLoading(true); 
 
       const token = await SecureStore.getItemAsync(TOKEN_KEY);
 
@@ -136,10 +127,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
         try {
           userData = await getCurrentUser();
-          // console.log(
-          //   "REINIT USER DATA ON OTHER SIDE OF INTERCEPTOR: ",
-          //   userData
-          // );
+     
         } catch (error) {
           console.error("Error fetching current user:", error);
           showAppMessage(true, null, "Token detected but cannot fetch user");
@@ -195,17 +183,13 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       !loading &&
       appSettings &&
       Object.keys(appSettings).length > 0
-    ) {
-      // console.log("!!!!!!!!!!!!!!!!!!!!!!!APP SETTINGS", appSettings);
+    ) { 
     }
 
     const cachedSettings = queryClient.getQueryData(["userSettings", user?.id]);
 
     if (cachedSettings) {
-      // console.log(
-      //   "!!!!!!!!!!!!!!!!!!!!!!! REACT QUERY CACHE: ",
-      //   cachedSettings
-      // );
+  
     }
   }, [appSettings]);
 
@@ -330,7 +314,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   };
 
   const onSignOut = async () => {
-    setLoading(true);
+   // setLoading(true);
     await signout();
     setUser(null);
     setAppSettings(null);
@@ -359,8 +343,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
   const getNotificationPermissionStatus = async () => {
     const { status: existingStatus } =
-      await Notifications.getPermissionsAsync();
-   // console.log(`existingStatus: `, existingStatus);
+      await Notifications.getPermissionsAsync(); 
     return existingStatus;
   };
 

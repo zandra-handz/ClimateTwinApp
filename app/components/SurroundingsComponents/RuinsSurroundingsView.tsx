@@ -6,8 +6,7 @@ import SurroundingsTray from "./SurroundingsTray";
 
 import RuinsHarmonyView from "./RuinsHarmonyView";
 
-const RuinsSurroundingsView = ({ height }) => {
-  const { ruinsSurroundings } = useSurroundings();
+const RuinsSurroundingsView = ({ height, ruinsSurroundings }) => {
 
   return (
     <View style={{ flex: 1, height: height }}>

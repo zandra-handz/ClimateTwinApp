@@ -25,6 +25,8 @@ import { Stack } from "expo-router";
 import { AppMessageContextProvider } from "../src/context/AppMessageContext";
 import { GlobalStylesProvider } from "../src/context/GlobalStylesContext";
 import { UserProvider } from "../src/context/UserContext";
+ 
+
 import { DeviceLocationProvider } from "../src/context/DeviceLocationContext";
 import { AppStateProvider } from "../src/context/AppStateContext";
 import { FriendsProvider } from "@/src/context/FriendsContext";
@@ -35,9 +37,12 @@ import { ActiveSearchProvider } from "../src/context/ActiveSearchContext";
 import { InteractiveElementsProvider } from "../src/context/InteractiveElementsContext";
 import { GroqProvider } from "../src/context/GroqContext";
 import { SurroundingsWSProvider } from "../src/context/SurroundingsWSContext";
+ 
 
 import AppMessage from "./components/AppMessage";
 import CustomStatusBar from "./components/CustomStatusBar";
+
+ 
 
 import * as Sentry from "@sentry/react-native";
 
@@ -54,6 +59,7 @@ export default Sentry.wrap(function Layout() {
 
   const appState = useRef(AppState.currentState);
   //const [appStateVisible, setAppStateVisible] = useState(appState.current);
+
 
   const { hasShareIntent, shareIntent, resetShareIntent, error } =
     useShareIntentContext();
@@ -127,13 +133,14 @@ export default Sentry.wrap(function Layout() {
                  
                       <SurroundingsWSProvider>
                         <GroqProvider>
+                        <ActiveSearchProvider>
                           <CurrentSurroundingsProvider>
                             <ComponentSpinner
                               spinnerSize={60}
                               isInitializerSpinner={true}
                             />
 
-                            <ActiveSearchProvider>
+                            
                               <NearbyLocationsProvider>
                                 <InteractiveElementsProvider>
                                   <Stack screenOptions={{ headerShown: false }}
@@ -172,8 +179,9 @@ export default Sentry.wrap(function Layout() {
                                   </Stack>
                                 </InteractiveElementsProvider>
                               </NearbyLocationsProvider>
-                            </ActiveSearchProvider>
+                            
                           </CurrentSurroundingsProvider>
+                          </ActiveSearchProvider>
                         </GroqProvider>
                       </SurroundingsWSProvider>
                  

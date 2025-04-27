@@ -2,14 +2,12 @@ import { View, Text } from "react-native";
 import React from "react";
 import { useGlobalStyles } from "../../src/context/GlobalStylesContext";  
 import PortalPixellySvg from "../assets/svgs/portal-pixelly.svg";
-import { useSurroundings } from "../../src/context/CurrentSurroundingsContext"; 
  
 
 // Only meant to be visible when currently exploring a location; no longer has go button
-const PortalBanner = () => { 
+const PortalBanner = ({  locationId, portalSurroundings, homeSurroundings }) => { 
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
-  const { locationId, portalSurroundings, homeSurroundings } = useSurroundings();
-
+ 
  
   return (
     <View

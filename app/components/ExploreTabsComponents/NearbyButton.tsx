@@ -1,8 +1,6 @@
-import React from 'react';
-import { View } from 'react-native';
+import React, { useEffect } from 'react'; // useEffect usage valid ?
 import { Feather } from "@expo/vector-icons";
-import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
-import { useActiveSearch } from "../../../src/context/ActiveSearchContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";  
 import Animated, { 
   Easing, 
   useSharedValue, 
@@ -11,35 +9,33 @@ import Animated, {
   useAnimatedStyle 
 } from 'react-native-reanimated';
 
-const NearbyButton = ({ color }) => {
-  const { themeStyles, appFontStyles } = useGlobalStyles();
-  const { isExploring, isSearchingForRuins } = useActiveSearch();
-
-  // Create shared values for rotation and scale
+const NearbyButton = ({ color, lastState }) => { 
+  const { appFontStyles } = useGlobalStyles();  
+ 
   const rotation = useSharedValue(0);
   const scale = useSharedValue(1);
   const positionShift = useSharedValue(0);
 
-  React.useEffect(() => {
-    if (!isExploring && isSearchingForRuins) { //added both conditions in case app gets stuck
-      // Start spinning and enlarging
+  const runAnimationBasedOnState = () => {
+    if (lastState === 'searching for ruins') {
       rotation.value = withRepeat(
-        withTiming(360, { duration: 2000, easing: Easing.linear }), // Smooth rotation
-        -1, // Infinite loop
-        false // No reset after loop
+        withTiming(360, { duration: 2000, easing: Easing.linear }),
+        -1,
+        false
       );
-
-      scale.value = withTiming(3, { duration: 500, easing: Easing.inOut(Easing.ease) }); // Scale up
-      positionShift.value = withTiming(-35, { duration: 500, easing: Easing.inOut(Easing.ease) }); // Move up
+      scale.value = withTiming(3, { duration: 500, easing: Easing.inOut(Easing.ease) });
+      positionShift.value = withTiming(-35, { duration: 500, easing: Easing.inOut(Easing.ease) });
     } else {
-      // Reset rotation and shrink back to normal size
       rotation.value = 0;
-      scale.value = withTiming(1, { duration: 500, easing: Easing.inOut(Easing.ease) }); // Scale down
-      positionShift.value = withTiming(0, { duration: 500, easing: Easing.inOut(Easing.ease) }); // Reset position
+      scale.value = withTiming(1, { duration: 500, easing: Easing.inOut(Easing.ease) });
+      positionShift.value = withTiming(0, { duration: 500, easing: Easing.inOut(Easing.ease) });
     }
-  }, [isExploring, isSearchingForRuins]);
+  };
 
-  // Create animated styles for rotation and scale
+  useEffect(() => {
+    runAnimationBasedOnState();
+  }, [lastState]);
+ 
   const animatedStyle = useAnimatedStyle(() => {
     return {
       transform: [
@@ -48,8 +44,7 @@ const NearbyButton = ({ color }) => {
       ],
     };
   });
-
-  // Create animated styles for positioning the container
+ 
   const containerStyle = useAnimatedStyle(() => {
     return {
       marginTop: positionShift.value, // Move the container up

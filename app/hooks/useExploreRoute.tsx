@@ -1,9 +1,5 @@
 import { useNavigationContainerRef, useRouter, useSegments } from "expo-router";
-import { useState, useEffect } from "react";
-import { usePathname } from "expo-router";
-
-
- 
+import { useState, useEffect } from "react";  
 
 const useExploreRoute = (lastState: string, isAuthenticated: boolean) => {
   const navigationRef = useNavigationContainerRef();

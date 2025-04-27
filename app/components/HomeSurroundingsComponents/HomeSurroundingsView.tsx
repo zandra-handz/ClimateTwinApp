@@ -1,38 +1,21 @@
-import { View, StyleSheet } from "react-native";
+import { View } from "react-native";
 import React from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
-import { useSurroundings } from "../../../src/context/CurrentSurroundingsContext";
-import MagnifiedNavButton from "../MagnifiedNavButton";
-import { useActiveSearch } from "@/src/context/ActiveSearchContext";
+import MagnifiedNavButton from "../MagnifiedNavButton"; 
 
-const HomeSurroundingsView = () => {
+const HomeSurroundingsView = ({remainingGoes, onPress }) => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { homeSurroundings } = useSurroundings();
-  const { handleGoHome, remainingGoes } = useActiveSearch();
-
-  const remaining =
+  
+  const message =
     remainingGoes === "No limit"
-      ? "Unlimited trips"
-      : `Trips remaining: ${remainingGoes}`;
+    ? `No limit`
+    : remainingGoes === "0"
+    ? ``
+    : remainingGoes === "1"
+    ? `One trip left`
+    : `${remainingGoes} left`;
 
-  // Combine both portalLocation and ruinsLocation into one array of key-value pairs
-  const combinedData = [
-    ...(homeSurroundings.id !== null
-      ? Object.entries(homeSurroundings)
-          .filter(([key, value]) => value) // Filter out empty values
-          .map(([key, value]) => ({
-            label: key,
-            value: value,
-          }))
-      : []),
-  ];
-
-  const formatValue = (value) => {
-    if (typeof value === "object") {
-      return JSON.stringify(value);
-    }
-    return value;
-  };
+  
   const overlayColor = `${themeStyles.primaryBackground.backgroundColor}99`;
 
   return (
@@ -43,8 +26,8 @@ const HomeSurroundingsView = () => {
         <View style={{ paddingBottom: 200 }}>
           <MagnifiedNavButton
             direction={"left"}
-            message={`Go home? (${remaining})`}
-            onPress={handleGoHome}
+            message={`Go home? (${message})`}
+            onPress={onPress}
           />
         </View>
       </View>

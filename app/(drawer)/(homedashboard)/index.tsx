@@ -1,27 +1,34 @@
-import React, { useEffect, useState } from "react";
-import { View, Button } from "react-native";
+import React from "react";
+import { View } from "react-native";
 import { useDeviceLocationContext } from "@/src/context/DeviceLocationContext";
-import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
-import { useActiveSearch } from "../../../src/context/ActiveSearchContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext"; 
 import GoButton from "@/app/components/GoButton";
 import TurnOnLocationButton from "@/app/components/TurnOnLocationButton";
 import WebSocketSearchingLocations from "../../components/WebSocketSearchingLocations";
 import WindyWindSquare from "@/app/components/SurroundingsComponents/WindyWindSquare";
 import Temperatures from "@/app/animations/Temperatures";
-import * as Sentry from "@sentry/react-native"; 
+import * as Sentry from "@sentry/react-native";
 import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
 
 import NotificationNotifier from "@/app/components/NotificationNotifier";
 
+import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
+import { useActiveSearch } from "@/src/context/ActiveSearchContext";
+
 const index = () => {
   const { deviceLocation } = useDeviceLocationContext();
-  const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { isSearchingForTwin } = useActiveSearch(); 
+  const { themeStyles, appContainerStyles } = useGlobalStyles(); 
+  const { lastState } = useSurroundingsWS();
+  const { remainingGoes, handleGo } = useActiveSearch();
 
   return (
     <>
-     <ComponentSpinner backgroundColor={themeStyles.primaryBackground.backgroundColor} spinnerType={'pulse'} isSocketSpinner={true}/>
-       <NotificationNotifier />
+      <ComponentSpinner
+        backgroundColor={themeStyles.primaryBackground.backgroundColor}
+        spinnerType={"pulse"}
+        isSocketSpinner={true}
+      />
+      <NotificationNotifier />
       <View
         style={[
           appContainerStyles.screenContainer,
@@ -40,9 +47,8 @@ const index = () => {
               alignItems: "center",
             }}
           >
-                          {isSearchingForTwin && (
-                            <>
-                            
+            {lastState === "searching for twin" && (
+              <>
                 <View
                   style={[
                     appContainerStyles.mapParentContainer,
@@ -53,16 +59,14 @@ const index = () => {
                 >
                   <WebSocketSearchingLocations
                     //don't think am using the below
-                    reconnectOnUserButtonPress={isSearchingForTwin}
+                    reconnectOnUserButtonPress={(lastState === 'searching for twin')}
                   />
-
                 </View>
                 <View style={{ height: 100, marginTop: 200 }}>
-                    <Temperatures />
-                  </View>
-                </>
-
-              )}
+                  <Temperatures />
+                </View>
+              </>
+            )}
             <>
               {/* <Button title='Try!' onPress={ () => { Sentry.captureException(new Error('First error')) }}/>
                */}
@@ -73,7 +77,7 @@ const index = () => {
                     { marginBottom: 20 },
                   ]}
                 >
-                  {!isSearchingForTwin &&
+                  {(lastState !== 'searching for twin') &&
                     deviceLocation &&
                     deviceLocation?.address &&
                     deviceLocation?.latitude &&
@@ -89,17 +93,16 @@ const index = () => {
                 </View>
 
                 <View style={{ height: 240 }}>
-                  {!isSearchingForTwin &&
+                  {(lastState !== 'searching for twin') &&
                     deviceLocation &&
                     deviceLocation?.address &&
                     deviceLocation?.latitude &&
                     deviceLocation?.longitude && (
-                      <GoButton address={deviceLocation?.address} size={240} />
+                      <GoButton address={deviceLocation?.address} size={240} lastState={lastState} remainingGoes={remainingGoes} onPress={handleGo} />
                     )}
                   {!deviceLocation?.address && <TurnOnLocationButton />}
                 </View>
               </>
-
             </>
           </View>
         </View>

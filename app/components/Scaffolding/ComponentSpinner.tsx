@@ -40,7 +40,7 @@ const ComponentSpinner = ({
   isSocketSpinner = false,
   offsetStatusBarHeight = false,
 }) => {
-  const { themeStyles, constantColorsStyles } = useGlobalStyles();
+  const {  constantColorsStyles } = useGlobalStyles();
   const { isAuthenticated, isInitializing } = useUser();
   const { isLocationSocketOpen, lastState } = useSurroundingsWS();
 
@@ -52,48 +52,63 @@ const ComponentSpinner = ({
 
   return (
     <>
-      {isInitializerSpinner && (isInitializing || (!lastState && isAuthenticated)) && (
-        <LinearGradient
-          colors={[
-            'teal',
-            constantColorsStyles.v1LogoColor.backgroundColor,
-            // "transparent",
-            // "transparent",
-          ]}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-          style={[styles.container, {top: offsetStatusBarHeight ? offset : 0}]}
-        >
-          {(isInitializing || (!lastState && isAuthenticated)) ? (
-            <Spinner
-              size={spinnerSize}
-              color={constantColorsStyles.v1LogoColor.backgroundColor}
-            />
-          ) : null}
-        </LinearGradient>
-      )}
+      {isInitializerSpinner &&
+        (isInitializing) && (
+          <LinearGradient
+            colors={[
+              "teal",
+              constantColorsStyles.v1LogoColor.backgroundColor,
+              // "transparent",
+              // "transparent",
+            ]}
+            start={{ x: 0, y: 0 }}
+            end={{ x: 1, y: 1 }}
+            style={[
+              styles.container,
+              { top: offsetStatusBarHeight ? offset : 0 },
+            ]}
+          >
+            {/* {(isInitializing || (!lastState && isAuthenticated)) ? ( */}
 
-{isSocketSpinner && !isLocationSocketOpen && isAuthenticated && !isInitializing && (
-        <View
-        style={[
-          styles.container,
-          { backgroundColor: backgroundColor, top: offsetStatusBarHeight ? offset : 0 }, //themeStyles.darkerBackground
-        ]}
-      >
-          {!isLocationSocketOpen && isAuthenticated && !isInitializing ? (
-            <Spinner
-              size={spinnerSize}
-              color={constantColorsStyles.v1LogoColor.backgroundColor}
-            />
-          ) : null}
-        </View>
-      )}
+              <Spinner
+                size={spinnerSize}
+                color={constantColorsStyles.v1LogoColor.backgroundColor}
+              />
+            {/* // ) : null} */}
+
+          </LinearGradient>
+        )}
+
+      {isSocketSpinner &&
+        !isLocationSocketOpen &&
+        isAuthenticated &&
+        !isInitializing && (
+          <View
+            style={[
+              styles.container,
+              {
+                backgroundColor: backgroundColor,
+                top: offsetStatusBarHeight ? offset : 0,
+              }, //themeStyles.darkerBackground
+            ]}
+          >
+            {!isLocationSocketOpen && isAuthenticated && !isInitializing ? (
+              <Spinner
+                size={spinnerSize}
+                color={constantColorsStyles.v1LogoColor.backgroundColor}
+              />
+            ) : null}
+          </View>
+        )}
 
       {!isInitializerSpinner && !isSocketSpinner && (
         <View
           style={[
             styles.container,
-            { backgroundColor: backgroundColor, top: offsetStatusBarHeight ? offset : 0 }, //themeStyles.darkerBackground
+            {
+              backgroundColor: backgroundColor,
+              top: offsetStatusBarHeight ? offset : 0,
+            }, //themeStyles.darkerBackground
           ]}
         >
           {showSpinner ? (
@@ -113,7 +128,7 @@ const styles = StyleSheet.create({
     ...StyleSheet.absoluteFillObject, // This ensures it fills the entire parent container
     justifyContent: "center",
     alignItems: "center",
-    zIndex: 10000, 
+    zIndex: 10000,
     //backgroundColor: "red",
   },
 
@@ -129,7 +144,7 @@ const styles = StyleSheet.create({
   //   backgroundColor: "rgba(0, 0, 0, 0.5)", // Semi-transparent overlay
   //   zIndex: 5000, // High zIndex to stay on top
   //   elevation: 5000, // Ensures Android rendering priority
-  // },  
+  // },
 });
 
 export default ComponentSpinner;

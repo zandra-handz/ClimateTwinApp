@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import { useUser } from "@/src/context/UserContext";
-import { useSurroundingsWS } from "../../src/context/SurroundingsWSContext";
-import { useActiveSearch } from "../../src/context/ActiveSearchContext";
+import { useSurroundingsWS } from "../../src/context/SurroundingsWSContext"; 
 import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
  
 import { useFriends } from "@/src/context/FriendsContext";

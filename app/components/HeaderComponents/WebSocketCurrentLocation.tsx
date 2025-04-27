@@ -1,61 +1,38 @@
-import React, { useEffect,  useState } from "react";
+import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import { useGlobalStyles } from "../../../src/context/GlobalStylesContext"; 
-import { useActiveSearch } from "../../../src/context/ActiveSearchContext"; 
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { useSurroundingsWS } from "../../../src/context/SurroundingsWSContext";
- 
- 
-const WebSocketCurrentLocation: React.FC = () => {
-  const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles(); 
-  const [update, setUpdate] = useState<string>(' ');
-  const { isSearchingForTwin, locationUpdateWSIsOpen } = useActiveSearch();
-  
-  
-  const { lastLocationName } = useSurroundingsWS();
- 
 
-     
+const WebSocketCurrentLocation: React.FC = () => {
   
-  useEffect(() => {
-    console.log('last location name: ', lastLocationName);
-    if (!lastLocationName) {
-      setUpdate("You are home"); // If no location name, reset the state
-    } else if (lastLocationName === null) {
-      setUpdate("You are home");  
-    } else if (lastLocationName === `You are searching`) {
-      // setisSearchingForTwin(true); 
-      setUpdate(`You are searching`);
-    } else if (lastLocationName !== update) { 
-      // triggerSurroundingsRefetch();
-      
-  
-        setUpdate(lastLocationName);  
-    
-    }
- 
-  }, [lastLocationName]);
+  const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
+  const { locationUpdateWSIsOpen, lastLocationName, lastState } =
+    useSurroundingsWS();
 
   return (
-    // <>
-    // {user?.authenticated && (
-      
     <View style={appContainerStyles.defaultElementRow}>
-      {update && locationUpdateWSIsOpen && !isSearchingForTwin && (
-        <>
-          <Text style={[appFontStyles.subHeaderMessageText, themeStyles.primaryText]}>
-            {update !== "You are home" ? `you are in: ` : ``}
-          </Text>
-          <Text style={[appFontStyles.emphasizedText, themeStyles.primaryText]}>
-            {update}
-          </Text>
-        </>
-      )}
+      {lastLocationName &&
+        locationUpdateWSIsOpen &&
+        lastState !== "searching for twin" && (
+          <>
+            <Text
+              style={[
+                appFontStyles.subHeaderMessageText,
+                themeStyles.primaryText,
+              ]}
+            >
+              {lastLocationName && lastLocationName !== "You are home"
+                ? `you are in: `
+                : ``}
+            </Text>
+            <Text
+              style={[appFontStyles.emphasizedText, themeStyles.primaryText]}
+            >
+              {lastLocationName}
+            </Text>
+          </>
+        )}
     </View>
-
-    
-// )}
-    
-//     </>
   );
 };
 

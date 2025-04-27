@@ -1,57 +1,34 @@
-import React, { useState, useEffect, useRef } from "react";
+import React  from "react";
 import { View, StyleSheet } from "react-native";
 import { useUser } from "../src/context/UserContext";
-import { useGlobalStyles } from "../src/context/GlobalStylesContext";
-import { useAppMessage } from "../src/context/AppMessageContext";
+import { useGlobalStyles } from "../src/context/GlobalStylesContext"; 
 import { useRouter } from "expo-router";
-import SignInButton from "./components/SignInButton";
-import { useFonts } from "expo-font"; 
+import SignInButton from "./components/SignInButton"; 
 import { LinearGradient } from "expo-linear-gradient";
 import CustomStatusBar from "./components/CustomStatusBar";
+import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
+import useProtectedRoute from "./hooks/useProtectedRoute";
+import useExploreRoute from "./hooks/useExploreRoute";
 
 const Index = () => {
   const { themeStyles, manualGradientColors, constantColorsStyles } =
-    useGlobalStyles();
-  const [showSignIn, setShowSignIn] = useState(false);
-  const { reInitialize, isAuthenticated, isInitializing } = useUser();
-  const { showAppMessage } = useAppMessage();
+    useGlobalStyles(); 
+  const { isAuthenticated, isInitializing } = useUser();
 
-  const router = useRouter();
-  const usernameInputRef = useRef(null);
-  const emailInputRef = useRef(null);
+  
+    const { lastState } = useSurroundingsWS();
 
-  const [confirmedUserNotSignedIn, setConfirmedUserNotSignedIn] =
-    useState(false);
+    useProtectedRoute(isAuthenticated, isInitializing);
+  
+    useExploreRoute(lastState, isAuthenticated); 
 
-  const [fontsLoaded] = useFonts({
-    "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
-    "Poppins-Bold": require("./assets/fonts/Poppins-Bold.ttf"),
-    "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
-  });
+  const router = useRouter(); 
+ 
 
-  //implement here: pass in prop to tell signin if creating new account
+   
   const handleNavigateToSignIn = () => {
     router.push("/signin");
-  };
-
-  // const handleNavigateToHome = () => {
-  //   router.push("/(tabs)");
-  // };
-
-  //i think i should do a condiitional check for user.authenticated at a higher level to ensure
-  // app screens can't be viewed at all if user logged out
-
-  useEffect(() => {
-    if (!isAuthenticated && !isInitializing) {
-      setShowSignIn(true);
-    }
-  }, [isAuthenticated, isInitializing]);
-
-  const handleCreateAccountInitialFocus = () => {
-    if (emailInputRef.current) {
-      emailInputRef.current.focus();
-    }
-  };
+  }; 
 
   return (
     <>
@@ -143,8 +120,7 @@ const styles = StyleSheet.create({
     height: "auto",
     borderBottomWidth: 1,
     padding: 10,
-    paddingTop: 14,
-    //borderRadius: 10,
+    paddingTop: 14, 
     alignContent: "center",
     justifyContent: "center",
     fontFamily: "Poppins-Regular",

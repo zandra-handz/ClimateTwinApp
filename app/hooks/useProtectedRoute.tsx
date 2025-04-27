@@ -1,19 +1,12 @@
 import { useNavigationContainerRef, useRouter, useSegments } from "expo-router";
 import { useState, useEffect } from "react";
-
-
-// Hook for protected route handling
-
+ 
 const useProtectedRoute = (isAuthenticated: boolean, isLoading: boolean) => {
   const navigationRef = useNavigationContainerRef();
   const router = useRouter();
   const segments = useSegments();
   const [isNavigationReady, setNavigationReady] = useState(false);
-
-  // console.log('useProtectedRoute triggered, isAuthenticated:', isAuthenticated);
-  // console.log('useProtectedRoute triggered, isLoading:', isLoading);
-  // console.log('useProtectedRoute triggered, is nav ready:', navigationRef.isReady());
-  // console.log(segments[0]);
+ 
 
   const goToRoot = (): void => {
     if (router.canDismiss()) {
@@ -44,28 +37,20 @@ const useProtectedRoute = (isAuthenticated: boolean, isLoading: boolean) => {
 
     const isOnSignIn = segments[0] === "signin";
     const isOnRecoverCreds = segments[0] === "recover-credentials";
-    const isOnExploreTabs = segments[0] === "(drawer)/(exploretabs)";
-    //const isOnRootPage = segments.length === 0;
-      const isOnRootPage = (segments as string[]).length === 0;
-
-    //const isOnRootPage = segments.length === 0 || segments[0] === "" || segments[0] === "secondindex" ; 
+    const isOnExploreTabs = segments[0] === "(drawer)/(exploretabs)"; 
+      const isOnRootPage = (segments as string[]).length === 0; 
  
 
     if (!isAuthenticated && !isOnSignIn && !isOnRecoverCreds) { 
 
-      //I may be able to get rid of secondindex and go back to using goToRoot
-      //because the actual looping issue seemed to be either signin flow fumbling reinit
-      //or not using a loading state to prevent things from running while user is in the process if reinitializing
-      //uh but this has been a long debug session and i don't want to touch anything right now 
-      //since it finally seems to work
-      //router.replace("/");
+ 
       console.log('going to root!');
       goToRoot();
     } else if (isAuthenticated && !isOnExploreTabs && (isOnSignIn || isOnRootPage)) {
-      // console.log('Protected route redirecting to (main)');
+ 
       router.push("/(drawer)");
     }
-  }, [isAuthenticated, isLoading, segments, isNavigationReady]); // removing authenticated
+  }, [isAuthenticated, isLoading, segments, isNavigationReady]); 
 };
 
 export default useProtectedRoute;

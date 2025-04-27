@@ -4,13 +4,14 @@ import ExploreTabBar from '../../components/ExploreTabsComponents/ExploreTabBar'
 
 
 export default () => {
+ 
   return (
     <>
     {/* <CustomStatusBar/> */}
   
   
     <Tabs 
-    tabBar={props=> <ExploreTabBar {...props} />}
+    tabBar={props=> <ExploreTabBar {...props}   />}
     > 
  
             <Tabs.Screen name="index" /> 

@@ -1,18 +1,25 @@
 import React from "react";
 import { View } from "react-native";
-import { useSurroundings } from "../../../src/context/CurrentSurroundingsContext"; 
+// import { useSurroundings } from "../../../src/context/CurrentSurroundingsContext";
+
 import MagnifiedNavButton from "../MagnifiedNavButton";
-import { useGlobalStyles } from "@/src/context/GlobalStylesContext"; 
+import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
 import WindyWindFriendsView from "./WindyWindFriendsView";
 
-const PortalSurroundingsView = ({ height  }) => {
+const PortalSurroundingsView = ({
+  height,
+  portalSurroundings,
+  ruinsSurroundings,
+  homeSurroundings,
+  onPress,
+}) => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const {
-    portalSurroundings,
-    ruinsSurroundings,
-    homeSurroundings,
-    handlePickNewSurroundings,
-  } = useSurroundings(); 
+  // const {
+  //   portalSurroundings,
+  //   ruinsSurroundings,
+  //   homeSurroundings,
+  //   handlePickNewSurroundings,
+  // } = useSurroundings();
   const isDisabled = !!ruinsSurroundings?.id;
 
   const handleExploreLocation = async () => {
@@ -20,7 +27,7 @@ const PortalSurroundingsView = ({ height  }) => {
       explore_type: "twin_location",
       id: portalSurroundings?.id,
     };
-    handlePickNewSurroundings(formattedData);
+    onPress(formattedData);
   };
 
   const overlayColor = `${themeStyles.primaryBackground.backgroundColor}CC`; //99 is slightly lighter
@@ -28,14 +35,14 @@ const PortalSurroundingsView = ({ height  }) => {
   return (
     <View style={{ flex: 1, height, position: "relative" }}>
       <View style={{ height: 90, width: "100%" }} />
- 
+
       <View
-        style={{ 
+        style={{
           borderRadius: 20,
-          width: "100%", 
+          width: "100%",
           zIndex: 1, // Ensures this section is below the overlay
         }}
-      > 
+      >
         {portalSurroundings &&
           portalSurroundings?.name &&
           portalSurroundings?.id && (
@@ -64,28 +71,21 @@ const PortalSurroundingsView = ({ height  }) => {
         />  
         <SingleDetailPanel label="Wind speed interaction" value={portalSurroundings.windSpeedInteraction} />
       */}
-
-
       </View>
 
       {isDisabled && (
-          <View
-            style={[
-              appContainerStyles.dimmer,
-              { backgroundColor: overlayColor },
-            ]}
-          > 
-          <View style={{paddingTop: 280}}>
+        <View
+          style={[appContainerStyles.dimmer, { backgroundColor: overlayColor }]}
+        >
+          <View style={{ paddingTop: 280 }}>
             <MagnifiedNavButton
               message={"Go back to portal location"}
               onPress={handleExploreLocation}
-            /> 
-            </View> 
+            />
           </View>
-        )}
- 
+        </View>
+      )}
     </View>
-    
   );
 };
 
