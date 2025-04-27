@@ -40,6 +40,7 @@ const ExploreTabsHeader = () => {
           ]}
         >
           <View style={appContainerStyles.headerRow}>
+            
             <WebSocketCurrentLocation />
 
             <View style={{ flexDirection: "row", alignItems: "center" }}>

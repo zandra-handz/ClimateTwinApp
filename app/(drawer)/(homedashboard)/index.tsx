@@ -83,6 +83,7 @@ const index = () => {
                     deviceLocation?.latitude &&
                     deviceLocation?.longitude && (
                       <View style={{ width: "100%", height: "100%" }}>
+                        
                         <WindyWindSquare
                           lat={42.846411}
                           lon={-71.5046743}

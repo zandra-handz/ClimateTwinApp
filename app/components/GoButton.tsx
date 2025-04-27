@@ -22,7 +22,7 @@ const GoButton = ({
       : remainingGoes === "0"
       ? ``
       : remainingGoes === "1"
-      ? `One trip left`
+      ? `1 trip left`
       : `${remainingGoes} left`;
 
   console.log(buttonLowerMessage);

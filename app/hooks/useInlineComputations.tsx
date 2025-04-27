@@ -147,9 +147,11 @@ const useInlineComputations = () => {
       
           return senderId === otherUserIdNum && treasureDataId === treasureIdNum;
         });
+
+        console.log(sentGiftRequestItem);
       
         // console.log('sentGift', sentGiftRequestItem);
-        return sentGiftRequestItem;
+        return sentGiftRequestItem || null;
       };
 
 
@@ -164,7 +166,7 @@ const useInlineComputations = () => {
       // } = getSurroundingsData(currentSurroundings);
 
       const getSurroundingsData = (currentSurroundings: any) => {
-        console.time('getSurroundingsData'); // Start timer
+      //  console.time('getSurroundingsData'); // Start timer
       
         let portalSurroundings = null;
         let ruinsSurroundings = null;
@@ -366,7 +368,7 @@ const useInlineComputations = () => {
           lastAccessed = null;
         }
       
-        console.timeEnd('getSurroundingsData'); // End timer
+      //  console.timeEnd('getSurroundingsData'); // End timer
       
         return {
           portalSurroundings,

@@ -2,10 +2,13 @@ import { Drawer } from "expo-router/drawer";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import ExploreTabsHeader from "../components/HeaderComponents/ExploreTabsHeader";
 import HomeHeader from "../components/HeaderComponents/HomeHeader";
-
+import { useUser } from "@/src/context/UserContext";
+import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
 import DrawerCustomizer from "../components/DrawerNavComponents/DrawerCustomizer";
  
 import * as Notifications from 'expo-notifications';
+
+import useExploreRoute from "../hooks/useExploreRoute";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -17,6 +20,13 @@ Notifications.setNotificationHandler({
 
 
 export default () => {
+  const { isAuthenticated, isInitializing } = useUser();
+
+  
+  const { lastState } = useSurroundingsWS();
+ 
+
+  useExploreRoute(lastState, isAuthenticated, isInitializing); 
   // export default function Layout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

@@ -20,7 +20,8 @@ const Index = () => {
 
     useProtectedRoute(isAuthenticated, isInitializing);
   
-    useExploreRoute(lastState, isAuthenticated); 
+    // moved to drawer layout 
+    // useExploreRoute(lastState, isAuthenticated, isInitializing); 
 
   const router = useRouter(); 
  
@@ -39,8 +40,10 @@ const Index = () => {
           //manualGradientColors.lightColor,
           constantColorsStyles.v1LogoColor.backgroundColor,
         ]}
-        start={{ x: 0, y: 1 }} // REVERSED:  start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 0 }} //end={{ x: 1, y: 1 }}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        // start={{ x: 0, y: 1 }} // REVERSED:  start={{ x: 0, y: 0 }}
+        // end={{ x: 1, y: 0 }} //end={{ x: 1, y: 1 }}
         style={[styles.container]}
       >
         <View

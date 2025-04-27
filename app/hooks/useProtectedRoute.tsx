@@ -47,7 +47,7 @@ const useProtectedRoute = (isAuthenticated: boolean, isLoading: boolean) => {
       console.log('going to root!');
       goToRoot();
     } else if (isAuthenticated && !isOnExploreTabs && (isOnSignIn || isOnRootPage)) {
- 
+      console.log('going to explore screen!');
       router.push("/(drawer)");
     }
   }, [isAuthenticated, isLoading, segments, isNavigationReady]); 

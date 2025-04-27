@@ -12,7 +12,7 @@ const HomeSurroundingsView = ({remainingGoes, onPress }) => {
     : remainingGoes === "0"
     ? ``
     : remainingGoes === "1"
-    ? `One trip left`
+    ? `1 trip left`
     : `${remainingGoes} left`;
 
   

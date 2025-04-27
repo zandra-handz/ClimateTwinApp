@@ -13,7 +13,8 @@ const WebSocketCurrentLocation: React.FC = () => {
     <View style={appContainerStyles.defaultElementRow}>
       {lastLocationName &&
         locationUpdateWSIsOpen &&
-        lastState !== "searching for twin" && (
+        lastState !== "searching for twin" &&
+         (
           <>
             <Text
               style={[

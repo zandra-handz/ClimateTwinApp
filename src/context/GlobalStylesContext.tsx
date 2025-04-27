@@ -238,7 +238,7 @@ const containerStyles = StyleSheet.create({
   emptyBannerContainer: {
     paddingHorizontal: 10,
     paddingVertical: 10, 
-    height: 'auto',  
+    height: 70,
     width: '100%',
     flexDirection: 'row',
     alignItems: 'center',
