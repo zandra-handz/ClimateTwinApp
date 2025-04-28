@@ -1,6 +1,5 @@
-import { View, Text, FlatList, StyleSheet } from "react-native";
-import React, { useState } from "react";
-import { useInteractiveElements } from "@/src/context/InteractiveElementsContext";
+import { View,  FlatList  } from "react-native";
+import React  from "react"; 
 import { useRouter } from "expo-router";
 import TreasureUICard from "./TreasureUICard";
 import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
@@ -8,9 +7,8 @@ import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
 
 //Mapped = Item details influence groq/item query
 //used for Pexel images
-const RuinsMappedTreasuresView = () => {
-  const router = useRouter();
-  const { strippedItemChoicesAsObjectExplore } = useInteractiveElements();
+const RuinsMappedTreasuresView = (strippedItemChoicesAsObjectExplore) => { // haven't tested this approach of passing this in
+  const router = useRouter(); 
   const { lastLocationName } = useSurroundingsWS();
 
   // const handleCollectTreasure = (topic, base) => {

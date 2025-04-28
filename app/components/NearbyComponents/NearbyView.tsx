@@ -1,16 +1,14 @@
 import { View, FlatList } from "react-native";
 import React from "react";
-import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
-import { useNearbyLocations } from "../../../src/context/NearbyLocationsContext";
+import { useGlobalStyles } from "../../../src/context/GlobalStylesContext"; 
 import { useSurroundings } from "@/src/context/CurrentSurroundingsContext"; 
 import NearbyRuinUICard from "./NearbyRuinUICard";
 import NearbyPortalUICard from "./NearbyPortalUICard";
 
 import ComponentSpinner from "../Scaffolding/ComponentSpinner";
 
-const NearbyView = () => {
-  const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { centeredNearbyLocations } = useNearbyLocations();
+const NearbyView = ({ centeredNearbyLocations }) => {
+  const { themeStyles, appContainerStyles } = useGlobalStyles(); 
   const { handlePickNewSurroundings, pickNewSurroundingsMutation } =
     useSurroundings();
 

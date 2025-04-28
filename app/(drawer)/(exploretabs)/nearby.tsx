@@ -1,10 +1,11 @@
-import React, {  useCallback, useEffect } from "react";
+import React  from "react";
 import { 
   View, 
 } from "react-native"; 
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext"; 
 import { useNearbyLocations } from "../../../src/context/NearbyLocationsContext";
- 
+import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
+ import useInlineComputations from "@/app/hooks/useInlineComputations";
 import { useRouter } from "expo-router";  
 import NearbyView from "../../components/NearbyComponents/NearbyView";
 
@@ -12,7 +13,10 @@ import NearbyView from "../../components/NearbyComponents/NearbyView";
 
 const nearby = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { triggerRefetch, nearbyLocations, centeredNearbyLocations } = useNearbyLocations();
+  const { lastLocationId } = useSurroundingsWS();
+  const { triggerRefetch, nearbyLocations } = useNearbyLocations();
+  const { getNearbyLocationsData } = useInlineComputations();
+ const centeredNearbyLocations = getNearbyLocationsData(nearbyLocations, lastLocationId);
  
   const router = useRouter();
  
@@ -40,7 +44,7 @@ const nearby = () => {
         <View style={appContainerStyles.innerFlexStartContainer}>
         {centeredNearbyLocations.length > 0 && (
           
-            <NearbyView />
+            <NearbyView centeredNearbyLocations={centeredNearbyLocations} />
         )}
              
     

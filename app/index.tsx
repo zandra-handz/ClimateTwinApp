@@ -19,6 +19,8 @@ const Index = () => {
     const { lastState } = useSurroundingsWS();
 
     useProtectedRoute(isAuthenticated, isInitializing);
+
+    useExploreRoute(lastState, isAuthenticated, isInitializing);
   
     // moved to drawer layout 
     // useExploreRoute(lastState, isAuthenticated, isInitializing); 

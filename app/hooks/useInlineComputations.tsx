@@ -165,8 +165,7 @@ const useInlineComputations = () => {
       //   lastAccessed
       // } = getSurroundingsData(currentSurroundings);
 
-      const getSurroundingsData = (currentSurroundings: any) => {
-      //  console.time('getSurroundingsData'); // Start timer
+      const getSurroundingsData = (currentSurroundings: any) => { 
       
         let portalSurroundings = null;
         let ruinsSurroundings = null;
@@ -367,8 +366,7 @@ const useInlineComputations = () => {
           locationId = null;
           lastAccessed = null;
         }
-      
-      //  console.timeEnd('getSurroundingsData'); // End timer
+       
       
         return {
           portalSurroundings,
@@ -377,9 +375,154 @@ const useInlineComputations = () => {
           locationId,
           lastAccessed,
           getSurroundingsData,
+         
         };
       };
       
+
+      const getNearbyLocationsData = (nearbyLocations: any[], lastLocationId: string) => {
+          
+        let centeredNearbyLocations = [];
+        
+        if (!lastLocationId || !nearbyLocations || nearbyLocations.length === 0) {
+          return centeredNearbyLocations;
+        }
+
+        centeredNearbyLocations = nearbyLocations.filter(item => item.id !== lastLocationId);
+        return centeredNearbyLocations;
+      }
+
+
+
+      const getItemChoices = (itemChoicesResponse) => {
+        let itemChoices = {};
+
+        if (!itemChoicesResponse) {
+          return;
+        }
+
+        itemChoices = itemChoicesResponse?.choices
+        ? Object.entries(itemChoicesResponse.choices)
+        : [];
+
+        return itemChoices;
+
+      }
+
+
+      const getItemChoicesAsObjectTwin = (itemChoicesResponse) => {
+
+        
+        let itemChoicesAsObjectTwin = {};
+
+        if (!itemChoicesResponse) {
+          return {};
+        }
+
+        // console.log(itemChoicesResponse?.choices);
+        itemChoicesAsObjectTwin =
+        itemChoicesResponse?.choices &&
+        itemChoicesResponse.choices["twin_location"] !== "None"
+          ? Object.entries(itemChoicesResponse.choices).reduce(
+              (acc, [key, value]) => { 
+                acc[key] = value;
+                return acc;
+              },
+              {}
+            )
+          : {};
+
+
+          // console.log(`item twin object: `, itemChoicesAsObjectTwin);
+
+        return itemChoicesAsObjectTwin;
+
+      }
+
+
+      const getItemChoicesAsObjectExplore = (itemChoicesResponse) => {
+        let itemChoicesAsObjectExplore = {};
+
+        if (!itemChoicesResponse) {
+          return itemChoicesAsObjectExplore;
+        }
+
+        itemChoicesAsObjectExplore =
+        itemChoicesResponse?.choices &&
+        itemChoicesResponse.choices["explore_location"] !== "None"
+          ? Object.entries(itemChoicesResponse.choices).reduce(
+              (acc, [key, value]) => { 
+                acc[key] = value;
+                return acc;
+              },
+              {}
+            )
+          : {};
+
+        return itemChoicesAsObjectExplore;
+
+      }
+
+
+
+      const getStrippedItemChoicesAsObjectTwin = (itemChoicesResponse) => {
+        let strippedItemChoicesAsObjectTwin = {};
+
+
+        if (!itemChoicesResponse) {
+          return strippedItemChoicesAsObjectTwin;
+        }
+
+        strippedItemChoicesAsObjectTwin =
+        itemChoicesResponse?.choices &&
+        itemChoicesResponse.choices["twin_location"] !== "None"
+          ? Object.entries(itemChoicesResponse.choices).reduce(
+              (acc, [key, value]) => {
+                // strip for simplicity
+                const newKey = key.startsWith("twin_location__")
+                  ? key.replace("twin_location__", "")
+                  : key;
+    
+                acc[newKey] = value;
+                return acc;
+              },
+              {}
+            )
+          : {};
+
+        return strippedItemChoicesAsObjectTwin;
+
+      }
+
+
+      const getStrippedItemChoicesAsObjectExplore = (itemChoicesResponse) => {
+        let strippedItemChoicesAsObjectExplore = {};
+
+        if (!itemChoicesResponse) {
+          return strippedItemChoicesAsObjectExplore;
+        }
+
+        strippedItemChoicesAsObjectExplore =
+        itemChoicesResponse?.choices &&
+        itemChoicesResponse.choices["explore_location"] !== "None"
+          ? Object.entries(itemChoicesResponse.choices).reduce(
+              (acc, [key, value]) => {
+                const newKey = key.startsWith("explore_location__")
+                  ? key.replace("explore_location__", "")
+                  : key;
+    
+                acc[newKey] = value;
+                return acc;
+              },
+              {}
+            )
+          : {};
+
+        return strippedItemChoicesAsObjectExplore;
+
+      }
+      
+
 
 
 
@@ -390,10 +533,20 @@ const useInlineComputations = () => {
         otherUserRecFriendRequest,
         otherUserSentFriendRequest,
         sortPendingGiftRequests,
+
         checkForTreasureOwnership,
         otherUserRecGiftRequest,
         otherUserSentGiftRequest,
+
         getSurroundingsData,
+
+        getNearbyLocationsData,
+
+        getItemChoices,
+        getItemChoicesAsObjectTwin,
+        getItemChoicesAsObjectExplore,
+        getStrippedItemChoicesAsObjectTwin,
+        getStrippedItemChoicesAsObjectExplore
 
     }
 }

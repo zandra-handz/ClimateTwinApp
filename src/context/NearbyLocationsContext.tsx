@@ -4,11 +4,11 @@ import React, {
   useState,
   useEffect,
   ReactNode,
-} from 'react';
-import { useUser } from './UserContext';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { getNearbyLocations } from '../calls/apicalls';
-import { useSurroundingsWS } from './SurroundingsWSContext';
+} from "react";
+import { useUser } from "./UserContext";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getNearbyLocations } from "../calls/apicalls";
+import { useSurroundingsWS } from "./SurroundingsWSContext";
 
 interface NearbyLocation {
   id: number;
@@ -26,16 +26,19 @@ interface NearbyLocation {
 
 interface NearbyLocationsContextType {
   nearbyLocations: NearbyLocation[] | undefined;
-  centeredNearbyLocations: NearbyLocation[];
   triggerRefetch: () => void;
 }
 
-const NearbyLocationsContext = createContext<NearbyLocationsContextType | undefined>(undefined);
+const NearbyLocationsContext = createContext<
+  NearbyLocationsContextType | undefined
+>(undefined);
 
 export const useNearbyLocations = (): NearbyLocationsContextType => {
   const context = useContext(NearbyLocationsContext);
   if (!context) {
-    throw new Error('useNearbyLocations must be used within a NearbyLocationsProvider');
+    throw new Error(
+      "useNearbyLocations must be used within a NearbyLocationsProvider"
+    );
   }
   return context;
 };
@@ -44,66 +47,47 @@ interface NearbyLocationsProviderProps {
   children: ReactNode;
 }
 
-export const NearbyLocationsProvider: React.FC<NearbyLocationsProviderProps> = ({ children }) => {
+export const NearbyLocationsProvider: React.FC<
+  NearbyLocationsProviderProps
+> = ({ children }) => {
   const { user, isAuthenticated, isInitializing } = useUser();
   const { lastState, lastLocationId, baseLocationId } = useSurroundingsWS();
-  const [centeredNearbyLocations, setCenteredNearbyLocations] = useState<NearbyLocation[]>([]);
+  // const [centeredNearbyLocations, setCenteredNearbyLocations] = useState<
+  //   NearbyLocation[]
+  // >([]);
 
   const queryClient = useQueryClient();
 
+  // isPortal === 'yes' is not right
 
-
- // isPortal === 'yes' is not right
-
-  const { data: nearbyLocations, isLoading, isError, isSuccess } = useQuery<NearbyLocation[]>({
-    queryKey: ['nearbyLocations', baseLocationId],
+  const {
+    data: nearbyLocations,
+    isLoading,
+    isError,
+    isSuccess,
+  } = useQuery<NearbyLocation[]>({
+    queryKey: ["nearbyLocations", baseLocationId, user?.id],
     queryFn: getNearbyLocations,
-    enabled: !!isAuthenticated && !isInitializing && !!lastLocationId && (lastState === 'exploring'), 
+    enabled:
+      !!isAuthenticated &&
+      !isInitializing &&
+      !!lastLocationId &&
+      lastState === "exploring",
     //staleTime: 0,
- 
   });
-
-
-  useEffect(() => {
-  
-    if (isError) {
-      console.log('nearby locations is error!');
-    }
-  }, [isError]);
-
-  
-  useEffect(() => {
-  
-    if (isSuccess) {
-      console.log('nearby locations is success!');
-    }
-  }, [isSuccess]);
-
-  useEffect(() => {
-    if (lastLocationId && nearbyLocations && nearbyLocations.length > 0) {
-     // console.log(lastLocationId);
-      
-     /// console.log('FILTERING NEARBY LOCATIONS');
-      const filteredData = nearbyLocations.filter(item => item.id !== lastLocationId);
-      setCenteredNearbyLocations(filteredData);
-     // console.log('FILTERED DATA', filteredData[7]);
-
-
-    } else {
-      setCenteredNearbyLocations([]);
-    }
-
-  }, [nearbyLocations, lastLocationId]);
-
-  
-  const triggerRefetch = () => {
-    queryClient.invalidateQueries({ queryKey: ['nearbyLocations', baseLocationId] });
-  };
  
-   
+ 
+
+  const triggerRefetch = () => {
+    queryClient.invalidateQueries({
+      queryKey: ["nearbyLocations", baseLocationId, user?.id],
+    });
+  };
 
   return (
-    <NearbyLocationsContext.Provider value={{ nearbyLocations, centeredNearbyLocations, triggerRefetch }}>
+    <NearbyLocationsContext.Provider
+      value={{ nearbyLocations, triggerRefetch }}
+    >
       {children}
     </NearbyLocationsContext.Provider>
   );

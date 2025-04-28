@@ -1,9 +1,7 @@
 import React, {
   createContext,
-  useContext,
-  useEffect,
-  ReactNode,
-  useState,
+  useContext, 
+  ReactNode, 
 } from "react";
 import { useUser } from "./UserContext";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -100,147 +98,42 @@ interface InteractiveElementsProviderProps {
 export const InteractiveElementsProvider: React.FC<
   InteractiveElementsProviderProps
 > = ({ children }) => {
-  const { isAuthenticated, isInitializing } = useUser(); 
+  const { user, isAuthenticated, isInitializing } = useUser(); 
   const { lastLocationId } = useSurroundingsWS();
   const queryClient = useQueryClient();
 
-  const queryKey = ["itemChoices", lastLocationId];
+ 
 
-  const queryOptions = {
-    queryKey,
-    queryFn: getItemChoices,
-    enabled: !!isAuthenticated && !isInitializing && !!lastLocationId,
-    onError: (err: Error) => {
-      console.error("Error fetching location data:", err.message);
-    },
-    onSuccess: (data: ItemChoicesResponse | null) => {
-      if (data) {
-        console.log("getItemChoices success:", data);
-      }
-    },
-  };
-  
   const {
     data: itemChoicesResponse,
     isLoading,
-  } = useQuery<ItemChoicesResponse | null, Error>(queryOptions);
+    isError,
+    isSuccess,
+  } = useQuery<ItemChoicesResponse | null, Error>({
+    queryKey: ["itemChoices", lastLocationId, user?.id],
+    queryFn: getItemChoices,
+    enabled: !!isAuthenticated && !isInitializing && !!lastLocationId,
+  });
   
-
-  // Convert itemChoices.choices (object) into an array of key-value pairs
-  const itemChoices = itemChoicesResponse?.choices
-    ? Object.entries(itemChoicesResponse.choices)
-    : [];
-
-  const itemChoicesAsObject = itemChoicesResponse?.choices
-    ? Object.entries(itemChoicesResponse.choices).reduce(
-        (acc, [key, value]) => {
-          acc[key] = value;
-          return acc;
-        },
-        {}
-      )
-    : {};
-
-  //Can't save treasure with this -- add twin_location__ back in whem saving the treasure
-  const itemChoicesAsObjectTwin =
-    itemChoicesResponse?.choices &&
-    itemChoicesResponse.choices["twin_location"] !== "None"
-      ? Object.entries(itemChoicesResponse.choices).reduce(
-          (acc, [key, value]) => { 
-            acc[key] = value;
-            return acc;
-          },
-          {}
-        )
-      : {};
-
-  const itemChoicesAsObjectExplore =
-    itemChoicesResponse?.choices &&
-    itemChoicesResponse.choices["explore_location"] !== "None"
-      ? Object.entries(itemChoicesResponse.choices).reduce(
-          (acc, [key, value]) => {
-        
-            acc[key] = value;
-            return acc;
-          },
-          {}
-        )
-      : {};
-
-  const strippedItemChoicesAsObjectTwin =
-    itemChoicesResponse?.choices &&
-    itemChoicesResponse.choices["twin_location"] !== "None"
-      ? Object.entries(itemChoicesResponse.choices).reduce(
-          (acc, [key, value]) => {
-            // strip for simplicity
-            const newKey = key.startsWith("twin_location__")
-              ? key.replace("twin_location__", "")
-              : key;
-
-            acc[newKey] = value;
-            return acc;
-          },
-          {}
-        )
-      : {};
-
-  const strippedItemChoicesAsObjectExplore =
-    itemChoicesResponse?.choices &&
-    itemChoicesResponse.choices["explore_location"] !== "None"
-      ? Object.entries(itemChoicesResponse.choices).reduce(
-          (acc, [key, value]) => {
-            const newKey = key.startsWith("explore_location__")
-              ? key.replace("explore_location__", "")
-              : key;
-
-            acc[newKey] = value;
-            return acc;
-          },
-          {}
-        )
-      : {};
 
   const triggerItemChoicesRefetch = () => {
     console.log("invalidating item choices query");
     queryClient.invalidateQueries({
-      queryKey: ["itemChoices", lastLocationId],
-      // Include currentSurroundings.id
+      queryKey: ["itemChoices", lastLocationId, user?.id],
+ 
     });
     console.log("refetching item choices query");
     queryClient.refetchQueries({
-      queryKey: ["itemChoices", lastLocationId],
+      queryKey: ["itemChoices", lastLocationId, user?.id],
     });
   };
 
 
-  useEffect(() => {
-    const unsubscribe = queryClient.getQueryCache().subscribe((event) => {
-      if (event.query.queryKey[0] === "itemChoices") {
-        // console.log(
-        //   "itemChoices cache updated."
-        //   // queryClient.getQueryData([
-        //   //   'itemChoices',
-        //   //   currentSurroundings?.explore_location?.id ?? null,
-        //   //   currentSurroundings?.twin_location?.id ?? null,
-        //   // ]),
-        // );
-      }
-    });
-
-    return () => {
-      unsubscribe(); // Unsubscribe when the component unmounts
-    };
-  }, [lastLocationId]); //passing in queryClient will trigger useEffect any time ANY query key is updated
-
+ 
   return (
     <InteractiveElementsContext.Provider
-      value={{
-        itemChoices, 
-        itemChoicesAsObject,
-        itemChoicesAsObjectTwin,
-        itemChoicesAsObjectExplore,
-        strippedItemChoicesAsObjectTwin,
-        strippedItemChoicesAsObjectExplore,
+      value={{ 
+        itemChoicesResponse,  
         triggerItemChoicesRefetch,
       }}
     >

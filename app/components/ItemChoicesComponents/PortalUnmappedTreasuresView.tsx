@@ -1,10 +1,6 @@
-import { View, Text, FlatList, StyleSheet, ScrollView } from "react-native";
-import React, { useEffect, useState } from "react";
-import ItemChoiceUICard from "./ItemChoiceUICard";
-import { useInteractiveElements } from "@/src/context/InteractiveElementsContext";
-import CardAnimationWrapper from "../CardAnimationWrapper";
-import { useRouter } from "expo-router";
-import TreasureUICard from "./TreasureUICard";
+import { View, FlatList  } from "react-native";
+import React from "react"; 
+import { useRouter } from "expo-router"; 
 import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
 
 import INaturalistTray from "../INaturalistComponents/iNaturalistTray";
@@ -15,15 +11,9 @@ import useINaturalist from "@/app/hooks/useINaturalist";
 //Unmapped = image results are arbitrarily assigned to base
 //used for iNaturalist -- iNaturalist returns much more revelant results
 //than Pexel with just the location coords
-const PortalUnmappedTreasuresView = () => {
+const PortalUnmappedTreasuresView = ({itemChoices}) => {
   const { iNaturalist } = useINaturalist();
-  const router = useRouter();
-  const {
-    itemChoicesAsObjectTwin,
-    itemChoicesAsObjectExplore,
-    locationPropertiesList,
-    itemChoices,
-  } = useInteractiveElements();
+  const router = useRouter(); 
   const { lastLocationName } = useSurroundingsWS();
 
   const handleInteractWithItem = (topic, base, query, index) => {

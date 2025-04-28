@@ -1,8 +1,6 @@
-import React, { useEffect } from "react";
-import { View, ScrollView } from "react-native";
-import { useInteractiveElements } from "@/src/context/InteractiveElementsContext";
-import RuinsMappedTreasuresView from "../ItemChoicesComponents/RuinsMappedTreasuresView";
-import PortalMappedTreasuresView from "../ItemChoicesComponents/PortalMappedTreasuresView";
+import React  from "react";
+import { View } from "react-native";
+import { useInteractiveElements } from "@/src/context/InteractiveElementsContext"; 
 import PortalUnmappedTreasuresView from "../ItemChoicesComponents/PortalUnmappedTreasuresView";
 
 import RuinsUnmappedTreasuresView from "../ItemChoicesComponents/RuinsUnmappedTreasureView";
@@ -10,6 +8,7 @@ import { useGroqContext } from "@/src/context/GroqContext";
 import useINaturalist from "@/app/hooks/useINaturalist";
 import WindyMap from "../WindyMap";
 import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
+import useInlineComputations from "@/app/hooks/useInlineComputations";
 
 const CurrentSurroundingsView = ({ height }) => {
   const { groqHistory } = useGroqContext();
@@ -19,8 +18,16 @@ const CurrentSurroundingsView = ({ height }) => {
     ? lastLatAndLong
     : [null, null];
 
-  const { itemChoicesAsObjectTwin, itemChoicesAsObjectExplore } =
-    useInteractiveElements();
+  const { itemChoicesResponse } =
+    useInteractiveElements(); 
+    const { getItemChoices, getItemChoicesAsObjectTwin, getItemChoicesAsObjectExplore } = useInlineComputations();
+
+    const  itemChoicesAsObjectTwin = getItemChoicesAsObjectTwin(itemChoicesResponse);
+ 
+    const  itemChoicesAsObjectExplore = getItemChoicesAsObjectExplore(itemChoicesResponse);
+
+    const  itemChoices  = getItemChoices(itemChoicesResponse);
+
 
   return (
     <>
@@ -30,13 +37,19 @@ const CurrentSurroundingsView = ({ height }) => {
 
       <View style={{ height: height }}>
         {groqHistory && iNaturalist?.results?.length > 0 ? (
-          <>
+          <> 
+
             {Object.keys(itemChoicesAsObjectExplore).length > 0 && (
-              <RuinsUnmappedTreasuresView />
-            )}
+
+              <RuinsUnmappedTreasuresView itemChoices={itemChoices} />
+
+            )} 
+ 
             {Object.keys(itemChoicesAsObjectTwin).length > 0 && (
-              <PortalUnmappedTreasuresView />
-            )}
+
+              <PortalUnmappedTreasuresView itemChoices={itemChoices}/>
+
+            )} 
           </>
         ) : (
           groqHistory && (

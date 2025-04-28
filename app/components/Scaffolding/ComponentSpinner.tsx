@@ -53,7 +53,8 @@ const ComponentSpinner = ({
   return (
     <>
       {isInitializerSpinner &&
-        (isInitializing) && (
+      (isInitializing) && (
+      //  ((isInitializing) || (!lastState && isAuthenticated)) && (
           <LinearGradient
             colors={[
               "teal",
