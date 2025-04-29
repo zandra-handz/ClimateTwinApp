@@ -1,44 +1,21 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import React, { useEffect } from "react";
+import { View } from "react-native";
+import React  from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
-import { Image } from "expo-image";
-import { useFocusEffect } from "expo-router"; 
-import GoToItemButton from "../GoToItemButton";
-
+import { Image } from "expo-image"; 
 import ComponentSpinner from "../Scaffolding/ComponentSpinner";
 const INaturalistHeaderImageCard = ({
-  value,
-  scientificLabel,
-  label,
-  accessibilityLabel,
-  base,
-  index, //to find image in groq
-  query, //for groq to search
-  onNavigationPress, //navs to collect screen
+  value, 
+  accessibilityLabel, 
   width=300,
   height=300,
 }) => {
-  const {
-    themeStyles,
-    appContainerStyles,
-    avgPhotoColor,
-    handleAvgPhotoColor,
+  const { 
+    appContainerStyles
   } = useGlobalStyles();
-
 
  
 
-  useFocusEffect(
-    React.useCallback(() => {
-      return () => {
-        // handleAvgPhotoColor(null);
-      };
-    }, [])
-  );
-
-
-
-  const debug = false;
+ 
   const imageUrl = value || null;
 
   return (

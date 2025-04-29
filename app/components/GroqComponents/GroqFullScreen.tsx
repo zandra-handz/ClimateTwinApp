@@ -14,6 +14,8 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import ComponentSpinner from "../Scaffolding/ComponentSpinner";
 import { useFocusEffect } from "expo-router";
 
+import useInlineComputations from "@/app/hooks/useInlineComputations";
+
 const GroqFullScreen = ({
   dataObject = {},
   opacity,
@@ -38,41 +40,45 @@ const GroqFullScreen = ({
   const debug = true;
 
   const { iNaturalist } = useINaturalist();
+  const { getWikiLink } = useInlineComputations();
   const iNaturalistImageSize = 300;
   const [fadeAnim] = useState(new Animated.Value(0));
-  const [ wiki, setWiki ] = useState(null);
+ 
 
   const reAdjustedIndex = index ? index - 1 : null;
 
-  
+  const wikiLink = getWikiLink(iNaturalist, reAdjustedIndex);
 
-  const wikiLink = iNaturalist.results[reAdjustedIndex]?.taxon?.wikipedia_url
-    ? iNaturalist.results[reAdjustedIndex].taxon.wikipedia_url.replace(/^http:/, "https:")
-    : null;
+  // const wikiLink = iNaturalist?.results[reAdjustedIndex]?.taxon?.wikipedia_url
+  //   ? iNaturalist.results[reAdjustedIndex].taxon.wikipedia_url.replace(/^http:/, "https:")
+  //   : null;
 
-  console.log(wikiLink);
+  // console.log(wikiLink);
 
-  useFocusEffect(
-    React.useCallback(() => {
-      handleAvgPhotoColor(null);
-      console.log(`index in groqfullscreen: `, index);
-      console.log(`index in groqfullscreen: `, reAdjustedIndex);
 
-      return () => {
-        handleAvgPhotoColor(null);
-      };
-    }, [])
-  );
+  // DON'T DELETE BECAUSE COOL AND TOOK FOREVER
+  // BUT DOESN'T WORK WITH INATURALIST
+  // useFocusEffect(
+  //   React.useCallback(() => {
+  //     handleAvgPhotoColor(null);
+  //     console.log(`index in groqfullscreen: `, index);
+  //     console.log(`index in groqfullscreen: `, reAdjustedIndex);
 
-  useEffect(() => {
-    console.log("groqscreen color animation triggered");
+  //     return () => {
+  //       handleAvgPhotoColor(null);
+  //     };
+  //   }, [])
+  // );
 
-    Animated.timing(fadeAnim, {
-      toValue: avgPhotoColor ? 1 : 0,
-      duration: 1000,
-      useNativeDriver: false,
-    }).start();
-  }, [avgPhotoColor]);
+  // useEffect(() => {
+  //   console.log("groqscreen color animation triggered");
+
+  //   Animated.timing(fadeAnim, {
+  //     toValue: avgPhotoColor ? 1 : 0,
+  //     duration: 1000,
+  //     useNativeDriver: false,
+  //   }).start();
+  // }, [avgPhotoColor]);
 
   return (
     <>

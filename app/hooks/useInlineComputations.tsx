@@ -111,46 +111,41 @@ const useInlineComputations = () => {
 
     const otherUserRecGiftRequest = ( treasureId, pendingGiftRequests, otherUserId) => {
 
-        if (!pendingGiftRequests || !otherUserId) { 
+        if (!pendingGiftRequests || !otherUserId || !treasureId) { 
+          console.log('treasures data missing');
             return null;
         }
  
-        const recGiftRequest = pendingGiftRequests.find(
-            (request) => request.recipient === otherUserId && request.treasure_data.id === treasureId
-        );
-
-        return !!recGiftRequest;
+       
+        const treasureIdNum = Number(treasureId);
+        const otherUserIdNum = Number(otherUserId);
+      
+        const recGiftRequestItem = pendingGiftRequests.find((request) => {
+          const recId = Number(request.recipient);
+          const treasureDataId = Number(request.treasure_data?.id);
+    
+          return recId === otherUserIdNum && treasureDataId === treasureIdNum;
+        });
+ 
+        return recGiftRequestItem || null;
 
     };
 
     const otherUserSentGiftRequest = (treasureId, pendingGiftRequests, otherUserId) => {
         if (!pendingGiftRequests || !otherUserId || !treasureId) {
-          console.log('data missing');
           return null;
         }
-      
-        // console.log('treasure id:', treasureId);
-      
+       
         const treasureIdNum = Number(treasureId);
         const otherUserIdNum = Number(otherUserId);
       
         const sentGiftRequestItem = pendingGiftRequests.find((request) => {
           const senderId = Number(request.sender);
           const treasureDataId = Number(request.treasure_data?.id);
-      
-        //   console.log('checking request:', {
-        //     senderId,
-        //     treasureDataId,
-        //     matchSender: senderId === otherUserIdNum,
-        //     matchTreasure: treasureDataId === treasureIdNum,
-        //   });
-      
+    
           return senderId === otherUserIdNum && treasureDataId === treasureIdNum;
         });
-
-        console.log(sentGiftRequestItem);
-      
-        // console.log('sentGift', sentGiftRequestItem);
+ 
         return sentGiftRequestItem || null;
       };
 
@@ -523,7 +518,55 @@ const useInlineComputations = () => {
       }
       
 
+const getWikiLink = (endpointData, reAdjustedIndex) => {
+  let wikiLink = null;
 
+  if (!endpointData || !endpointData?.results) {
+    return wikiLink;
+  }
+  wikiLink = endpointData?.results[reAdjustedIndex]?.taxon?.wikipedia_url
+  ? endpointData.results[reAdjustedIndex].taxon.wikipedia_url.replace(/^http:/, "https:")
+  : null;
+
+  return wikiLink;
+}
+
+
+const getiNaturalistItemData = (endpointData, index) => {
+  let resultsExist = false;
+  let label = null;
+  let scientificLabel = null;
+  let mediumImageUrl = null;
+  let imageUrl = null;
+
+
+
+  if (!endpointData || !endpointData?.results || !endpointData?.results[index] ) {
+    return { resultsExist, label, scientificLabel, mediumImageUrl, imageUrl };
+  } 
+  resultsExist = true;
+  label = endpointData?.results[index]?.taxon?.preferred_common_name || "No common name available";
+  scientificLabel  = endpointData?.results[index]?.taxon?.name || "No name available";
+  mediumImageUrl = endpointData?.results[index]?.taxon?.default_photo?.medium_url || null;
+  imageUrl = endpointData?.results[index]?.taxon?.default_photo?.url || null;
+
+
+  return {  resultsExist, label, scientificLabel, mediumImageUrl, imageUrl };
+}
+
+const getNonPendingTreasures = (treasures) => {
+  let nonPendingTreasures = [];
+
+  if (!treasures) {
+    return nonPendingTreasures;
+  }
+
+  nonPendingTreasures = treasures.filter((treasure) => (treasure.pending === false));
+
+  return nonPendingTreasures;
+
+};
+ 
 
 
     return {
@@ -532,8 +575,10 @@ const useInlineComputations = () => {
         checkForExistingFriendship,
         otherUserRecFriendRequest,
         otherUserSentFriendRequest,
-        sortPendingGiftRequests,
 
+
+        getNonPendingTreasures,
+        sortPendingGiftRequests,
         checkForTreasureOwnership,
         otherUserRecGiftRequest,
         otherUserSentGiftRequest,
@@ -546,7 +591,15 @@ const useInlineComputations = () => {
         getItemChoicesAsObjectTwin,
         getItemChoicesAsObjectExplore,
         getStrippedItemChoicesAsObjectTwin,
-        getStrippedItemChoicesAsObjectExplore
+        getStrippedItemChoicesAsObjectExplore,
+
+
+        // iNaturalist
+        getWikiLink,
+        getiNaturalistItemData, 
+
+
+   
 
     }
 }

@@ -2,27 +2,29 @@ import React from "react";
 import { View } from "react-native";
 import { useRouter } from "expo-router";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
-import { useFriends } from "@/src/context/FriendsContext";
-import useTreasures from "../../hooks/useTreasures";
+
+//import useTreasures from "../../hooks/useTreasures";
+
+import { useTreasures } from "@/src/context/TreasuresContext";
 import TreasuresView from "../../components/TreasuresComponents/TreasuresView";
 import ActionsFooter from "@/app/components/ActionsFooter";
 import NothingHere from "@/app/components/Scaffolding/NothingHere";
 import { usePendingRequests } from "@/src/context/PendingRequestsContext";
 import useInlineComputations from "@/app/hooks/useInlineComputations";
 import { useUser } from "@/src/context/UserContext";
+ 
 
 const index = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { treasures, nonPendingTreasures } = useTreasures();
+  const { treasures } = useTreasures();
   const { user } = useUser();
 
   const { pendingRequests } = usePendingRequests();
-   const { sortPendingGiftRequests, checkForTreasureOwnership, otherUserRecGiftRequest,
-    otherUserSentGiftRequest  } = useInlineComputations();
+   const { sortPendingGiftRequests, getNonPendingTreasures  } = useInlineComputations();
    const allGiftRequests = pendingRequests?.pending_gift_requests;
 
    const { recGiftRequests, sentGiftRequests } = sortPendingGiftRequests(allGiftRequests, user?.id);
-  
+  const nonPendingTreasures = getNonPendingTreasures(treasures);
     
   const router = useRouter();
 

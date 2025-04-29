@@ -504,6 +504,25 @@ export const searchUsers = async (query : string) => {
 };
 
 
+export const searchTreasures = async (query : string) => {
+    try {
+       console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.get(`/users/treasures/get/?search=${query}`);
+       // console.log('API GET Call searchUsers', response.data);
+        return response.data.results;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/treasures/get/:', error.response.data);
+        } else if (error.request) {
+            console.error('Error request for /users/treasures/get/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /users/treasures/get/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
+
 
 
 export const go = async (startingAddress) => {

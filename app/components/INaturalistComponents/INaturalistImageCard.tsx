@@ -1,5 +1,5 @@
 import { View, Text, TouchableOpacity } from "react-native";
-import React, { useEffect } from "react";
+import React  from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { Image } from "expo-image";
 import { useFocusEffect } from "expo-router"; 
@@ -19,32 +19,24 @@ const INaturalistImageCard = ({
 }) => {
   const {
     themeStyles,
-    appContainerStyles,
-    avgPhotoColor,
-    handleAvgPhotoColor,
+    appContainerStyles, 
   } = useGlobalStyles();
 
 
- 
-
-  useFocusEffect(
-    React.useCallback(() => {
-      return () => {
-        // handleAvgPhotoColor(null);
-      };
-    }, [])
-  );
-
+  
   const handlePress = () => {
     const adjustedIndex = index + 1;
     onPress(query, base, query, adjustedIndex);
 
   };
-
-  const debug = false;
+ 
   const imageUrl = value || null;
 
   return (
+    <>
+
+    {/* {imageUrl &&( */}
+      
     <TouchableOpacity
       onPress={handlePress}
       style={[
@@ -92,15 +84,18 @@ const INaturalistImageCard = ({
             <Image
               key={imageUrl}
               source={{ uri: imageUrl, cache: "reload" }} // Force image reload
-              style={{ width: width, height: height, borderRadius: 30 }}
+              style={{ width: width, height: height, borderRadius: 30, backgroundColor: "pink" }}
               accessibilityLabel={accessibilityLabel || "No label available"}
               contentFit="cover"
-              //onError={() => setImgSource(require("./fallback-image.png"))}
+              
+             // onError={() => setImgSource(require("./fallback-image.png"))}
             />
           </>
         )}
       </View>
     </TouchableOpacity>
+     
+    </>
   );
 };
 export default INaturalistImageCard;

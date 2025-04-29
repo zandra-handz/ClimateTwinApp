@@ -25,24 +25,21 @@ import { Stack } from "expo-router";
 import { AppMessageContextProvider } from "../src/context/AppMessageContext";
 import { GlobalStylesProvider } from "../src/context/GlobalStylesContext";
 import { UserProvider } from "../src/context/UserContext";
- 
 
 import { DeviceLocationProvider } from "../src/context/DeviceLocationContext";
 import { AppStateProvider } from "../src/context/AppStateContext";
 import { FriendsProvider } from "@/src/context/FriendsContext";
 import { PendingRequestsProvider } from "@/src/context/PendingRequestsContext";
+import { TreasuresProvider } from "@/src/context/TreasuresContext";
 import { CurrentSurroundingsProvider } from "../src/context/CurrentSurroundingsContext";
 import { NearbyLocationsProvider } from "../src/context/NearbyLocationsContext";
 import { ActiveSearchProvider } from "../src/context/ActiveSearchContext";
 import { InteractiveElementsProvider } from "../src/context/InteractiveElementsContext";
 import { GroqProvider } from "../src/context/GroqContext";
 import { SurroundingsWSProvider } from "../src/context/SurroundingsWSContext";
- 
 
 import AppMessage from "./components/AppMessage";
 import CustomStatusBar from "./components/CustomStatusBar";
-
- 
 
 import * as Sentry from "@sentry/react-native";
 
@@ -52,14 +49,12 @@ Sentry.init({
   // uncomment the line below to enable Spotlight (https://spotlightjs.com)
   // spotlight: __DEV__,
 });
- 
 
 export default Sentry.wrap(function Layout() {
   const queryClient = new QueryClient();
 
   const appState = useRef(AppState.currentState);
   //const [appStateVisible, setAppStateVisible] = useState(appState.current);
-
 
   const { hasShareIntent, shareIntent, resetShareIntent, error } =
     useShareIntentContext();
@@ -129,63 +124,62 @@ export default Sentry.wrap(function Layout() {
                   <AppMessage />
                   <CustomStatusBar />
                   <PendingRequestsProvider>
-                  <FriendsProvider>
-                 
-                      <SurroundingsWSProvider>
-                        <GroqProvider>
-                        <ActiveSearchProvider>
-                          <CurrentSurroundingsProvider>
-                            <ComponentSpinner
-                              spinnerSize={60}
-                              isInitializerSpinner={true}
-                            />
+                    <FriendsProvider>
+                      <TreasuresProvider>
+                        <SurroundingsWSProvider>
+                          <GroqProvider>
+                            <ActiveSearchProvider>
+                              <CurrentSurroundingsProvider>
+                                <ComponentSpinner
+                                  spinnerSize={60}
+                                  isInitializerSpinner={true}
+                                />
 
-                            
-                              <NearbyLocationsProvider>
-                                <InteractiveElementsProvider>
-                                  <Stack screenOptions={{ headerShown: false }}
-                                   initialRouteName="index"
-                                   >
-                                    <Stack.Screen
-                                      name="(drawer)"
-                                      options={{
-                                        headerShown: false,
-                                        gestureEnabled: false,
-                                      }}
-                                    />
+                                <NearbyLocationsProvider>
+                                  <InteractiveElementsProvider>
+                                    <Stack
+                                      screenOptions={{ headerShown: false }}
+                                      initialRouteName="index"
+                                    >
+                                      <Stack.Screen
+                                        name="(drawer)"
+                                        options={{
+                                          headerShown: false,
+                                          gestureEnabled: false,
+                                        }}
+                                      />
 
-                                    <Stack.Screen
-                                      name="index"
-                                      options={{
-                                        headerShown: false,
-                                        headerTitle: "Welcome",
-                                        headerStyle: {
-                                          backgroundColor: "teal",
-                                        },
-                                        gestureEnabled: false,
-                                      }}
-                                    />
-                                    <Stack.Screen
-                                      name="signin"
-                                      options={{
-                                        headerShown: false,
-                                        headerTitle: "Sign in",
-                                        headerStyle: {
-                                          backgroundColor: "teal",
-                                        },
-                                        gestureEnabled: false,
-                                      }}
-                                    />
-                                  </Stack>
-                                </InteractiveElementsProvider>
-                              </NearbyLocationsProvider>
-                            
-                          </CurrentSurroundingsProvider>
-                          </ActiveSearchProvider>
-                        </GroqProvider>
-                      </SurroundingsWSProvider>
-                 
-                  </FriendsProvider>
+                                      <Stack.Screen
+                                        name="index"
+                                        options={{
+                                          headerShown: false,
+                                          headerTitle: "Welcome",
+                                          headerStyle: {
+                                            backgroundColor: "teal",
+                                          },
+                                          gestureEnabled: false,
+                                        }}
+                                      />
+                                      <Stack.Screen
+                                        name="signin"
+                                        options={{
+                                          headerShown: false,
+                                          headerTitle: "Sign in",
+                                          headerStyle: {
+                                            backgroundColor: "teal",
+                                          },
+                                          gestureEnabled: false,
+                                        }}
+                                      />
+                                    </Stack>
+                                  </InteractiveElementsProvider>
+                                </NearbyLocationsProvider>
+                              </CurrentSurroundingsProvider>
+                            </ActiveSearchProvider>
+                          </GroqProvider>
+                        </SurroundingsWSProvider>
+                      </TreasuresProvider>
+                    </FriendsProvider>
                   </PendingRequestsProvider>
                 </GlobalStylesProvider>
               </AppStateProvider>

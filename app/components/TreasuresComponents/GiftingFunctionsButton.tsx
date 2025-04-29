@@ -1,26 +1,19 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
   TouchableOpacity,
-  Modal,
-  FlatList,
-  Keyboard,
+
 } from "react-native";
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
-
-import { useFriends } from "@/src/context/FriendsContext";
-import { AntDesign, Feather } from "@expo/vector-icons";
-import { useUser } from "@/src/context/UserContext";
-import { useRouter } from "expo-router";
-import { useAppMessage } from "@/src/context/AppMessageContext";
-import useInbox from "@/app/hooks/useInbox";
-import { usePendingRequests } from "@/src/context/PendingRequestsContext";
+ 
+import { Feather } from "@expo/vector-icons"; 
+import useInbox from "@/app/hooks/useInbox"; 
 import useInlineComputations from "@/app/hooks/useInlineComputations";
 import useTreasures from "@/app/hooks/useTreasures";
 
 import DoubleCheckerWithMessageInput from "../Scaffolding/DoubleCheckerWithMessageInput";
-import { ConstantColorFactor } from "three";
+ 
 
 const GiftingFunctionsButton = ({
   cTUserId,
@@ -30,25 +23,17 @@ const GiftingFunctionsButton = ({
   size,
   recGiftRequests,
   sentGiftRequests,
-}) => {
-  const router = useRouter();
-  const { user } = useUser();
-  const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
+}) => { 
+  const { themeStyles  } = useGlobalStyles();
   const [isDoubleCheckerVisible, setDoubleCheckerVisible] = useState(false);
-  const [isFriend, setIsFriend] = useState<boolean>(false);
-  const [isPending, setIsPending] = useState<boolean>(false);
-  const [isSent, setIsSent] = useState<boolean>(false);
-  const { showAppMessage } = useAppMessage();
+ 
   const {
-    handleAcceptTreasureGift,
-    acceptTreasureGiftMutation,
+    handleAcceptTreasureGift, 
     handleDeclineTreasureGift,
     triggerTreasuresRefetch,
     treasures,
   } = useTreasures();
- 
-  console.log(recGiftRequests.length); 
-  console.log(sentGiftRequests.length);
+  
 
   const { 
     checkForTreasureOwnership,
@@ -58,21 +43,22 @@ const GiftingFunctionsButton = ({
  
 
   const isOwner = checkForTreasureOwnership(treasureId, treasures, cTUserId);
-
-  const recGiftRequest = otherUserRecGiftRequest(
+ 
+  const recGiftRequestItem = otherUserRecGiftRequest(
     treasureId,
     recGiftRequests,
     cTUserId
   );
 
+  const recGiftRequest = !!recGiftRequestItem;
+ 
   const  sentGiftRequestItem  = otherUserSentGiftRequest(
     treasureId,
     sentGiftRequests,
     cTUserId
-  );
-  // console.log(sentGiftRequestItem);
-  const messageId = sentGiftRequestItem?.id || null;
-
+  ); 
+  const messageId = recGiftRequestItem?.id || null;
+ 
   const sentGiftRequest = !!sentGiftRequestItem;
  
   const { triggerInboxItemsRefetch } = useInbox();
@@ -94,9 +80,10 @@ const GiftingFunctionsButton = ({
       handleAcceptTreasureGift(messageId);
       triggerTreasuresRefetch();
       triggerInboxItemsRefetch();
-    } else {
-    console.log('no message id');
-    };
+    }
+    //  else {
+    // console.log('no message id');
+    // };
   };
 
   const handleDecline = () => {
@@ -106,18 +93,7 @@ const GiftingFunctionsButton = ({
       triggerInboxItemsRefetch();
     }
   };
-
-  // useEffect(() => {
-  //   if (acceptTreasureGiftMutation.isSuccess) {
-  //     showAppMessage(true, null, "Treasure accepted!");
-  //   }
-  // }, [acceptTreasureGiftMutation.isSuccess]);
-
-  // useEffect(() => {
-  //   if (acceptTreasureGiftMutation.isError) {
-  //     showAppMessage(true, null, "Oops! Friendship was not accepted.");
-  //   }
-  // }, [acceptTreasureGiftMutation.isError]);
+ 
 
   return (
     <>
@@ -234,33 +210,7 @@ const GiftingFunctionsButton = ({
           >
             <Text style={[themeStyles.primaryText]}>Request sent</Text>
           </View>
-        )}
-
-        {/* {isOwner && (
-          <View
-            style={{
-              borderRadius: 10,
-              flexDirection: "row",
-              alignItems: "center",
-              height: "100%",
-              flex: 1,
-              justifyContent: "center",
-
-              backgroundColor: themeStyles.darkestBackground.backgroundColor,
-              //  backgroundColor: "orange",
-            }}
-          >
-            <AntDesign
-              name="check"
-              size={size / 2}
-              color={`limegreen`}
-              style={{
-                borderRadius: size / 2,
-                backgroundColor: themeStyles.darkerBackground.backgroundColor,
-              }}
-            />
-          </View>
-        )} */}
+        )} 
       </View>
     </>
   );

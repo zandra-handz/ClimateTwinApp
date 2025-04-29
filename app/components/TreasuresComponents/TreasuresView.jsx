@@ -1,10 +1,8 @@
-import { View, FlatList, Text } from "react-native";
-import TreasuresUICard from "./TreasuresUICard";
-import React, { useEffect } from "react";
+import { View, FlatList  } from "react-native"; 
+import React  from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import TreasureListItem from "./TreasureListItem";
-import TreasureRequestListItem from "./TreasureRequestListItem";
-import { useFriends } from "@/src/context/FriendsContext";
+import TreasureRequestListItem from "./TreasureRequestListItem"; 
 import { useUser } from "@/src/context/UserContext";
 
 const TreasuresView = ({
@@ -13,20 +11,19 @@ const TreasuresView = ({
   recGiftRequests,
   sentGiftRequests,
 }) => {
-  const { user } = useUser();
-  const { giftRequests, giftRequestsReceived, giftRequestsSent } = useFriends();
-  const { appContainerStyles, themeStyles } = useGlobalStyles();
-
-  // useEffect(() => {
-  //   if (giftRequests && giftRequestsSent) {
-  //     console.log(`GIFT REQUESTS: `, giftRequestsSent);
-  //   }
-  // }, [giftRequests, giftRequestsSent]);
-
+  const { user } = useUser(); 
+  const { appContainerStyles  } = useGlobalStyles();
+ 
   return (
     <View style={[appContainerStyles.dataListContainer]}>
       <FlatList
         data={listData}
+       
+        fadingEdgeLength={100}
+        initialNumToRender={10}
+        removeClippedSubviews={false}
+        keyboardShouldPersistTaps='always'
+        //refreshing={} set true while getting new data
         keyExtractor={(item, index) =>
           item.id ? `${item.id}-${item.timestamp || index}` : index.toString()
         }

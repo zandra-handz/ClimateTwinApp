@@ -16,6 +16,8 @@ const RuinsUnmappedTreasuresView = ({itemChoices}) => {
 
  
   const handleInteractWithItem = (topic, base, query, index) => {
+
+   // console.log('interact with item', topic, base, query, index);
     if (topic) {
       router.push({
         pathname: "(treasures)/interact",

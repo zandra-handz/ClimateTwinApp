@@ -1,13 +1,12 @@
-import React, { createContext, useContext, useState, useEffect, useRef } from "react";
-import { Alert } from "react-native";
-import { useQueryClient, UseQueryResult, useQuery, useMutation } from "@tanstack/react-query";
+import React, { createContext, useContext, useState, useRef } from "react";
+ 
+import { useQueryClient,   useQuery, useMutation } from "@tanstack/react-query";
 import { useUser } from "./UserContext";
 import { useSurroundingsWS } from "./SurroundingsWSContext";
 import useLLMScripts from "../../app/llm/useLLMScripts";
 import { talkToGroq } from "../calls/groqcall";
 import useLiveWeather from "../../app/hooks/useLiveWeather";
-//import useNativePlants from "../hooks/useNativePlants";
-import useINaturalist from "../../app/hooks/useINaturalist";
+//import useNativePlants from "../hooks/useNativePlants"; 
 
 interface GroqHistoryData {
   [key: string]: any;
@@ -37,10 +36,9 @@ export const useGroqContext = () => {
 };
 
 export const GroqProvider: React.FC = ({ children }) => {
-    const { isAuthenticated, isInitializing } = useUser();
-    const { liveWeather, liveTemperature, liveWeatherId, liveWeatherString } = useLiveWeather();
-    //const { nativePlants } = useNativePlants();
-    const { iNaturalist } = useINaturalist();
+    const { user, isAuthenticated, isInitializing } = useUser();
+    const {   liveWeatherId, liveWeatherString } = useLiveWeather();
+    //const { nativePlants } = useNativePlants(); 
     const { lastLocationName, lastLocationId, lastLatAndLong } = useSurroundingsWS();
     const [latitude, longitude] = Array.isArray(lastLatAndLong) ? lastLatAndLong : [null, null];
     const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -79,12 +77,12 @@ export const GroqProvider: React.FC = ({ children }) => {
     const [currentGroqItemName, setCurrentGroqItemName] = useState<string | null>(null);
   
     const { data: groqHistory, isLoading, isPending, isError } = useQuery({
-      queryKey: ["groq", lastLocationId, "history", liveWeatherId],
+      queryKey: ["groq", user?.id, lastLocationId, "history", liveWeatherId],
       queryFn: () => talkToGroq({ role: roleHistory, prompt: promptHistory }),
       enabled: !!isAuthenticated && !!lastLocationId && !!liveWeatherId && !!liveWeatherString && !isInitializing,
       staleTime: locationCacheExpiration,
       gcTime: locationCacheExpiration,
-      onSuccess: () => {},
+ 
     });
   
     const getRoleAndPrompt = (keyword: string, locationGroqHistory: string, query: string) => {
@@ -111,14 +109,14 @@ export const GroqProvider: React.FC = ({ children }) => {
         return Promise.reject("Invalid keyword");
       },
       onMutate: ({ keyword, base }) => {
-        const queryKey = ["groq", lastLocationId, keyword, base];
+        const queryKey = ["groq", user?.id, lastLocationId, keyword, base];
         setCurrentGroqQueryKey(queryKey);
       },
       gcTime: locationCacheExpiration,
       retry: 1,
       onSuccess: (data, variables) => {
         const { keyword, base } = variables;
-        const queryKey = ["groq", lastLocationId, keyword, base];
+        const queryKey = ["groq", user?.id, lastLocationId, keyword, base];
   
         const name = data.split("\n").find((line) => line.trim().startsWith("NAME:"))?.replace("NAME: ", "").trim() || null;
         const imageUrls = data.split("\n").filter((line) => line.trim().startsWith("IMAGELINK:"))
@@ -160,7 +158,7 @@ export const GroqProvider: React.FC = ({ children }) => {
         return; // Add return here to stop the function execution
         }
   
-      const queryKey = ["groq", lastLocationId, keyword, base];
+      const queryKey = ["groq", user?.id, lastLocationId, keyword, base];
       const cachedData = queryClient.getQueryData(queryKey);
       if (cachedData) return;
   
@@ -175,7 +173,7 @@ export const GroqProvider: React.FC = ({ children }) => {
     };
   
     const logGroqState = () => {
-      const queryKey = ["groq", lastLocationId];
+      const queryKey = ["groq", user?.id, lastLocationId];
       const queryState = queryClient.getQueryState(queryKey);
       console.log("Last Updated At:", new Date(queryState?.dataUpdatedAt || 0));
     };

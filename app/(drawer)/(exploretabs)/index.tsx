@@ -163,7 +163,7 @@ const index = () => {
   // }, [surroundingsViews]);
 
   const scrollToIndex = (index) => {
-    console.log("SCROLL TO INDEX!");
+   // console.log("SCROLL TO INDEX!");
     if (flatListRef.current && surroundingsViews.length > index) {
       flatListRef.current.scrollToIndex({ index, animated: true });
       handleVisibilityToggles(index);
@@ -258,11 +258,13 @@ const index = () => {
           </>
         )}
         <View style={appContainerStyles.innerFlexStartContainer}>
-          {!currentSurroundingsIsPending && surroundingsViews && (
+          {surroundingsViews && ( // removed !currentSurroundingsIsPending and put refreshing below to test that out
             <>
               <Animated.FlatList
                 ref={flatListRef}
-                data={surroundingsViews}
+                data={surroundingsViews} 
+                refreshing={currentSurroundingsIsPending} 
+                fadingEdgeLength={20}
                 getItemLayout={(data, index) => ({
                   length: ITEM_HEIGHT + ITEM_BOTTOM_MARGIN,
                   offset: (ITEM_HEIGHT + ITEM_BOTTOM_MARGIN) * index,

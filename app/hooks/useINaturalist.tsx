@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "../../src/context/UserContext";
 import { useSurroundingsWS } from "../../src/context/SurroundingsWSContext";
@@ -30,43 +30,30 @@ interface INaturalist {
   per_page: number;
   results: INaturalistObservation[];
 }
-
-const defaultINaturalist: INaturalist = {
-  page: 1,
-  per_page: 30,
-  results: [],
-};
+ 
 
 const useINaturalist = () => {
-  const { isAuthenticated, isInitializing } = useUser();
+  const { user, isAuthenticated, isInitializing } = useUser();
   const { lastLocationId, lastLatAndLong } = useSurroundingsWS();
   const [lat, lon] = Array.isArray(lastLatAndLong) ? lastLatAndLong : [null, null];
   const locationCacheExpiration = 1000 * 60 * 60; // 1 hour
-
-  const [iNaturalist, setINaturalist] = useState<INaturalist>(defaultINaturalist);
+ 
 
   const {
-    data: iNaturalistData,
-    isFetching,
-    isPending,
-    isSuccess,
+    data: iNaturalist, 
+    isPending: iNaturalistIsPending,
+    isSuccess: iNaturalistIsSuccess,
+    isError: iNaturalistIsError,
   } = useQuery<INaturalist | null>({
-    queryKey: ["iNaturalist", lastLocationId, lat, lon],
+    queryKey: ["iNaturalist", lastLocationId, lat, lon, user?.id],
     queryFn: () => getINaturalist({ lat, lon }),
     enabled: !!isAuthenticated && !!lastLocationId && !isInitializing && !!lastLatAndLong,
     staleTime: locationCacheExpiration,
     gcTime: locationCacheExpiration,
   });
+ 
 
-  useEffect(() => {
-    if (iNaturalistData) {
-      setINaturalist(iNaturalistData);
-    } else {
-      setINaturalist(defaultINaturalist);
-    }
-  }, [iNaturalistData]);
-
-  return { iNaturalist };
+  return { iNaturalist, iNaturalistIsPending, iNaturalistIsSuccess, iNaturalistIsError };
 };
 
 export default useINaturalist;

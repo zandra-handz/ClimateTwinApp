@@ -1,29 +1,23 @@
-import { View, Text, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react"; 
-import INaturalistImageCard from "./INaturalistImageCard";
-import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
+import { View, Text } from "react-native";
+import React  from "react"; 
+import INaturalistImageCard from "./INaturalistImageCard"; 
 import useINaturalist from "@/app/hooks/useINaturalist";
+import useInlineComputations from "@/app/hooks/useInlineComputations";
 
 
 
-//pass topic and base and pass those in to touchable on press to start allowing treasure saving
+ 
 const INaturalistTray = ({ index, item, topic, base, onPress, width=300, height=300 }) => {
-  const { iNaturalist } = useINaturalist(); // Use iNaturalist data from the hook
-  const { handleAvgPhotoColor, avgPhotoColor } = useGlobalStyles();
-
-  // useEffect(() => {
-  //   if (item) {
-  //       console.log(`item in naturalist tray: `, item);
-  //   }
-  // }, [item]);
+  const { iNaturalist } = useINaturalist(); 
 
  
 
-  const label = iNaturalist.results[index]?.taxon?.preferred_common_name || "No common name available";
-  const scientificLabel = iNaturalist.results[index]?.taxon?.preferred_common_name || "No common name available"
+  const { getiNaturalistItemData } = useInlineComputations();
+ 
+
+  const { resultsExist, label, scientificLabel, mediumImageUrl, imageUrl } = getiNaturalistItemData(iNaturalist, index);
   const query = `${label} (${scientificLabel})`;
-  //const wikiLink = iNaturalist.results[index]?.taxon?.wikipedia_url || `No wiki available`;
-        
+ 
 
   return (
     <View
@@ -40,20 +34,18 @@ const INaturalistTray = ({ index, item, topic, base, onPress, width=300, height=
       }}
     >
       {/* Render the image card with data from iNaturalist */}
-      {iNaturalist && iNaturalist.results && iNaturalist.results[index] ? (
+      {resultsExist ? (
        
        <INaturalistImageCard
-          value={
-            // Accessing medium_url from default_photo
-            iNaturalist.results[index]?.taxon?.default_photo?.medium_url ||
-            iNaturalist.results[index]?.taxon?.default_photo?.url ||
-            null
-          }
-          scientificLabel={scientificLabel}
-          label={label}
-          accessibilityLabel={
-            iNaturalist.results[index]?.taxon?.name || "No description available"
-          }
+       value={
+        // Accessing medium_url from default_photo
+        mediumImageUrl || imageUrl ||
+        null
+      }
+      scientificLabel={scientificLabel}
+      label={label}
+      accessibilityLabel={
+        scientificLabel }
           base={base}
           index={index}
           query={query}

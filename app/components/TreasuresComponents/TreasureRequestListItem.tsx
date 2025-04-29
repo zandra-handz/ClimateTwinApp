@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Modal, FlatList } from "react-native";
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
-import { useFriends } from "@/src/context/FriendsContext";
+ 
 import Avatar from "../FriendsComponents/Avatar";
 import useDateTimeFunctions from "@/app/hooks/useDateTimeFunctions";
 import GiftingFunctionsButton from "./GiftingFunctionsButton";  
