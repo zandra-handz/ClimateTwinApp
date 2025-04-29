@@ -2,10 +2,10 @@ import { View, Text } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { useAppMessage } from "@/src/context/AppMessageContext";
-import useProfile from "@/app/hooks/useProfile";
+import useProfile from "@/src/hooks/useProfile";
 import { useUser } from "@/src/context/UserContext";
 import { Image } from "expo-image";
-import useImageUploadFunctions from "@/app/hooks/useImageUploadFunction";
+import useImageUploadFunctions from "@/src/hooks/useImageUploadFunction";
 import React, { useState, useEffect, useRef } from "react";
 import ActionsFooter from "@/app/components/ActionsFooter";
 //test

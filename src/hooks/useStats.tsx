@@ -3,8 +3,8 @@
 import React, { useMemo, useRef } from "react";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 
-import { useUser } from "../../src/context/UserContext";
-import { getStats } from "../../src/calls/apicalls";
+import { useUser } from "../context/UserContext";
+import { getStats } from "../calls/apicalls";
 
 const useStats = () => {
   const { isAuthenticated, isInitializing } = useUser();

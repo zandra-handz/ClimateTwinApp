@@ -9,12 +9,12 @@ import SmithsonianTray from "../SmithsonianComponents/SmithsonianTray";
 
 import INaturalistHeader from "../INaturalistComponents/INaturalistHeader";
 import { WebView } from "react-native-webview";
-import useINaturalist from "@/app/hooks/useINaturalist";
+import useINaturalist from "@/src/hooks/useINaturalist";
 import { SafeAreaView } from "react-native-safe-area-context";
 import ComponentSpinner from "../Scaffolding/ComponentSpinner";
 import { useFocusEffect } from "expo-router";
 
-import useInlineComputations from "@/app/hooks/useInlineComputations";
+import useInlineComputations from "@/src/hooks/useInlineComputations";
 
 const GroqFullScreen = ({
   dataObject = {},

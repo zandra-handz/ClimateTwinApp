@@ -1,6 +1,6 @@
 import { View, Text } from "react-native";
 import React from "react";
-import useInbox from "../../hooks/useInbox";
+import useInbox from "../../../src/hooks/useInbox";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 
 const NewItemsDot = ({ showUnread = "all" }) => {

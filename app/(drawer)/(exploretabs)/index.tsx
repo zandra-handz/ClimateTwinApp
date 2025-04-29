@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import { Animated, View } from "react-native";
 import { useFocusEffect } from "expo-router";
-import { useGeolocationWatcher } from "../../hooks/useCurrentLocationWatcher";
+import { useGeolocationWatcher } from "../../../src/hooks/useCurrentLocationWatcher";
 
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { useSurroundings } from "../../../src/context/CurrentSurroundingsContext";
-import useInlineComputations from "@/app/hooks/useInlineComputations";
+import useInlineComputations from "@/src/hooks/useInlineComputations";
 import CurrentSurroundingsView from "@/app/components/SurroundingsComponents/CurrentSurroundingsView";
 import PortalSurroundingsView from "@/app/components/SurroundingsComponents/PortalSurroundingsView";
 import RuinsSurroundingsView from "@/app/components/SurroundingsComponents/RuinsSurroundingsView";

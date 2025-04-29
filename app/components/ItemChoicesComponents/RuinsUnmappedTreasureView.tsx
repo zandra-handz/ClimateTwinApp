@@ -3,7 +3,7 @@ import React  from "react";
 import { useRouter } from "expo-router"; 
 import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
 import INaturalistTray from "../INaturalistComponents/iNaturalistTray";
-import useINaturalist from "@/app/hooks/useINaturalist";
+import useINaturalist from "@/src/hooks/useINaturalist";
 
 
 //Unmapped = image results are arbitrarily assigned to base

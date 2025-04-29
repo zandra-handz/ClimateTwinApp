@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
-import { useGeolocationWatcher } from "../../hooks/useCurrentLocationWatcher";  
+import { useGeolocationWatcher } from "../../../src/hooks/useCurrentLocationWatcher";  
 import HomeSurroundingsView from "@/app/components/HomeSurroundingsComponents/HomeSurroundingsView";
   
 import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";

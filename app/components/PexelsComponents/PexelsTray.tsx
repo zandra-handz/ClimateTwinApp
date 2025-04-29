@@ -6,7 +6,7 @@ import React, {
   useLayoutEffect,
 } from "react";
 import PexelsImageCard from "./PexelsImageCard";
-import usePexels from "@/app/hooks/usePexels";
+import usePexels from "@/app/DELETE/usePexels";
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
 import { useFocusEffect } from "expo-router";
 

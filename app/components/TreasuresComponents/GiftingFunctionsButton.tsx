@@ -8,9 +8,9 @@ import {
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
  
 import { Feather } from "@expo/vector-icons"; 
-import useInbox from "@/app/hooks/useInbox"; 
-import useInlineComputations from "@/app/hooks/useInlineComputations";
-import useTreasures from "@/app/hooks/useTreasures";
+import useInbox from "@/src/hooks/useInbox"; 
+import useInlineComputations from "@/src/hooks/useInlineComputations"; 
+import { useTreasures } from "@/src/context/TreasuresContext";
 
 import DoubleCheckerWithMessageInput from "../Scaffolding/DoubleCheckerWithMessageInput";
  

@@ -5,7 +5,7 @@ import { useUser } from "./UserContext";
 import { useSurroundingsWS } from "./SurroundingsWSContext";
 import useLLMScripts from "../../app/llm/useLLMScripts";
 import { talkToGroq } from "../calls/groqcall";
-import useLiveWeather from "../../app/hooks/useLiveWeather";
+import useLiveWeather from "../hooks/useLiveWeather";
 //import useNativePlants from "../hooks/useNativePlants"; 
 
 interface GroqHistoryData {

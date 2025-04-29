@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Platform } from 'react-native';
-import { useGlobalStyles } from '../../src/context/GlobalStylesContext';
+import { useGlobalStyles } from '../context/GlobalStylesContext';
  
 // To help me with the process of refactoring useEffects to computations at thte tops of components instead 
 // :)

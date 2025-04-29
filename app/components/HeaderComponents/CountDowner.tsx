@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useCallback } from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { useSurroundingsWS } from "../../../src/context/SurroundingsWSContext"; 
 import Animated, { useSharedValue, useAnimatedProps } from "react-native-reanimated";
-import useDateTimeFunctions from "../../hooks/useDateTimeFunctions";
+import useDateTimeFunctions from "../../../src/hooks/useDateTimeFunctions";
 
 const CountDowner = () => {
   const { lastLocationAccessTime, lastLocationId, alwaysReRender } = useSurroundingsWS();

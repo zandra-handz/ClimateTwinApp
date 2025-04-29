@@ -107,7 +107,7 @@ export default () => {
             }}
           />
 
-<Stack.Screen
+          <Stack.Screen
             name="user"
             options={({ route }) => ({
               headerShown: true,
@@ -134,7 +134,6 @@ export default () => {
               gestureEnabled: true,
             })}
           />
-        
         </Stack>
       </SafeAreaView>
     </GestureHandlerRootView>

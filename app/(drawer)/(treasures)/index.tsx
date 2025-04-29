@@ -2,30 +2,30 @@ import React from "react";
 import { View } from "react-native";
 import { useRouter } from "expo-router";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
-
-//import useTreasures from "../../hooks/useTreasures";
-
 import { useTreasures } from "@/src/context/TreasuresContext";
 import TreasuresView from "../../components/TreasuresComponents/TreasuresView";
 import ActionsFooter from "@/app/components/ActionsFooter";
 import NothingHere from "@/app/components/Scaffolding/NothingHere";
 import { usePendingRequests } from "@/src/context/PendingRequestsContext";
-import useInlineComputations from "@/app/hooks/useInlineComputations";
+import useInlineComputations from "@/src/hooks/useInlineComputations";
 import { useUser } from "@/src/context/UserContext";
- 
 
 const index = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { treasures } = useTreasures();
+  const { treasures, handleGetTreasure } = useTreasures();
   const { user } = useUser();
 
   const { pendingRequests } = usePendingRequests();
-   const { sortPendingGiftRequests, getNonPendingTreasures  } = useInlineComputations();
-   const allGiftRequests = pendingRequests?.pending_gift_requests;
+  const { sortPendingGiftRequests, getNonPendingTreasures } =
+    useInlineComputations();
+  const allGiftRequests = pendingRequests?.pending_gift_requests;
 
-   const { recGiftRequests, sentGiftRequests } = sortPendingGiftRequests(allGiftRequests, user?.id);
+  const { recGiftRequests, sentGiftRequests } = sortPendingGiftRequests(
+    allGiftRequests,
+    user?.id
+  );
   const nonPendingTreasures = getNonPendingTreasures(treasures);
-    
+
   const router = useRouter();
 
   const handlePress = () => {
@@ -34,6 +34,7 @@ const index = () => {
 
   const handleViewTreasure = (id, descriptor) => {
     if (id) {
+      handleGetTreasure(id);
       router.push({
         pathname: "(treasures)/[id]",
         params: { id: id, descriptor: descriptor },
@@ -55,7 +56,7 @@ const index = () => {
             (allGiftRequests && allGiftRequests?.length > 0)) && (
             <TreasuresView
               listData={[
-                ...( recGiftRequests ?? []),
+                ...(recGiftRequests ?? []),
                 ...(sentGiftRequests ?? []),
                 ...(nonPendingTreasures ?? []),
               ]}
@@ -73,7 +74,12 @@ const index = () => {
             />
           )}
         </View>
-        <ActionsFooter onPressLeft={() => router.back()} labelLeft={"Back"} />
+        <ActionsFooter
+          onPressLeft={() => router.back()}
+          labelLeft={"Back"}
+          onPressRight={() => router.push("/search")}
+          labelRight={"Search treasures"}
+        />
       </View>
     </>
   );

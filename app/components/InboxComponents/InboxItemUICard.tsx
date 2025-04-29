@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
-import useDateTimeFunctions from "../../hooks/useDateTimeFunctions";
+import useDateTimeFunctions from "../../../src/hooks/useDateTimeFunctions";
 import CuteDetailBox from "../CuteDetailBox";
 import SingleDetailPanel from "../SingleDetailPanel";
 import GoToItemButton from "../GoToItemButton";

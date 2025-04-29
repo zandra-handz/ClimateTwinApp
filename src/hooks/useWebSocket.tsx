@@ -1,8 +1,8 @@
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useFocusEffect } from "expo-router";
 import { useSharedValue } from "react-native-reanimated";
-import { useUser } from "../../src/context/UserContext";
-import { useSurroundingsWS } from "../../src/context/SurroundingsWSContext";
+import { useUser } from "../context/UserContext";
+import { useSurroundingsWS } from "../context/SurroundingsWSContext";
 import * as SecureStore from "expo-secure-store";
 
 const useWebSocket = () => {

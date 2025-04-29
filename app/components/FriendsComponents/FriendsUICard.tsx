@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { useAppMessage } from "@/src/context/AppMessageContext";
 import { useRouter } from "expo-router";
-import useDateTimeFunctions from "../../hooks/useDateTimeFunctions";
+import useDateTimeFunctions from "../../../src/hooks/useDateTimeFunctions";
 import CuteDetailBox from "../CuteDetailBox";
 import GoToItemButton from "../GoToItemButton";
 import UnfriendButton from "../Scaffolding/UnfriendButton";

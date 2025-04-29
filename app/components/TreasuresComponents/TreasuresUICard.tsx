@@ -1,19 +1,20 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React, { useState } from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
-import useDateTimeFunctions from "../../hooks/useDateTimeFunctions";
+import useDateTimeFunctions from "../../../src/hooks/useDateTimeFunctions";
 import CuteDetailBox from "../CuteDetailBox";
 import GoToItemButton from "../GoToItemButton";
 import SendButton from "../Scaffolding/SendButton";
 import ReturnItemButton from "../Scaffolding/ReturnItemButton";
-import DoubleChecker from "../Scaffolding/DoubleChecker";
-import useTreasures from "@/app/hooks/useTreasures";
+import DoubleChecker from "../Scaffolding/DoubleChecker"; 
+import { useTreasures } from "@/src/context/TreasuresContext";
  
 import { useFriends } from "@/src/context/FriendsContext";
 import { router } from "expo-router";
+import GiftingFunctionsButton from "./GiftingFunctionsButton";
  
 
-const TreasuresUICard = ({ data, onOpenTreasurePress, isFullView }) => {
+const TreasuresUICard = ({ data, onOpenTreasurePress, isFullView, recGiftRequests, sentGiftRequests  }) => {
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
   const { formatUTCToMonthDayYear } = useDateTimeFunctions();
   const { friends } = useFriends();
@@ -210,8 +211,7 @@ const TreasuresUICard = ({ data, onOpenTreasurePress, isFullView }) => {
           yesButtonText="Yes"
           onPress={handleDeleteTreasure}
         />
-      )} */}
-      {data?.pending != true && (
+      )} */} 
         <View
           style={[
             themeStyles.primaryBackground,
@@ -353,8 +353,7 @@ const TreasuresUICard = ({ data, onOpenTreasurePress, isFullView }) => {
             <ReturnItemButton onPress={() => handleToggleDoubleChecker()} />
               </View>
           )} */}
-        </View>
-      )}
+        </View> 
     </>
   );
 };

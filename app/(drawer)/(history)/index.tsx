@@ -2,7 +2,7 @@ import React from "react";
 import { View } from "react-native";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 
-import useHistory from "../../hooks/useHistory";
+import useHistory from "../../../src/hooks/useHistory";
 
 import DataList from "../../components/Scaffolding/DataList";
 

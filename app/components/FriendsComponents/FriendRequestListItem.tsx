@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Modal, FlatList } from "react-native";
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext"; 
 import Avatar from "../FriendsComponents/Avatar";
-import useDateTimeFunctions from "@/app/hooks/useDateTimeFunctions";
+import useDateTimeFunctions from "@/src/hooks/useDateTimeFunctions";
 import FriendingFunctionsButton from "./FriendingFunctionsButton"; 
 import DoubleCheckerWithMessageDisplay from "../Scaffolding/DoubleCheckerWithMessageDisplay";
 import { AntDesign, Feather } from "@expo/vector-icons";

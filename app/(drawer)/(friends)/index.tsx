@@ -9,7 +9,7 @@ import { useFriends } from "@/src/context/FriendsContext";
 import FriendsView from "@/app/components/FriendsComponents/FriendsView";
 
 import { usePendingRequests } from "@/src/context/PendingRequestsContext";
-import useInlineComputations from "@/app/hooks/useInlineComputations";
+import useInlineComputations from "@/src/hooks/useInlineComputations";
 
 // MOVED INSIDE FRIENDSVIEW TO INCLUDE IN THE SAME FLATLIST
 // import FriendRequestsView from "@/app/components/FriendsComponents/FriendRequestsView";
@@ -24,7 +24,7 @@ import { useUser } from "@/src/context/UserContext";
 const index = () => {
   const { themeStyles,  appContainerStyles } = useGlobalStyles();
  
-  const { friends } =
+  const { friends, handleGetFriend, handleGetPublicProfile } =
     useFriends();
 
     const { user } = useUser();
@@ -40,7 +40,9 @@ const index = () => {
   const router = useRouter();
 
   const handleViewFriend = (id, friendName) => {
+
     if (id) {
+     handleGetFriend(id);
       router.push({
         pathname: "/[id]",
         params: { id: id, friendName: friendName },
@@ -50,6 +52,7 @@ const index = () => {
 
   const handleViewUser = (id, friendName) => {
     if (id) {
+      handleGetPublicProfile(id);
       router.push({
         pathname: "/user",
         params: { id: id, friendName: friendName },

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { View, ScrollView } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
@@ -10,8 +10,10 @@ import ActionsFooter from "@/app/components/ActionsFooter";
 
 import DoubleChecker from "@/app/components/Scaffolding/DoubleChecker";
 import { usePendingRequests } from "@/src/context/PendingRequestsContext";
-import useInlineComputations from "@/app/hooks/useInlineComputations";
+import useInlineComputations from "@/src/hooks/useInlineComputations";
 import { useUser } from "@/src/context/UserContext";
+import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
+ 
 // This accesses friends and checks for friendships so that i can move it if needed or
 // or link from multiple places
 
@@ -25,6 +27,7 @@ const userdetails = () => {
     handleGetPublicProfile,
     getPublicProfileMutation,
     viewingPublicProfile,
+    setViewingPublicProfile,
   } = useFriends();
   const {
     friends,
@@ -48,6 +51,19 @@ const userdetails = () => {
   const handleToggleDoubleChecker = () => {
     setDoubleCheckerVisible((prev) => !prev);
   };
+
+  useLayoutEffect(() => {
+    if (id) {
+      console.log('moved this to the navigate button');
+     // handleGetPublicProfile(id);
+    }
+
+    // Cleanup the data when leaving the screen
+    return () => {
+      console.log('setting viewingfriend to null');
+      setViewingPublicProfile(null); // Reset viewingFriend when navigating away
+    };
+  }, [id]);
 
   useEffect(() => {
     if (friendRequestMutation.isSuccess) {
@@ -81,11 +97,7 @@ const userdetails = () => {
     }
   };
 
-  useEffect(() => {
-    if (id) {
-      handleGetPublicProfile(id);
-    }
-  }, [id]);
+
 
   return (
     <>
@@ -99,6 +111,17 @@ const userdetails = () => {
           onPress={handleAddFriend}
         />
       )}
+      {getPublicProfileMutation.isPending && (
+                <ComponentSpinner
+                  showSpinner={true}
+                  backgroundColor={themeStyles.primaryBackground.backgroundColor}
+                  spinnerType={'circle'}
+                  offsetStatusBarHeight={true}
+                />
+
+      )}
+      {viewingPublicProfile && !getPublicProfileMutation.isPending && (
+        
       <View
         style={[
           appContainerStyles.screenContainer,
@@ -116,6 +139,8 @@ const userdetails = () => {
         )}
         <ActionsFooter onPressLeft={() => router.back()} labelLeft={"Back"} />
       </View>
+      
+    )}
     </>
   );
 };

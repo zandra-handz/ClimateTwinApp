@@ -8,7 +8,7 @@ import DrawerCustomizer from "../components/DrawerNavComponents/DrawerCustomizer
  
 import * as Notifications from 'expo-notifications';
 
-import useExploreRoute from "../hooks/useExploreRoute";
+import useExploreRoute from "../../src/hooks/useExploreRoute";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({

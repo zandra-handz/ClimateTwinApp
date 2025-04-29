@@ -7,8 +7,8 @@ import SignInButton from "./components/SignInButton";
 import { LinearGradient } from "expo-linear-gradient";
 import CustomStatusBar from "./components/CustomStatusBar";
 import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
-import useProtectedRoute from "./hooks/useProtectedRoute";
-import useExploreRoute from "./hooks/useExploreRoute";
+import useProtectedRoute from "../src/hooks/useProtectedRoute";
+import useExploreRoute from "../src/hooks/useExploreRoute";
 
 const Index = () => {
   const { themeStyles, manualGradientColors, constantColorsStyles } =

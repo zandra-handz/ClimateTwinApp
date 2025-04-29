@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
   
 import Avatar from "../FriendsComponents/Avatar";  
-import useDateTimeFunctions from "@/app/hooks/useDateTimeFunctions";
+import useDateTimeFunctions from "@/src/hooks/useDateTimeFunctions";
 import FriendingFunctionsButton from "./FriendingFunctionsButton"; 
 
 const FriendListItem = ({

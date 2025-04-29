@@ -1,8 +1,8 @@
 import { View, Text } from "react-native";
 import React  from "react"; 
 import INaturalistImageCard from "./INaturalistImageCard"; 
-import useINaturalist from "@/app/hooks/useINaturalist";
-import useInlineComputations from "@/app/hooks/useInlineComputations";
+import useINaturalist from "@/src/hooks/useINaturalist";
+import useInlineComputations from "@/src/hooks/useInlineComputations";
 
 
 

@@ -9,17 +9,17 @@ import { cleanTreasuresData } from "@/src/calls/apicalls";
 
 import Avatar from "@/app/components/FriendsComponents/Avatar";
 
-import useDateTimeFunctions from "@/app/hooks/useDateTimeFunctions";
+import useDateTimeFunctions from "@/src/hooks/useDateTimeFunctions";
 
 import CuteDetailBox from "@/app/components/CuteDetailBox";
 
-import useImageUploadFunctions from "@/app/hooks/useImageUploadFunction";
+import useImageUploadFunctions from "@/src/hooks/useImageUploadFunction";
 import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
 import ActionsFooter from "@/app/components/ActionsFooter";
 
 import DeleteItemButton from "@/app/components/Scaffolding/DeleteItemButton";
 import GoToItemButton from "@/app/components/GoToItemButton";
-import useProfile from "@/app/hooks/useProfile";
+import useProfile from "@/src/hooks/useProfile";
 
 import DoubleChecker from "@/app/components/Scaffolding/DoubleChecker";
 

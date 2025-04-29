@@ -114,19 +114,35 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
   //   }, [isError]);
 
   const handleGetFriend = async (id: number) => {
-    try {
-      const friend = await queryClient.fetchQuery<Friend>({
-        queryKey: ["friend", user?.id, id],
-        queryFn: () => getFriend(id),
-      });
-
-      if (friend) {
-        setViewingFriend(friend);
-      }
-    } catch (error) {
-      console.error("Error fetching friend: ", error);
+    const cacheKey = ["friend", user?.id, id];
+    const cachedFriend = queryClient.getQueryData<Friend>(cacheKey);
+  
+    if (cachedFriend) {
+      setViewingFriend(cachedFriend);
+    } else {
+      await getFriendMutation.mutateAsync(id);
     }
   };
+  
+  const getFriendMutation = useMutation({
+    mutationFn: (friendId: number) => getFriend(friendId),
+    onSuccess: (data, friendId) => {
+      setViewingFriend(data);
+      queryClient.setQueryData(["friend", user?.id, friendId], data); // correctly uses friendId
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => {
+        getFriendMutation.reset();
+      }, 2000);
+    },
+    onError: (error) => {
+      setViewingFriend(null);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => {
+        getFriendMutation.reset();
+      }, 2000);
+    },
+  });
+  
 
   const searchUsersMutation = useMutation({
     mutationFn: (query: string) => searchUsers(query),
@@ -174,11 +190,23 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
     searchUsersMutation.mutate(query);
   };
 
+  const handleGetPublicProfile = async (userId: number) => {
+    const cacheKey = ["publicProfile", user?.id, userId];
+    const cachedProfile = queryClient.getQueryData<PublicProfile>(cacheKey);
+  
+    if (cachedProfile) {
+      setViewingPublicProfile(cachedProfile);
+    } else {
+      await getPublicProfileMutation.mutateAsync(userId);
+    }
+  };
+  
   const getPublicProfileMutation = useMutation<PublicProfile, Error, number>({
     mutationFn: (userId: number) => getPublicProfile(userId),
-    onSuccess: (data) => {
+    onSuccess: (data, userId) => {
       setViewingPublicProfile(data);
-
+      queryClient.setQueryData(["publicProfile", user?.id, userId], data); // Cache the public profile
+  
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -190,16 +218,14 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
-
+  
       timeoutRef.current = setTimeout(() => {
         getPublicProfileMutation.reset();
       }, 2000);
     },
   });
+  
 
-  const handleGetPublicProfile = (userId: number) => {
-    getPublicProfileMutation.mutate(userId);
-  };
 
   const handleSendFriendRequest = (recipientId: number, message: string) => {
     if (!recipientId || !user?.id) {
@@ -361,6 +387,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
       value={{
         friends,
         handleGetFriend,
+        getFriendMutation,
         replaceUserIdWithFriendName,
         handleSearchUsers,
         searchUsersMutation,
@@ -374,9 +401,11 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
         handleDeleteFriendship,
         deleteFriendshipMutation,
         viewingFriend,
+        setViewingFriend, // using to clear screen
         handleGetPublicProfile,
         getPublicProfileMutation,
         viewingPublicProfile, 
+        setViewingPublicProfile, // using to clear screen
       }}
     >
       {children}

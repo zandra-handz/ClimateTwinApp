@@ -4,7 +4,7 @@ import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
 
 import ComponentSpinner from "./Scaffolding/ComponentSpinner";
 import { useSurroundings } from "../../src/context/CurrentSurroundingsContext";
-import useInlineComputations from "@/app/hooks/useInlineComputations";
+import useInlineComputations from "@/src/hooks/useInlineComputations";
 
 const ScrollDetailPanel = ({ label, value, opacity, isLoading = false }) => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();

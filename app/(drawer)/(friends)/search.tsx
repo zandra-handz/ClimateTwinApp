@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { View } from "react-native";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import ActionsFooter from "@/app/components/ActionsFooter";
@@ -7,11 +7,12 @@ import { useFriends } from "@/src/context/FriendsContext";
 import { useUser } from "@/src/context/UserContext";
 
 import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
-import DebouncedUserSearch from "@/app/components/DebouncedUserSearch";
+import DebouncedSearch from "@/app/components/DebouncedSearch";
+ 
 import SearchResultsView from "@/app/components/FriendsComponents/SearchResultsView";
 import DoubleChecker from "@/app/components/Scaffolding/DoubleChecker";
 import { usePendingRequests } from "@/src/context/PendingRequestsContext";
-import useInlineComputations from "@/app/hooks/useInlineComputations";
+import useInlineComputations from "@/src/hooks/useInlineComputations";
 
 const search = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
@@ -23,6 +24,7 @@ const search = () => {
     handleSearchUsers,
     handleSendFriendRequest,
     searchUsersMutation,
+    handleGetPublicProfile,
     
   } = useFriends();
 
@@ -47,7 +49,9 @@ const search = () => {
   };
 
   const handleViewUser = (user) => {
+
     if (user.id) {
+      handleGetPublicProfile(user.id);
       router.push({
         pathname: "(friends)/user",
         params: { id: user.id, username: user.username },
@@ -69,7 +73,7 @@ const search = () => {
         ]}
       >
         <View style={{ height: 50, width: "100%", marginVertical: 6 }}>
-          <DebouncedUserSearch onEnter={handleSearchUsers} />
+          <DebouncedSearch onEnter={handleSearchUsers} placeholder={`Search users`} />
         </View>
 
         <View style={appContainerStyles.innerFlexStartContainer}>
@@ -84,9 +88,10 @@ const search = () => {
           {userSearchResults && !searchUsersMutation.isPending && (
             <SearchResultsView
               data={userSearchResults}
-              onViewUserPress={handleViewUser}
-              recFriendRequests={recFriendRequests}
-              sentFriendRequests={sentFriendRequests}
+              onViewResultPress={handleViewUser}
+              recRequests={recFriendRequests}
+              sentRequests={sentFriendRequests}
+              friendsOrTreasures={'friends'}
             />
           )}
         </View>

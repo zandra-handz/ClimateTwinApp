@@ -4,7 +4,7 @@ import { useRouter } from "expo-router";
 import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
 
 import INaturalistTray from "../INaturalistComponents/iNaturalistTray";
-import useINaturalist from "@/app/hooks/useINaturalist";
+import useINaturalist from "@/src/hooks/useINaturalist";
 
 //onPress feature depends on groqHistory
 

@@ -12,7 +12,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import * as Device from "expo-device";
 import Constants from "expo-constants";
 import { Platform, AppState } from "react-native";
-import useProtectedRoute from "../../app/hooks/useProtectedRoute"; 
+import useProtectedRoute from "../hooks/useProtectedRoute"; 
 import {
   signup,
   signin,

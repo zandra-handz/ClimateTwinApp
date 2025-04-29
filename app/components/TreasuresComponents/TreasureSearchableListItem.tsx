@@ -1,16 +1,16 @@
-import React  from "react";
-import { View, Text, TouchableOpacity  } from "react-native";
+import React from "react";
+import { View, Text, TouchableOpacity } from "react-native";
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
  
 import Avatar from "../FriendsComponents/Avatar";
 import useDateTimeFunctions from "@/src/hooks/useDateTimeFunctions";
 import GiftingFunctionsButton from "./GiftingFunctionsButton";
-import {  Feather } from "@expo/vector-icons";
+import { AntDesign, Feather } from "@expo/vector-icons";
 import { useUser } from "@/src/context/UserContext";
 
 
 
-const TreasureListItem = ({
+const TreasureSearchableListItem = ({
   treasure,
   avatar=null,
   size,
@@ -90,6 +90,37 @@ const TreasureListItem = ({
    );
 
 
+      const findCurrentOwner = (
+       <>
+       {treasure?.user === user?.id && (
+                <Text
+                style={[
+                  appFontStyles.treasureCollectionDetailsText,
+                  themeStyles.primaryText,
+                ]}
+              >
+                Current keeper:{" "}
+                You
+                
+              </Text>
+
+       ) }
+       {treasure?.user !== user?.id && (
+         <Text
+           style={[
+             appFontStyles.treasureCollectionDetailsText,
+             themeStyles.primaryText,
+           ]}
+         >
+           Current keeper:{" "}
+           {(treasure?.user_username) || 
+             "unknown" }
+           
+         </Text>
+      )}
+       </>
+     );
+   
 
    const findLocation = (
     <>
@@ -131,7 +162,7 @@ const TreasureListItem = ({
         /> 
         <Text style={[themeStyles.primaryText]}>{findLocation}</Text>
         </View>
-        <Text style={[themeStyles.primaryText]}>{findOwnedSince}</Text>
+        <Text style={[themeStyles.primaryText]}>{findCurrentOwner}</Text>
         {/* <Text style={[themeStyles.primaryText]}>
         {findDetails}
       </Text> */}
@@ -163,4 +194,4 @@ const TreasureListItem = ({
   );
 };
 
-export default TreasureListItem;
+export default TreasureSearchableListItem;

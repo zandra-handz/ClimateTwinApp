@@ -523,6 +523,26 @@ export const searchTreasures = async (query : string) => {
 };
 
 
+// haven't made protected endpoint yet, it will work the same but check the searchable field to ensure can
+// be viewed by unassociated parties
+export const getSearchableTreasure = async (treasureId) => {
+    try {
+      //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.get(`/users/treasure/${treasureId}/`);
+       // console.log('API GET Call getTreaure', response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/treasure/:', error.response.data);
+        } else if (error.request) {
+            console.error('Error request for /users/treasure/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /users/treasure/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
 
 
 export const go = async (startingAddress) => {
@@ -743,7 +763,7 @@ export const getTreasure = async (treasureId) => {
     try {
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get(`/users/treasure/${treasureId}/`);
-       // console.log('API GET Call getTreaure', response.data);
+       console.log('API GET Call getTreaure', response.data);
         return response.data;
     } catch (error) {
         if (error.response) {

@@ -1,7 +1,7 @@
 import React, { useMemo, useRef, useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { useUser } from "../../src/context/UserContext";
-import { getInboxItems, getInboxItem, acceptTreasureGift } from "../../src/calls/apicalls";
+import { useUser } from "../context/UserContext";
+import { getInboxItems, getInboxItem, acceptTreasureGift } from "../calls/apicalls";
 
 // Define types for inbox items and messages
 

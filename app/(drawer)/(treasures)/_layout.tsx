@@ -76,13 +76,68 @@ export default () => {
               gestureEnabled: true,
             })}
           />
-             <Stack.Screen
+
+          <Stack.Screen
+            name="search"
+            options={{
+              headerShown: true,
+              headerTitle: "Search public treasures",
+              headerTitleStyle: {
+                color: constantColorsStyles.v1LogoColor.color,
+              },
+              headerStyle: {
+                backgroundColor:
+                  constantColorsStyles.v1LogoColor.backgroundColor,
+              },
+
+              headerLeft: () => (
+                <TouchableOpacity
+                  onPress={() => console.log("icon is pressable!")}
+                  style={{ paddingLeft: 10, paddingRight: 10 }}
+                >
+                  <Feather
+                    name="search"
+                    size={appFontStyles.exploreTabBarIcon.width}
+                    color={constantColorsStyles.v1LogoColor.color}
+                  />
+                </TouchableOpacity>
+              ),
+              gestureEnabled: true,
+            }}
+          />
+                   <Stack.Screen
+            name="searchable"
+            options={({ route }) => ({
+              headerShown: true,
+              headerTitle: route.params?.descriptor || "Public Treasure",
+              headerTitleStyle: {
+                color: constantColorsStyles.v1LogoColor.color,
+              },
+              headerStyle: {
+                backgroundColor:
+                  constantColorsStyles.v1LogoColor.backgroundColor,
+              },
+              headerLeft: () => (
+                <TouchableOpacity
+                  onPress={() => router.back()}
+                  style={{ paddingLeft: 10, paddingRight: 10 }}
+                >
+                  <AntDesign
+                    name="user"
+                    size={appFontStyles.exploreTabBarIcon.width}
+                    color={constantColorsStyles.v1LogoColor.color}
+                  />
+                </TouchableOpacity>
+              ),
+              gestureEnabled: true,
+            })}
+          />
+          <Stack.Screen
             name="history"
             options={({ route }) => ({
               headerShown: true,
               headerTitle: `${route.params?.descriptor || "Treasure"} History`,
 
-             
               headerTitleStyle: {
                 color: constantColorsStyles.v1LogoColor.color,
               },

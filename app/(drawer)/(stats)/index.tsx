@@ -4,7 +4,7 @@ import {
 } from "react-native"; 
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext"; 
  
-import useStats from "@/app/hooks/useStats";
+import useStats from "@/src/hooks/useStats";
 import StatsView from "@/app/components/StatsComponents/StatsView";
  
  

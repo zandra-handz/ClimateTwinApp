@@ -13,7 +13,7 @@ import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
 import ProgressCircle from "./Scaffolding/ProgressCircle";
 import WorldMapSvg from "../assets/svgs/worldmap.svg";
 
-import useWebSocket from "../hooks/useWebSocket";
+import useWebSocket from "../../src/hooks/useWebSocket";
 
 import Dot from "../animations/Dot";
  

@@ -5,7 +5,7 @@ import {
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext"; 
 import { useNearbyLocations } from "../../../src/context/NearbyLocationsContext";
 import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
- import useInlineComputations from "@/app/hooks/useInlineComputations";
+ import useInlineComputations from "@/src/hooks/useInlineComputations";
 import { useRouter } from "expo-router";  
 import NearbyView from "../../components/NearbyComponents/NearbyView";
 

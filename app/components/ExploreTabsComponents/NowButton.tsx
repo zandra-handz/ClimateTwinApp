@@ -10,7 +10,7 @@ import Animated, {
   useAnimatedStyle,
 } from "react-native-reanimated";
 
-import useWebSocket from "@/app/hooks/useWebSocket";
+import useWebSocket from "@/src/hooks/useWebSocket";
 
 
 const NowButton = ({ color, lastState }) => {

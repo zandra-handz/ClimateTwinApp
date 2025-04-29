@@ -5,10 +5,10 @@ import PortalUnmappedTreasuresView from "../ItemChoicesComponents/PortalUnmapped
 
 import RuinsUnmappedTreasuresView from "../ItemChoicesComponents/RuinsUnmappedTreasureView";
 import { useGroqContext } from "@/src/context/GroqContext";
-import useINaturalist from "@/app/hooks/useINaturalist";
+import useINaturalist from "@/src/hooks/useINaturalist";
 import WindyMap from "../WindyMap";
 import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
-import useInlineComputations from "@/app/hooks/useInlineComputations";
+import useInlineComputations from "@/src/hooks/useInlineComputations";
 
 const CurrentSurroundingsView = ({ height }) => {
   const { groqHistory } = useGroqContext();

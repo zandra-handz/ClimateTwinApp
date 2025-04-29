@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import React, { useEffect, useState, useCallback, useLayoutEffect } from "react"; 
 import SurroundingsImageCard from "./SurroundingsImageCard";
-import usePexels from "@/app/hooks/usePexels";
+import usePexels from "@/app/DELETE/usePexels";
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
 import { useFocusEffect } from "expo-router";
  

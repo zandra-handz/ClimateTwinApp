@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Modal, FlatList } from "react-native";
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
  
 import Avatar from "../FriendsComponents/Avatar";
-import useDateTimeFunctions from "@/app/hooks/useDateTimeFunctions";
+import useDateTimeFunctions from "@/src/hooks/useDateTimeFunctions";
 import GiftingFunctionsButton from "./GiftingFunctionsButton";  
 import DoubleCheckerWithMessageDisplay from "../Scaffolding/DoubleCheckerWithMessageDisplay";
 import { AntDesign, Feather } from "@expo/vector-icons";
@@ -31,12 +31,8 @@ const TreasureRequestListItem = ({
   const handleToggleDoubleChecker = () => {
     setDoubleCheckerVisible((prev) => !prev);
   };
-// useEffect(() => {
-//   if (treasure) {
-//     console.log(treasure);
-//   }
 
-// }, [treasure]);
+  
   return (
     <>
       {isDoubleCheckerVisible && (

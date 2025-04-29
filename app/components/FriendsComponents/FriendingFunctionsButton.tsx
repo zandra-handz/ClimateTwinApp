@@ -7,11 +7,11 @@ import { AntDesign, Feather } from "@expo/vector-icons";
 
 import { useRouter } from "expo-router";
 import { useAppMessage } from "@/src/context/AppMessageContext";
-import useInbox from "@/app/hooks/useInbox"; 
+import useInbox from "@/src/hooks/useInbox"; 
 
 import { useUser } from "@/src/context/UserContext";
  
-import useInlineComputations from "@/app/hooks/useInlineComputations";
+import useInlineComputations from "@/src/hooks/useInlineComputations";
 
 import DoubleCheckerWithMessageInput from "../Scaffolding/DoubleCheckerWithMessageInput";
 

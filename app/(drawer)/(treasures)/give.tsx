@@ -1,8 +1,9 @@
-import { View, Text, Keyboard, Dimensions } from "react-native";
+import { View, Keyboard  } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import ActionsFooter from "@/app/components/ActionsFooter"; 
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
-import useTreasures from "@/app/hooks/useTreasures";
+ 
+import { useTreasures } from "@/src/context/TreasuresContext";
 import { useAppMessage } from "../../../src/context/AppMessageContext";
 import { useLocalSearchParams, useRouter } from "expo-router";  
 import TextInputBlock from "@/app/components/TextInputBlock";

@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
-import useDateTimeFunctions from "../../hooks/useDateTimeFunctions";
+import useDateTimeFunctions from "../../../src/hooks/useDateTimeFunctions";
 
 const StatsUICard = ({ data, onPress, onOpenPress, onOpenTreasurePress }) => {
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();

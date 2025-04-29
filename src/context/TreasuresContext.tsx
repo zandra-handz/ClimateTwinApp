@@ -23,6 +23,7 @@ import {
   getTreasure,
   getOwnerChangeRecords,
   searchTreasures,
+  getSearchableTreasure,
   collectTreasure,
   acceptTreasureGift,
   declineTreasureGift,
@@ -35,7 +36,7 @@ import { usePendingRequests } from "./PendingRequestsContext";
 export interface TreasuresContextType {
   treasures: Treasure[] | undefined;
   handleGetTreasure: (id: number) => Promise<void>; 
-  nonPendingTreasures;
+ 
   handleGetOwnerChangeRecords;
   handleSearchTreasures: (searchText: string) => void;
   searchTreasuresMutation: UseMutationResult<any, unknown>; // Replace with your real mutation result type
@@ -46,6 +47,8 @@ export interface TreasuresContextType {
   handleAcceptTreasureGift;
   handleDeclineTreasureGift;
   viewingTreasure;
+  viewingSearchableTreasure;
+  searchableTreasureMutation;
   collectTreasureMutation;
   giftTreasureMutation;
   giftTreasureBackToFinderMutation;
@@ -75,10 +78,9 @@ export const TreasuresProvider: React.FC<TreasuresProviderProps> = ({
   const { showAppMessage } = useAppMessage();
   const { user, isAuthenticated, isInitializing } = useUser();
   const { triggerRequestsRefetch } = usePendingRequests();
-  const [testData, setTestData] = useState(null);
-  const [ nonPendingTreasures, setNonPendingTreasures ] = useState([]);
+  const [testData, setTestData] = useState(null); 
   const [viewingTreasure, setViewingTreasure] = useState<Treasure | null>(null);
-  const [viewingSearchableTreasure, setViewingSearchablerofile] =
+  const [viewingSearchableTreasure, setViewingSearchableTreasure] =
     useState<Treasure | null>(null);  
 
   const [treasureSearchResults, setTreasureSearchResults] = useState(null);
@@ -97,33 +99,43 @@ export const TreasuresProvider: React.FC<TreasuresProviderProps> = ({
     queryFn: getTreasures,
     enabled: !!(isAuthenticated && !isInitializing && user && user.id),
   });
-
-  //move out of context and out of a useEffect
  
-  useEffect(() => {
-    if (isSuccess) {
-      const filtered = treasures.filter((treasure) => (treasure.pending === false));
-
-      setNonPendingTreasures(filtered);
-      
-    }
-
-  }, [isSuccess]);
-
   const handleGetTreasure = async (id: number) => {
-    try {
-      const treasure = await queryClient.fetchQuery<Treasure>({
-        queryKey: ["treasure", user?.id, id],
-        queryFn: () => getTreasure(id),
-      });
-
-      if (treasure) {
-        setViewingTreasure(treasure); 
-      }
-    } catch (error) {
-      console.error("Error fetching treasure: ", error);
+    const cacheKey = ["treasure", user?.id, id];
+    const cachedTreasure = queryClient.getQueryData<Treasure>(cacheKey);
+  
+    if (cachedTreasure) {
+      setViewingTreasure(cachedTreasure);
+    } else {
+      await getTreasureMutation.mutateAsync(id);
     }
   };
+  
+  const getTreasureMutation = useMutation<Treasure, Error, number>({
+    mutationFn: (id: number) => getTreasure(id),
+    onSuccess: (data, id) => {
+      setViewingTreasure(data);
+      queryClient.setQueryData(["treasure", user?.id, id], data);
+  
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      timeoutRef.current = setTimeout(() => {
+        getTreasureMutation.reset();
+      }, 2000);
+    },
+    onError: () => {
+      setViewingTreasure(null);
+  
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      timeoutRef.current = setTimeout(() => {
+        getTreasureMutation.reset();
+      }, 2000);
+    },
+  });
+  
 
   const searchTreasuresMutation = useMutation({
     mutationFn: (query: string) => searchTreasures(query),
@@ -153,32 +165,43 @@ export const TreasuresProvider: React.FC<TreasuresProviderProps> = ({
     searchTreasuresMutation.mutate(query);
   };
 
-//   const getPublicProfileMutation = useMutation<PublicProfile, Error, number>({
-//     mutationFn: (userId: number) => getPublicProfile(userId),
-//     onSuccess: (data) => {
-//       setViewingPublicProfile(data);
+  const handleGetSearchableTreasure = async (treasureId: number) => {
+    const cacheKey = ["searchableTreasure", user?.id, treasureId];
+    const cachedTreasure = queryClient.getQueryData<Treasure>(cacheKey);
+  
+    if (cachedTreasure) {
+      setViewingSearchableTreasure(cachedTreasure);
+    } else {
+      await searchableTreasureMutation.mutateAsync(treasureId);
+    }
+  };
+  
+  const searchableTreasureMutation = useMutation<Treasure, Error, number>({
+    mutationFn: (treasureId: number) => getSearchableTreasure(treasureId),
+    onSuccess: (data, treasureId) => {
+      setViewingSearchableTreasure(data);
+      queryClient.setQueryData(["searchableTreasure", user?.id, treasureId], data);
+  
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+      timeoutRef.current = setTimeout(() => {
+        searchableTreasureMutation.reset();
+      }, 2000);
+    },
+    onError: () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current);
+      }
+  
+      timeoutRef.current = setTimeout(() => {
+        searchableTreasureMutation.reset();
+      }, 2000);
+    },
+  });
+  
 
-//       if (timeoutRef.current) {
-//         clearTimeout(timeoutRef.current);
-//       }
-//       timeoutRef.current = setTimeout(() => {
-//         getPublicProfileMutation.reset();
-//       }, 2000);
-//     },
-//     onError: () => {
-//       if (timeoutRef.current) {
-//         clearTimeout(timeoutRef.current);
-//       }
-
-//       timeoutRef.current = setTimeout(() => {
-//         getPublicProfileMutation.reset();
-//       }, 2000);
-//     },
-//   });
-
-//   const handleGetPublicProfile = (userId: number) => {
-//     getPublicProfileMutation.mutate(userId);
-//   };
+ 
 
   const handleCollectTreasure = (item: string, descriptor: string, description: string, thirdData: string) => {
       
@@ -459,8 +482,7 @@ onError: () => {
         treasures,
         isPending,
         isSuccess,
-        isError,
-        nonPendingTreasures, // USE THIS FOR TREASURES LIST
+        isError, 
         handleGetTreasure,
         handleGetOwnerChangeRecords,
         handleSearchTreasures,
@@ -469,8 +491,15 @@ onError: () => {
         handleGiftTreasureBackToFinder,
         handleAcceptTreasureGift,
         handleDeclineTreasureGift,
+        handleGetSearchableTreasure,
         viewingTreasure,
+        setViewingTreasure,
+        getTreasureMutation,
+        viewingSearchableTreasure,
+        setViewingSearchableTreasure,
         searchTreasuresMutation,
+        searchableTreasureMutation,
+        treasureSearchResults,
         collectTreasureMutation,
         giftTreasureMutation,
         giftTreasureBackToFinderMutation,

@@ -1,13 +1,11 @@
- import React, { useEffect, useCallback } from 'react' 
- import { View, Text } from 'react-native'
+ import React, { useCallback } from 'react' 
+ import { View  } from 'react-native'
  import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
  import ActionsFooter from "@/app/components/ActionsFooter";
  import { useLocalSearchParams, useRouter, useFocusEffect } from "expo-router"; 
  import DataList from '@/app/components/Scaffolding/DataList';
-
-
- import useTreasures from '@/app/hooks/useTreasures';
  
+ import { useTreasures } from '@/src/context/TreasuresContext';
  
  const treasure_history = () => {
       const { id } = useLocalSearchParams<{ id: string }>();

@@ -6,12 +6,12 @@ import { useSurroundingsWS } from "../../src/context/SurroundingsWSContext";
 import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
  
 import { useFriends } from "@/src/context/FriendsContext";
-import useInbox from "../hooks/useInbox";
+import useInbox from "../../src/hooks/useInbox";
 import { clearNotificationCache } from "../../src/calls/apicalls";
 
 import { useAppMessage } from "@/src/context/AppMessageContext";
-
-import useTreasures from "../hooks/useTreasures";
+ 
+import { useTreasures } from "@/src/context/TreasuresContext";
 
 const NotificationNotifier = () => {
   const {

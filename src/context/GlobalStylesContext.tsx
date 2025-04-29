@@ -880,7 +880,7 @@ const containerStyles = StyleSheet.create({
     width: '100%',
     textAlign: 'left',
     //height: 100, 
-    borderRadius: 16, 
+    borderRadius: 6, 
     padding: 20,
     flexGrow: 1,
 
@@ -892,7 +892,7 @@ const containerStyles = StyleSheet.create({
     justifyContent: 'center',   
     height: "auto",
     padding: 30,
-    borderRadius: 30,
+    borderRadius: 6,
     width: "100%",
     flexDirection: "column",
     flex: 1,

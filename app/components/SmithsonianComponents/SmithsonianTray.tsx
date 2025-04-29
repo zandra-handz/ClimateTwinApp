@@ -4,7 +4,7 @@ import React, {
   useState, 
 } from "react";
 import SmithsonianImageCard from "./SmithsonianImageCard";
-import useSmithsonian from "@/app/hooks/useSmithsonian";
+import useSmithsonian from "@/app/DELETE/useSmithsonian";
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext"; 
 
 const SmithsonianTray = ({ queryString, base, photoNumber }) => {
