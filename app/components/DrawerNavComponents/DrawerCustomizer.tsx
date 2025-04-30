@@ -125,7 +125,7 @@ const DrawerCustomizer = (props) => {
           onPress={() => router.push("/(exploretabs)")}
         />
         <FriendsWithNotifs />
-        <InboxWithNotifs/> 
+        {/* <InboxWithNotifs/>  */}
         <TreasuresWithNotifs />
         <DrawerItem
           icon={() => (

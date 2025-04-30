@@ -20,6 +20,7 @@ interface SurroundingsWSContextType {
   lastInboxItemId: string | null;
   lastRequestId: string | null;
   lastRequestType: string | null;
+  lastRequestItemId: string | null;
   lastLocationId: string | null;
   lastLocationAccessTime: string | null;
   lastLatAndLong: [string, string] | null;
@@ -70,6 +71,8 @@ export const SurroundingsWSProvider: React.FC<SurroundingsWSProviderProps> = ({
   const [lastInboxItemId, setLastInboxItemId] = useState<string | null>(null);
   const [lastRequestId, setLastRequestId] = useState<string | null>(null);
   const [lastRequestType, setLastRequestType] = useState<string | null>(null);
+  const [lastRequestItemId, setLastRequestItemId] = useState<string | null>(null);
+  
   const [lastLatAndLong, setLastLatAndLong] = useState<[string, string] | null>(
     null
   );
@@ -87,6 +90,7 @@ export const SurroundingsWSProvider: React.FC<SurroundingsWSProviderProps> = ({
       setLastInboxItemId(null);
       setLastRequestId(null);
       setLastRequestType(null);
+      setLastRequestItemId(null);
       setLastSearchProgress(null);
       setLastState(null);
       setLastLocationIsSame(null);
@@ -179,12 +183,68 @@ export const SurroundingsWSProvider: React.FC<SurroundingsWSProviderProps> = ({
     socket.onmessage = (event: WebSocketMessageEvent) => {
       const update = JSON.parse(event.data);
       console.log("Received update from socket in WS context:", update);
+ 
+      // const {
+      //   message,
+      //   state,
+      //   location_same_as_last_update,
+      //   base_location,
+      //   search_progress,
+      //   notification,
+      //   inbox_item_id,
+      //   friend_request_id,
+      //   friend_id,
+      //   gift_request_id,
+      //   gift_id,
+      //   name,
+      //   location_id,
+      //   last_accessed,
+      //   latitude,
+      //   longitude
+      // } = update;
+      
+      // if (message) setLastMessage(message);
+      // if (state) setLastState(state);
+      // if (location_same_as_last_update) setLastLocationIsSame(location_same_as_last_update);
+      // if (base_location) setBaseLocationId(base_location);
+      // if (search_progress) setLastSearchProgress(search_progress);
+      // if (notification) setLastNotification(notification);
+      // if (notification && inbox_item_id) setLastInboxItemId(inbox_item_id);
 
-      //FOR DEBUGGING ONLY:
-      // showAppMessage(true, null, `Update from socket: ${update.name || 'No name'}`);
+      // if (notification && friend_request_id) {
+      //   setLastRequestId(friend_request_id);
+      //   setLastRequestType('friend');
+      //   setLastRequestItemId(friend_id);
+      // }
+      // if (notification && gift_request_id) {
+      //   setLastRequestId(gift_request_id);
+      //   setLastRequestType('gift');
+      //   setLastRequestItemId(gift_id);
+      // }
+      // if (name) setLastLocationName(name);
+      // if (location_id) setLastLocationId(location_id);
+      // if (typeof last_accessed !== "undefined") {
+      //   setTimeout(() => {
+      //     setLastLocationAccessTime(last_accessed);
+      //     setAlwaysReRender((prev) => prev + 1);
+      //   }, 0);
+      // }
+      // if (typeof latitude === "number" && typeof longitude === "number") {
+      //   setLastLatAndLong([latitude, longitude]);
+      // }
+      
 
-      // Update state so that consumers can receive the update.
-      // setLastMessage(update);
+
+
+
+
+
+
+
+
+
+
+
 
       if ("message" in update) {
         setLastMessage(update.message);
@@ -219,11 +279,13 @@ export const SurroundingsWSProvider: React.FC<SurroundingsWSProviderProps> = ({
       if ("notification" in update && "friend_request_id" in update) {
         setLastRequestId(update.friend_request_id);
         setLastRequestType('friend')
+        setLastRequestItemId(update.friend_id)
       }  
 
       if ("notification" in update && "gift_request_id" in update) {
         setLastRequestId(update.gift_request_id);
         setLastRequestType('gift')
+        setLastRequestItemId(update.gift_id)
       }  
 
       if ("name" in update) {
@@ -400,6 +462,7 @@ export const SurroundingsWSProvider: React.FC<SurroundingsWSProviderProps> = ({
         lastInboxItemId,
         lastRequestId,
         lastRequestType,
+        lastRequestItemId,
         lastSearchProgress,
         lastState,
         lastLocationIsSame,
