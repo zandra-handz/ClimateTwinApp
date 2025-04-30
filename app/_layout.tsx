@@ -116,10 +116,11 @@ export default Sentry.wrap(function Layout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <QueryClientProvider client={queryClient}>
+      <AppStateProvider>
         <AppMessageContextProvider>
           <UserProvider>
-            <DeviceLocationProvider>
-              <AppStateProvider>
+            <DeviceLocationProvider> 
+            
                 <GlobalStylesProvider>
                   <AppMessage />
                   <CustomStatusBar />
@@ -181,11 +182,11 @@ export default Sentry.wrap(function Layout() {
                       </TreasuresProvider>
                     </FriendsProvider>
                   </PendingRequestsProvider>
-                </GlobalStylesProvider>
-              </AppStateProvider>
+                </GlobalStylesProvider> 
             </DeviceLocationProvider>
           </UserProvider>
         </AppMessageContextProvider>
+        </AppStateProvider>
       </QueryClientProvider>
     </GestureHandlerRootView>
   );

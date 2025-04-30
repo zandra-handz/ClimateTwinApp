@@ -1,56 +1,34 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { AppState } from 'react-native';
+import React, { createContext, useEffect, useRef, useState, useContext } from "react";
+import { AppState, AppStateStatus } from "react-native";
 
-// Define the context and its type
-interface AppStateContextProps {
-  isAppForeground: boolean;
-  isAppInactive: boolean;
-  isAppBackground: boolean;
-}
-
-const AppStateContext = createContext<AppStateContextProps | undefined>(undefined);
-
-// Custom hook to access the context
-export const useAppState = (): AppStateContextProps => {
+const AppStateContext = createContext<{ appState: AppStateStatus }>({ appState: "active" });
+ 
+export const useAppState = () => {
   const context = useContext(AppStateContext);
   if (!context) {
     throw new Error('useAppState must be used within an AppStateProvider');
   }
   return context;
 };
-
-// AppStateProvider component to wrap the app and provide the state
-export const AppStateProvider: React.FC = ({ children }) => {
-  const [isAppForeground, setIsAppForeground] = useState<boolean>(false);
-  const [isAppInactive, setIsAppInactive] = useState<boolean>(false);
-  const [isAppBackground, setIsAppBackground] = useState<boolean>(true);
+ 
+export const AppStateProvider = ({ children }) => {
+  const appState = useRef(AppState.currentState);
+  const [state, setState] = useState<AppStateStatus>(appState.current);
 
   useEffect(() => {
-    const appStateListener = AppState.addEventListener('change', (nextAppState) => {
-      if (nextAppState === 'active') {
-        setIsAppForeground(true);
-        setIsAppInactive(false);
-        setIsAppBackground(false);
-      } else if (nextAppState === 'background') {
-        setIsAppForeground(false);
-        setIsAppInactive(false);
-        setIsAppBackground(true);
-      } else if (nextAppState === 'inactive') {
-        setIsAppForeground(false);
-        setIsAppInactive(true);
-        setIsAppBackground(false);
-      }
+    const subscription = AppState.addEventListener("change", nextState => {
+      appState.current = nextState;
+      setState(nextState);
     });
 
-    // Cleanup on unmount
-    return () => {
-      appStateListener.remove();
-    };
+    return () => subscription.remove();
   }, []);
 
+  // Usage in components:
+  // appState === 'active'/'background'/'inactive'
   return (
-    <AppStateContext.Provider value={{ isAppForeground, isAppInactive, isAppBackground }}>
-      {children}
+    <AppStateContext.Provider value={{ appState: state }}>
+      {children} 
     </AppStateContext.Provider>
   );
-};
+};  

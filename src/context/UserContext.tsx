@@ -12,6 +12,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import * as Device from "expo-device";
 import Constants from "expo-constants";
 import { Platform, AppState } from "react-native";
+import { useAppState } from "./AppStateContext";
 import useProtectedRoute from "../hooks/useProtectedRoute"; 
 import {
   signup,
@@ -73,10 +74,8 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     Record<string, any>
   >({});
   const queryClient = useQueryClient();
-  const { showAppMessage } = useAppMessage();
-  const appState = useRef(AppState.currentState);
-  const [appStateVisible, setAppStateVisible] = useState(appState.current);
-
+  const { showAppMessage } = useAppMessage(); 
+const { appState } = useAppState();
   const segments = useSegments();
   const [isNavigationReady, setNavigationReady] = useState(false);
   const isOnSignIn = segments[0] === "signin";
@@ -93,17 +92,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     });
 
     return () => unsubscribe && unsubscribe();
-  }, [navigationRef.isReady()]);
-
-  useEffect(() => {
-    const subscription = AppState.addEventListener("change", (nextAppState) => {
-      if (appState.current !== nextAppState) {
-        appState.current = nextAppState;
-        setAppStateVisible(nextAppState);
-      }
-    });
-    return () => subscription.remove();
-  }, []);
+  }, [navigationRef.isReady()]); 
 
   // useProtectedRoute(authenticated, loading); // moved to main index file
 
@@ -111,15 +100,13 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
   const reInitialize = async () => {
     if (isReinitializing) {
- 
       return;
     }
 
     isReinitializing = true;
     try {
-      console.log("reinitializing!!!!"); 
-      setLoading(true); 
-
+     // console.log("reinitializing!!!!"); 
+      setLoading(true);  
       const token = await SecureStore.getItemAsync(TOKEN_KEY);
 
       if (token) {
@@ -183,25 +170,17 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
       !loading &&
       appSettings &&
       Object.keys(appSettings).length > 0
-    ) { 
-    }
-
+    ) {}
     const cachedSettings = queryClient.getQueryData(["userSettings", user?.id]);
-
-    if (cachedSettings) {
-  
-    }
+    if (cachedSettings) {}
   }, [appSettings]);
 
   useEffect(() => {
-    if (appStateVisible === "active" && isNavigationReady && !isOnSignIn) {
-      // console.log("Current segment:", segments[0]);
-      console.log(
-        "APP IN FOREGROUND, REINITTING IN USER CONTEXT!!!!!!!!!!!!!!!!!!!!!!!!"
-      );
+    if (appState === "active" && isNavigationReady && !isOnSignIn) {
       reInitialize();
     }
-  }, [appStateVisible, isNavigationReady]);
+  }, [appState, isNavigationReady]);
+
 
   const updateUserSettingsMutation = useMutation<
     Record<string, any>,
@@ -220,7 +199,6 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
             "userSettings",
             user?.id,
           ]);
-          console.log("Refetched user settings:", updatedSettings);
         });
     },
     onError: (error) => {
@@ -244,7 +222,6 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   const signinMutation = useMutation({
     mutationFn: signinWithoutRefresh,
     onSuccess: () => {
-      console.log("Sign in mutation is running reInit");
       reInitialize();
 
       if (timeoutRef.current) {
@@ -294,12 +271,10 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
     onError: () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
-      }
-
+      } 
       timeoutRef.current = setTimeout(() => {
         signupMutation.reset();
       }, 2000);
-
     },
   });
 
@@ -328,15 +303,10 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
   };
 
   useEffect(() => {
-    console.log(
-      "usernotifs useEffect triggered in context: ",
-      appSettings?.receive_notifications
-    );
-    if (appSettings?.receive_notifications) {
-      console.log("registering for notifs");
+ 
+    if (appSettings?.receive_notifications) { 
       registerForNotifications();
-    } else {
-      console.log("removing notifs permissions");
+    } else { 
       removeNotificationPermissions();
     }
   }, [appSettings]);
@@ -362,8 +332,7 @@ export const UserProvider: React.FC<UserProviderProps> = ({ children }) => {
 
       if (finalStatus !== "granted") {
         const { status } = await Notifications.requestPermissionsAsync();
-        finalStatus = status;
-        console.log(`new status: `, status);
+        finalStatus = status; 
       }
 
       if (finalStatus === "granted" && user) {

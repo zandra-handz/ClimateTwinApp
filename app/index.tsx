@@ -10,7 +10,7 @@ import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
 import useProtectedRoute from "../src/hooks/useProtectedRoute";
 import useExploreRoute from "../src/hooks/useExploreRoute";
 
-const Index = () => {
+const index = () => {
   const { themeStyles, manualGradientColors, constantColorsStyles } =
     useGlobalStyles(); 
   const { isAuthenticated, isInitializing } = useUser();
@@ -177,4 +177,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Index;
+export default index;

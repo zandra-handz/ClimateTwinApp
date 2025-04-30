@@ -17,7 +17,7 @@ const PushNotifsSwitch = () => {
   const { lightOrDark, themeStyles, appContainerStyles, appFontStyles } =
     useGlobalStyles();
 
-  const { isAppForeground, isAppBackground, isAppInactive } = useAppState();
+  const { appState } = useAppState();
 const { showAppMessage } = useAppMessage();
   const [metaGuiderVisible, setMetaGuiderVisible ] = useState<boolean>(false);
   const [ returningFromPhoneSettings, setReturningFromPhoneSettings ] = useState<boolean>(false);
@@ -62,13 +62,13 @@ const { showAppMessage } = useAppMessage();
   };
 
   useEffect(() => {
-    if (isAppForeground && returningFromPhoneSettings) {
+    if ((appState === 'active') && returningFromPhoneSettings) {
       console.log('returning from phone app settings!');
       registerForNotifications();
       setReturningFromPhoneSettings(false);
     }
 
-  }, [isAppForeground]);
+  }, [appState]);
 
   return (
     <View style={{ height: "auto" }}>
