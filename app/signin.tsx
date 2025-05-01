@@ -203,7 +203,7 @@ console.log('setting signin to false');
   const handleAuthentication = async () => {
     let result;
     setisSigningIn(true);
-    showAppMessage(true, null, 'setting signinstate');
+    // showAppMessage(true, null, 'setting signinstate');
     if (isSignInScreen) {
       try { 
         onSignin(username, password);
