@@ -195,7 +195,7 @@ export default () => {
           <Stack.Screen
             name="interact"
             options={({ route }) => ({
-              headerShown: true,
+              headerShown: false,
               headerTitle:
                 route.params?.topic && route.params?.name
                   ? `${route.params?.topic} in ${route.params?.name}`

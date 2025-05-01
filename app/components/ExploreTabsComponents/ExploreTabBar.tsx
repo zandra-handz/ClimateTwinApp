@@ -1,5 +1,5 @@
 import { View } from "react-native";
-import React, { useState } from "react";
+import React from "react";
 import { useLinkBuilder } from "@react-navigation/native";
 import { Text, TouchableOpacity } from "react-native";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";

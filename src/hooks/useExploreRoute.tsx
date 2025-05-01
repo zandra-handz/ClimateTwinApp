@@ -21,9 +21,11 @@ const useExploreRoute = (lastState: string, isAuthenticated: boolean, isInitiali
   }, [navigationRef.isReady()]);
 
   useEffect(() => {
-    if (!isNavigationReady || !lastState) { 
+    if (!isNavigationReady || !lastState || !isAuthenticated || isInitializing) { 
       return;
     }  
+
+
     const isOnSignIn = segments[0] === "signin";
     const isOnExploreTabs = segments[1] === "(exploretabs)"; 
     const isOnDashboard = segments[1] === "(homedashboard)";
@@ -35,14 +37,14 @@ const useExploreRoute = (lastState: string, isAuthenticated: boolean, isInitiali
  
 
                                                   //was previously !isOnDashboard but couldn't open other drawer screens when not exploring
-    if ((lastState === 'home' || lastState === 'searching for twin') && isOnExploreTabs && isAuthenticated && !isInitializing) {
+    if ((lastState === 'home' || lastState === 'searching for twin') && (segments[1] === "(exploretabs)")) {
        // console.log('going to dashboard!!!'); 
       router.replace("/(homedashboard)")
-    } else if ((lastState === 'exploring' || lastState === 'searching for ruins') && isOnDashboard && isAuthenticated && !isInitializing) { 
+    } else if ((lastState === 'exploring' || lastState === 'searching for ruins') && isOnDashboard) { 
       router.replace("/(exploretabs)");
     }
-    console.log(`LAST STATE`, lastState);
-  }, [ lastState, segments, isNavigationReady]);
+   // console.log(`LAST STATE`, lastState);
+  }, [ lastState, segments, isNavigationReady, isAuthenticated, isInitializing]);
 };
 
 export default useExploreRoute;

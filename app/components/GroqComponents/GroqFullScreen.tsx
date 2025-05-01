@@ -205,45 +205,26 @@ const GroqFullScreen = ({
               }
             />
           </View>
-          {iNaturalist && wikiLink && (
-            <View
-              style={{
-                height: 120,
-                zIndex: 1000,
-                borderRadius: 20,
-                overflow: "hidden",
-              }}
-            >
-              <WebView
-                style={{ flex: 1 }}
-                originWhitelist={["*"]}
-                source={{
-                  uri: wikiLink,
-                }}
-                javaScriptEnabled={true}
-                domStorageEnabled={true}
-                mixedContentMode="always"
-                startInLoadingState={true}
-                onError={(error) => console.error("WebView error:", error)}
-                androidLayerType="hardware"
-                forceDarkOn={true}
-              />
-            </View>
-          )}
+          <ScrollView horizontal >
+            <>
+
         {dataObject && dataObject?.textBody && (
-          
+         
+            
           <View
             style={{
               height: wikiLink ? 200 : 350,
-              
-              width: "100%",
+              height: 364,
+              width: 390,
               backgroundColor: themeStyles.darkerBackground.backgroundColor,
               padding: 10,
               marginTop: 10, 
+              marginRight: 10,
               borderRadius: 20,
             }}
           >
-            <ScrollView>
+            <ScrollView fadingEdgeLength={40} contentContainerStyle={{width: 380, flex: 1, padding: 4}}>
+             
               <View style={appContainerStyles.groqHeaderRow}>
                 <Text
                   style={[
@@ -268,7 +249,38 @@ const GroqFullScreen = ({
             </ScrollView>
           </View>
           
+          
         )}
+                  {iNaturalist && wikiLink && (
+            <View
+              style={{
+                height: 365,
+                zIndex: 1000,
+                width: 380,
+                borderRadius: 20,
+                marginRight: 10,
+                overflow: "hidden",
+              }}
+            >
+              <WebView
+                style={{ flex: 1 }}
+                originWhitelist={["*"]}
+                source={{
+                  uri: wikiLink,
+                }}
+                javaScriptEnabled={true}
+                domStorageEnabled={true}
+                mixedContentMode="always"
+                startInLoadingState={true}
+                onError={(error) => console.error("WebView error:", error)}
+                androidLayerType="hardware"
+                forceDarkOn={true}
+              />
+            </View>
+          )}
+        </>
+        
+        </ScrollView>
         </View>
       </Animated.View>
       

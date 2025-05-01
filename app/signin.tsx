@@ -4,40 +4,43 @@ import {
   TextInput,
   StyleSheet,
   Text,
-  Dimensions, 
+  Dimensions,
   Keyboard,
   TouchableOpacity,
 } from "react-native";
 import { useUser } from "../src/context/UserContext";
 import { useGlobalStyles } from "../src/context/GlobalStylesContext";
-import { useAppMessage } from "../src/context/AppMessageContext"; 
-import { useFonts } from "expo-font";  
-import { LinearGradient } from "expo-linear-gradient"; 
+import { useAppMessage } from "../src/context/AppMessageContext";
+import { useFonts } from "expo-font";
+import { LinearGradient } from "expo-linear-gradient";
+import ComponentSpinner from "./components/Scaffolding/ComponentSpinner";
 
-import * as SecureStore from 'expo-secure-store';
+import * as SecureStore from "expo-secure-store";
 
 import { useRouter, Link } from "expo-router";
 
-
 import { SafeAreaView } from "react-native-safe-area-context";
 import { signup } from "../src/calls/apicalls";
- 
-import { StatusBar } from 'react-native';
+
+import { StatusBar } from "react-native";
 import SimpleBottomButton from "./components/SimpleBottomButton";
 
 //a frienddate assistant for overwhelmed adults, and for people who just have a lot to talk about
- 
 
 const SignInScreen = () => {
-
-const router = useRouter();
+  const router = useRouter();
   //const route = useRoute();
   //const createNewAccount = route.params?.createNewAccount ?? false;
   const createNewAccount = false;
 
   const { showAppMessage } = useAppMessage();
-  const { themeStyles, appFontStyles, appContainerStyles, manualGradientColors, constantColorsStyles } =
-    useGlobalStyles();
+  const {
+    themeStyles,
+    appFontStyles,
+    appContainerStyles,
+    manualGradientColors,
+    constantColorsStyles,
+  } = useGlobalStyles();
   const [showSignIn, setShowSignIn] = useState(true);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -46,8 +49,11 @@ const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [isSignInScreen, setSignInScreen] = useState(true);
   const [signUpSuccess, setSignUpSuccess] = useState(false);
+  const [isSigningIn, setisSigningIn] = useState(false);
   const {
     user,
+    isInitializing,
+    isAuthenticated,
     onSignin,
     signinMutation,
     signupMutation,
@@ -63,7 +69,6 @@ const router = useRouter();
   const [usernameInputVisible, setUsernameInputVisible] = useState(true);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [isEmailFocused, setIsEmailFocused] = useState(false);
- 
 
   const [isKeyboardVisible, setIsKeyboardVisible] = useState(false);
 
@@ -104,12 +109,14 @@ const router = useRouter();
       setUsernameInputVisible(true);
 
       usernameInputRef.current.focus();
+console.log('setting signin to false');
+      setisSigningIn(false);
     }
   }, []);
 
-//   useEffect(() => {
-//     checkIfSignedIn();
-//   }, []);
+  //   useEffect(() => {
+  //     checkIfSignedIn();
+  //   }, []);
 
   const toggleMode = () => {
     setUsername("");
@@ -143,18 +150,18 @@ const router = useRouter();
     setUsernameInputVisible(true);
   };
 
-//   useEffect(() => {
-//     if (signinMutation.isError) {
-//       setPassword(null);
-//       console.log("useeffect for sign in mutation error");
-//       setUsernameInputVisible(true);
+  //   useEffect(() => {
+  //     if (signinMutation.isError) {
+  //       setPassword(null);
+  //       console.log("useeffect for sign in mutation error");
+  //       setUsernameInputVisible(true);
 
-//       if (usernameInputRef.current) {
-//         setUsernameInputVisible(true);
-//         usernameInputRef.current.focus();
-//       }
-//     }
-//   }, [signinMutation]);
+  //       if (usernameInputRef.current) {
+  //         setUsernameInputVisible(true);
+  //         usernameInputRef.current.focus();
+  //       }
+  //     }
+  //   }, [signinMutation]);
 
   // const checkIfSignedIn = async () => {
   //   try {
@@ -185,28 +192,27 @@ const router = useRouter();
 
   // }, [user]);
 
-
   const navigateToRecoverCredentials = () => {
-    console.log('routing to recover credentials screen');
+    console.log("routing to recover credentials screen");
     router.push({
-      pathname:'/recover-credentials',
-    params: { createNewAccount: false},
-  });
-
+      pathname: "/recover-credentials",
+      params: { createNewAccount: false },
+    });
   };
- 
+
   const handleAuthentication = async () => {
     let result;
+    setisSigningIn(true);
+    showAppMessage(true, null, 'setting signinstate');
     if (isSignInScreen) {
       try { 
-
         onSignin(username, password);
       } catch (error) {
         console.error(error);
         showAppMessage(true, null, `Error! Not signed in.`);
       }
     } else {
-      if (password !== verifyPassword) { 
+      if (password !== verifyPassword) {
         showAppMessage(true, null, "Oops! Passwords do not match");
         return;
       }
@@ -215,13 +221,14 @@ const router = useRouter();
       if (result && result.status === 201) {
         alert("Sign up was successful!");
         setSignUpSuccess(true);
-        setLoading(false);
-       // router.replace('signin');
+        setisSigningIn(true);
+        // router.replace('signin');
       } else if (result && result.error) {
         alert("Error: " + result.error);
       }
     }
     setLoading(false);
+    setisSigningIn(false);
   };
   const handleNavigateBackToWelcomeScreen = () => {
     router.back();
@@ -264,17 +271,27 @@ const router = useRouter();
   return (
     <>
       <StatusBar />
+
       <LinearGradient
         colors={[
-          'teal',
+          "teal",
           //manualGradientColors.lightColor,
           constantColorsStyles.v1LogoColor.backgroundColor,
-          
         ]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         style={[styles.container]}
       >
+              { isSigningIn && (
+                 <ComponentSpinner
+                 showSpinner={true}
+                 backgroundColor={themeStyles.primaryBackground.backgroundColor}
+                 spinnerType={"circle"}
+                 offsetStatusBarHeight={true}
+               />
+            
+           
+          )}
         <SafeAreaView
           style={{
             width: "100%",
@@ -283,48 +300,69 @@ const router = useRouter();
             justifyContent: "space-between",
           }}
         >
-          <TouchableOpacity
-            onPress={handleNavigateBackToWelcomeScreen}
-            style={{
-              height: 30,
-              width: 30,
-              alignItems: "center",
-              justifyContent: "center",
-              textAlign: "center",
-              backgroundColor: manualGradientColors.homeDarkColor,
-              borderRadius: 30 / 2, // Half of the height/width to create a circle
-            }}
-          >
-            <Text style={{ fontSize: 18,   color: constantColorsStyles.v1LogoColor.color, selfAlign: 'center', lineHeight: 18, justifyContent: 'center' }}>
-              x
-            </Text>
-          </TouchableOpacity> 
-          <> 
-              <View
-                style={{ 
-                  height: 40,
-                  marginLeft: '2%',
-                  paddingTop: "3%",
+          {!isAuthenticated && !isInitializing && !isSigningIn && (
+            <>
+              <TouchableOpacity
+                onPress={handleNavigateBackToWelcomeScreen}
+                style={{
+                  height: 30,
+                  width: 30,
+                  alignItems: "center",
+                  justifyContent: "center",
+                  textAlign: "center",
+                  backgroundColor: manualGradientColors.homeDarkColor,
+                  borderRadius: 30 / 2, // Half of the height/width to create a circle
                 }}
               >
                 <Text
-                  style={styles.toggleButton}
-                  onPress={isSignInScreen ? toggleMode : handleBackToSignIn}
-                  accessible={true}
-                  accessibilityLabel="Toggle button"
-                  accessibilityHint="Press to toggle between sign in and create account"
+                  style={{
+                    fontSize: 18,
+                    color: constantColorsStyles.v1LogoColor.color,
+                    selfAlign: "center",
+                    lineHeight: 18,
+                    justifyContent: "center",
+                  }}
                 >
-                  {isSignInScreen ? "Create new account?" : "Go to sign in"}
+                  x
                 </Text>
-              </View> 
-              
-          </>
-          {!loading && username && password && !isSignInScreen && !isKeyboardVisible && (
-                <View style={{width: '100%', position: 'absolute', bottom: 0, paddingBottom: 60, right: 0}}> 
+              </TouchableOpacity>
+              <>
+                <View
+                  style={{
+                    height: 40,
+                    marginLeft: "2%",
+                    paddingTop: "3%",
+                  }}
+                >
+                  <Text
+                    style={styles.toggleButton}
+                    onPress={isSignInScreen ? toggleMode : handleBackToSignIn}
+                    accessible={true}
+                    accessibilityLabel="Toggle button"
+                    accessibilityHint="Press to toggle between sign in and create account"
+                  >
+                    {isSignInScreen ? "Create new account?" : "Go to sign in"}
+                  </Text>
+                </View>
+              </>
+              {!loading &&
+                username &&
+                password &&
+                !isSignInScreen &&
+                !isKeyboardVisible && (
+                  <View
+                    style={{
+                      width: "100%",
+                      position: "absolute",
+                      bottom: 0,
+                      paddingBottom: 60,
+                      right: 0,
+                    }}
+                  >
                     <SimpleBottomButton
                       onPress={handleAuthentication}
                       title={isSignInScreen ? "Sign in" : "Create account"}
-                    //   shapeSource={require("../assets/shapes/coffeecupdarkheart.png")}
+                      //   shapeSource={require("../assets/shapes/coffeecupdarkheart.png")}
                       shapeWidth={190}
                       shapeHeight={190}
                       shapePosition="left"
@@ -338,16 +376,26 @@ const router = useRouter();
                           : "Create account button"
                       }
                       accessibilityHint="Press to sign in or create an account"
-                    />  
-                </View>
-              )}
-                            {!loading && username && password && isSignInScreen && (
+                    />
+                  </View>
+                )}
+
+
+
+              {!loading && username && password && isSignInScreen && (
                 <>
-                  <View style={{width: '100%', position: 'absolute', bottom: 0, paddingBottom: 60, right: 0}}> 
-                   
+                  <View
+                    style={{
+                      width: "100%",
+                      position: "absolute",
+                      bottom: 0,
+                      paddingBottom: 60,
+                      right: 0,
+                    }}
+                  >
                     <SimpleBottomButton
                       onPress={handleAuthentication}
-                      title={isSignInScreen ? "Sign in" : "Create account"} 
+                      title={isSignInScreen ? "Sign in" : "Create account"}
                       fontColor={themeStyles.primaryText.color}
                       accessible={true}
                       accessibilityLabel={
@@ -371,26 +419,25 @@ const router = useRouter();
                   )}
                 </>
               )}
+            </>
+          )}
 
-          
         </SafeAreaView>
-
       </LinearGradient>
 
-      {showSignIn && (
+
+
+      {showSignIn && !isSigningIn && !isAuthenticated && !isInitializing && (
         <View
           style={[styles.form, { bottom: isKeyboardVisible ? 10 : "47%" }]}
           accessible={true}
           accessibilityLabel="Form container"
         >
-          <Text
-                  style={styles.inputHeaderText} 
-                  accessible={true} 
-                >
-                  {isSignInScreen ? "Sign in" : "Create new account"}
-                </Text>
-          {!isSignInScreen  && (
-            <View style={{ flexDirection: "column", width: "100%" }}> 
+          <Text style={styles.inputHeaderText} accessible={true}>
+            {isSignInScreen ? "Sign in" : "Create new account"}
+          </Text>
+          {!isSignInScreen && (
+            <View style={{ flexDirection: "column", width: "100%" }}>
               <TextInput
                 style={[styles.input, isEmailFocused && styles.inputFocused]}
                 placeholder="Email"
@@ -406,9 +453,8 @@ const router = useRouter();
                 importantForAccessibility="yes"
               />
             </View>
-          )} 
-          <View style={{ flexDirection: "column", width: "100%" }}> 
-
+          )}
+          <View style={{ flexDirection: "column", width: "100%" }}>
             <TextInput
               style={[styles.input, isUsernameFocused && styles.inputFocused]}
               placeholder="Username"
@@ -426,49 +472,44 @@ const router = useRouter();
             />
           </View>
 
-         
-            <View style={{ flexDirection: "column", width: "100%" }}> 
-              <TextInput
-                style={[styles.input, isPasswordFocused && styles.inputFocused]}
-                placeholder="Password"
-                autoFocus={false} //true
-                secureTextEntry={true}
-                onChangeText={(text) => setPassword(text)}
-                onSubmitEditing={
-                  isSignInScreen
-                    ? handleAuthentication
-                    : handleFirstPasswordSubmit
-                }
-                value={password}
-                ref={passwordInputRef}
-                onFocus={() => setIsPasswordFocused(true)}
-                onBlur={() => setIsPasswordFocused(false)}
+          <View style={{ flexDirection: "column", width: "100%" }}>
+            <TextInput
+              style={[styles.input, isPasswordFocused && styles.inputFocused]}
+              placeholder="Password"
+              autoFocus={false} //true
+              secureTextEntry={true}
+              onChangeText={(text) => setPassword(text)}
+              onSubmitEditing={
+                isSignInScreen
+                  ? handleAuthentication
+                  : handleFirstPasswordSubmit
+              }
+              value={password}
+              ref={passwordInputRef}
+              onFocus={() => setIsPasswordFocused(true)}
+              onBlur={() => setIsPasswordFocused(false)}
+              accessible={true}
+              accessibilityLabel="Password input"
+              accessibilityHint="Enter your password"
+              importantForAccessibility="yes"
+            />
+          </View>
+
+          {isSignInScreen && (
+            <View style={{ flexDirection: "row", width: "100%" }}>
+              <Text
+                style={styles.toggleButton}
+                onPress={() => navigateToRecoverCredentials()}
                 accessible={true}
-                accessibilityLabel="Password input"
-                accessibilityHint="Enter your password"
-                importantForAccessibility="yes"
-              />
-
-            </View> 
-
-{isSignInScreen && (
-            <View style={{ flexDirection: "row", width: "100%" }}> 
-                <Text
-                  style={styles.toggleButton}
-                  onPress={() => navigateToRecoverCredentials()}
-                  accessible={true}
-                  accessibilityLabel="Toggle button"
-                  accessibilityHint="Press to toggle between sign in and create account"
-                >
-                  {"Forgot username or password"}
-                </Text>
-              </View> 
-              
-  
-)}
+                accessibilityLabel="Toggle button"
+                accessibilityHint="Press to toggle between sign in and create account"
+              >
+                {"Forgot username or password"}
+              </Text>
+            </View>
+          )}
           {!isSignInScreen && (
             <View style={{ flexDirection: "column", width: "100%" }}>
-          
               <TextInput
                 style={[styles.input, isPasswordFocused && styles.inputFocused]}
                 ref={verifyPasswordInputRef}
@@ -483,12 +524,9 @@ const router = useRouter();
                 accessibilityHint="Re-enter your password for verification"
                 importantForAccessibility="yes"
               />
-
             </View>
           )}
-                       
         </View>
-        
       )}
     </>
   );
@@ -510,7 +548,7 @@ const styles = StyleSheet.create({
     // right: 0,
   },
   input: {
-    fontFamily: "Poppins-Regular", 
+    fontFamily: "Poppins-Regular",
     //fontWeight: 'bold',
     placeholderTextColor: "black",
     height: "auto",
@@ -520,7 +558,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     borderRadius: 10,
     alignContent: "center",
-    justifyContent: "center", 
+    justifyContent: "center",
     borderColor: "black",
     fontSize: 15,
   },
@@ -561,16 +599,16 @@ const styles = StyleSheet.create({
     fontFamily: "Poppins-Regular",
   },
   toggleButton: {
-    color: "black",  
-    fontFamily: 'Poppins-Bold',
+    color: "black",
+    fontFamily: "Poppins-Bold",
     fontSize: 14,
-    selfAlign: 'center', 
-  },  
+    selfAlign: "center",
+  },
   inputHeaderText: {
-    color: "black",  
-    fontFamily: 'Poppins-Bold',
+    color: "black",
+    fontFamily: "Poppins-Bold",
     fontSize: 16,
-    selfAlign: 'center', 
+    selfAlign: "center",
   },
   spinnerContainer: {
     ...StyleSheet.absoluteFillObject, // Cover the entire screen

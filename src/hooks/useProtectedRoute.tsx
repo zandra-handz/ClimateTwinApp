@@ -1,11 +1,15 @@
 import { useNavigationContainerRef, useRouter, useSegments } from "expo-router";
 import { useState, useEffect } from "react";
+import { useUser } from "../context/UserContext";
+import { useSurroundingsWS } from "../context/SurroundingsWSContext";
  
-const useProtectedRoute = (isAuthenticated: boolean, isLoading: boolean) => {
+const useProtectedRoute = (isAuthenticatedd: boolean, isLoadingg: boolean) => {
   const navigationRef = useNavigationContainerRef();
   const router = useRouter();
   const segments = useSegments();
   const [isNavigationReady, setNavigationReady] = useState(false);
+  const { user, isAuthenticated, isInitializing: isLoading } = useUser();
+  const { lastState } = useSurroundingsWS();
  
 
   const goToRoot = (): void => {
@@ -48,9 +52,13 @@ const useProtectedRoute = (isAuthenticated: boolean, isLoading: boolean) => {
       goToRoot();
     } else if (isAuthenticated && !isOnExploreTabs && (isOnSignIn || isOnRootPage)) {
       console.log('going to explore screen!');
-      router.push("/(drawer)");
+      if (lastState === 'home' || lastState === 'searching for twin' || !lastState) {
+        router.push("/(drawer)/(homedashboard)");
+      } else if (lastState === 'exploring' || lastState === 'searching for ruins') {
+        router.push("/(drawer)/(exploretabs)");
+      } 
     }
-  }, [isAuthenticated, isLoading, segments, isNavigationReady]); 
+  }, [isAuthenticated, isLoading, segments, isNavigationReady, lastState]); 
 };
 
 export default useProtectedRoute;

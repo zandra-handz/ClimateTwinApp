@@ -18,6 +18,9 @@ export default () => {
     <CustomStatusBar/>  
   
     <Tabs 
+      screenOptions={{
+        animationEnabled: true, // Enables crossfade/slide animation
+      }}
     tabBar={props=> <ExploreTabBar {...props} openDoubleChecker={openDoubleChecker}  />}
     > 
 

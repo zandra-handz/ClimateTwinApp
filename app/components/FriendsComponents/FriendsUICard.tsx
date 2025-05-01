@@ -9,7 +9,7 @@ import GoToItemButton from "../GoToItemButton";
 import UnfriendButton from "../Scaffolding/UnfriendButton";
 import DoubleChecker from "../Scaffolding/DoubleChecker";
 import Avatar from "./Avatar";
- 
+
 import { useFriends } from "@/src/context/FriendsContext";
 
 const FriendsUICard = ({ data, onViewFriendPress, isFullView }) => {
@@ -192,24 +192,24 @@ const FriendsUICard = ({ data, onViewFriendPress, isFullView }) => {
               {data.username || "No name"}
             </Text>
           </View>
- 
-                  <View
-                    style={[
-                      appContainerStyles.userBioContainer,
-                      themeStyles.darkestBackground,
-                      { marginVertical: 3 },
-                    ]}
-                  >
-                    <Text
-                      style={[
-                        appFontStyles.itemDescriptionText,
-                        themeStyles.primaryText,
-                      ]}
-                    >
-                      <Text style={{ fontWeight: "bold" }}>Bio: </Text>
-                      {data?.friend_profile.bio || "No bio"}
-                    </Text>
-                  </View>
+
+          <View
+            style={[
+              appContainerStyles.userBioContainer,
+              themeStyles.darkestBackground,
+              { marginVertical: 3 },
+            ]}
+          >
+            <Text
+              style={[
+                appFontStyles.itemDescriptionText,
+                themeStyles.primaryText,
+              ]}
+            >
+              <Text style={{ fontWeight: "bold" }}>Bio: </Text>
+              {data?.friend_profile.bio || "No bio"}
+            </Text>
+          </View>
 
           <View style={[appContainerStyles.itemCollectionDetailsSubheader]}>
             <CuteDetailBox
@@ -217,15 +217,16 @@ const FriendsUICard = ({ data, onViewFriendPress, isFullView }) => {
               iconTwo={"map"}
               message={findLastVisit}
             />
-          </View>
-          <View style={[appContainerStyles.itemCollectionDetailsSubheader]}>
-            <CuteDetailBox
+            <View style={{marginVertical: 8}}>
+              
+                    <CuteDetailBox
               iconOne={"heart"}
               //iconTwo={"map"}
               message={findDetails}
             />
-          </View>
-
+            
+            </View>
+          </View> 
           {onViewFriendPress && (
             <>
               <GoToItemButton

@@ -124,10 +124,10 @@ export default Sentry.wrap(function Layout() {
                 <GlobalStylesProvider>
                   <AppMessage />
                   <CustomStatusBar />
+                  <SurroundingsWSProvider>
                   <PendingRequestsProvider>
                     <FriendsProvider>
-                      <TreasuresProvider>
-                        <SurroundingsWSProvider>
+                      <TreasuresProvider> 
                           <GroqProvider>
                             <ActiveSearchProvider>
                               <CurrentSurroundingsProvider>
@@ -178,10 +178,11 @@ export default Sentry.wrap(function Layout() {
                               </CurrentSurroundingsProvider>
                             </ActiveSearchProvider>
                           </GroqProvider>
-                        </SurroundingsWSProvider>
+                       
                       </TreasuresProvider>
                     </FriendsProvider>
                   </PendingRequestsProvider>
+                  </SurroundingsWSProvider>
                 </GlobalStylesProvider> 
             </DeviceLocationProvider>
           </UserProvider>

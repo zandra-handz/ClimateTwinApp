@@ -1023,7 +1023,7 @@ const containerStyles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth
   },
   groqScrollFullScreenContainer: {
-    borderRadius: 20,    
+   // borderRadius: 20,    
     width: '100%', 
     flex: 1,
     alignSelf: 'center', 

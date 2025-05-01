@@ -21,7 +21,7 @@ const INaturalistHeaderImageCard = ({
   return (
     <View
       style={[
-        appContainerStyles.groqImageContainer, 
+        appContainerStyles.groqImageContainer, { borderRadius: 0}
       ]}
     >
       <View
@@ -32,12 +32,12 @@ const INaturalistHeaderImageCard = ({
           height: height,
           width: width,
           justifyContent: "center",
-          borderRadius: 30,
+          borderRadius: 0, 
           overflow: "hidden",
         }}
       >
         {!imageUrl && (
-          <View style={{ width: width, height: height, borderRadius: 30 }}>
+          <View style={{ width: width, height: height, borderRadius: 0 }}>
             <ComponentSpinner showSpinner={true} />
           </View>
         )}
@@ -66,7 +66,7 @@ const INaturalistHeaderImageCard = ({
             <Image
               key={imageUrl}
               source={{ uri: imageUrl, cache: "reload" }} // Force image reload
-              style={{ width: width, height: height, borderRadius: 30 }}
+              style={{ width: width, height: height, borderRadius: 0  }}
               accessibilityLabel={accessibilityLabel || "No label available"}
               contentFit="cover"
               //onError={() => setImgSource(require("./fallback-image.png"))}
