@@ -3,6 +3,7 @@ import React  from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { Image } from "expo-image";
 import { useFocusEffect } from "expo-router"; 
+import PointerSolidSvg from '../../assets/svgs/pointer-solid.svg';
 
 import ComponentSpinner from "../Scaffolding/ComponentSpinner";
 const INaturalistImageCard = ({
@@ -77,9 +78,11 @@ const INaturalistImageCard = ({
                 right: 0,
               }}
             >
-              <Text style={themeStyles.primaryText}>
+              <PointerSolidSvg width={30} height={30} color={themeStyles.primaryText.color}  />
+      
+              {/* <Text style={themeStyles.primaryText}>
                 {label} ({scientificLabel})
-              </Text>
+              </Text> */}
             </View>
             <Image
               key={imageUrl}

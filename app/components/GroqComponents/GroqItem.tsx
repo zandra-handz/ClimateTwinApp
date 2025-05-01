@@ -25,7 +25,7 @@ const GroqItem = ({
 
   const [dataObject, setDataObject] = useState({});
 
-  const debug = true;
+ // const debug = true;
 
   const queryClient = useQueryClient();
 
@@ -63,9 +63,9 @@ const GroqItem = ({
     topic,
     altImageSearchQuery,
   }) => {
-    if (debug) {
-      console.log("GROQITEM DEBUG: handleFormatDataObject triggered");
-    }
+    // if (debug) {
+    //   console.log("GROQITEM DEBUG: handleFormatDataObject triggered");
+    // }
 
     const formattedData = {
       textHeader,

@@ -796,6 +796,17 @@ const containerStyles = StyleSheet.create({
     borderRadius: 20,
 
   },
+  interactHeaderRow: {
+
+    width: '100%',
+    textAlign: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+    flexDirection: 'row',
+    justifyContent: 'center', 
+     
+   // paddingBottom: 10,
+  },
   groqHeaderRow: {
     width: '100%',
     textAlign: 'left',
