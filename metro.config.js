@@ -10,6 +10,7 @@ const { transformer, resolver } = config;
 config.transformer = {
 ...transformer,
 babelTransformerPath: require.resolve("react-native-svg-transformer"),
+_expoRelativeProjectRoot: __dirname,
 }
 
 config.resolver = {
