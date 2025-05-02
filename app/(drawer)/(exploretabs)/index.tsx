@@ -20,6 +20,8 @@ import GroqHistory from "@/app/components/GroqComponents/GroqHistory";
 
 import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
 
+ 
+
 const index = () => {
   const { user } = useUser();
   // useGeolocationWatcher();

@@ -230,8 +230,7 @@ const containerStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     alignContent: 'center', 
-    justifyContent: "center",
-    backgroundColor: 'gray',
+    justifyContent: "center", 
 
   },
 
@@ -628,7 +627,7 @@ const containerStyles = StyleSheet.create({
     // borderTopWidth: StyleSheet.hairlineWidth,
     marginHorizontal: 0,
     paddingTop: 6,
-    paddingBottom: 20,
+    paddingBottom: 4,
     borderTopWidth: StyleSheet.hairlineWidth,
   
     
@@ -1199,7 +1198,7 @@ const containerStyles = StyleSheet.create({
     right: 0,
     left: 0,
     paddingTop: 6,
-    paddingBottom: 20,
+    paddingBottom: 4,
     //height: 80,  managed in Footer component because it changes if keyboard is visible
     width: '100%',
     flexDirection: 'row',

@@ -3,7 +3,7 @@ import React from "react";
 import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
 
 const ActionsFooter = ({
-  height=74,  //managed here instead of in styles
+  height=60,  //managed here instead of in styles
   onPressLeft=() => {},
   onPressRight=() => {},
   labelLeft = "",

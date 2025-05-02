@@ -57,7 +57,7 @@ const ComponentSpinner = ({
       //  ((isInitializing) || (!lastState && isAuthenticated)) && (
           <LinearGradient
             colors={[
-              "teal",
+              "pink", //"teal",
               constantColorsStyles.v1LogoColor.backgroundColor,
               // "transparent",
               // "transparent",
@@ -96,7 +96,8 @@ const ComponentSpinner = ({
             {!isLocationSocketOpen && isAuthenticated && !isInitializing ? (
               <Spinner
                 size={spinnerSize}
-                color={constantColorsStyles.v1LogoColor.backgroundColor}
+                color={'red'}
+              //  color={constantColorsStyles.v1LogoColor.backgroundColor}
               />
             ) : null}
           </View>

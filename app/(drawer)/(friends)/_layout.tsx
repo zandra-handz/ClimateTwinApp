@@ -14,7 +14,7 @@ export default () => {
   const router = useRouter();
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <View
+      <SafeView
         style={{
           flex: 1,
           backgroundColor: constantColorsStyles.v1LogoColor.backgroundColor,
@@ -135,7 +135,7 @@ export default () => {
             })}
           />
         </Stack>
-      </View>
+      </SafeView>
     </GestureHandlerRootView>
   );
 };

@@ -38,7 +38,7 @@ const nearby = () => {
         style={[
           appContainerStyles.screenContainer,
           themeStyles.primaryBackground,
-         { paddingTop: 30 },
+       
         ]}
       >
         <View style={appContainerStyles.innerFlexStartContainer}>

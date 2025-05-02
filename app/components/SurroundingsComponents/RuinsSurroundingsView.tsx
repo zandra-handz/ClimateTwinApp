@@ -10,7 +10,7 @@ const RuinsSurroundingsView = ({ height, ruinsSurroundings }) => {
   const padding = 30 + height;
 
   return (
-    <View style={{ flex: 1, height: height, paddingTop: 30 }}> 
+    <View style={{ flex: 1, height: height }}> 
       {ruinsSurroundings?.id && (
         <>
           {ruinsSurroundings.streetViewImage && (

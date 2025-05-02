@@ -5,7 +5,7 @@ import HomeHeader from "../components/HeaderComponents/HomeHeader";
 import { useUser } from "@/src/context/UserContext";
 import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
 import DrawerCustomizer from "../components/DrawerNavComponents/DrawerCustomizer";
- 
+ import SafeView from "../components/SafeView";
 import * as Notifications from 'expo-notifications';
 
 import useExploreRoute from "../../src/hooks/useExploreRoute";
@@ -30,7 +30,9 @@ export default () => {
   // export default function Layout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
+      
       <Drawer drawerContent={(props) => <DrawerCustomizer {...props} />}>
+
       <Drawer.Screen
           name="(homedashboard)"
           options={{
@@ -47,9 +49,8 @@ export default () => {
             drawerLabel: "Explore",
             title: "explore",
           }}
-        />  
-
-
+        />   
+  
         <Drawer.Screen
           name="(friends)"
           options={{ header: () => null, drawerLabel: "Friends" }}
@@ -73,8 +74,10 @@ export default () => {
                 <Drawer.Screen
           name="(profile)"
           options={{ header: () => null, drawerLabel: "Profile" }}
-        />
+        /> 
       </Drawer>
+      
+
     </GestureHandlerRootView>
   );
 };

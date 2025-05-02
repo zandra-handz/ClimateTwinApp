@@ -1,9 +1,10 @@
 import { Tabs } from "expo-router";
 import ExploreTabBar from "../../components/ExploreTabsComponents/ExploreTabBar";
-
+ 
 export default () => {
   return (
     <>
+
       <Tabs
         screenOptions={{
           headerShown: false,

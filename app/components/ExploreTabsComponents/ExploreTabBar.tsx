@@ -32,7 +32,7 @@ function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled }) {
         style={[
           themeStyles.darkerBackground,
           appContainerStyles.exploreTabBarContainer,
-          { borderColor: "teal", flex: 1, height: 74 },
+          { borderColor: "teal", flex: 1, height: 60 },
         ]}
       >
         {state.routes.map((route, index) => {

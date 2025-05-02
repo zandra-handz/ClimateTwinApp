@@ -14,12 +14,12 @@ export default () => {
   const router = useRouter();
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      {/* <SafeView
+      <SafeView
         style={{
           flex: 1,
           backgroundColor: constantColorsStyles.v1LogoColor.backgroundColor,
         }}
-      > */}
+      >
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen
             name="index"
@@ -195,7 +195,7 @@ export default () => {
           <Stack.Screen
             name="interact"
             options={({ route }) => ({
-             // headerShown: false,
+              headerShown: false,
               headerTitle:
                 route.params?.topic && route.params?.name
                   ? `${route.params?.topic} in ${route.params?.name}`
@@ -257,7 +257,7 @@ export default () => {
             })}
           />
         </Stack>
-      {/* </SafeView> */}
+      </SafeView>
     </GestureHandlerRootView>
   );
 };
