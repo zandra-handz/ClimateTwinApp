@@ -20,9 +20,8 @@ import {
 } from "../src/calls/apicalls";
 
 import { useRouter, useLocalSearchParams } from "expo-router";
-
-import { SafeAreaView } from "react-native-safe-area-context";
-
+ 
+import SafeView from "./components/SafeView";
 import { StatusBar } from "react-native";
 import SimpleBottomButton from "./components/SimpleBottomButton";
 
@@ -149,7 +148,7 @@ const ScreenRecoverCredentials = () => {
         end={{ x: 1, y: 1 }}
         style={[styles.container]}
       >
-        <SafeAreaView
+        <SafeView
           style={{
             width: "100%",
             flex: 1,
@@ -244,7 +243,7 @@ const ScreenRecoverCredentials = () => {
               </View>
             </>
           )}
-        </SafeAreaView>
+        </SafeView>
       </LinearGradient>
  
         <View

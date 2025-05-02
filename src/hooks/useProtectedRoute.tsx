@@ -17,8 +17,8 @@ const useProtectedRoute = (isAuthenticatedd: boolean, isLoadingg: boolean) => {
       router.dismissAll();
     } else {
       console.log("Already at the root screen, no need to dismiss.");
-      console.log(segments[0]);
-      console.log(segments[1]);
+      // console.log(segments[0]);
+      // console.log(segments[1]);
     }
   };
 
@@ -48,17 +48,13 @@ const useProtectedRoute = (isAuthenticatedd: boolean, isLoadingg: boolean) => {
     if (!isAuthenticated && !isOnSignIn && !isOnRecoverCreds) { 
 
  
-      console.log('going to root!');
+     // console.log('going to root!');
       goToRoot();
-    } else if (isAuthenticated && !isOnExploreTabs && (isOnSignIn || isOnRootPage)) {
-      console.log('going to explore screen!');
-      if (lastState === 'home' || lastState === 'searching for twin' || !lastState) {
+    } else if (isAuthenticated && (isOnSignIn || isOnRootPage)) { 
         router.push("/(drawer)/(homedashboard)");
-      } else if (lastState === 'exploring' || lastState === 'searching for ruins') {
-        router.push("/(drawer)/(exploretabs)");
-      } 
-    }
-  }, [isAuthenticated, isLoading, segments, isNavigationReady, lastState]); 
+      }  
+       
+  }, [isAuthenticated, isLoading, segments, isNavigationReady ]); 
 };
 
 export default useProtectedRoute;

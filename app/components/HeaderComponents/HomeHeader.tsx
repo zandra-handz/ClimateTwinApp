@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { View } from "react-native"; 
+import SafeView from "../SafeView";
 import { DrawerToggleButton } from "@react-navigation/drawer"; 
 
 import RefreshSocketButton from "../Scaffolding/RefreshSocketButton";
@@ -27,7 +27,7 @@ const HomeHeader = () => {
 
   return (
     <> 
-      <SafeAreaView style={[themeStyles.primaryBackground, { flex: 1 }]}>
+      <SafeView style={[themeStyles.primaryBackground, { flex: 1 }]}>
         <View
           style={[
             appContainerStyles.headerContainer,
@@ -45,7 +45,7 @@ const HomeHeader = () => {
             </View> 
           </View>
         </View>
-      </SafeAreaView>
+      </SafeView>
     </>
   );
 };

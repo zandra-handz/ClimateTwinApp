@@ -31,7 +31,7 @@ const CurrentSurroundingsView = ({ height }) => {
 
   return (
     <>
-      <View style={{ marginVertical: 10, height: 100 }}>
+      <View style={{ marginVertical: 10, height: 130, paddingTop: 30 }}>
         <WindyMap lat={latitude} lon={longitude} zoom={12} />
       </View>
 

@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { View } from "react-native"; 
+import SafeView from "../SafeView";
 import { DrawerToggleButton } from "@react-navigation/drawer";
 
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
@@ -21,10 +21,7 @@ const ExploreTabsHeader = () => {
   const { sendMessage, lastLocationName, lastLocationAccessTime } =
     useSurroundingsWS(); 
 
-  useEffect(() => {
-    console.log("exploretabheader rerendered");
-  }, []);
-
+ 
   const handleRefreshDataFromSocket = () => {
     console.log("sending refresh message to socket");
     sendMessage({ action: "refresh" });
@@ -32,18 +29,18 @@ const ExploreTabsHeader = () => {
 
   return (
     <> 
-      <SafeAreaView style={[themeStyles.primaryBackground, { flex: 1 }]}>
+      <SafeView style={[themeStyles.primaryBackground, { flex: 1 }]}>
         <View
           style={[
             appContainerStyles.headerContainer,
-            themeStyles.primaryBackground,
+            themeStyles.primaryBackground, 
           ]}
         >
           <View style={appContainerStyles.headerRow}>
             
             <WebSocketCurrentLocation />
 
-            <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <View style={{ flexDirection: "row", alignItems: "center", height: '100%' }}>
               <>
                 <CountDowner />
 
@@ -56,7 +53,7 @@ const ExploreTabsHeader = () => {
             </View>
           </View> 
         </View>
-      </SafeAreaView>
+      </SafeView>
     </>
   );
 };

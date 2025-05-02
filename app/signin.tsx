@@ -14,12 +14,11 @@ import { useAppMessage } from "../src/context/AppMessageContext";
 import { useFonts } from "expo-font";
 import { LinearGradient } from "expo-linear-gradient";
 import ComponentSpinner from "./components/Scaffolding/ComponentSpinner";
-
+import SafeView from "./components/SafeView";
 import * as SecureStore from "expo-secure-store";
 
 import { useRouter, Link } from "expo-router";
-
-import { SafeAreaView } from "react-native-safe-area-context";
+ 
 import { signup } from "../src/calls/apicalls";
 
 import { StatusBar } from "react-native";
@@ -292,7 +291,7 @@ console.log('setting signin to false');
             
            
           )}
-        <SafeAreaView
+        <SafeView
           style={{
             width: "100%",
             flex: 1,
@@ -422,14 +421,14 @@ console.log('setting signin to false');
             </>
           )}
 
-        </SafeAreaView>
+        </SafeView>
       </LinearGradient>
 
 
 
       {showSignIn && !isSigningIn && !isAuthenticated && !isInitializing && (
         <View
-          style={[styles.form, { bottom: isKeyboardVisible ? 10 : "47%" }]}
+          style={[styles.form, { position: 'absolute', bottom: isKeyboardVisible ? '50%' : "50%" }]}
           accessible={true}
           accessibilityLabel="Form container"
         >

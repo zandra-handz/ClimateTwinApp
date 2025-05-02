@@ -1,7 +1,7 @@
 import { Tabs } from "expo-router";
 import { Text, TouchableOpacity } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { GestureHandlerRootView } from "react-native-gesture-handler"; 
+import SafeView from "@/app/components/SafeView";
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
 import { useRouter } from "expo-router";
 import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
@@ -14,12 +14,12 @@ export default () => {
   const router = useRouter();
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaView
+      {/* <SafeView
         style={{
           flex: 1,
           backgroundColor: constantColorsStyles.v1LogoColor.backgroundColor,
         }}
-      >
+      > */}
         <Stack screenOptions={{ headerShown: false }}>
           <Stack.Screen
             name="index"
@@ -195,7 +195,7 @@ export default () => {
           <Stack.Screen
             name="interact"
             options={({ route }) => ({
-              headerShown: false,
+             // headerShown: false,
               headerTitle:
                 route.params?.topic && route.params?.name
                   ? `${route.params?.topic} in ${route.params?.name}`
@@ -257,7 +257,7 @@ export default () => {
             })}
           />
         </Stack>
-      </SafeAreaView>
+      {/* </SafeView> */}
     </GestureHandlerRootView>
   );
 };

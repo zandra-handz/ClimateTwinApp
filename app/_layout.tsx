@@ -8,7 +8,7 @@ import NotificationNotifier from "./components/NotificationNotifier";
 import * as Notifications from "expo-notifications";
 import * as FileSystem from "expo-file-system";
 import * as Linking from "expo-linking";
-
+import SafeView from "./components/SafeView";
 import ComponentSpinner from "./components/Scaffolding/ComponentSpinner";
 
 import * as MediaLibrary from "expo-media-library";
@@ -116,18 +116,17 @@ export default Sentry.wrap(function Layout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <QueryClientProvider client={queryClient}>
-      <AppStateProvider>
-        <AppMessageContextProvider>
-          <UserProvider>
-            <DeviceLocationProvider> 
-            
+        <AppStateProvider>
+          <AppMessageContextProvider>
+            <UserProvider>
+              <DeviceLocationProvider>
                 <GlobalStylesProvider>
                   <AppMessage />
                   <CustomStatusBar />
                   <SurroundingsWSProvider>
-                  <PendingRequestsProvider>
-                    <FriendsProvider>
-                      <TreasuresProvider> 
+                    <PendingRequestsProvider>
+                      <FriendsProvider>
+                        <TreasuresProvider>
                           <GroqProvider>
                             <ActiveSearchProvider>
                               <CurrentSurroundingsProvider>
@@ -141,7 +140,8 @@ export default Sentry.wrap(function Layout() {
                                     <Stack
                                       screenOptions={{ headerShown: false }}
                                       initialRouteName="index"
-                                    >
+                                    > 
+                                        
                                       <Stack.Screen
                                         name="(drawer)"
                                         options={{
@@ -149,44 +149,49 @@ export default Sentry.wrap(function Layout() {
                                           gestureEnabled: false,
                                         }}
                                       />
+                                       
 
-                                      <Stack.Screen
-                                        name="index"
-                                        options={{
-                                          headerShown: false,
-                                          headerTitle: "Welcome",
-                                          headerStyle: {
-                                            backgroundColor: "teal",
-                                          },
-                                          gestureEnabled: false,
-                                        }}
-                                      />
-                                      <Stack.Screen
-                                        name="signin"
-                                        options={{
-                                          headerShown: false,
-                                          headerTitle: "Sign in",
-                                          headerStyle: {
-                                            backgroundColor: "teal",
-                                          },
-                                          gestureEnabled: false,
-                                        }}
-                                      />
+                                      <SafeView style={{ flex: 1 }}>
+                                        <Stack.Screen
+                                          name="index"
+                                          options={{
+                                            headerShown: false,
+                                            headerTitle: "Welcome",
+                                            headerStyle: {
+                                              backgroundColor: "teal",
+                                            },
+                                            gestureEnabled: false,
+                                          }}
+                                        />
+                                      </SafeView>
+
+                                      <SafeView style={{ flex: 1 }}>
+                                        <Stack.Screen
+                                          name="signin"
+                                          options={{
+                                            headerShown: false,
+                                            headerTitle: "Sign in",
+                                            headerStyle: {
+                                              backgroundColor: "teal",
+                                            },
+                                            gestureEnabled: false,
+                                          }}
+                                        />
+                                      </SafeView>
                                     </Stack>
                                   </InteractiveElementsProvider>
                                 </NearbyLocationsProvider>
                               </CurrentSurroundingsProvider>
                             </ActiveSearchProvider>
                           </GroqProvider>
-                       
-                      </TreasuresProvider>
-                    </FriendsProvider>
-                  </PendingRequestsProvider>
+                        </TreasuresProvider>
+                      </FriendsProvider>
+                    </PendingRequestsProvider>
                   </SurroundingsWSProvider>
-                </GlobalStylesProvider> 
-            </DeviceLocationProvider>
-          </UserProvider>
-        </AppMessageContextProvider>
+                </GlobalStylesProvider>
+              </DeviceLocationProvider>
+            </UserProvider>
+          </AppMessageContextProvider>
         </AppStateProvider>
       </QueryClientProvider>
     </GestureHandlerRootView>

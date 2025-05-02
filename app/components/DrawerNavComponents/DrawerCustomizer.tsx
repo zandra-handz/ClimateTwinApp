@@ -4,8 +4,8 @@ import {
   TouchableOpacity,
   //Image,
   StyleSheet,
-  SafeAreaView,
-} from "react-native";
+ // SafeAreaView,
+} from "react-native"; 
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { useRouter } from "expo-router";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
@@ -51,10 +51,10 @@ const DrawerCustomizer = (props) => {
       }}
       style={[themeStyles.darkerBackground, appContainerStyles.drawerContainer]}
     >
-      <SafeAreaView
+      <View
         style={{
           flex: 1,
-          backgroundColor: themeStyles.darkerBackground.backgroundColor,
+          backgroundColor: 'themeStyles.darkerBackground.backgroundColor',
         }}
       >
         {/* <CustomStatusBar /> */}
@@ -239,7 +239,7 @@ const DrawerCustomizer = (props) => {
             Sign out
           </Text>
         </TouchableOpacity> */}
-      </SafeAreaView>
+      </View>
     </DrawerContentScrollView>
   );
 };

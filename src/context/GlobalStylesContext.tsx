@@ -416,14 +416,16 @@ const containerStyles = StyleSheet.create({
   headerContainer: {
     flexDirection: "column",
     //justifyContent: 'space-between',
-    height: 70,
+    height: 44, 
     alignItems: "center",
     paddingHorizontal: 10,
+   // backgroundColor: 'pink',
     zIndex: 100,
   },
   headerRow: {
     flexDirection: "row",
     width: "100%",
+    height: '100%',
     justifyContent: "space-between",
     alignItems: "center",
     flexWrap: "wrap",
@@ -616,7 +618,7 @@ const containerStyles = StyleSheet.create({
     gap: 4,
   },
   exploreTabBarContainer: {
-   height: 60, // 66
+  // height: 60, // 66  // managed in component
    width: '100%',
     position: "absolute",
     bottom: 0,
@@ -626,7 +628,7 @@ const containerStyles = StyleSheet.create({
     // borderTopWidth: StyleSheet.hairlineWidth,
     marginHorizontal: 0,
     paddingTop: 6,
-    paddingBottom: 4,
+    paddingBottom: 20,
     borderTopWidth: StyleSheet.hairlineWidth,
   
     
@@ -1196,6 +1198,8 @@ const containerStyles = StyleSheet.create({
     bottom: 0, 
     right: 0,
     left: 0,
+    paddingTop: 6,
+    paddingBottom: 20,
     //height: 80,  managed in Footer component because it changes if keyboard is visible
     width: '100%',
     flexDirection: 'row',

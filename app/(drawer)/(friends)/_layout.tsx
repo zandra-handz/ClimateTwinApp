@@ -1,7 +1,7 @@
 import { Tabs } from "expo-router";
-import { Text, TouchableOpacity } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { View, Text, TouchableOpacity } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler"; 
+import SafeView from "@/app/components/SafeView";
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
 import { useRouter } from "expo-router";
 import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
@@ -14,7 +14,7 @@ export default () => {
   const router = useRouter();
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <SafeAreaView
+      <View
         style={{
           flex: 1,
           backgroundColor: constantColorsStyles.v1LogoColor.backgroundColor,
@@ -135,7 +135,7 @@ export default () => {
             })}
           />
         </Stack>
-      </SafeAreaView>
+      </View>
     </GestureHandlerRootView>
   );
 };

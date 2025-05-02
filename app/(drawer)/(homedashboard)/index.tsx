@@ -9,9 +9,9 @@ import WindyWindSquare from "@/app/components/SurroundingsComponents/WindyWindSq
 import Temperatures from "@/app/animations/Temperatures";
 import * as Sentry from "@sentry/react-native";
 import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
-
+import useExploreRoute from "@/src/hooks/useExploreRoute";
 import NotificationNotifier from "@/app/components/NotificationNotifier";
-
+import { useUser } from "@/src/context/UserContext";
 import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
 import { useActiveSearch } from "@/src/context/ActiveSearchContext";
 
@@ -19,7 +19,10 @@ const index = () => {
   const { deviceLocation } = useDeviceLocationContext();
   const { themeStyles, appContainerStyles } = useGlobalStyles(); 
   const { lastState } = useSurroundingsWS();
+  const { isAuthenticated, isInitializing } = useUser();
   const { remainingGoes, handleGo } = useActiveSearch();
+
+  useExploreRoute(lastState, isAuthenticated, isInitializing); 
 
   return (
     <>
@@ -33,11 +36,12 @@ const index = () => {
         style={[
           appContainerStyles.screenContainer,
           themeStyles.primaryBackground,
-          { paddingTop: 10 },
+          { paddingTop: 50 },
         ]}
       >
         {/* <Button title='Try!' onPress={ () => { Sentry.captureException(new Error('First error')) }}/> */}
-
+{(lastState === 'home' || lastState === 'searching for twin') && (
+  
         <View style={appContainerStyles.innerFlexStartContainer}>
           <View
             style={{
@@ -107,6 +111,8 @@ const index = () => {
             </>
           </View>
         </View>
+        
+)}
       </View>
     </>
   );

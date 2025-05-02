@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 // import { StatusBar } from 'react-native'; 
 import { StatusBar } from 'expo-status-bar';
 import { useGlobalStyles } from '../../src/context/GlobalStylesContext';
@@ -15,27 +15,22 @@ const CustomStatusBar = () => {
     const segments = useSegments();
     const pathname = usePathname(); // is this? right??
 
-    useEffect(() => {
+    const statusBarColor = useMemo(() => {
         if (appSettings) {
             if (appSettings.manual_dark_mode === true) {
-                setColor('light');
+                return 'light';
             } else if (appSettings.manual_dark_mode === false) {
-                setColor('dark');
+                return 'dark';
             } else {
-                let phoneTheme;
-                phoneTheme = colorScheme === "dark" ? "light" : "dark";
-                setColor(phoneTheme);
-            } 
+                return colorScheme === 'dark' ? 'light' : 'dark';
+            }
         }
-        
-        // Log the screen and color change
-        console.log(`Current screen: ${pathname}, ${segments} setColor in CustomStatusBar: ${color}`);
-    }, [appSettings, pathname]); // Make sure to add router.pathname to dependencies
-
+        return 'auto'; // fallback if appSettings is undefined
+    }, [appSettings, colorScheme]);
     return (
         <>
             <StatusBar
-                style={color} 
+                style={statusBarColor} 
                 translucent={true}
                 backgroundColor="transparent"
             /> 

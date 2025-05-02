@@ -23,7 +23,7 @@ const home = () => {
         style={[
           appContainerStyles.screenContainer,
           themeStyles.primaryBackground,
-          { paddingTop: 90 },
+          { paddingTop: 10 },
         ]}
       >
         <View style={appContainerStyles.innerFlexStartContainer}>

@@ -7,7 +7,7 @@ import { AntDesign } from "@expo/vector-icons";
 import NearbyButton from "./NearbyButton";
 import NowButton from "./NowButton"; 
 import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
-
+import SafeView from "../SafeView";
 function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled }) {
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
   const { buildHref } = useLinkBuilder(); 
@@ -28,11 +28,11 @@ function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled }) {
 
   return (
     <>
-      <View
+      <SafeView
         style={[
           themeStyles.darkerBackground,
           appContainerStyles.exploreTabBarContainer,
-          { borderColor: "teal" },
+          { borderColor: "teal", flex: 1, height: 74 },
         ]}
       >
         {state.routes.map((route, index) => {
@@ -121,7 +121,7 @@ function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled }) {
             </TouchableOpacity>
           );
         })}
-      </View>
+      </SafeView>
     </>
   );
 }

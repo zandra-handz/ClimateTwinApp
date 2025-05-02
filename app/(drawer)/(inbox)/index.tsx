@@ -1,5 +1,5 @@
 import React from "react";
-import { SafeAreaView, View } from "react-native";
+import { View } from "react-native";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext"; 
 import useInbox from "../../../src/hooks/useInbox"; 
 import InboxView from "@/app/components/InboxComponents/InboxView";

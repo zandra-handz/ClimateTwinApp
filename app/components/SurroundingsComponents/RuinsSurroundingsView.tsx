@@ -7,10 +7,10 @@ import SurroundingsTray from "./SurroundingsTray";
 import RuinsHarmonyView from "./RuinsHarmonyView";
 
 const RuinsSurroundingsView = ({ height, ruinsSurroundings }) => {
+  const padding = 30 + height;
 
   return (
-    <View style={{ flex: 1, height: height }}>
-      <View style={{ height: 10, width: "100%" }}></View>
+    <View style={{ flex: 1, height: height, paddingTop: 30 }}> 
       {ruinsSurroundings?.id && (
         <>
           {ruinsSurroundings.streetViewImage && (

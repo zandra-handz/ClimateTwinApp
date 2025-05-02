@@ -9,7 +9,7 @@ import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
 import { useRouter } from "expo-router";  
 import NearbyView from "../../components/NearbyComponents/NearbyView";
 
- 
+import NothingHere from "@/app/components/Scaffolding/NothingHere";
 
 const nearby = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
@@ -38,13 +38,17 @@ const nearby = () => {
         style={[
           appContainerStyles.screenContainer,
           themeStyles.primaryBackground,
-          { paddingTop: 10 },
+         { paddingTop: 30 },
         ]}
       >
         <View style={appContainerStyles.innerFlexStartContainer}>
         {centeredNearbyLocations.length > 0 && (
           
             <NearbyView centeredNearbyLocations={centeredNearbyLocations} />
+        )}
+
+        {centeredNearbyLocations.length < 1 && (
+          <NothingHere message={'No other locations'} subMessage={'Sorry!'} offsetStatusBarHeight={true} />
         )}
              
     
