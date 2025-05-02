@@ -15,22 +15,42 @@ const CustomStatusBar = () => {
     const segments = useSegments();
     const pathname = usePathname(); // is this? right??
 
-    const statusBarColor = useMemo(() => {
+    useEffect(() => {
         if (appSettings) {
             if (appSettings.manual_dark_mode === true) {
-                return 'light';
+                setColor('light');
             } else if (appSettings.manual_dark_mode === false) {
-                return 'dark';
+                setColor('dark');
             } else {
-                return colorScheme === 'dark' ? 'light' : 'dark';
-            }
+                let phoneTheme;
+                phoneTheme = colorScheme === "dark" ? "light" : "dark";
+                setColor(phoneTheme);
+            } 
         }
-        return 'auto'; // fallback if appSettings is undefined
-    }, [appSettings, colorScheme]);
+        
+        // Log the screen and color change
+        console.log(`Current screen: ${pathname}, ${segments} setColor in CustomStatusBar: ${color}`);
+    }, [appSettings, pathname]); // Make sure to add router.pathname to dependencies
+
+
+
+    // const statusBarColor = useMemo(() => {
+    //     if (appSettings) {
+    //         if (appSettings.manual_dark_mode === true) {
+    //             return 'light';
+    //         } else if (appSettings.manual_dark_mode === false) {
+    //             return 'dark';
+    //         } else {
+    //             return colorScheme === 'dark' ? 'light' : 'dark';
+    //         }
+    //     }
+    //     return 'auto'; // fallback if appSettings is undefined
+    // }, [appSettings, colorScheme]);
+
     return (
         <>
             <StatusBar
-                style={statusBarColor} 
+                style={color} 
                 translucent={true}
                 backgroundColor="transparent"
             /> 
