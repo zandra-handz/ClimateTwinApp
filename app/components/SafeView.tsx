@@ -1,7 +1,7 @@
 import React from "react";
 import { View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import CustomStatusBar from "./CustomStatusBar";
+// import CustomStatusBar from "./CustomStatusBar";
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
 
 export const SafeView = ({
@@ -32,7 +32,7 @@ export const SafeView = ({
         style,
       ]}
     >
-      {includeCustomStatusBar && <CustomStatusBar />}
+      {/* {includeCustomStatusBar && <CustomStatusBar />} */}
       {children}
     </View>
   );
