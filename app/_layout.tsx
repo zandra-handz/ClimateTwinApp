@@ -152,8 +152,7 @@ export default Sentry.wrap(function Layout() {
                                         }}
                                       />
                                        
-
-                                      <SafeView style={{ flex: 1 }}>
+ 
                                         <Stack.Screen
                                           name="index"
                                           options={{
@@ -164,10 +163,8 @@ export default Sentry.wrap(function Layout() {
                                             },
                                             gestureEnabled: false,
                                           }}
-                                        />
-                                      </SafeView>
-
-                                      <SafeView style={{ flex: 1 }}>
+                                        /> 
+ 
                                         <Stack.Screen
                                           name="signin"
                                           options={{
@@ -178,8 +175,7 @@ export default Sentry.wrap(function Layout() {
                                             },
                                             gestureEnabled: false,
                                           }}
-                                        />
-                                      </SafeView>
+                                        /> 
                                     </Stack>
                                   </InteractiveElementsProvider>
                                 </NearbyLocationsProvider>
