@@ -187,12 +187,11 @@ export const sendResetCodeEmail = async (email) => {
 
 
 export const verifyResetCodeEmail = async ({email, resetCode}) => {
-    console.log(email);
-    console.log(resetCode);
+    
   
     try {
         response = await axios.post('/users/verify-reset-code/', { 'email': email, 'reset_code': resetCode });
-        console.log(response);
+    
         return response;
     } catch (e) {
         console.log('error checking reset code:', e);
@@ -201,12 +200,9 @@ export const verifyResetCodeEmail = async ({email, resetCode}) => {
 };
 
 export const resetPassword = async ({email, resetCode, newPassword }) => {
-    console.log(email);
-    console.log(resetCode);
-  
+ 
     try {
         response = await axios.post('/users/reset-password/', { 'email': email, 'reset_code': resetCode, 'new_password' : newPassword});
-        console.log(response);
         return response;
     } catch (e) {
         console.log('error resetting password:', e);
@@ -227,9 +223,6 @@ export const sendEmail = async (email) => {
 
 
 export const signup = async ({username, email, password}) => {
-    console.log(username);
-    console.log(email);
-    console.log(password);
   
     try {
         return await axios.post('/users/sign-up/', { username, email, password });
@@ -276,7 +269,7 @@ export const getUserSettings = async () => {
     try {
        // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/users/settings/');
-        console.log('API GET Call getUserSettings', response.data);
+        console.log('API GET Call getUserSettings'); //, response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
@@ -312,7 +305,7 @@ export const getUserProfile = async () => {
     try {
        // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/users/profile/');
-        console.log('API GET Call getUserProfile', response.data);
+        console.log('API GET Call getUserProfile'); //, response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
@@ -330,7 +323,7 @@ export const getPublicProfile = async (userId : number) => {
     try {
        // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get(`/users/get/${userId}/public-profile/`);
-        console.log('API GET Call getPublicProfile', response.data);
+        console.log('API GET Call getPublicProfile'); //, response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
@@ -346,11 +339,7 @@ export const getPublicProfile = async (userId : number) => {
 
 
 export const updateUserProfile = async (userId, updatedProfile) => {
-    console.log(userId);
-   // console.log([...updatedProfile]);
-    console.log('Updated Profile:', updatedProfile);
-
-    console.log('Request Headers:', axios.defaults.headers.common);
+ 
     try {
         const response = await axios.patch(`/users/profile/update/${userId}/`, updatedProfile,
             {
@@ -359,7 +348,7 @@ export const updateUserProfile = async (userId, updatedProfile) => {
                 },
             }
         );
-        console.log('API PATCH CALL updatedProfile', response.data);
+        console.log('API PATCH CALL updatedProfile'); //, response.data);
         //console.log('API response:', response.data); // Log the response data
         return response.data; // Ensure this returns the expected structure
     } catch (error) {
@@ -371,7 +360,7 @@ export const updateUserProfile = async (userId, updatedProfile) => {
  
 
   export const uploadUserAvatar = async (userId, formData) => {
-    console.log('FormData in uploadUserAvatar:', userId, formData);
+    // console.log('FormData in uploadUserAvatar:', userId, formData);
     
     try {
         const response = await axios.patch(`/users/profile/update/${userId}/`, formData, {
@@ -380,7 +369,7 @@ export const updateUserProfile = async (userId, updatedProfile) => {
             },
         });
 
-        console.log('Avatar uploaded successfully:', response.data);
+        // console.log('Avatar uploaded successfully:', response.data);
         return response.data; // Return the created image data if needed
     } catch (error) {
         console.error('Error uploading avatar:', error);
@@ -432,7 +421,7 @@ export const getAllUsers = async () => {
 
 export const searchUsers = async (query : string) => {
     try {
-       console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+      //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get(`/users/get/?search=${query}`);
        // console.log('API GET Call searchUsers', response.data);
         return response.data.results;
@@ -451,7 +440,7 @@ export const searchUsers = async (query : string) => {
 
 export const searchTreasures = async (query : string) => {
     try {
-       console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+      // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get(`/users/treasures/get/?search=${query}`);
        // console.log('API GET Call searchUsers', response.data);
         return response.data.results;
@@ -492,11 +481,10 @@ export const getSearchableTreasure = async (treasureId) => {
 
 export const go = async (startingAddress) => {
     const address = {address : startingAddress}
-    try {
-        console.log(address);
-        console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
-        const response = await axios.post('/climatevisitor/go/', address); 
-        console.log(response.status);
+    try { 
+        // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.post('/climatevisitor/go/'); //, address); 
+ 
         return response.data[0];
         
     } catch (error) {
@@ -546,7 +534,7 @@ export const getRemainingGoes = async () => {
 export const updateUserSettings = async (userId, updatedSettings) => {
     try {
         const response = await axios.patch(`/users/change-settings/${userId}/`, updatedSettings);
-        console.log('API PATCH CALL updateUserSettings', response.data);
+        console.log('API PATCH CALL updateUserSettings'); //, response.data);
         //console.log('API response:', response.data); // Log the response data
         return response.data; // Ensure this returns the expected structure
     } catch (error) {
@@ -563,7 +551,7 @@ export const updateUserSettings = async (userId, updatedSettings) => {
     try {
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/climatevisitor/launchpad-data/');
-        console.log('API GET Call launchPadData', response.data);
+        console.log('API GET Call launchPadData'); //, response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
@@ -584,7 +572,7 @@ export const updateUserSettings = async (userId, updatedSettings) => {
     try {
        // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/climatevisitor/currently-visiting/');
-        console.log('API GET Call matchedLocation', response.data);
+        console.log('API GET Call matchedLocation'); //, response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
@@ -631,7 +619,7 @@ export const getItemChoices = async () => {
     try {
        // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/climatevisitor/item-choices/');
-       // console.log('API GET Call getItemChoices', response.data);
+        console.log('API GET Call getItemChoices'); //, response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
@@ -646,8 +634,7 @@ export const getItemChoices = async () => {
 };
 
 export const collectTreasure = async (data) => {
-    try {
-        console.log(data);
+    try { 
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.post(`/climatevisitor/collect/`, data);
         console.log('API POST Call collectTreaure'); //, response.data);
@@ -708,7 +695,7 @@ export const getTreasure = async (treasureId) => {
     try {
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get(`/users/treasure/${treasureId}/`);
-       console.log('API GET Call getTreaure', response.data);
+       console.log('API GET Call getTreaure'); //, response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
@@ -724,8 +711,7 @@ export const getTreasure = async (treasureId) => {
 
 
 export const requestToGiftTreasure = async (data) => {
-    try {
-        console.log(data);
+    try { 
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.post(`/users/send-gift-request/`, data);
         console.log('API GET Call getTreaure'); //, response.data);
@@ -836,7 +822,7 @@ export const getStats = async () => {
     try {
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/climatevisitor/algo-stats-for-user/'); 
-        console.log('API GET Call getStats', response.data.results); //, response.data);
+        console.log('API GET Call getStats'); //, response.data.results); //, response.data);
         return response.data.results; //endpoint is paginated, use 'results'
     } catch (error) {
         if (error.response) {

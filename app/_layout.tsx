@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Alert, AppState, Platform } from "react-native";
-
+import { useFonts } from "expo-font"; 
+import * as SplashScreen from 'expo-splash-screen';
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import NotificationNotifier from "./components/NotificationNotifier";
@@ -84,6 +85,27 @@ export default Sentry.wrap(function AppLayout() {
     requestPermissions();
   }, [hasShareIntent, shareIntent]);
 
+
+    const [fontsLoaded] = useFonts({
+      "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
+      "Poppins-Bold": require("./assets/fonts/Poppins-Bold.ttf"),
+      "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
+    });
+
+
+    SplashScreen.preventAutoHideAsync();
+
+    
+  useEffect(() => {
+    if (fontsLoaded) {
+      SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
+  if (!fontsLoaded) {
+    return null;
+  }
+
   // useEffect(() => {
   //   // hellofriendh had load fonts here
 
@@ -116,6 +138,8 @@ export default Sentry.wrap(function AppLayout() {
   //     subscription.remove();
   //   };
   // }, []);
+
+
 
   //useProtectedRoute is now what is navigating depending on user states
   return (

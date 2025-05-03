@@ -54,12 +54,7 @@ const ScreenRecoverCredentials = () => {
 
   const resetCodeRef = useRef(null);
   const newPasswordInputRef = useRef(null);
-
-  const [fontsLoaded] = useFonts({
-    "Poppins-Regular": require("./assets/fonts/Poppins-Regular.ttf"),
-    "Poppins-Bold": require("./assets/fonts/Poppins-Bold.ttf"),
-    "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf"),
-  });
+ 
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
@@ -133,10 +128,7 @@ const ScreenRecoverCredentials = () => {
     router.back();
   };
 
-  if (!fontsLoaded) {
-    return null; // Or any other loading indicator if fonts are not yet loaded
-  }
-
+ 
   return (
     <>
       <LinearGradient

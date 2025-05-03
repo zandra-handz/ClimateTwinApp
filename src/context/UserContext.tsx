@@ -20,7 +20,7 @@ import {
 } from "../calls/apicalls";
 import { useAppMessage } from "./AppMessageContext";
 import { useNavigationContainerRef, useSegments } from "expo-router";
-
+import { useWatchAppState } from "../hooks/useWatchAppState";
 import { User } from "../types/UserContextTypes";
 
 interface UserContextType {
@@ -97,7 +97,7 @@ const { appState } = useAppState();
       return;
     }
 
-    showAppMessage(true, null, "DEBUG: Reinitiaizing user!");
+   // showAppMessage(true, null, "DEBUG: Reinitializing user!");
     isReinitializing = true;
     try {  
       const token = await SecureStore.getItemAsync(TOKEN_KEY);
@@ -145,11 +145,30 @@ function usePrevious<T>(value: T): T | undefined {
 
   const prevAppState = usePrevious(appState);
 
-  useEffect(() => {
-    if (appState === "active" && !isOnSignIn) {
-      reInitialize();
+  // useEffect(() => {
+  //   if (
+  //     prevAppState !== "active" &&
+  //     appState === "active" &&
+  //     !isOnSignIn
+  //   ) {
+  //     reInitialize();
+  //   }
+  // }, [appState, prevAppState]);
+
+  useWatchAppState((newState) => {
+    if (newState === 'active') {
+      showAppMessage(true, null, '(Debug) app in forground');
+      reInitialize(); // or whatever logic you want
     }
-  }, [appState]); // I don't want this to run every time segment changes lol
+  });
+
+  // useEffect(() => {
+  //   if (appState === "active" && !isOnSignIn) {
+  //     reInitialize();
+  //   }
+  // }, [appState]); 
+  
+  // I don't want this to run every time segment changes lol
  // }, [appState, prevAppState, isOnSignIn]);
 
  
