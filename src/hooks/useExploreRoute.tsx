@@ -21,7 +21,8 @@ const useExploreRoute = (lastState: string, isAuthenticated: boolean, isInitiali
   }, [navigationRef.isReady()]);
 
   useEffect(() => {
-    if (!isNavigationReady || !lastState || !isAuthenticated || isInitializing) { 
+    if (!lastState || !isAuthenticated || isInitializing) { 
+    // if (!isNavigationReady || !lastState || !isAuthenticated || isInitializing) { 
       return;
     }  
 
@@ -44,7 +45,8 @@ const useExploreRoute = (lastState: string, isAuthenticated: boolean, isInitiali
       router.replace("/(exploretabs)");
     }
    // console.log(`LAST STATE`, lastState);
-  }, [ lastState, segments, isNavigationReady, isAuthenticated, isInitializing]);
+  }, [ lastState, segments, isAuthenticated, isInitializing]);
+  // }, [ lastState, segments, isNavigationReady, isAuthenticated, isInitializing]);
 };
 
 export default useExploreRoute;
