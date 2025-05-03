@@ -27,6 +27,7 @@ import { Stack } from "expo-router";
 import { AppMessageContextProvider } from "../src/context/AppMessageContext";
 import { GlobalStylesProvider } from "../src/context/GlobalStylesContext";
 import {  UserProvider } from "../src/context/UserContext";
+import { UserSettingsProvider } from "@/src/context/UserSettingsContext";
 
 
 import { DeviceLocationProvider } from "../src/context/DeviceLocationContext";
@@ -123,6 +124,7 @@ export default Sentry.wrap(function AppLayout() {
         <AppStateProvider>
           <AppMessageContextProvider>
             <UserProvider>
+              <UserSettingsProvider>
               <DeviceLocationProvider>
                 <GlobalStylesProvider>
                   <AppMessage />
@@ -192,7 +194,8 @@ export default Sentry.wrap(function AppLayout() {
                     </PendingRequestsProvider>
                   </SurroundingsWSProvider>
                 </GlobalStylesProvider>
-              </DeviceLocationProvider>
+              </DeviceLocationProvider> 
+              </UserSettingsProvider>
             </UserProvider>
           </AppMessageContextProvider>
         </AppStateProvider>

@@ -1,9 +1,11 @@
 import { Stack } from "expo-router";
 import { useUser } from "../src/context/UserContext";
+import { useUserSettings } from "@/src/context/UserSettingsContext";
 import ComponentSpinner from "./components/Scaffolding/ComponentSpinner";
 
 export default function AppRoutes() {
   const { isAuthenticated, isInitializing } = useUser();
+  const { settingsAreLoading } = useUserSettings();
 
   if (isInitializing) {
     return <ComponentSpinner spinnerSize={60} isInitializerSpinner />;
@@ -11,7 +13,7 @@ export default function AppRoutes() {
 // initialRouteName="index">
   return (
     <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Protected guard={isAuthenticated && !isInitializing}>
+      <Stack.Protected guard={isAuthenticated && !settingsAreLoading}>
         <Stack.Screen
           name="(drawer)"
           options={{
@@ -20,7 +22,7 @@ export default function AppRoutes() {
           }}
         />
       </Stack.Protected>
-      <Stack.Protected guard={!isAuthenticated || isInitializing}>
+      <Stack.Protected guard={!isAuthenticated || settingsAreLoading}>
         <Stack.Screen
           name="index"
           options={{
@@ -33,7 +35,7 @@ export default function AppRoutes() {
           }}
         />
       </Stack.Protected>
-      <Stack.Protected guard={!isAuthenticated || isInitializing}>
+      <Stack.Protected guard={!isAuthenticated || settingsAreLoading}>
         <Stack.Screen
           name="signin"
           options={{

@@ -4,6 +4,7 @@ import React, {
   ReactNode, 
 } from "react";
 import { useUser } from "./UserContext";
+import { useUserSettings } from "./UserSettingsContext";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getItemChoices } from "../calls/apicalls"; 
 import { useSurroundingsWS } from "./SurroundingsWSContext";
@@ -98,7 +99,8 @@ interface InteractiveElementsProviderProps {
 export const InteractiveElementsProvider: React.FC<
   InteractiveElementsProviderProps
 > = ({ children }) => {
-  const { user, isAuthenticated, isInitializing } = useUser(); 
+  const { user, isAuthenticated } = useUser(); 
+  const { settingsAreLoading } = useUserSettings();
   const { lastLocationId } = useSurroundingsWS();
   const queryClient = useQueryClient();
 
@@ -107,22 +109,20 @@ export const InteractiveElementsProvider: React.FC<
   const {
     data: itemChoicesResponse,
     isLoading,
-    isError,
     isSuccess,
+    isError,
   } = useQuery<ItemChoicesResponse | null, Error>({
     queryKey: ["itemChoices", lastLocationId, user?.id],
     queryFn: getItemChoices,
-    enabled: !!isAuthenticated && !isInitializing && !!lastLocationId,
+    enabled: !!isAuthenticated && !settingsAreLoading && !!lastLocationId,
   });
   
 
-  const triggerItemChoicesRefetch = () => {
-    console.log("invalidating item choices query");
+  const triggerItemChoicesRefetch = () => { 
     queryClient.invalidateQueries({
       queryKey: ["itemChoices", lastLocationId, user?.id],
  
-    });
-    console.log("refetching item choices query");
+    }); 
     queryClient.refetchQueries({
       queryKey: ["itemChoices", lastLocationId, user?.id],
     });

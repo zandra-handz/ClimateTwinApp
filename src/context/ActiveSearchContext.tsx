@@ -5,6 +5,7 @@ import React, {
   ReactNode, 
 } from "react";
 import { useUser } from "./UserContext";
+import { useUserSettings } from "./UserSettingsContext";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import { go, getRemainingGoes, expireSurroundings } from "../calls/apicalls";
 
@@ -36,7 +37,8 @@ interface ActiveSearchProviderProps {
 export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
   children,
 }) => {
-  const { user, isAuthenticated, isInitializing } = useUser();
+  const { user, isAuthenticated  } = useUser();
+  const { settingsAreLoading } = useUserSettings();
 
   const queryClient = useQueryClient();
   const timeoutRef = useRef(null);  
@@ -54,7 +56,7 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
   } = useQuery({
     queryKey: ["remainingGoes", user?.id],
     queryFn: () => getRemainingGoes(),
-    enabled: !!isAuthenticated && !isInitializing,
+    enabled: !!isAuthenticated && !settingsAreLoading,
  
   });
 

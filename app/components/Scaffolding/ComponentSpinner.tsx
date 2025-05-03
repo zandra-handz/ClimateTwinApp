@@ -13,6 +13,7 @@ import {
   Wave,
 } from "react-native-animated-spinkit";
 import { useUser } from "@/src/context/UserContext";
+import { useUserSettings } from "@/src/context/UserSettingsContext";
 import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
 import { LinearGradient } from "expo-linear-gradient";
@@ -41,7 +42,8 @@ const ComponentSpinner = ({
   offsetStatusBarHeight = false,
 }) => {
   const {  constantColorsStyles } = useGlobalStyles();
-  const { isAuthenticated, isInitializing } = useUser();
+  const { isAuthenticated } = useUser();
+  const { settingsAreLoading } = useUserSettings();
   const { isLocationSocketOpen, lastState } = useSurroundingsWS();
 
   // if (!showSpinner) return null;
@@ -53,7 +55,7 @@ const ComponentSpinner = ({
   return (
     <>
       {isInitializerSpinner &&
-      (isInitializing) && (
+      (settingsAreLoading) && (
       //  ((isInitializing) || (!lastState && isAuthenticated)) && (
           <LinearGradient
             colors={[
@@ -83,7 +85,7 @@ const ComponentSpinner = ({
       {isSocketSpinner &&
         !isLocationSocketOpen &&
         isAuthenticated &&
-        !isInitializing && (
+        !settingsAreLoading && (
           <View
             style={[
               styles.container,
@@ -93,7 +95,7 @@ const ComponentSpinner = ({
               }, //themeStyles.darkerBackground
             ]}
           >
-            {!isLocationSocketOpen && isAuthenticated && !isInitializing ? (
+            {!isLocationSocketOpen && isAuthenticated && !settingsAreLoading ? (
               <Spinner
                 size={spinnerSize}
                 color={'red'}

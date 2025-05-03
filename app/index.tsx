@@ -1,6 +1,7 @@
 import React  from "react";
 import { View, StyleSheet } from "react-native";
 import { useUser } from "../src/context/UserContext";
+import { useUserSettings } from "@/src/context/UserSettingsContext";
 import { useGlobalStyles } from "../src/context/GlobalStylesContext"; 
 import { useRouter } from "expo-router";
 import SignInButton from "./components/SignInButton"; 
@@ -13,9 +14,9 @@ import useExploreRoute from "../src/hooks/useExploreRoute";
 const index = () => {
   const { themeStyles, manualGradientColors, constantColorsStyles } =
     useGlobalStyles(); 
-  const { isAuthenticated, isInitializing } = useUser();
+  const { isAuthenticated  } = useUser();
 
-  
+  const { settingsAreLoading } = useUserSettings();
     const { lastState } = useSurroundingsWS();
 
     //WHERE WAS USING BEFORE MAY 3
@@ -81,7 +82,7 @@ const index = () => {
                   position: "absolute",
                 }}
               >
-                {!isAuthenticated && !isInitializing && (
+                {!isAuthenticated && !settingsAreLoading && (
                   <SignInButton
                     onPress={() => handleNavigateToSignIn()}
                     title={"Sign in"}

@@ -2,13 +2,15 @@ import { useEffect, useState, useRef, useCallback } from "react";
 import { useFocusEffect } from "expo-router";
 import { useSharedValue } from "react-native-reanimated";
 import { useUser } from "../context/UserContext";
+import { useUserSettings } from "../context/UserSettingsContext";
 import { useSurroundingsWS } from "../context/SurroundingsWSContext";
 import * as SecureStore from "expo-secure-store";
 
 const useWebSocket = () => {
   const socketRef = useRef<WebSocket | null>(null);
   const TOKEN_KEY = "accessToken";
-  const { isAuthenticated, isInitializing } = useUser();
+  const { isAuthenticated } = useUser();
+  const { settingsAreLoading } = useUserSettings();
   const { lastState } = useSurroundingsWS();
   const [token, setToken] = useState<string | null>(null);
   const [triggerReconnectAfterFetch, setTriggerReconnectAfterFetch] =
@@ -28,7 +30,7 @@ const useWebSocket = () => {
   useFocusEffect(
     useCallback(() => {
       console.log("Location Searcher socket is focused");
-      if (isAuthenticated && !isInitializing && (lastState === 'searching for twin')) {
+      if (isAuthenticated && !settingsAreLoading && (lastState === 'searching for twin')) {
         fetchToken();
         setTriggerReconnectAfterFetch(true);
       }

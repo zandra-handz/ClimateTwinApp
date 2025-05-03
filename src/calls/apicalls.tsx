@@ -276,7 +276,7 @@ export const getUserSettings = async () => {
     try {
        // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/users/settings/');
-        //console.log('API GET Call getUserSettings', response.data);
+        console.log('API GET Call getUserSettings', response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
@@ -546,7 +546,7 @@ export const getRemainingGoes = async () => {
 export const updateUserSettings = async (userId, updatedSettings) => {
     try {
         const response = await axios.patch(`/users/change-settings/${userId}/`, updatedSettings);
-        //console.log('API PATCH CALL updateUserSettings', response.data);
+        console.log('API PATCH CALL updateUserSettings', response.data);
         //console.log('API response:', response.data); // Log the response data
         return response.data; // Ensure this returns the expected structure
     } catch (error) {

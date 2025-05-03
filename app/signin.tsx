@@ -9,6 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useUser } from "../src/context/UserContext";
+import { useUserSettings } from "@/src/context/UserSettingsContext";
 import { useGlobalStyles } from "../src/context/GlobalStylesContext";
 import { useAppMessage } from "../src/context/AppMessageContext";
 import { useFonts } from "expo-font";
@@ -50,16 +51,13 @@ const SignInScreen = () => {
   const [signUpSuccess, setSignUpSuccess] = useState(false);
   const [isSigningIn, setisSigningIn] = useState(false);
   const {
-    user,
-    isInitializing,
+    user, 
     isAuthenticated,
-    onSignin,
-    signinMutation,
-    signupMutation,
-    onSignUp,
-    handleSignUp,
-    reInitialize,
+    onSignin, 
+    onSignUp,  
   } = useUser();
+
+  const { settingsAreLoading } = useUserSettings();
   const usernameInputRef = useRef(null);
   const passwordInputRef = useRef(null);
   const verifyPasswordInputRef = useRef(null);
@@ -299,7 +297,7 @@ console.log('setting signin to false');
             justifyContent: "space-between",
           }}
         >
-          {!isAuthenticated && !isInitializing && !isSigningIn && (
+          {!isAuthenticated && !settingsAreLoading && !isSigningIn && (
             <>
               <TouchableOpacity
                 onPress={handleNavigateBackToWelcomeScreen}
@@ -426,7 +424,7 @@ console.log('setting signin to false');
 
 
 
-      {showSignIn && !isSigningIn && !isAuthenticated && !isInitializing && (
+      {showSignIn && !isSigningIn && !isAuthenticated && !settingsAreLoading && (
         <View
           style={[styles.form, { position: 'absolute', bottom: isKeyboardVisible ? '50%' : "50%" }]}
           accessible={true}

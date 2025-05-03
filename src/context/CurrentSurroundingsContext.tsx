@@ -6,7 +6,8 @@ import React, {
   useRef,
   ReactNode,
 } from "react";
-import { useUser } from "./UserContext";  
+import { useUser } from "./UserContext"; 
+import { useUserSettings } from "./UserSettingsContext"; 
 import { useSurroundingsWS } from "./SurroundingsWSContext";  
 import { useGroqContext } from "./GroqContext";  
 import { useActiveSearch } from "./ActiveSearchContext";
@@ -76,7 +77,8 @@ interface CurrentSurroundingsProviderProps {
 export const CurrentSurroundingsProvider: React.FC<
   CurrentSurroundingsProviderProps
 > = ({ children }) => {
-  const { user, isAuthenticated, isInitializing } = useUser();
+  const { user, isAuthenticated  } = useUser();
+  const { settingsAreLoading } = useUserSettings();
   const { refetchRemainingGoes } = useActiveSearch();
   const { extendGroqStaleTime, logGroqState } = useGroqContext();
   const segments = useSegments();
@@ -111,7 +113,7 @@ export const CurrentSurroundingsProvider: React.FC<
 
     enabled:
       !!isAuthenticated &&
-      !isInitializing &&
+      !settingsAreLoading &&
       !!lastLocationId &&
       lastState !== "home" &&
       lastState !== "searching for twin" &&

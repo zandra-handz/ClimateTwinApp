@@ -1,6 +1,7 @@
 import { useNavigationContainerRef, useRouter, useSegments } from "expo-router";
 import { useState, useEffect } from "react";
 import { useUser } from "../context/UserContext";
+import { useUserSettings } from "../context/UserSettingsContext";
 import { useSurroundingsWS } from "../context/SurroundingsWSContext";
  
 const useProtectedRoute = (isAuthenticatedd: boolean, isLoadingg: boolean) => {
@@ -9,6 +10,7 @@ const useProtectedRoute = (isAuthenticatedd: boolean, isLoadingg: boolean) => {
   const segments = useSegments();
   const [isNavigationReady, setNavigationReady] = useState(false);
   const { user, isAuthenticated, isInitializing: isLoading } = useUser();
+  const { settingsAreLoading } = useUserSettings();
   const { lastState } = useSurroundingsWS();
  
 
@@ -22,6 +24,7 @@ const useProtectedRoute = (isAuthenticatedd: boolean, isLoadingg: boolean) => {
     }
   };
 
+  // might be causing issues since Expo 53 SDK update 
   useEffect(() => {
     if (navigationRef.isReady()) {
       setNavigationReady(true);
@@ -35,7 +38,7 @@ const useProtectedRoute = (isAuthenticatedd: boolean, isLoadingg: boolean) => {
   }, [navigationRef.isReady()]);
 
   useEffect(() => {
-    if (!isNavigationReady || isLoading) { 
+    if (!isNavigationReady || settingsAreLoading) { 
       return;
     }  
 
@@ -54,7 +57,7 @@ const useProtectedRoute = (isAuthenticatedd: boolean, isLoadingg: boolean) => {
         router.push("/(drawer)/(homedashboard)");
       }  
        
-  }, [isAuthenticated, isLoading, segments, isNavigationReady ]); 
+  }, [isAuthenticated, settingsAreLoading, segments, isNavigationReady ]); 
 };
 
 export default useProtectedRoute;

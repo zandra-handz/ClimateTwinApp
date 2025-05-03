@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "../context/UserContext";
+import { useUserSettings } from "../context/UserSettingsContext";
 import { useSurroundingsWS } from "../context/SurroundingsWSContext";
 import { getLiveWeather } from "../calls/liveweathercall";
 
@@ -39,6 +40,7 @@ const defaultLiveWeather: LiveWeather = {
 
 const useLiveWeather = () => {
   const { isAuthenticated, isInitializing } = useUser();
+  const { settingsAreLoading } = useUserSettings();
   const { lastLocationId, lastLatAndLong } = useSurroundingsWS();
   const [lat, lon] = Array.isArray(lastLatAndLong) ? lastLatAndLong : [null, null]; 
   const locationCacheExpiration = 1000 * 60 * 60; // 1 hour
@@ -57,7 +59,7 @@ const useLiveWeather = () => {
   } = useQuery<LiveWeather | null>({
     queryKey: ["liveWeather", lastLocationId, lat, lon],
     queryFn: () => getLiveWeather({ lat, lon }),
-    enabled: !!isAuthenticated && !!lastLocationId && !isInitializing && !!lastLatAndLong,
+    enabled: !!isAuthenticated && !!lastLocationId && !settingsAreLoading && !!lastLatAndLong,
     staleTime: locationCacheExpiration,
     gcTime: locationCacheExpiration,
   });

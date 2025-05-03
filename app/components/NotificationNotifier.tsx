@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, TouchableOpacity, Modal, StyleSheet } from "react-native";
 import { useRouter } from "expo-router";
 import { useUser } from "@/src/context/UserContext";
+import { useUserSettings } from "@/src/context/UserSettingsContext";
 import { useSurroundingsWS } from "../../src/context/SurroundingsWSContext";
 import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
 
@@ -13,6 +14,7 @@ import { useAppMessage } from "@/src/context/AppMessageContext";
 
 import { useTreasures } from "@/src/context/TreasuresContext";
 
+
 const NotificationNotifier = () => {
   const {
     themeStyles,
@@ -20,7 +22,8 @@ const NotificationNotifier = () => {
     appFontStyles,
     constantColorsStyles,
   } = useGlobalStyles();
-  const { user, isAuthenticated, isInitializing } = useUser();
+  const { user, isAuthenticated } = useUser();
+  const { settingsAreLoading } = useUserSettings();
   const { showAppMessage } = useAppMessage();
   const {
     handleAcceptTreasureGift,
@@ -220,7 +223,7 @@ const NotificationNotifier = () => {
   return (
     <>
       {isAuthenticated &&
-        !isInitializing &&
+        !settingsAreLoading &&
         lastNotification &&
         lastRequestType &&
         lastRequestId && (

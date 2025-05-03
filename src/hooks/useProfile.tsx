@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState, useEffect } from "react";
+import React, {   useRef, useState, useEffect } from "react";
 import {
   useQuery,
   useQueryClient,
@@ -7,6 +7,7 @@ import {
 } from "@tanstack/react-query";
 
 import { useUser } from "../context/UserContext";
+import { useUserSettings } from "../context/UserSettingsContext";
 import {
   getUserProfile,
   updateUserProfile,
@@ -36,7 +37,8 @@ interface UserProfile {
  
 
 const useProfile = () => {
-  const { user, isAuthenticated, isInitializing } = useUser();  
+  const { user, isAuthenticated } = useUser();  
+  const { settingsAreLoading } = useUserSettings();
   const [avatar, setAvatar] = useState<string | null>(null);
 
   const queryClient = useQueryClient();
@@ -51,7 +53,7 @@ const useProfile = () => {
   }: UseQueryResult<UserProfile, Error> = useQuery({
     queryKey: ["profile", user?.id],
     queryFn: getUserProfile,
-    enabled: !!isAuthenticated && !isInitializing,
+    enabled: !!isAuthenticated && !settingsAreLoading,
     onSuccess: (data) => { 
      
     },

@@ -13,6 +13,7 @@ import {
 } from "@tanstack/react-query";
  
 import { useUser } from "../../src/context/UserContext";
+import { useUserSettings } from "./UserSettingsContext";
 import { useAppMessage } from "@/src/context/AppMessageContext";
 import {
   getFriends,
@@ -79,7 +80,8 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
   children,
 }) => { 
   const { showAppMessage } = useAppMessage();
-  const { user, isAuthenticated, isInitializing } = useUser();
+  const { user, isAuthenticated,  } = useUser();
+  const { settingsAreLoading } = useUserSettings();
   const { triggerRequestsRefetch } = usePendingRequests();
   const [viewingFriend, setViewingFriend] = useState<Friend | null>(null);  
   const [viewingPublicProfile, setViewingPublicProfile] =
@@ -101,7 +103,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
   }: UseQueryResult<Friend[], Error> = useQuery({
     queryKey: ["friends", user?.id],
     queryFn: getFriends,
-    enabled: !!(isAuthenticated && !isInitializing && user && user.id),
+    enabled: !!(isAuthenticated && !settingsAreLoading && user && user.id),
   });
   
   

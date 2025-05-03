@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useUser } from "../context/UserContext";
+import { useUserSettings } from "../context/UserSettingsContext";
 import { getInboxItems, getInboxItem, acceptTreasureGift } from "../calls/apicalls";
 
 // Define types for inbox items and messages
@@ -32,7 +33,8 @@ interface InboxItem {
 }
 
 const useInbox = () => {
-  const { user, isAuthenticated, isInitializing } = useUser();
+  const { user, isAuthenticated } = useUser();
+  const { settingsAreLoading } = useUserSettings();
   const queryClient = useQueryClient();
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -53,7 +55,7 @@ const useInbox = () => {
   } = useQuery<InboxItem[]>({
     queryKey: ["inboxItems", user?.id],
     queryFn: getInboxItems,
-    enabled: !!isAuthenticated && !isInitializing,
+    enabled: !!isAuthenticated && !settingsAreLoading,
  
   });
 

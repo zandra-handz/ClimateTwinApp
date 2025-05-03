@@ -12,17 +12,19 @@ import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
 import useExploreRoute from "@/src/hooks/useExploreRoute";
 import NotificationNotifier from "@/app/components/NotificationNotifier";
 import { useUser } from "@/src/context/UserContext";
+import { useUserSettings } from "@/src/context/UserSettingsContext";
 import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
 import { useActiveSearch } from "@/src/context/ActiveSearchContext";
 
 const index = () => {
   const { deviceLocation } = useDeviceLocationContext();
+  const {settingsAreLoading } = useUserSettings();
   const { themeStyles, appContainerStyles } = useGlobalStyles(); 
   const { lastState } = useSurroundingsWS();
   const { isAuthenticated, isInitializing } = useUser();
   const { remainingGoes, handleGo } = useActiveSearch();
 
- // useExploreRoute(lastState, isAuthenticated, isInitializing); 
+ // useExploreRoute(lastState, isAuthenticated, isInitializing); //replace with settingsAreLoading
 
   return (
     <>

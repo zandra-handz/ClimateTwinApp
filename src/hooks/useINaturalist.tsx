@@ -1,6 +1,7 @@
 
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "../context/UserContext";
+import { useUserSettings } from "../context/UserSettingsContext";
 import { useSurroundingsWS } from "../context/SurroundingsWSContext";
 import { getINaturalist } from "../calls/inaturalistcall";
 
@@ -33,7 +34,8 @@ interface INaturalist {
  
 
 const useINaturalist = () => {
-  const { user, isAuthenticated, isInitializing } = useUser();
+  const { user, isAuthenticated } = useUser();
+  const { settingsAreLoading } = useUserSettings();
   const { lastLocationId, lastLatAndLong } = useSurroundingsWS();
   const [lat, lon] = Array.isArray(lastLatAndLong) ? lastLatAndLong : [null, null];
   const locationCacheExpiration = 1000 * 60 * 60; // 1 hour
@@ -47,7 +49,7 @@ const useINaturalist = () => {
   } = useQuery<INaturalist | null>({
     queryKey: ["iNaturalist", lastLocationId, lat, lon, user?.id],
     queryFn: () => getINaturalist({ lat, lon }),
-    enabled: !!isAuthenticated && !!lastLocationId && !isInitializing && !!lastLatAndLong,
+    enabled: !!isAuthenticated && !!lastLocationId && !settingsAreLoading && !!lastLatAndLong,
     staleTime: locationCacheExpiration,
     gcTime: locationCacheExpiration,
   });

@@ -1,41 +1,19 @@
 import { View } from "react-native";
 import React from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
-import { useUser } from "../../../src/context/UserContext";
+  
 import { DrawerItem } from "@react-navigation/drawer";
 import {  Feather } from "@expo/vector-icons";
 import NewItemsDot from "./NewItemsDot";
 import { useRouter } from "expo-router";
 
 const InboxWithNotifs = () => {
-    const router = useRouter();
-  const { appSettings, updateSettings } = useUser();
+    const router = useRouter();  
   const { lightOrDark, themeStyles, appContainerStyles, appFontStyles } =
     useGlobalStyles();
 
 
-  const currentMode =
-    lightOrDark === "dark" ? {  mode: 'Light', icon: "sun" } : { mode: 'Dark', icon: "moon" };
-  //const pressColor = lightOrDark === "dark" ? "white" : "black";
-  const pressColor = themeStyles.primaryText.color;
-  const handlePress = () => {
-    if (appSettings?.manual_dark_mode == null) {
-      console.log("lightDark handlePress PRESSED");
-      updateSettings({ manual_dark_mode: false });
-    } else if (appSettings?.manual_dark_mode === false) {
-      console.log("lightDark handlePress PRESSED");
-      updateSettings({ manual_dark_mode: true });
-    } else if (appSettings?.manual_dark_mode === true) {
-      console.log("lightDark handlePress PRESSED");
-      updateSettings({ manual_dark_mode: false });
-    }
-  };
-
-  const handleReset = () => {
-    // Just pass the settings, no need to pass the user ID
-    updateSettings({ manual_dark_mode: null });
-  };
-
+  
   return (
     <View style={{ height: "auto" }}>
         <DrawerItem
@@ -55,7 +33,7 @@ const InboxWithNotifs = () => {
             { borderBottomColor: themeStyles.primaryText.color },
           ]}
           label="Inbox"
-          onPress={() => router.push("(inbox)")}
+          onPress={() => router.push("/(inbox)")}
         />
  
         <View

@@ -2,11 +2,12 @@ import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { useUser } from "../../../src/context/UserContext";
+import { useUserSettings } from "@/src/context/UserSettingsContext";
 import { DrawerItem } from "@react-navigation/drawer";
 import { Feather } from "@expo/vector-icons";
 
-const DarkLightSwitch = () => {
-  const { appSettings, updateSettings } = useUser();
+const DarkLightSwitch = () => { 
+  const {settingsState, handleUpdateUserSettings } = useUserSettings();
   const { lightOrDark, themeStyles, appContainerStyles, appFontStyles } =
     useGlobalStyles();
 
@@ -17,21 +18,20 @@ const DarkLightSwitch = () => {
   //const pressColor = lightOrDark === "dark" ? "white" : "black";
   const pressColor = themeStyles.primaryText.color;
   const handlePress = () => {
-    if (appSettings?.manual_dark_mode == null) {
+    if (settingsState?.manual_dark_mode == null) {
+      //console.log("lightDark handlePress PRESSED");
+      handleUpdateUserSettings({ manual_dark_mode: false });
+    } else if (settingsState?.manual_dark_mode === false) {
       // console.log("lightDark handlePress PRESSED");
-      updateSettings({ manual_dark_mode: false });
-    } else if (appSettings?.manual_dark_mode === false) {
+      handleUpdateUserSettings({ manual_dark_mode: true });
+    } else if (settingsState?.manual_dark_mode === true) {
       // console.log("lightDark handlePress PRESSED");
-      updateSettings({ manual_dark_mode: true });
-    } else if (appSettings?.manual_dark_mode === true) {
-      // console.log("lightDark handlePress PRESSED");
-      updateSettings({ manual_dark_mode: false });
+      handleUpdateUserSettings({ manual_dark_mode: false });
     }
   };
 
-  const handleReset = () => {
-    // Just pass the settings, no need to pass the user ID
-    updateSettings({ manual_dark_mode: null });
+  const handleReset = () => { 
+    handleUpdateUserSettings({ manual_dark_mode: null });
   };
 
   return (
@@ -55,7 +55,7 @@ const DarkLightSwitch = () => {
         onPress={() => handlePress()}
       />
 
-      {appSettings && appSettings.manual_dark_mode != null && (
+      {settingsState && settingsState.manual_dark_mode != null && (
         <View
           style={{
             position: "absolute",

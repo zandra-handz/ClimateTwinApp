@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import * as SecureStore from "expo-secure-store";
 import { useUser } from "./UserContext";
+import { useUserSettings } from "./UserSettingsContext";
 import { useAppMessage } from "./AppMessageContext";
 interface SurroundingsWSContextType {
   sendMessage: (message: string) => void;
@@ -45,7 +46,8 @@ export const SurroundingsWSProvider: React.FC<SurroundingsWSProviderProps> = ({
 }) => {
   const TOKEN_KEY = "accessToken";
   const socketRef = useRef<WebSocket | null>(null);
-  const { isAuthenticated, isInitializing } = useUser();
+  const { isAuthenticated } = useUser();
+  const { settingsAreLoading } = useUserSettings();
   const [isReconnecting, setIsReconnecting] = useState(false);
   const { showAppMessage } = useAppMessage();
   const [locationUpdateWSIsOpen, setlocationUpdateWSIsOpen] =
@@ -119,7 +121,7 @@ export const SurroundingsWSProvider: React.FC<SurroundingsWSProviderProps> = ({
     //   return;
     // }
 
-    if (isInitializing) {
+    if (settingsAreLoading) {
       return;
     }
 
@@ -371,7 +373,7 @@ export const SurroundingsWSProvider: React.FC<SurroundingsWSProviderProps> = ({
   };
 
   const attemptReconnect = () => {
-    if (!isReconnecting && isAuthenticated && !isInitializing) {
+    if (!isReconnecting && isAuthenticated && !settingsAreLoading) {
       console.log("Attempting to reconnect triggered");
 
       if (
@@ -384,7 +386,7 @@ export const SurroundingsWSProvider: React.FC<SurroundingsWSProviderProps> = ({
         setTimeout(() => {
           if (
             isAuthenticated &&
-            !isInitializing &&
+            !settingsAreLoading &&
             (!socketRef.current ||
               socketRef.current.readyState !== WebSocket.OPEN)
           ) {
@@ -404,7 +406,7 @@ export const SurroundingsWSProvider: React.FC<SurroundingsWSProviderProps> = ({
 
   useEffect(() => {
     //console.log('WS connection useEffect triggered');
-    if (isAuthenticated && !isInitializing) {
+    if (isAuthenticated && !settingsAreLoading) {
       connectWebSocket(); // Check if connection/reconnection needed when authenticated & done initializing
     }
 
@@ -416,7 +418,7 @@ export const SurroundingsWSProvider: React.FC<SurroundingsWSProviderProps> = ({
       setReconnectionDelay(1000);
       setIsReconnecting(false);
     };
-  }, [isInitializing]);
+  }, [settingsAreLoading, isAuthenticated]);
 
   const sendMessage = (message: any) => {
     if (socketRef.current && socketRef.current.readyState === WebSocket.OPEN) {

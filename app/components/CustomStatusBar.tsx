@@ -3,11 +3,13 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { useGlobalStyles } from '../../src/context/GlobalStylesContext';
 import { useUser } from '../../src/context/UserContext';
+import { useUserSettings } from '@/src/context/UserSettingsContext';
 import { useColorScheme } from "react-native";
 import { useRouter, usePathname, useSegments } from 'expo-router';  // Import useRouter
 
 const CustomStatusBar = () => { 
     const { user, isAuthenticated, appSettings } = useUser();
+    const { settingsState } = useUserSettings();
     const { themeStyles } = useGlobalStyles();
     const colorScheme = useColorScheme();
     const [color, setColor] = useState();
@@ -16,10 +18,10 @@ const CustomStatusBar = () => {
     const pathname = usePathname(); // is this? right??
 
     useEffect(() => {
-        if (appSettings) {
-            if (appSettings.manual_dark_mode === true) {
+        if (settingsState) {
+            if (settingsState.manual_dark_mode === true) {
                 setColor('light');
-            } else if (appSettings.manual_dark_mode === false) {
+            } else if (settingsState.manual_dark_mode === false) {
                 setColor('dark');
             } else {
                 let phoneTheme;
@@ -30,7 +32,7 @@ const CustomStatusBar = () => {
         
         // Log the screen and color change
       //  console.log(`Current screen: ${pathname}, ${segments} setColor in CustomStatusBar: ${color}`);
-    }, [appSettings, pathname]); // Make sure to add router.pathname to dependencies
+    }, [settingsState, pathname]); // Make sure to add router.pathname to dependencies
 
 
 

@@ -3,6 +3,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler";
 import ExploreTabsHeader from "../components/HeaderComponents/ExploreTabsHeader";
 import HomeHeader from "../components/HeaderComponents/HomeHeader";
 import { useUser } from "@/src/context/UserContext";
+import { useUserSettings } from "@/src/context/UserSettingsContext";
 import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
 import DrawerCustomizer from "../components/DrawerNavComponents/DrawerCustomizer";
 // import SafeView from "../components/SafeView";
@@ -20,6 +21,7 @@ Notifications.setNotificationHandler({
 
 export default () => {
   const { isAuthenticated, isInitializing } = useUser();
+  const { settingsAreLoading } = useUserSettings();
 
   const { lastState } = useSurroundingsWS();
 
@@ -30,7 +32,7 @@ export default () => {
   const isHome : boolean = (lastState === 'home' || lastState === 'searching for twin'
   );
 
-  useExploreRoute(lastState, isAuthenticated, isInitializing);
+  useExploreRoute(lastState, isAuthenticated, settingsAreLoading);
   // export default function Layout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>

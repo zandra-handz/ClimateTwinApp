@@ -10,6 +10,7 @@ import {
 
 
 import { useUser } from "../../src/context/UserContext";
+import { useUserSettings } from "./UserSettingsContext";
 import { useAppMessage } from "@/src/context/AppMessageContext";
 import {
   Treasure,
@@ -76,7 +77,8 @@ export const TreasuresProvider: React.FC<TreasuresProviderProps> = ({
   children,
 }) => {
   const { showAppMessage } = useAppMessage();
-  const { user, isAuthenticated, isInitializing } = useUser();
+  const { user, isAuthenticated  } = useUser();
+  const { settingsAreLoading } = useUserSettings();
   const { triggerRequestsRefetch } = usePendingRequests();
   const [testData, setTestData] = useState(null); 
   const [viewingTreasure, setViewingTreasure] = useState<Treasure | null>(null);
@@ -97,7 +99,7 @@ export const TreasuresProvider: React.FC<TreasuresProviderProps> = ({
   }: UseQueryResult<Treasure[], Error> = useQuery({
     queryKey: ["treasures", user?.id],
     queryFn: getTreasures,
-    enabled: !!(isAuthenticated && !isInitializing && user && user.id),
+    enabled: !!(isAuthenticated && !settingsAreLoading && user && user.id),
   });
  
   const handleGetTreasure = async (id: number) => {

@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useRef } from "react";
  
 import { useQueryClient,   useQuery, useMutation } from "@tanstack/react-query";
 import { useUser } from "./UserContext";
+import { useUserSettings } from "./UserSettingsContext";
 import { useSurroundingsWS } from "./SurroundingsWSContext";
 import useLLMScripts from "../../app/llm/useLLMScripts";
 import { talkToGroq } from "../calls/groqcall";
@@ -36,7 +37,8 @@ export const useGroqContext = () => {
 };
 
 export const GroqProvider: React.FC = ({ children }) => {
-    const { user, isAuthenticated, isInitializing } = useUser();
+    const { user, isAuthenticated } = useUser();
+    const { settingsAreLoading } = useUserSettings();
     const {   liveWeatherId, liveWeatherString } = useLiveWeather();
     //const { nativePlants } = useNativePlants(); 
     const { lastLocationName, lastLocationId, lastLatAndLong } = useSurroundingsWS();
@@ -79,7 +81,7 @@ export const GroqProvider: React.FC = ({ children }) => {
     const { data: groqHistory, isLoading, isPending, isError } = useQuery({
       queryKey: ["groq", user?.id, lastLocationId, "history", liveWeatherId],
       queryFn: () => talkToGroq({ role: roleHistory, prompt: promptHistory }),
-      enabled: !!isAuthenticated && !!lastLocationId && !!liveWeatherId && !!liveWeatherString && !isInitializing,
+      enabled: !!isAuthenticated && !!lastLocationId && !!liveWeatherId && !!liveWeatherString && !settingsAreLoading,
       staleTime: locationCacheExpiration,
       gcTime: locationCacheExpiration,
  

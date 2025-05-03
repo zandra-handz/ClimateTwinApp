@@ -6,6 +6,7 @@ import React, {
   ReactNode,
 } from "react";
 import { useUser } from "./UserContext";
+import { useUserSettings } from "./UserSettingsContext";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getNearbyLocations } from "../calls/apicalls";
 import { useSurroundingsWS } from "./SurroundingsWSContext";
@@ -50,7 +51,8 @@ interface NearbyLocationsProviderProps {
 export const NearbyLocationsProvider: React.FC<
   NearbyLocationsProviderProps
 > = ({ children }) => {
-  const { user, isAuthenticated, isInitializing } = useUser();
+  const { user, isAuthenticated } = useUser();
+  const { settingsAreLoading } = useUserSettings();
   const { lastState, lastLocationId, baseLocationId } = useSurroundingsWS();
   // const [centeredNearbyLocations, setCenteredNearbyLocations] = useState<
   //   NearbyLocation[]
@@ -70,7 +72,7 @@ export const NearbyLocationsProvider: React.FC<
     queryFn: getNearbyLocations,
     enabled:
       !!isAuthenticated &&
-      !isInitializing &&
+      !settingsAreLoading &&
       !!lastLocationId &&
       lastState === "exploring",
     //staleTime: 0,

@@ -8,6 +8,7 @@ import React, {
 import { StyleSheet, AccessibilityInfo } from "react-native";
 import { useColorScheme } from "react-native";
 import { useUser } from "./UserContext"; 
+import { useUserSettings } from "./UserSettingsContext";
 
 // Define the types for the global styles state
 interface GradientColors {
@@ -69,7 +70,8 @@ interface GlobalStylesProviderProps {
 export const GlobalStylesProvider: React.FC<GlobalStylesProviderProps> = ({
   children,
 }) => {
-  const { user, isAuthenticated, appSettings } = useUser();
+  const { isAuthenticated } = useUser();
+  const { settingsState } = useUserSettings();
   const colorScheme = useColorScheme();
   const [nonCustomHeaderPage, setNonCustomHeaderPage] =
     useState<boolean>(false);
@@ -101,23 +103,23 @@ export const GlobalStylesProvider: React.FC<GlobalStylesProviderProps> = ({
   });
 
   useEffect(() => {
-    if (isAuthenticated && appSettings) {
-      console.log(
-        `APP SETTINGS IN GLOBAL STYLES: ${appSettings.manual_dark_mode}`
-      );
+    if (settingsState) {
+      // console.log(
+      //   `APP SETTINGS IN GLOBAL STYLES: ${settingsState.manual_dark_mode}`
+      // );
       const determineTheme = () => {
-        if (appSettings.manual_dark_mode !== null) {
-          return appSettings.manual_dark_mode ? "dark" : "light";
+        if (settingsState.manual_dark_mode !== null) {
+          return settingsState.manual_dark_mode ? "dark" : "light";
         }
         return colorScheme || "dark";
       };
 
       setStyles((prevStyles) => ({
         ...prevStyles,
-        fontSize: appSettings.large_text ? 20 : 16,
-        highContrast: appSettings.high_contrast_mode,
-        screenReader: appSettings.screen_reader,
-        receiveNotifications: appSettings.receive_notifications,
+        fontSize: settingsState.large_text ? 20 : 16,
+        highContrast: settingsState.high_contrast_mode,
+        screenReader: settingsState.screen_reader,
+        receiveNotifications: settingsState.receive_notifications,
         theme: determineTheme(),
       }));
     } else {
@@ -126,7 +128,7 @@ export const GlobalStylesProvider: React.FC<GlobalStylesProviderProps> = ({
         theme: colorScheme || "dark",
       }));
     }
-  }, [isAuthenticated, appSettings, colorScheme]);
+  }, [settingsState, colorScheme]);
 
   // Effect to adjust styles based on the theme
   useEffect(() => {

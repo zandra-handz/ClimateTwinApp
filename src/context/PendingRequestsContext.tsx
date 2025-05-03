@@ -10,6 +10,7 @@ import {
 } from "@tanstack/react-query";
  ;
 import { useUser } from "../../src/context/UserContext"; 
+import { useUserSettings } from "./UserSettingsContext";
 import { 
   getUserPendingRequests,
 } from "../../src/calls/apicalls";
@@ -42,7 +43,8 @@ interface PendingRequestsProviderProps {
 export const PendingRequestsProvider: React.FC<PendingRequestsProviderProps> = ({
   children,
 }) => { 
-  const { user, isAuthenticated, isInitializing } = useUser();
+  const { user, isAuthenticated } = useUser();
+  const { settingsAreLoading } = useUserSettings();
  
   const queryClient = useQueryClient();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -57,7 +59,7 @@ export const PendingRequestsProvider: React.FC<PendingRequestsProviderProps> = (
   }: UseQueryResult<PendingRequestsResponse, Error> = useQuery({
     queryKey: ["pendingRequests", user?.id],
     queryFn: getUserPendingRequests,
-    enabled: !!(isAuthenticated && !isInitializing && user && user.id),
+    enabled: !!(isAuthenticated && !settingsAreLoading && user && user.id),
   });
  
  
