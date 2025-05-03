@@ -82,7 +82,7 @@ const SignInScreen = () => {
 
   useLayoutEffect(() => {
     if (createNewAccount === true) {
-      console.log("user wants to create new account");
+     // console.log("user wants to create new account");
       toggleMode();
     }
   }, [createNewAccount]);

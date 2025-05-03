@@ -22,7 +22,7 @@ const index = () => {
   const { isAuthenticated, isInitializing } = useUser();
   const { remainingGoes, handleGo } = useActiveSearch();
 
-  useExploreRoute(lastState, isAuthenticated, isInitializing); 
+ // useExploreRoute(lastState, isAuthenticated, isInitializing); 
 
   return (
     <>

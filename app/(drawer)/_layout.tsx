@@ -26,7 +26,7 @@ export default () => {
   const { lastState } = useSurroundingsWS();
  
 
-   //useExploreRoute(lastState, isAuthenticated, isInitializing); 
+   useExploreRoute(lastState, isAuthenticated, isInitializing); 
   // export default function Layout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
