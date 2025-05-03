@@ -75,17 +75,19 @@ const { appState } = useAppState();
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    if (navigationRef.isReady()) {
-      setNavigationReady(true);
-    }
+  showAppMessage(true, null, 'DEBUG: User context rerendered!');
 
-    const unsubscribe = navigationRef.addListener("state", () => {
-      setNavigationReady(true);
-    });
+  // useEffect(() => {
+  //   if (navigationRef.isReady()) {
+  //     setNavigationReady(true);
+  //   }
 
-    return () => unsubscribe && unsubscribe();
-  }, [navigationRef.isReady()]); 
+  //   const unsubscribe = navigationRef.addListener("state", () => {
+  //     setNavigationReady(true);
+  //   });
+
+  //   return () => unsubscribe && unsubscribe();
+  // }, [navigationRef.isReady()]); 
 
   // useProtectedRoute(authenticated, loading); // moved to main index file
 
@@ -145,10 +147,10 @@ function usePrevious<T>(value: T): T | undefined {
   const prevAppState = usePrevious(appState);
 
   useEffect(() => {
-    if (appState === "active" && prevAppState !== "active" && !isOnSignIn) {
+    if (appState === "active" && !isOnSignIn) {
       reInitialize();
     }
-  }, [appState, prevAppState]); // I don't want this to run every time segment changes lol
+  }, [appState]); // I don't want this to run every time segment changes lol
  // }, [appState, prevAppState, isOnSignIn]);
 
  

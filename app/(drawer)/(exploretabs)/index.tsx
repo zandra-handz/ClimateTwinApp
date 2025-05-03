@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import { Animated, View } from "react-native";
 import { useFocusEffect } from "expo-router"; 
-
+import SafeView from "@/app/components/SafeView";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { useSurroundings } from "../../../src/context/CurrentSurroundingsContext";
 import useInlineComputations from "@/src/hooks/useInlineComputations";

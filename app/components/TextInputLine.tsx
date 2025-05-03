@@ -122,7 +122,7 @@ import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
   const styles = StyleSheet.create({
 
     container: {
-      borderRadius: 30,
+      borderRadius: 10,
       alignSelf: "center",
       padding: 10,
       paddingHorizontal: 20,

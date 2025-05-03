@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     alignSelf: "center",
     padding: 20, 
+    width: '100%',
   },
   title: {
     fontSize: 15,

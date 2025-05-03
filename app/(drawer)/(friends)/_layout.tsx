@@ -1,15 +1,14 @@
-import { Tabs } from "expo-router";
-import { View, Text, TouchableOpacity } from "react-native";
-import { GestureHandlerRootView } from "react-native-gesture-handler"; 
-//import SafeView from "@/app/components/SafeView";
+import { TouchableOpacity } from "react-native";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
+import SafeView from "@/app/components/SafeView";
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
 import { useRouter } from "expo-router";
-import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
+import { AntDesign, Feather } from "@expo/vector-icons";
 
 import { Stack } from "expo-router"; // Expo Router's Stack component
 
 export default () => {
-  const { themeStyles, constantColorsStyles, appFontStyles } =
+  const { constantColorsStyles, appFontStyles } =
     useGlobalStyles();
   const router = useRouter();
   return (
