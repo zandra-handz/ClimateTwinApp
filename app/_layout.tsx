@@ -26,7 +26,8 @@ import { Stack } from "expo-router";
 
 import { AppMessageContextProvider } from "../src/context/AppMessageContext";
 import { GlobalStylesProvider } from "../src/context/GlobalStylesContext";
-import { UserProvider } from "../src/context/UserContext";
+import {  UserProvider } from "../src/context/UserContext";
+
 
 import { DeviceLocationProvider } from "../src/context/DeviceLocationContext";
 import { AppStateProvider } from "../src/context/AppStateContext";
@@ -39,6 +40,7 @@ import { ActiveSearchProvider } from "../src/context/ActiveSearchContext";
 import { InteractiveElementsProvider } from "../src/context/InteractiveElementsContext";
 import { GroqProvider } from "../src/context/GroqContext";
 import { SurroundingsWSProvider } from "../src/context/SurroundingsWSContext";
+import AppRoutes from "./AppRoutes";
 
 import AppMessage from "./components/AppMessage";
 import CustomStatusBar from "./components/CustomStatusBar";
@@ -52,9 +54,9 @@ Sentry.init({
   // spotlight: __DEV__,
 });
 
-export default Sentry.wrap(function Layout() {
+export default Sentry.wrap(function AppLayout() {
   const queryClient = new QueryClient();
-
+ 
   const appState = useRef(AppState.currentState);
   //const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
@@ -139,19 +141,22 @@ export default Sentry.wrap(function Layout() {
 
                                 <NearbyLocationsProvider>
                                   <InteractiveElementsProvider>
-                                    <Stack
+                                    <AppRoutes />
+                                    {/* <Stack
                                       screenOptions={{ headerShown: false }}
                                       initialRouteName="index"
                                     > 
-                                        
-                                      <Stack.Screen
-                                        name="(drawer)"
-                                        options={{
-                                          headerShown: false,
-                                          gestureEnabled: false,
-                                        }}
-                                      />
+                                        <Stack.Protected guard={isAuthenticated && !isInitializing}>
+
+                                          <Stack.Screen
+                                            name="(drawer)"
+                                            options={{
+                                              headerShown: false,
+                                              gestureEnabled: false,
+                                            }}
+                                          />
                                        
+                                       </Stack.Protected>
  
                                         <Stack.Screen
                                           name="index"
@@ -176,7 +181,7 @@ export default Sentry.wrap(function Layout() {
                                             gestureEnabled: false,
                                           }}
                                         /> 
-                                    </Stack>
+                                    </Stack> */}
                                   </InteractiveElementsProvider>
                                 </NearbyLocationsProvider>
                               </CurrentSurroundingsProvider>

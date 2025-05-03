@@ -18,7 +18,8 @@ const index = () => {
   
     const { lastState } = useSurroundingsWS();
 
-    useProtectedRoute(isAuthenticated, isInitializing);
+    //WHERE WAS USING BEFORE MAY 3
+   // useProtectedRoute(isAuthenticated, isInitializing);
 
   
   
