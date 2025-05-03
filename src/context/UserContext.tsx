@@ -103,6 +103,7 @@ const { appState } = useAppState();
       return;
     }
 
+    showAppMessage(true, null, "DEBUG: Reinitiaizing user!");
     isReinitializing = true;
     try {
      // console.log("reinitializing!!!!"); 

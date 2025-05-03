@@ -32,7 +32,7 @@ const useExploreRoute = (lastState: string, isAuthenticated: boolean, isInitiali
 
     console.log(segments[0]);
     console.log(segments[1]);
-   
+   console.log('explore route triggered');
     // console.log(isNavigationReady);
  
 

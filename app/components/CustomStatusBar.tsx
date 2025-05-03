@@ -29,7 +29,7 @@ const CustomStatusBar = () => {
         }
         
         // Log the screen and color change
-        console.log(`Current screen: ${pathname}, ${segments} setColor in CustomStatusBar: ${color}`);
+      //  console.log(`Current screen: ${pathname}, ${segments} setColor in CustomStatusBar: ${color}`);
     }, [appSettings, pathname]); // Make sure to add router.pathname to dependencies
 
 
