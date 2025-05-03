@@ -8,7 +8,7 @@ import NotificationNotifier from "./components/NotificationNotifier";
 import * as Notifications from "expo-notifications";
 import * as FileSystem from "expo-file-system";
 import * as Linking from "expo-linking";
-import SafeView from "./components/SafeView";
+// import SafeView from "./components/SafeView";
 import ComponentSpinner from "./components/Scaffolding/ComponentSpinner";
 import { enableScreens } from 'react-native-screens';
 enableScreens(false); 

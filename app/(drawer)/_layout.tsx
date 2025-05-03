@@ -5,7 +5,7 @@ import HomeHeader from "../components/HeaderComponents/HomeHeader";
 import { useUser } from "@/src/context/UserContext";
 import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
 import DrawerCustomizer from "../components/DrawerNavComponents/DrawerCustomizer";
- import SafeView from "../components/SafeView";
+// import SafeView from "../components/SafeView";
 import * as Notifications from 'expo-notifications';
 
 import useExploreRoute from "../../src/hooks/useExploreRoute";
