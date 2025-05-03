@@ -14,7 +14,7 @@ const { themeStyles } = useGlobalStyles();
 
   return (
     <>
-      <SafeView style={{flex: 1, backgroundColor: themeStyles.primaryBackground.backgroundColor}}>
+      {/* <SafeView style={{flex: 1, backgroundColor: themeStyles.primaryBackground.backgroundColor}}> */}
 
       <Tabs
        initialRouteName="index"
@@ -31,7 +31,7 @@ const { themeStyles } = useGlobalStyles();
         <Tabs.Screen name="index" />
         <Tabs.Screen name="nearby"  />
       </Tabs>
-      </SafeView>
+      {/* </SafeView> */}
     </>
   );
 };

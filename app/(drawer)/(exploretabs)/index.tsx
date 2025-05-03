@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import { Animated, View } from "react-native";
-import { useFocusEffect } from "expo-router";
-import { useGeolocationWatcher } from "../../../src/hooks/useCurrentLocationWatcher";
+import { useFocusEffect } from "expo-router"; 
 
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { useSurroundings } from "../../../src/context/CurrentSurroundingsContext";
