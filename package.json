@@ -20,7 +20,7 @@
     "@expo/metro-config": "~0.20.0",
     "@expo/vector-icons": "^14.0.2",
     "@react-native-cookies/cookies": "^6.2.1",
-    "@react-native/metro-config": "^0.77.0",
+    "@react-native/js-polyfills": "^0.79.2",
     "@react-navigation/bottom-tabs": "^7.2.0",
     "@react-navigation/drawer": "^7.3.9",
     "@react-navigation/native": "^7.0.14",
