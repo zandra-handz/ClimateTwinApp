@@ -2,16 +2,13 @@ import React, {
   createContext,
   useContext,
   useState,
-  useEffect,
   useRef,
+  useEffect, 
   // AccessibilityInfo,
 } from "react";
-import * as SecureStore from "expo-secure-store";
-import * as Notifications from "expo-notifications";
+import * as SecureStore from "expo-secure-store"; 
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import * as Device from "expo-device";
-import Constants from "expo-constants";
-import { Platform  } from "react-native";
+ 
 import { useAppState } from "./AppStateContext";
 //import useProtectedRoute from "../hooks/useProtectedRoute"; 
 import {
@@ -136,13 +133,23 @@ const { appState } = useAppState();
     }
   }; 
 
+  
+function usePrevious<T>(value: T): T | undefined {
+  const ref = useRef<T>();
+  useEffect(() => {
+    ref.current = value;
+  }, [value]);
+  return ref.current;
+}
+
+
+  const prevAppState = usePrevious(appState);
 
   useEffect(() => {
-    if (appState === "active" && !isOnSignIn) {
+    if (appState === "active" && prevAppState !== "active" && !isOnSignIn) {
       reInitialize();
     }
-  }, [appState]);
-
+  }, [appState, prevAppState, isOnSignIn]);
 
  
  

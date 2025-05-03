@@ -266,8 +266,7 @@ console.log('setting signin to false');
   }
 
   return (
-    <>
-      <StatusBar />
+    <> 
 
       <LinearGradient
         colors={[
@@ -376,6 +375,7 @@ console.log('setting signin to false');
                     />
                   </View>
                 )}
+                
 
 
 
@@ -426,8 +426,8 @@ console.log('setting signin to false');
 
       {showSignIn && !isSigningIn && !isAuthenticated && !settingsAreLoading && (
         <View
-          style={[styles.form, { position: 'absolute', bottom: isKeyboardVisible ? '50%' : "50%" }]}
-          accessible={true}
+        style={[styles.form, { bottom: isKeyboardVisible ? 10 : "47%" }]}
+         accessible={true}
           accessibilityLabel="Form container"
         >
           <Text style={styles.inputHeaderText} accessible={true}>

@@ -32,14 +32,16 @@ export default () => {
   const isHome : boolean = (lastState === 'home' || lastState === 'searching for twin'
   );
 
-  useExploreRoute(lastState, isAuthenticated, settingsAreLoading);
+ // useExploreRoute(lastState, isAuthenticated, settingsAreLoading);
   // export default function Layout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      <Drawer drawerContent={(props) => <DrawerCustomizer {...props} />}>
+      <Drawer   drawerContent={(props) => <DrawerCustomizer {...props} />}>
         {/* <Drawer.Protected
           guard={isHome}
         > */}
+        <Drawer.Protected guard={!isExploring}>
+          
           <Drawer.Screen
             name="(homedashboard)"
             options={{
@@ -48,6 +50,8 @@ export default () => {
               title: "home",
             }}
           />
+          
+        </Drawer.Protected>
         {/* </Drawer.Protected> */}
         <Drawer.Protected
           guard={isExploring}

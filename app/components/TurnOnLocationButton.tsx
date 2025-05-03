@@ -10,7 +10,7 @@ const TurnOnLocationButton = () => {
 
   const handleButtonPress = () => {
     triggerNewPermissionRequest();
-    console.log("implement turn on location manually feature");
+  //  console.log("implement turn on location manually feature");
   };
   return (
     <>
