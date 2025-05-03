@@ -12,8 +12,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAppState } from "./AppStateContext";
 //import useProtectedRoute from "../hooks/useProtectedRoute"; 
 import {
-  signup,
-  signin,
+  signup, 
   signinWithoutRefresh,
   signout,
   getCurrentUser, 
@@ -149,7 +148,8 @@ function usePrevious<T>(value: T): T | undefined {
     if (appState === "active" && prevAppState !== "active" && !isOnSignIn) {
       reInitialize();
     }
-  }, [appState, prevAppState, isOnSignIn]);
+  }, [appState, prevAppState]); // I don't want this to run every time segment changes lol
+ // }, [appState, prevAppState, isOnSignIn]);
 
  
  
