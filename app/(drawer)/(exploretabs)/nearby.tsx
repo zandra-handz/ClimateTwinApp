@@ -8,7 +8,7 @@ import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
  import useInlineComputations from "@/src/hooks/useInlineComputations";
 import { useRouter } from "expo-router";  
 import NearbyView from "../../components/NearbyComponents/NearbyView";
-
+import SafeView from "@/app/components/SafeView";
 import NothingHere from "@/app/components/Scaffolding/NothingHere";
 
 const nearby = () => {
@@ -34,6 +34,8 @@ const nearby = () => {
   
 
   return ( 
+      <SafeView style={{flex: 1, backgroundColor: themeStyles.primaryBackground.backgroundColor}}>
+    
       <View
         style={[
           appContainerStyles.screenContainer,
@@ -54,6 +56,7 @@ const nearby = () => {
     
         </View>
       </View> 
+      </SafeView>
   );
 };
 

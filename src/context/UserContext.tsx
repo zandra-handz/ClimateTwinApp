@@ -74,8 +74,7 @@ const { appState } = useAppState();
   const isOnSignIn = segments[0] === "signin";
 
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  showAppMessage(true, null, 'DEBUG: User context rerendered!');
+ 
 
   // useEffect(() => {
   //   if (navigationRef.isReady()) {

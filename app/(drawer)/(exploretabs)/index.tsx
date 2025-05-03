@@ -229,6 +229,8 @@ const index = () => {
         spinnerType={"pulse"}
         isSocketSpinner={true}
       />
+       <SafeView style={{flex: 1, backgroundColor: themeStyles.primaryBackground.backgroundColor}}>
+
 
       <View
         style={[
@@ -300,6 +302,7 @@ const index = () => {
           )}
         </View>
       </View>
+      </SafeView>
     </>
   );
 };

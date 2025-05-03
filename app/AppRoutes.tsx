@@ -4,10 +4,10 @@ import { useUserSettings } from "@/src/context/UserSettingsContext";
 import ComponentSpinner from "./components/Scaffolding/ComponentSpinner";
 
 export default function AppRoutes() {
-  const { isAuthenticated, isInitializing } = useUser();
+  const { isAuthenticated } = useUser();
   const { settingsAreLoading } = useUserSettings();
 
-  if (isInitializing) {
+  if (settingsAreLoading) {
     return <ComponentSpinner spinnerSize={60} isInitializerSpinner />;
   }
 // initialRouteName="index">
