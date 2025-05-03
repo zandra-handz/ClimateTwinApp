@@ -483,7 +483,7 @@ export const go = async (startingAddress) => {
     const address = {address : startingAddress}
     try { 
         // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
-        const response = await axios.post('/climatevisitor/go/'); //, address); 
+        const response = await axios.post('/climatevisitor/go/', address); 
  
         return response.data[0];
         
@@ -1082,7 +1082,7 @@ export const getNearbyLocations = async () => {
     try {
        // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/climatevisitor/currently-nearby/');
-        console.log('API GET Call getNearbyLocations'); //, response.data);
+        console.log('API GET Call getNearbyLocations');//, response.data);
         return response.data;
     } catch (error) {
         if (error.response) {

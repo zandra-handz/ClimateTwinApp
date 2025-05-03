@@ -145,22 +145,22 @@ function usePrevious<T>(value: T): T | undefined {
 
   const prevAppState = usePrevious(appState);
 
-  // useEffect(() => {
-  //   if (
-  //     prevAppState !== "active" &&
-  //     appState === "active" &&
-  //     !isOnSignIn
-  //   ) {
-  //     reInitialize();
-  //   }
-  // }, [appState, prevAppState]);
-
-  useWatchAppState((newState) => {
-    if (newState === 'active') {
-      showAppMessage(true, null, '(Debug) app in forground');
-      reInitialize(); // or whatever logic you want
+  useEffect(() => {
+    if (
+      prevAppState !== "active" &&
+      appState === "active" &&
+      !isOnSignIn
+    ) {
+      reInitialize();
     }
-  });
+  }, [appState, prevAppState]);
+
+  // useWatchAppState((newState) => {
+  //   if (newState === 'active') {
+  //     showAppMessage(true, null, '(Debug) app in forground');
+  //     reInitialize(); // or whatever logic you want
+  //   }
+  // });
 
   // useEffect(() => {
   //   if (appState === "active" && !isOnSignIn) {

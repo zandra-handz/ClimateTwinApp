@@ -102,7 +102,7 @@ export const DeviceLocationProvider: React.FC = ({ children }) => {
       };
   
       watchLocation();
-    }, [queryClient, newPermissionRequest]);
+    }, [queryClient]); //, newPermissionRequest]);
 
 
     const triggerNewPermissionRequest = () => {
