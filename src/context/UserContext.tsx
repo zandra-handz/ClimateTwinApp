@@ -176,11 +176,18 @@ const { appState } = useAppState();
     if (cachedSettings) {}
   }, [appSettings]);
 
+  // useEffect(() => {
+  //   if (appState === "active" && isNavigationReady && !isOnSignIn) {
+  //     reInitialize();
+  //   }
+  // }, [appState, isNavigationReady]);
+
+
   useEffect(() => {
-    if (appState === "active" && isNavigationReady && !isOnSignIn) {
+    if (appState === "active" && !isOnSignIn) {
       reInitialize();
     }
-  }, [appState, isNavigationReady]);
+  }, [appState]);
 
 
   const updateUserSettingsMutation = useMutation<

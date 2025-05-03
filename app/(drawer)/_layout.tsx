@@ -6,7 +6,7 @@ import { useUser } from "@/src/context/UserContext";
 import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
 import DrawerCustomizer from "../components/DrawerNavComponents/DrawerCustomizer";
 // import SafeView from "../components/SafeView";
-import * as Notifications from 'expo-notifications';
+import * as Notifications from "expo-notifications";
 
 import useExploreRoute from "../../src/hooks/useExploreRoute";
 
@@ -18,39 +18,47 @@ Notifications.setNotificationHandler({
   }),
 });
 
-
 export default () => {
   const { isAuthenticated, isInitializing } = useUser();
 
-  
   const { lastState } = useSurroundingsWS();
- 
 
-   useExploreRoute(lastState, isAuthenticated, isInitializing); 
+
+  const isExploring : boolean = (lastState === 'exploring' || lastState === 'searching for ruins'
+  );
+
+  const isHome : boolean = (lastState === 'home' || lastState === 'searching for twin'
+  );
+
+  useExploreRoute(lastState, isAuthenticated, isInitializing);
   // export default function Layout() {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
-      
       <Drawer drawerContent={(props) => <DrawerCustomizer {...props} />}>
-
-      <Drawer.Screen
-          name="(homedashboard)"
-          options={{
-           header: () => <HomeHeader />,
-            drawerLabel: "Home",
-            title: "home",
-          }}
-        /> 
-
-        <Drawer.Screen
-          name="(exploretabs)"
-          options={{
-            header: () => <ExploreTabsHeader />,
-            drawerLabel: "Explore",
-            title: "explore",
-          }}
-        />   
-  
+        {/* <Drawer.Protected
+          guard={isHome}
+        > */}
+          <Drawer.Screen
+            name="(homedashboard)"
+            options={{
+              header: () => <HomeHeader />,
+              drawerLabel: "Home",
+              title: "home",
+            }}
+          />
+        {/* </Drawer.Protected> */}
+        <Drawer.Protected
+          guard={isExploring}
+        >
+          <Drawer.Screen
+            name="(exploretabs)"
+            options={{
+              header: () => <ExploreTabsHeader />,
+              drawerLabel: "Explore",
+              title: "explore",
+            }}
+          />
+        </Drawer.Protected>
         <Drawer.Screen
           name="(friends)"
           options={{ header: () => null, drawerLabel: "Friends" }}
@@ -71,13 +79,11 @@ export default () => {
           name="(stats)"
           options={{ header: () => null, drawerLabel: "Stats" }}
         />
-                <Drawer.Screen
+        <Drawer.Screen
           name="(profile)"
           options={{ header: () => null, drawerLabel: "Profile" }}
-        /> 
+        />
       </Drawer>
-      
-
     </GestureHandlerRootView>
   );
 };
