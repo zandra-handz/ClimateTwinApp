@@ -1,11 +1,20 @@
 import { View, Text } from "react-native";
 import React from "react";
-import useInbox from "../../../src/hooks/useInbox";
+ 
+import { usePendingRequests } from "@/src/context/PendingRequestsContext";
+import useInlineComputations from "@/src/hooks/useInlineComputations";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 
 const NewItemsDot = ({ showUnread = "all" }) => {
   // all, friends, or gifts
-  const { unreadFriendReqCount, unreadGiftReqCount, unreadCount, inboxItems } = useInbox();
+  const {  inboxItems } = usePendingRequests();
+  const { getUnreadRequestCounts } = useInlineComputations();
+
+  const {
+    unreadFriendReqCount,
+    unreadGiftReqCount,
+    unreadCount
+  } = getUnreadRequestCounts(  inboxItems);
 
   const {
     themeStyles,

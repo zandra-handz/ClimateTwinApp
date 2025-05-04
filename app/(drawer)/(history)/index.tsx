@@ -1,16 +1,17 @@
 import React from "react";
 import { View } from "react-native";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
-
-import useHistory from "../../../src/hooks/useHistory";
-
-import DataList from "../../components/Scaffolding/DataList";
+import HistoryView from "@/app/components/HistoryComponents/HistoryView";
+ 
+import { useActiveSearch } from "@/src/context/ActiveSearchContext";
+import ActionsFooter from "@/app/components/ActionsFooter";
+import { useRouter } from "expo-router";
 
 const index = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
-
-  const { history } = useHistory();
-
+  const { history } = useActiveSearch();
+  const router = useRouter();
+ // const { history } = useHistory();
   const handlePress = () => {
     console.log("History handlePress pressed!");
   };
@@ -26,9 +27,10 @@ const index = () => {
       >
         <View style={appContainerStyles.innerFlexStartContainer}>
           {history && (
-            <DataList listData={history} onCardButtonPress={handlePress} />
+            <HistoryView data={history} onCardButtonPress={handlePress} />
           )}
         </View>
+        <ActionsFooter onPressLeft={() => router.back()} labelLeft={"Back"} />
       </View>
     </>
   );

@@ -55,7 +55,7 @@ export const UserSettingsProvider: React.FC<UserSettingsProviderProps> = ({
   const [settingsState, setSettingsState] = useState<Record<string, any> | null>(null);
     const [ settingsAreLoading, setSettingsAreLoading ] = useState(true);
 
-    console.log(`SETTINGS RE LOADINGGGGGGGG`, settingsAreLoading);
+  //  console.log(`SETTINGS RE LOADINGGGGGGGG`, settingsAreLoading);
   const {
     data: userSettings,
     isPending,
@@ -79,7 +79,7 @@ export const UserSettingsProvider: React.FC<UserSettingsProviderProps> = ({
 
   useEffect(() => { 
     if (settingsLoaded) {
-        console.log('settings loaded!', settingsAreLoading);
+        console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ settings loaded!');
         setSettingsState(userSettings);
         // this below also sets settingsLoaded so keep an eye on for race condition
         if (userSettings?.receive_notifications) { 
@@ -107,9 +107,9 @@ export const UserSettingsProvider: React.FC<UserSettingsProviderProps> = ({
     queryClient.invalidateQueries({
       queryKey: ["userSettings", user?.id],
     });
-    queryClient.refetchQueries({
-      queryKey: ["userSettings", user?.id],
-    });
+    // queryClient.refetchQueries({
+    //   queryKey: ["userSettings", user?.id],
+    // });
   };
 
     const updateUserSettingsMutation = useMutation<
@@ -121,15 +121,15 @@ export const UserSettingsProvider: React.FC<UserSettingsProviderProps> = ({
       onSuccess: (data) => {
         setSettingsState((prev) => ({ ...prev, ...data }));
   
-        queryClient.invalidateQueries({ queryKey: ["userSettings", user?.id] });
-        queryClient
-          .refetchQueries({ queryKey: ["userSettings", user?.id] })
-          .then(() => {
-            const updatedSettings = queryClient.getQueryData([
-              "userSettings",
-              user?.id,
-            ]);
-          });
+        // queryClient.invalidateQueries({ queryKey: ["userSettings", user?.id] });
+        // queryClient
+        //   .refetchQueries({ queryKey: ["userSettings", user?.id] })
+        //   .then(() => {
+        //     const updatedSettings = queryClient.getQueryData([
+        //       "userSettings",
+        //       user?.id,
+        //     ]);
+        //   });
       },
       onError: (error) => {
         console.error("Error updating user settings:", error);

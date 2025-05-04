@@ -123,9 +123,9 @@ export const InteractiveElementsProvider: React.FC<
       queryKey: ["itemChoices", lastLocationId, user?.id],
  
     }); 
-    queryClient.refetchQueries({
-      queryKey: ["itemChoices", lastLocationId, user?.id],
-    });
+    // queryClient.refetchQueries({
+    //   queryKey: ["itemChoices", lastLocationId, user?.id],
+    // });
   };
 
 

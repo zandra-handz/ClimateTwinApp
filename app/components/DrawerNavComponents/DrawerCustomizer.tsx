@@ -4,16 +4,16 @@ import {
   TouchableOpacity,
   //Image,
   StyleSheet,
- // SafeAreaView,
-} from "react-native"; 
+  // SafeAreaView,
+} from "react-native";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { useRouter } from "expo-router";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
-import { useUser } from "../../../src/context/UserContext"; 
+import { useUser } from "../../../src/context/UserContext";
 import { Image } from "expo-image";
 import ClimateTwinLogo from "../../assets/images/logo.png";
 import DarkLightSwitch from "./DarkLightSwitch";
-import { AntDesign, Feather  } from "@expo/vector-icons"; 
+import { AntDesign, Feather } from "@expo/vector-icons";
 import InboxWithNotifs from "./InboxWithNotifs";
 import FriendsWithNotifs from "./FriendsWithNotifs";
 import TreasuresWithNotifs from "./TreasuresWithNotifs";
@@ -54,7 +54,7 @@ const DrawerCustomizer = (props) => {
       <View
         style={{
           flex: 1,
-          backgroundColor: 'themeStyles.darkerBackground.backgroundColor',
+          backgroundColor: "themeStyles.darkerBackground.backgroundColor",
         }}
       >
         {/* <CustomStatusBar /> */}
@@ -146,7 +146,9 @@ const DrawerCustomizer = (props) => {
           label="History"
           onPress={() => router.push("/(history)")}
         />
-                <DrawerItem
+        {user && user.is_superuser && (
+          
+        <DrawerItem
           icon={() => (
             <Feather
               name="activity" //activity
@@ -165,15 +167,18 @@ const DrawerCustomizer = (props) => {
           label="Stats"
           onPress={() => router.push("/(stats)")}
         />
+        
+      )}
+       {user && user.is_superuser && (
         <DrawerItem
-                  icon={() => (
-                    <Feather
-                      name="zoom-in"
-                      size={appFontStyles.exploreTabBarIcon.width}
-                      color={themeStyles.exploreTabBarText.color}
-                      {...props}
-                    />
-                  )}
+          icon={() => (
+            <Feather
+              name="zoom-in"
+              size={appFontStyles.exploreTabBarIcon.width}
+              color={themeStyles.exploreTabBarText.color}
+              {...props}
+            />
+          )}
           labelStyle={[themeStyles.primaryText, appFontStyles.drawerLabelText]}
           pressColor={"lightblue"}
           style={[
@@ -184,6 +189,7 @@ const DrawerCustomizer = (props) => {
           label="Accessibility"
           onPress={() => router.push("/(treasures)")}
         />
+       )}
         <DarkLightSwitch />
         <DeviceLocationSwitch />
         <PushNotifsSwitch />

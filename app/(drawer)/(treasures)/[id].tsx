@@ -92,7 +92,7 @@ const details = () => {
     console.log("handleViewTreasureHistory pressed");
     if (id) {
       router.push({
-        pathname: "(treasures)/history",
+        pathname: "/(drawer)/(treasures)/history",
         params: { id: id, descriptor: descriptor },
       });
     }
@@ -106,7 +106,7 @@ const details = () => {
   const handleGoToGiveScreen = (friendId) => {
     if (id) {
       router.push({
-        pathname: "/give",
+        pathname: "/(drawer)/(treasures)/give",
         params: { id: id, descriptor: descriptor, friendId: friendId },
       });
     }

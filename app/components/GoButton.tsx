@@ -8,27 +8,18 @@ const GoButton = ({
   address,
   size = 240,
   lastState,
-  remainingGoes,
+  topMessage,
+  bottomMessage,
   onPress,
 }) => {
   const { themeStyles, appFontStyles, appContainerStyles } = useGlobalStyles();
 
-  const buttonTopMessage =
-    remainingGoes !== "0" ? `Open a portal` : `No trips left`;
+ 
 
-  const buttonLowerMessage =
-    remainingGoes === "No limit"
-      ? `No limit`
-      : remainingGoes === "0"
-      ? ``
-      : remainingGoes === "1"
-      ? `1 trip left`
-      : `${remainingGoes} left`;
-
-  console.log(buttonLowerMessage);
+  console.log(`GO BUTTON:`, bottomMessage);
 
   const handlePress = () => {
-    if (remainingGoes !== "0" && lastState !== "searching for twin") {
+    if (topMessage !== "No trips left" && lastState !== "searching for twin") {
       onPress(address);
     }
   };
@@ -63,7 +54,7 @@ const GoButton = ({
             }}
           >
             <Text style={[themeStyles.primaryText, appFontStyles.goButtonText]}>
-              {buttonTopMessage}
+              {topMessage}
             </Text>
           </View>
           <View style={{ position: "absolute", bottom: 26 }}>
@@ -73,7 +64,7 @@ const GoButton = ({
                 appFontStyles.remainingTripsText,
               ]}
             >
-              {buttonLowerMessage}
+              {bottomMessage}
             </Text>
           </View>
         </>

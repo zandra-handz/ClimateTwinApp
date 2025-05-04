@@ -3,11 +3,13 @@ import React, {
   useContext,
   useRef, 
   ReactNode, 
+  useEffect,
 } from "react";
 import { useUser } from "./UserContext";
 import { useUserSettings } from "./UserSettingsContext";
+import { useSurroundingsWS } from "./SurroundingsWSContext";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
-import { go, getRemainingGoes, expireSurroundings } from "../calls/apicalls";
+import { go, getRemainingGoes, expireSurroundings, getHistory } from "../calls/apicalls";
 
  
  
@@ -40,29 +42,69 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
   const { user, isAuthenticated  } = useUser();
   const { settingsAreLoading } = useUserSettings();
 
+  const { lastState, lastLocationName, lastLocationId } = useSurroundingsWS();
+
   const queryClient = useQueryClient();
   const timeoutRef = useRef(null);  
 
  
 
   // useExploreRoute(lastState, isAuthenticated);
+  const {
+    data: history,
+    refetch: refetchHistory,
+    isSuccess: historyIsSuccess,
+ 
+  } = useQuery({
+    queryKey: ["history", user?.id],
+    queryFn: () => getHistory(),
+    enabled: !!isAuthenticated && !settingsAreLoading && (lastState === 'home' || lastState === 'exploring'), //initializing may not be necessary
+  
+  });
+
+
+
+
+  useEffect(() => {
+    if (  (lastState === 'home' || lastState === 'exploring')) {
+     console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~refetching history and goes');
+     triggerHistoryRefetch();
+      refetchGoesLeft();
+    }
+  }, [ lastState]);
+  const triggerHistoryRefetch = () => {  
+    queryClient.invalidateQueries({ queryKey: ["history", user?.id] });
+    // queryClient.refetchQueries({ queryKey: ["history", user?.id] });  
+  };
+
+
 
   const {
     data: remainingGoes,
     isLoading,
     isFetching,
-    isSuccess,
+    isSuccess: remainingGoesIsSuccess,
     isError,
+    refetch: refetchGoesLeft,
   } = useQuery({
     queryKey: ["remainingGoes", user?.id],
     queryFn: () => getRemainingGoes(),
-    enabled: !!isAuthenticated && !settingsAreLoading,
+    enabled: !settingsAreLoading && !!(isAuthenticated && lastState && (lastState != 'searching for twin' && lastState != 'searching for ruins')),
  
   });
 
+
+  // useEffect(() => {
+  //   if (remainingGoes) {
+  //     console.log('remaininggoooess')
+  //     console.log(remainingGoes);
+  //   }
+
+  // }, [remainingGoes]);
+
   const refetchRemainingGoes = () => {
     queryClient.invalidateQueries({ queryKey: ["remainingGoes", user?.id] });
-    queryClient.refetchQueries({ queryKey: ["remainingGoes", user?.id] });
+   // queryClient.refetchQueries({ queryKey: ["remainingGoes", user?.id] });
   };
 
   const handleGo = (address) => {
@@ -118,7 +160,7 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
       }, 2000);
     },
     onSuccess: (data) => {
-      refetchRemainingGoes();
+     // refetchRemainingGoes();
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -139,6 +181,8 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
         remainingGoes,
         handleGoHome,
         refetchRemainingGoes,
+        history,
+        triggerHistoryRefetch,
       }}
     >
       {children}

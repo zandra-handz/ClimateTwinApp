@@ -1,7 +1,8 @@
 import React from "react";
 import { View } from "react-native";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext"; 
-import useInbox from "../../../src/hooks/useInbox"; 
+ 
+import { usePendingRequests } from "@/src/context/PendingRequestsContext";
 import InboxView from "@/app/components/InboxComponents/InboxView";
 import { useRouter } from "expo-router";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -10,7 +11,7 @@ import ActionsFooter from "@/app/components/ActionsFooter";
 
 const index = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { inboxItems } = useInbox();
+  const { inboxItems } = usePendingRequests();
   const router = useRouter();
   const navigation = useNavigation();
 

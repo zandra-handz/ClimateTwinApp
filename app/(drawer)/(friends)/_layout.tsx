@@ -52,7 +52,7 @@ export default () => {
           <Stack.Screen
             name="[id]"
             options={({ route }) => ({
-              headerShown: true,
+              headerShown: false,
               headerTitle: route.params?.friendName || "Profile",
               headerTitleStyle: {
                 color: constantColorsStyles.v1LogoColor.color,
@@ -80,7 +80,7 @@ export default () => {
           <Stack.Screen
             name="search"
             options={{
-              headerShown: true,
+              headerShown: false,
               headerTitle: "Search users",
               headerTitleStyle: {
                 color: constantColorsStyles.v1LogoColor.color,
@@ -109,7 +109,7 @@ export default () => {
           <Stack.Screen
             name="user"
             options={({ route }) => ({
-              headerShown: true,
+              headerShown: false,
               headerTitle: route.params?.username || "Profile",
               headerTitleStyle: {
                 color: constantColorsStyles.v1LogoColor.color,

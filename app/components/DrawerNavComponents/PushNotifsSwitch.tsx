@@ -26,6 +26,7 @@ const PushNotifsSwitch = () => {
   const { appState } = useAppState();
   const { showAppMessage } = useAppMessage();
   const [metaGuiderVisible, setMetaGuiderVisible] = useState<boolean>(false);
+ 
   const [returningFromPhoneSettings, setReturningFromPhoneSettings] =
     useState<boolean>(false);
 
@@ -33,16 +34,15 @@ const PushNotifsSwitch = () => {
 
   const setting = settingsState?.receive_notifications === true ? "On" : "Off";
 
-  const handleReset = async () => {
-    console.log("handleReset triggered");
+  const handleReset = async () => { 
     const currentPhonePermission = await getNotificationPermissionStatus();
     const userSettingsPermission = settingsState?.receive_notifications;
 
-    console.log(currentPhonePermission);
-    console.log(userSettingsPermission);
+    // console.log(currentPhonePermission);
+    // console.log(userSettingsPermission);
 
     if (currentPhonePermission === "granted") {
-      console.log("current permissions is granted");
+     // console.log("current permissions is granted");
       showAppMessage(
         true,
         null,
@@ -73,8 +73,7 @@ const PushNotifsSwitch = () => {
   };
 
   useEffect(() => {
-    if (appState === "active" && returningFromPhoneSettings) {
-      console.log("returning from phone app settings!");
+    if (appState === "active" && returningFromPhoneSettings) { 
       handleRegisterForNotifications();
       setReturningFromPhoneSettings(false);
     }

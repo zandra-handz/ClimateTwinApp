@@ -1,3 +1,6 @@
+//create another stylesheet for AppStandards or something
+//include borderradiuses, fadingedges for flatlists, paddings, etc
+
 import React, {
   createContext,
   useContext,
@@ -526,16 +529,26 @@ const containerStyles = StyleSheet.create({
     justifyContent: 'flex-start',
 
   },
-  pickerContainer: {
-    //flex: 1,
+  embeddedPickerContainer: { 
+    justifyContent: "flex-start",
+    alignItems: "flex-end",
+    padding: 10,
+    paddingVertical: 0,
+    borderRadius: 20,
+    top: 0,
+    bottom: 0,
+    height: "100%", 
+    width: "100%", 
+ 
+  },
+  pickerContainer: { 
     justifyContent: 'flex-start', 
     alignItems: 'flex-end',     
     padding: 10, 
     borderRadius: 20,
     position: 'absolute',
-    width: 'auto',  
-  //  top: 30, // DOWNWARD
-    bottom: 80, // UPWARD
+    width: 'auto',   
+    bottom: 80,  
     right: 10,
     zIndex: 20,
     elevation: 20,
@@ -589,9 +602,16 @@ const containerStyles = StyleSheet.create({
     justifyContent: 'flex-start',
     flexDirection: 'row',
     alignItems:'center',
-    
-   //pass height in in components
-    //borderBottomWidth: StyleSheet.hairlineWidth,
+     
+
+  },
+  dCPickerButtonContainer: {
+    paddingHorizontal: 4,
+    borderRadius: 10,  
+    justifyContent: 'flex-start',
+    flexDirection: 'row',
+    alignItems:'center',
+     
 
   },
   tabBarContainer: {
@@ -898,6 +918,20 @@ const containerStyles = StyleSheet.create({
     padding: 20,
     flexGrow: 1,
 
+  },
+  historyCardContainer: { 
+
+    marginBottom: 10,  
+    alignItems: 'center',
+    justifyContent: 'center',   
+    height: "auto",
+    padding: 20,
+    borderRadius: 6,
+    width: "100%",
+    flexDirection: "column",
+    flex: 1,
+    zIndex: 10,
+    borderWidth: StyleSheet.hairlineWidth,
   },
   itemCardContainer: { 
 
@@ -1412,6 +1446,12 @@ const fontStyles = StyleSheet.create({
   },
   dCButtonText: { // used in DebounceUserSearch and UserListItem too
     fontSize: 15,
+    lineHeight: 22,
+    fontWeight: 'bold',
+
+  },
+  dCPickerButtonText: { // used in DebounceUserSearch and UserListItem too
+    fontSize: 14,
     lineHeight: 22,
     fontWeight: 'bold',
 

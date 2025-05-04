@@ -302,12 +302,12 @@ const GroqFullScreen = ({
                     </Pressable>
                   </View>
                   <ScrollView
-                    fadingEdgeLength={50}
+                    fadingEdgeLength={80}
                     contentContainerStyle={{ width: 380, flex: 1, padding: 4 }}
                     onTouchStart={() => setHorizontalScrollEnabled(false)}
                     onTouchEnd={() => setHorizontalScrollEnabled(true)}
                     onScrollEndDrag={() => setHorizontalScrollEnabled(true)}
-                    contentContainerStyle={themeStyles.darkestBackground}
+                    contentContainerStyle={[themeStyles.darkestBackground, {padding: 10}]}
                   >
                     {/* <View style={appContainerStyles.groqHeaderRow}>
                       <Text

@@ -80,7 +80,7 @@ export default () => {
           <Stack.Screen
             name="search"
             options={{
-              headerShown: true,
+              headerShown: false,
               headerTitle: "Search public treasures",
               headerTitleStyle: {
                 color: constantColorsStyles.v1LogoColor.color,
@@ -227,7 +227,7 @@ export default () => {
           <Stack.Screen
             name="collect"
             options={({ route }) => ({
-              headerShown: true,
+              headerShown: false,
               headerTitle:
                 route.params?.topic && route.params?.name
                   ? `${route.params?.topic} in ${route.params?.name}`

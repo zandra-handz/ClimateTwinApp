@@ -28,7 +28,7 @@ import Constants from "expo-constants";
     }
  
      const url = `${API_URL}?lat=${lat}&lon=${lon}&units=${units}&appid=${API_KEY}`;
-     console.log(url);
+   //  console.log(url);
      try {
          const response = await fetch(url);
         //  , {

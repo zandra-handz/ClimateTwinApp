@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Modal, StyleSheet } from "react-native";
+import { View, Text, TouchableOpacity, Modal } from "react-native";
 import { useRouter } from "expo-router";
 import { useUser } from "@/src/context/UserContext";
 import { useUserSettings } from "@/src/context/UserSettingsContext";
 import { useSurroundingsWS } from "../../src/context/SurroundingsWSContext";
 import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
 
-import { useFriends } from "@/src/context/FriendsContext";
-import useInbox from "../../src/hooks/useInbox";
+import { useFriends } from "@/src/context/FriendsContext"; 
+import { usePendingRequests } from "@/src/context/PendingRequestsContext";
 import { clearNotificationCache } from "../../src/calls/apicalls";
 
 import { useAppMessage } from "@/src/context/AppMessageContext";
@@ -22,7 +22,7 @@ const NotificationNotifier = () => {
     appFontStyles,
     constantColorsStyles,
   } = useGlobalStyles();
-  const { user, isAuthenticated } = useUser();
+  const {   isAuthenticated } = useUser();
   const { settingsAreLoading } = useUserSettings();
   const { showAppMessage } = useAppMessage();
   const {
@@ -47,7 +47,7 @@ const NotificationNotifier = () => {
     handleGetPublicProfile,
   } = useFriends();
   const [modalMessage, setModalMessage] = useState(null);
-  const { triggerInboxItemsRefetch } = useInbox();
+  const { triggerRequestsAndInboxRefetch } = usePendingRequests();
 
   const closeModal = () => {
     setIsVisible(false);
@@ -75,7 +75,7 @@ const NotificationNotifier = () => {
     if (lastRequestType === "gift" && lastInboxItemId && lastRequestItemId) {
       // put back in after done testing
       await clearNotificationCache();
-      triggerInboxItemsRefetch();
+      triggerRequestsAndInboxRefetch();
       handleGetTreasure(lastRequestItemId);
       router.push({
         pathname: "/(drawer)/(treasures)/[id]",
@@ -86,7 +86,7 @@ const NotificationNotifier = () => {
       });
     } else if (lastRequestType === "friend" && lastInboxItemId && lastRequestItemId) {
       await clearNotificationCache();
-      triggerInboxItemsRefetch();
+      triggerRequestsAndInboxRefetch();
       handleGetPublicProfile(lastRequestItemId);
       router.push({
         pathname: "/(friends)/user",
@@ -104,7 +104,7 @@ const NotificationNotifier = () => {
   //   if (lastRequestType === "gift" && lastInboxItemId && lastRequestItemId) {
   //     // put back in after done testing
   //     await clearNotificationCache();
-  //     triggerInboxItemsRefetch();
+  //     triggerRequestsAndInboxRefetch();
   //     router.push({
   //       pathname: "/(drawer)/(inbox)/[id]",
   //       params: {
@@ -114,7 +114,7 @@ const NotificationNotifier = () => {
   //       },
   //     });
   //   } else if (lastRequestType === "friend" && lastInboxItemId && lastRequestItemId) {
-  //     triggerInboxItemsRefetch();
+  //     triggerRequestsAndInboxRefetch();
   //     router.push({
   //       pathname: "/(drawer)/(inbox)/[id]",
   //       params: {
@@ -131,12 +131,12 @@ const NotificationNotifier = () => {
     console.log("handleDecline pressed");
     if (lastRequestType === "gift" && lastRequestId) {
       handleDeclineTreasureGift(lastRequestId);
-      triggerInboxItemsRefetch();
+      triggerRequestsAndInboxRefetch();
       await clearNotificationCache();
       closeModal();
     } else if (lastRequestType === "friend" && lastRequestId) {
       handleDeclineFriendship(lastRequestId);
-      triggerInboxItemsRefetch();
+      triggerRequestsAndInboxRefetch();
       console.log("decline friendship here");
       await clearNotificationCache();
       closeModal();
@@ -146,13 +146,13 @@ const NotificationNotifier = () => {
   const handleAccept = async () => {
     if (lastRequestType === "gift" && lastRequestId) {
       handleAcceptTreasureGift(lastRequestId);
-      triggerInboxItemsRefetch();
+      triggerRequestsAndInboxRefetch();
       console.log("accept treasure here");
       await clearNotificationCache();
       closeModal();
     } else if (lastRequestType === "friend" && lastRequestId) {
       handleAcceptFriendship(lastRequestId);
-      triggerInboxItemsRefetch();
+      triggerRequestsAndInboxRefetch();
       console.log("accept friendship here");
       await clearNotificationCache();
       closeModal();

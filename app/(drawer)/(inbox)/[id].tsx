@@ -5,7 +5,8 @@ import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { useRouter } from "expo-router";
 
 import { useAppMessage } from "../../../src/context/AppMessageContext";
-import useInbox from "../../../src/hooks/useInbox"; 
+ 
+import { usePendingRequests } from "@/src/context/PendingRequestsContext";
 import { useTreasures } from "@/src/context/TreasuresContext";
 import { useFriends } from "@/src/context/FriendsContext";
 
@@ -34,9 +35,9 @@ const read = () => {
   const {
     handleGetInboxItem,
     viewingInboxItem,
-    viewingMessage,
-    triggerInboxItemsRefetch,
-  } = useInbox();
+    viewingMessage, 
+    triggerRequestsAndInboxRefetch,
+  } = usePendingRequests();
   const router = useRouter();
 
   const fetchInboxItem = async (id) => {
@@ -46,11 +47,11 @@ const read = () => {
   const handleDecline = () => { 
     if (viewingMessage?.content_object.special_type === "gift request") {
       handleDeclineTreasureGift(viewingMessage?.content_object.id);
-      triggerInboxItemsRefetch();
+      triggerRequestsAndInboxRefetch();
     }
     if (viewingMessage?.content_object.special_type === "friend request") {
       handleDeclineFriendship(viewingMessage?.content_object.id);
-      triggerInboxItemsRefetch();
+      triggerRequestsAndInboxRefetch();
     }
   };
 
@@ -58,11 +59,11 @@ const read = () => {
     console.log("handle accept pressed!");
     if (viewingMessage?.content_object.special_type === "gift request") {
       handleAcceptTreasureGift(viewingMessage?.content_object.id);
-      triggerInboxItemsRefetch();
+      triggerRequestsAndInboxRefetch();
     }
     if (viewingMessage?.content_object.special_type === "friend request") {
       handleAcceptFriendship(viewingMessage?.content_object.id);
-      triggerInboxItemsRefetch();
+      triggerRequestsAndInboxRefetch();
     }
   };
 

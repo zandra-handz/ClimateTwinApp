@@ -26,7 +26,7 @@ export default () => {
             name="index"
             options={{
               headerShown: true,
-              headerTitle: "History",
+              headerTitle: "Your travel history",
               headerTitleStyle: {
                 color: constantColorsStyles.v1LogoColor.color,
               },

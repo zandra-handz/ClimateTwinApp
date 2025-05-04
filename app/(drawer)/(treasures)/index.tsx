@@ -12,7 +12,7 @@ import { useUser } from "@/src/context/UserContext";
 
 const index = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { treasures, handleGetTreasure } = useTreasures();
+  const { treasures, handleGetTreasure  } = useTreasures();
   const { user } = useUser();
 
   const { pendingRequests } = usePendingRequests();

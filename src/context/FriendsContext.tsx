@@ -82,7 +82,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
   const { showAppMessage } = useAppMessage();
   const { user, isAuthenticated,  } = useUser();
   const { settingsAreLoading } = useUserSettings();
-  const { triggerRequestsRefetch } = usePendingRequests();
+  const {  triggerRequestsAndInboxRefetch } = usePendingRequests();
   const [viewingFriend, setViewingFriend] = useState<Friend | null>(null);  
   const [viewingPublicProfile, setViewingPublicProfile] =
     useState<PublicProfile | null>(null); //is this correct or do i need the friendship?
@@ -248,7 +248,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
     mutationFn: (data: AddFriendRequest) => requestToAddFriend(data),
     onSuccess: () => {
       //Do we need?
-      triggerRequestsRefetch();
+      triggerRequestsAndInboxRefetch();
       triggerFriendsRefetch(); 
 
       if (timeoutRef.current) {
@@ -273,7 +273,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
   const triggerFriendsRefetch = () => {
     console.log("triggerFriendsRefetch triggered");
     queryClient.invalidateQueries({ queryKey: ["friends", user?.id] });
-    queryClient.refetchQueries({ queryKey: ["friends", user?.id] });
+   // queryClient.refetchQueries({ queryKey: ["friends", user?.id] });
   };
  
 
@@ -289,7 +289,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
     mutationFn: (itemViewId: number) => acceptFriendship(itemViewId),
     onSuccess: () => {
       showAppMessage(true, null, "Friendship accepted!");
-     triggerRequestsRefetch();
+      triggerRequestsAndInboxRefetch(); 
      triggerFriendsRefetch(); 
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
@@ -321,7 +321,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
     mutationFn: (itemViewId: number) => declineFriendship(itemViewId),
     onSuccess: () => { 
      showAppMessage(true, null, "Friendship declined");
-      triggerRequestsRefetch();
+     triggerRequestsAndInboxRefetch();
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -345,6 +345,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
     mutationFn: (itemViewId: number) => deleteFriendship(itemViewId),
     onSuccess: () => {
       triggerFriendsRefetch();
+      triggerRequestsAndInboxRefetch(); 
       // moved to friend ui card
       // router.replace('/(friends)');
 

@@ -4,6 +4,7 @@ import React, {
   useEffect, 
   useState,
 } from "react";
+import { Alert } from 'react-native';
 import { useQueryClient } from "@tanstack/react-query";
 import * as Location from "expo-location"; 
 import Geocoder from "react-native-geocoding";
@@ -82,12 +83,12 @@ export const DeviceLocationProvider: React.FC = ({ children }) => {
   
                 setDeviceLocation(formattedData); 
   
-                queryClient.setQueryData("deviceLocation", user?.id, formattedData); 
+                queryClient.setQueryData(["deviceLocation", user?.id], formattedData);
 
               } catch (geocoderError) {
-                console.error(
+                Alert.alert(
                   "Error fetching address for location:",
-                  geocoderError
+                  `${geocoderError}`
                 );
               }
             }
@@ -97,12 +98,15 @@ export const DeviceLocationProvider: React.FC = ({ children }) => {
             watchId.remove();
           };
         } catch (error) {
-          console.error("Error in geolocation watcher:", error);
+          Alert.alert(
+            "Error fetching address for location:",
+            `${error}`
+          );
         }
       };
   
       watchLocation();
-    }, [queryClient]); //, newPermissionRequest]);
+    }, [queryClient, newPermissionRequest]); //, newPermissionRequest]);
 
 
     const triggerNewPermissionRequest = () => {

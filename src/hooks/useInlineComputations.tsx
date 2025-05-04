@@ -568,6 +568,71 @@ const getNonPendingTreasures = (treasures) => {
 };
  
 
+const formatRemainingGoes = (remainingGoes) => {
+  let message = 'Unknown';
+   message =
+  remainingGoes === "No limit"
+  ? `No limit`
+  : remainingGoes === "0"
+  ? ``
+  : remainingGoes === "1"
+  ? `1 trip left`
+  : `${remainingGoes} left`;
+return message;
+
+};
+
+const formatGoesForGoButton = (remainingGoes) => {
+  let topMessage = 'Unknown';
+  let bottomMessage = 'Unknown';
+ 
+  topMessage = remainingGoes !== "0" ? `Open a portal` : `No trips left`;
+
+  bottomMessage =
+    remainingGoes === "No limit"
+      ? `No limit`
+      : remainingGoes === "0"
+      ? ``
+      : remainingGoes === "1"
+      ? `1 trip left`
+      : `${remainingGoes} left`;
+
+      return {topMessage, bottomMessage};
+
+};
+
+
+const getUnreadRequestCounts = (inboxItems) => {
+  if ( !Array.isArray(inboxItems)) {
+    return {
+      unreadFriendReqCount: 0,
+      unreadGiftReqCount: 0,
+      unreadCount: 0,
+    };
+  }
+
+  const unreadFriendReqCount = inboxItems.filter(
+    item =>
+      item.is_read === false &&
+      item?.content_type === 'Users | friend request'
+  ).length;
+
+  const unreadGiftReqCount = inboxItems.filter(
+    item =>
+      item.is_read === false &&
+      item?.content_type === 'Users | gift request'
+  ).length;
+
+  const unreadCount = unreadFriendReqCount + unreadGiftReqCount;
+
+  return {
+    unreadFriendReqCount,
+    unreadGiftReqCount,
+    unreadCount,
+  };
+};
+
+
 
     return {
         sortPendingFriendRequests,
@@ -597,6 +662,12 @@ const getNonPendingTreasures = (treasures) => {
         // iNaturalist
         getWikiLink,
         getiNaturalistItemData, 
+
+        formatRemainingGoes,
+        formatGoesForGoButton,
+
+
+        getUnreadRequestCounts,
 
 
    

@@ -18,11 +18,11 @@ export const API_URL = 'https://api.inaturalist.org/v1/observations';
  
     const { getCurrentDateValues } = useDateTimeFunctions(); 
     const { year, month, day } = getCurrentDateValues();  
-    console.log(`month to query inaturalist with: `, month);
+   // console.log(`month to query inaturalist with: `, month);
 
   
      const url = `${API_URL}?lat=${lat}&lng=${lon}&radius=${rad}&month=${month}&per_page=8`;
-     console.log(url);
+    // console.log(url);
      try {
          const response = await fetch(url);
        

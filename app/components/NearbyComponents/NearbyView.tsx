@@ -30,7 +30,7 @@ const NearbyView = ({ centeredNearbyLocations }) => {
           // extraData={centeredNearbyLocations} // force rerender
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <View style={{ marginVertical: 4 }}>
+            <View style={{ marginVertical: 2 }}>
               {item.explore_type === "twin_location" && (
                 <NearbyPortalUICard
                   data={item}

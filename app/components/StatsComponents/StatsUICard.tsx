@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text } from "react-native";
 import React from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import useDateTimeFunctions from "../../../src/hooks/useDateTimeFunctions";
@@ -61,7 +61,7 @@ const StatsUICard = ({ data, onPress, onOpenPress, onOpenTreasurePress }) => {
     <View
       style={[
         themeStyles.darkerBackground,
-        appContainerStyles.treasureCardContainer,
+        appContainerStyles.itemCardContainer,
         { borderColor: themeStyles.primaryBorder.color },
       ]}
     >
@@ -154,24 +154,7 @@ const StatsUICard = ({ data, onPress, onOpenPress, onOpenTreasurePress }) => {
           <Text style={{ fontWeight: "bold" }}>Twin address: </Text>
           {data?.climate_twin_address || "Unknown"}
         </Text>
-      </View>
-      {/* {Object.entries(data).map(([key, value]) => renderField(key, value))} */}
-      {/* <TouchableOpacity onPress={() => onPress(data)}>
-        <Text style={themeStyles.primaryText}>PRESS ME</Text>
-      </TouchableOpacity>
-
-      {onOpenPress && (
-        <TouchableOpacity onPress={() => onOpenPress(data.id, data.message)}>
-          <Text style={themeStyles.primaryText}>OPEN VIA DATA ID</Text>
-        </TouchableOpacity>
-      )}
-      {onOpenTreasurePress && (
-        <TouchableOpacity
-          onPress={() => onOpenTreasurePress(data.id, data.descriptor)}
-        >
-          <Text style={themeStyles.primaryText}>OPEN VIA DATA ID</Text>
-        </TouchableOpacity>
-      )} */}
+      </View> 
     </View>
   );
 };

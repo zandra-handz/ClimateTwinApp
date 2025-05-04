@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Modal, FlatList, Keyboard } from "react-native";
+import React, {   useState } from "react";
+import { View, Text, TouchableOpacity  } from "react-native";
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
  
 import { useFriends } from "@/src/context/FriendsContext";
@@ -7,8 +7,8 @@ import { AntDesign, Feather } from "@expo/vector-icons";
 
 import { useRouter } from "expo-router";
 import { useAppMessage } from "@/src/context/AppMessageContext";
-import useInbox from "@/src/hooks/useInbox"; 
-
+ 
+import { usePendingRequests } from "@/src/context/PendingRequestsContext";
 import { useUser } from "@/src/context/UserContext";
  
 import useInlineComputations from "@/src/hooks/useInlineComputations";
@@ -52,7 +52,7 @@ const isFriend = checkForExistingFriendship(friends, cTUserId);
  const sentFriendRequest = !!sentFriendRequestItem;
 //  console.log(sentFriendRequest);
 //  console.log(recFriendRequest);
-  const { triggerInboxItemsRefetch } = useInbox();
+  const { triggerRequestsAndInboxRefetch } = usePendingRequests();
 
   const handleToggleDoubleChecker = () => {  
     setDoubleCheckerVisible(prev => !prev);
@@ -73,14 +73,14 @@ const isFriend = checkForExistingFriendship(friends, cTUserId);
   const handleAccept = () => {
     if (messageId) {
       handleAcceptFriendship(messageId);
-      triggerInboxItemsRefetch();
+      //triggerRequestsAndInboxRefetch(); doing this in the Friend context
     }
   };
 
   const handleDecline = () => {
     if (messageId) {
       handleDeclineFriendship(messageId);
-      triggerInboxItemsRefetch();
+     // triggerRequestsAndInboxRefetch(); doing this in the Friend context
     }
   };
 

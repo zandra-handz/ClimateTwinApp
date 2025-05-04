@@ -1,7 +1,6 @@
 import { View, Text, TouchableOpacity } from "react-native";
 import React from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
-import { useUser } from "../../../src/context/UserContext";
 import { useUserSettings } from "@/src/context/UserSettingsContext";
 import { DrawerItem } from "@react-navigation/drawer";
 import { Feather } from "@expo/vector-icons";
@@ -14,18 +13,14 @@ const DarkLightSwitch = () => {
   const currentMode =
     lightOrDark === "dark"
       ? { mode: "Light", icon: "sun" }
-      : { mode: "Dark", icon: "moon" };
-  //const pressColor = lightOrDark === "dark" ? "white" : "black";
+      : { mode: "Dark", icon: "moon" }; 
   const pressColor = themeStyles.primaryText.color;
   const handlePress = () => {
-    if (settingsState?.manual_dark_mode == null) {
-      //console.log("lightDark handlePress PRESSED");
+    if (settingsState?.manual_dark_mode == null) { 
       handleUpdateUserSettings({ manual_dark_mode: false });
-    } else if (settingsState?.manual_dark_mode === false) {
-      // console.log("lightDark handlePress PRESSED");
+    } else if (settingsState?.manual_dark_mode === false) { 
       handleUpdateUserSettings({ manual_dark_mode: true });
-    } else if (settingsState?.manual_dark_mode === true) {
-      // console.log("lightDark handlePress PRESSED");
+    } else if (settingsState?.manual_dark_mode === true) { 
       handleUpdateUserSettings({ manual_dark_mode: false });
     }
   };

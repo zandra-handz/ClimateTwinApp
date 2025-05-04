@@ -79,7 +79,7 @@ export const TreasuresProvider: React.FC<TreasuresProviderProps> = ({
   const { showAppMessage } = useAppMessage();
   const { user, isAuthenticated  } = useUser();
   const { settingsAreLoading } = useUserSettings();
-  const { triggerRequestsRefetch } = usePendingRequests();
+  const { triggerRequestsAndInboxRefetch } = usePendingRequests();
   const [testData, setTestData] = useState(null); 
   const [viewingTreasure, setViewingTreasure] = useState<Treasure | null>(null);
   const [viewingSearchableTreasure, setViewingSearchableTreasure] =
@@ -229,7 +229,7 @@ const collectTreasureMutation = useMutation({
   onSuccess: () => { 
     showAppMessage(true, null, `Treasure collected!`);
     triggerTreasuresRefetch();
-    triggerRequestsRefetch();
+    triggerRequestsAndInboxRefetch();
 
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -278,7 +278,7 @@ const giftTreasureMutation = useMutation({
   mutationFn: (data: GiftTreasureRequest) => requestToGiftTreasure(data),
   onSuccess: () => { 
     triggerTreasuresRefetch();
-    triggerRequestsRefetch();
+    triggerRequestsAndInboxRefetch();
 
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -322,7 +322,7 @@ const giftTreasureBackToFinderMutation = useMutation({
   mutationFn: (data: GiftTreasureBackToFinderRequest) => requestToGiftTreasureBackToFinder(data),
   onSuccess: () => { 
     triggerTreasuresRefetch();
-    triggerRequestsRefetch();
+    triggerRequestsAndInboxRefetch();
 
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -352,7 +352,7 @@ const giftTreasureBackToFinderMutation = useMutation({
 
 const triggerTreasuresRefetch = () => {  
   queryClient.invalidateQueries({ queryKey: ["treasures", user?.id] });
-  queryClient.refetchQueries({ queryKey: ["treasures", user?.id] });  
+//  queryClient.refetchQueries({ queryKey: ["treasures", user?.id] });  
 };
 
 
@@ -374,7 +374,7 @@ mutationFn: (itemViewId : number) => acceptTreasureGift(itemViewId),
 onSuccess: () => { 
 
   triggerTreasuresRefetch();
-  triggerRequestsRefetch();
+  triggerRequestsAndInboxRefetch();
 
   if (timeoutRef.current) {
     clearTimeout(timeoutRef.current);
@@ -414,7 +414,7 @@ mutationFn: (itemViewId : number) => declineTreasureGift(itemViewId),
 onSuccess: () => { 
 
 // triggerTreasuresRefetch();
-triggerRequestsRefetch();
+triggerRequestsAndInboxRefetch();
 
 if (timeoutRef.current) {
   clearTimeout(timeoutRef.current);

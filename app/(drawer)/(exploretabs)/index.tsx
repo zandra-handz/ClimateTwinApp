@@ -269,7 +269,7 @@ const index = () => {
                 ref={flatListRef}
                 data={surroundingsViews} 
                 refreshing={currentSurroundingsIsPending} 
-                fadingEdgeLength={20}
+                //fadingEdgeLength={20}
                 getItemLayout={(data, index) => ({
                   length: ITEM_HEIGHT + ITEM_BOTTOM_MARGIN,
                   offset: (ITEM_HEIGHT + ITEM_BOTTOM_MARGIN) * index,

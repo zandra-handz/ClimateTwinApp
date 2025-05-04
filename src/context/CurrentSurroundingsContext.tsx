@@ -9,8 +9,7 @@ import React, {
 import { useUser } from "./UserContext"; 
 import { useUserSettings } from "./UserSettingsContext"; 
 import { useSurroundingsWS } from "./SurroundingsWSContext";  
-import { useGroqContext } from "./GroqContext";  
-import { useActiveSearch } from "./ActiveSearchContext";
+import { useGroqContext } from "./GroqContext";   
 import {
   useQuery,
   useQueryClient,
@@ -78,8 +77,7 @@ export const CurrentSurroundingsProvider: React.FC<
   CurrentSurroundingsProviderProps
 > = ({ children }) => {
   const { user, isAuthenticated  } = useUser();
-  const { settingsAreLoading } = useUserSettings();
-  const { refetchRemainingGoes } = useActiveSearch();
+  const { settingsAreLoading } = useUserSettings(); 
   const { extendGroqStaleTime, logGroqState } = useGroqContext();
   const segments = useSegments();
   const queryClient = useQueryClient();
@@ -124,18 +122,13 @@ export const CurrentSurroundingsProvider: React.FC<
 
   // Invalidate remaining goes cache when location is fetched
   // need to improve so that doesn't just fetch same data over and over
- useEffect(() => {
-  if (isSuccess) {
-    refetchRemainingGoes();
-  }
-
- }, [isSuccess]);
+ 
 
 
   const handlePickNewSurroundings = async (data: any) => {
     let locationType;
     if (data && data.explore_type) {
-      console.log(data);
+    
       try {
         locationType =
           data.explore_type === "discovery_location"
@@ -183,9 +176,9 @@ export const CurrentSurroundingsProvider: React.FC<
     queryClient.invalidateQueries({
       queryKey: ["currentSurroundings", lastLocationId, user?.id],
     });
-    queryClient.refetchQueries({
-      queryKey: ["currentSurroundings", lastLocationId, user?.id],
-    });  
+    // queryClient.refetchQueries({
+    //   queryKey: ["currentSurroundings", lastLocationId, user?.id],
+    // });  
   };
 
   return (

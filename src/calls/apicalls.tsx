@@ -506,7 +506,7 @@ export const go = async (startingAddress) => {
 export const getRemainingGoes = async () => {
     try {
         const response = await axios.get('/climatevisitor/get-remaining-goes/');
-        console.log('API GET getRemainingGoes'); //, response.data);
+        console.log('API GET getRemainingGoes', response.data);
  
         if (response.data) { 
             if (response.data.remaining_goes) {
