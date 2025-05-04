@@ -34,6 +34,7 @@ const ScrollDetailPanel = ({ label, value, opacity, isLoading = false }) => {
       {value && (
         <ScrollView
         showsVerticalScrollIndicator={false} 
+      
           contentContainerStyle={{
             flexDirection: "column",
         
@@ -55,6 +56,7 @@ const ScrollDetailPanel = ({ label, value, opacity, isLoading = false }) => {
           >
             {value}
           </Text>
+          <View style={{ height: 80 }} /> 
         </ScrollView>
       )}
     </Animated.View>

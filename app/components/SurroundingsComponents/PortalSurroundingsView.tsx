@@ -34,7 +34,7 @@ const PortalSurroundingsView = ({
 
   return (
     <View style={{ flex: 1, height, position: "relative" }}>
-      <View style={{ height: 90, width: "100%" }} />
+      <View style={{ height: 78, width: "100%" }} />
 
       <View
         style={{

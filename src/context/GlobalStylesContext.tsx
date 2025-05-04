@@ -1032,7 +1032,7 @@ const containerStyles = StyleSheet.create({
     overflow: 'hidden', 
     zIndex: 100,
     position: 'absolute',
-    bottom: 78,
+    bottom: 0,
     borderColor: 'teal',
     borderWidth: StyleSheet.hairlineWidth
   },
