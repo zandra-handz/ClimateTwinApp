@@ -17,15 +17,15 @@ const TreasuresView = ({
   return (
     <View style={[appContainerStyles.dataListContainer]}>
       <FlatList
-        data={listData}
-       extraData={listData}
+        data={listData} 
+    //   extraData={listData}
         fadingEdgeLength={100}
-        initialNumToRender={10}
+        //initialNumToRender={10}
         removeClippedSubviews={false}
         keyboardShouldPersistTaps='always'
         //refreshing={} set true while getting new data
         keyExtractor={(item, index) =>
-          item.id ? `${item.id}-${item.timestamp || index}` : index.toString()
+          item.id ? `${item.id}-${item.timestamp || index}` : `${index}`
         }
         renderItem={({ item }) => (
           <View style={{ marginVertical: 4 }}>

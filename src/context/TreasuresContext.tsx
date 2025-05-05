@@ -226,10 +226,15 @@ export const TreasuresProvider: React.FC<TreasuresProviderProps> = ({
 
 const collectTreasureMutation = useMutation({
   mutationFn: (data: CollectTreasureRequest) => collectTreasure(data),
-  onSuccess: () => { 
+  onSuccess: async () => { 
     showAppMessage(true, null, `Treasure collected!`);
-    triggerTreasuresRefetch();
-    triggerRequestsAndInboxRefetch();
+
+    await queryClient.refetchQueries({ queryKey: ['pendingRequests', { user: user?.id } ] }); 
+    await queryClient.refetchQueries({ queryKey: ['inboxItems', { user: user?.id } ] });  
+    await queryClient.refetchQueries({ queryKey: ['treasures', { user: user?.id}]});
+  
+    // triggerTreasuresRefetch();
+    // triggerRequestsAndInboxRefetch();
 
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -276,10 +281,15 @@ const handleGiftTreasure = (treasureId: number, recipientId: number, message: st
 
 const giftTreasureMutation = useMutation({
   mutationFn: (data: GiftTreasureRequest) => requestToGiftTreasure(data),
-  onSuccess: () => { 
+  onSuccess: async () => { 
+
+    await queryClient.refetchQueries({ queryKey: ['pendingRequests', { user: user?.id } ] }); 
+    await queryClient.refetchQueries({ queryKey: ['inboxItems', { user: user?.id } ] });  
+    await queryClient.refetchQueries({ queryKey: ['treasures', { user: user?.id}]}); 
+  
    
-    triggerRequestsAndInboxRefetch();
-    triggerTreasuresRefetch();
+    // triggerRequestsAndInboxRefetch();
+    // triggerTreasuresRefetch();
 
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -321,9 +331,14 @@ const handleGiftTreasureBackToFinder = (treasureId: number, message: string | 'N
 
 const giftTreasureBackToFinderMutation = useMutation({
   mutationFn: (data: GiftTreasureBackToFinderRequest) => requestToGiftTreasureBackToFinder(data),
-  onSuccess: () => { 
-    triggerTreasuresRefetch();
-    triggerRequestsAndInboxRefetch();
+  onSuccess: async () => { 
+
+    await queryClient.refetchQueries({ queryKey: ['pendingRequests', { user: user?.id } ] }); 
+    await queryClient.refetchQueries({ queryKey: ['inboxItems', { user: user?.id } ] });  
+    await queryClient.refetchQueries({ queryKey: ['treasures', { user: user?.id}]}); 
+  
+    // triggerTreasuresRefetch();
+    // triggerRequestsAndInboxRefetch();
 
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -372,10 +387,16 @@ const handleAcceptTreasureGift = (itemViewId : number) => {
 
 const acceptTreasureGiftMutation = useMutation({
 mutationFn: (itemViewId : number) => acceptTreasureGift(itemViewId),
-onSuccess: () => { 
+onSuccess: async () => { 
 
-  triggerTreasuresRefetch();
-  triggerRequestsAndInboxRefetch();
+  await queryClient.refetchQueries({ queryKey: ['pendingRequests', { user: user?.id } ] }); 
+  await queryClient.refetchQueries({ queryKey: ['inboxItems', { user: user?.id } ] });  
+  await queryClient.refetchQueries({ queryKey: ['treasures', { user: user?.id}]});
+
+
+
+  // triggerTreasuresRefetch();
+  // triggerRequestsAndInboxRefetch();
 
   if (timeoutRef.current) {
     clearTimeout(timeoutRef.current);
@@ -412,10 +433,14 @@ declineTreasureGiftMutation.mutate(itemViewId);
 
 const declineTreasureGiftMutation = useMutation({
 mutationFn: (itemViewId : number) => declineTreasureGift(itemViewId),
-onSuccess: () => { 
+onSuccess: async () => { 
+
+  await queryClient.refetchQueries({ queryKey: ['pendingRequests', { user: user?.id } ] }); 
+  await queryClient.refetchQueries({ queryKey: ['inboxItems', { user: user?.id } ] });  
+  // await queryClient.refetchQueries({ queryKey: ['treasures', { user: user?.id}]});
 
 // triggerTreasuresRefetch();
-triggerRequestsAndInboxRefetch();
+//triggerRequestsAndInboxRefetch();
 
 if (timeoutRef.current) {
   clearTimeout(timeoutRef.current);

@@ -287,7 +287,7 @@ export const getUserPendingRequests = async () => {
     try {
        // console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
         const response = await axios.get('/users/pending-requests/');
-      //console.log('API GET Call getUserPendingRequests', response.data);
+      console.log('API GET Call getUserPendingRequests'); //, response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
