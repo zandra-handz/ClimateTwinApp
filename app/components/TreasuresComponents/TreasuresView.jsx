@@ -18,7 +18,7 @@ const TreasuresView = ({
     <View style={[appContainerStyles.dataListContainer]}>
       <FlatList
         data={listData}
-       
+       extraData={listData}
         fadingEdgeLength={100}
         initialNumToRender={10}
         removeClippedSubviews={false}

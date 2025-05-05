@@ -20,6 +20,7 @@ const FriendsView = ({ listData, onViewFriendPress, onViewUserPress, recFriendRe
     <View style={[appContainerStyles.dataListContainer, { paddingTop: 6 }]}>
       <FlatList
         data={listData}
+        extraData={listData}
         keyExtractor={(item, index) =>
           item.id ? `${item.id}-${item.timestamp || index}` : index.toString()
         }
