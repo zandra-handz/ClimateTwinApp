@@ -99,7 +99,7 @@ export const TreasuresProvider: React.FC<TreasuresProviderProps> = ({
   }: UseQueryResult<Treasure[], Error> = useQuery({
     queryKey: ["treasures", user?.id],
     queryFn: getTreasures,
-    enabled: !!(isAuthenticated && !settingsAreLoading && user && user.id),
+    enabled: !!(isAuthenticated && user && user.id),
   });
  
   const handleGetTreasure = async (id: number) => {
@@ -277,8 +277,9 @@ const handleGiftTreasure = (treasureId: number, recipientId: number, message: st
 const giftTreasureMutation = useMutation({
   mutationFn: (data: GiftTreasureRequest) => requestToGiftTreasure(data),
   onSuccess: () => { 
-    triggerTreasuresRefetch();
+   
     triggerRequestsAndInboxRefetch();
+    triggerTreasuresRefetch();
 
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -351,7 +352,7 @@ const giftTreasureBackToFinderMutation = useMutation({
 
 
 const triggerTreasuresRefetch = () => {  
-  queryClient.invalidateQueries({ queryKey: ["treasures", user?.id] });
+  queryClient.invalidateQueries({ queryKey: ['treasures', user?.id] });
 //  queryClient.refetchQueries({ queryKey: ["treasures", user?.id] });  
 };
 

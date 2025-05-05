@@ -272,8 +272,8 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
 
   const triggerFriendsRefetch = () => {
     console.log("triggerFriendsRefetch triggered");
-    queryClient.invalidateQueries({ queryKey: ["friends", user?.id] });
-   // queryClient.refetchQueries({ queryKey: ["friends", user?.id] });
+   // queryClient.invalidateQueries({ queryKey: ['friends', user?.id] });
+    queryClient.refetchQueries({ queryKey: ["friends", user?.id] });
   };
  
 
@@ -344,8 +344,9 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
   const deleteFriendshipMutation = useMutation({
     mutationFn: (itemViewId: number) => deleteFriendship(itemViewId),
     onSuccess: () => {
-      triggerFriendsRefetch();
+     
       triggerRequestsAndInboxRefetch(); 
+      triggerFriendsRefetch();
       // moved to friend ui card
       // router.replace('/(friends)');
 

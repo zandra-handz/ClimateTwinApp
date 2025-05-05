@@ -61,7 +61,7 @@ export const PendingRequestsProvider: React.FC<PendingRequestsProviderProps> = (
         isSuccess,
         isError,
       } = useQuery<InboxItem[]>({
-        queryKey: ["inboxItems", user?.id],
+        queryKey: ['inboxItems', { user: user?.id }],
         queryFn: getInboxItems,
         enabled: !!isAuthenticated && !settingsAreLoading,
      
@@ -71,7 +71,7 @@ export const PendingRequestsProvider: React.FC<PendingRequestsProviderProps> = (
      const handleGetInboxItem = async (id: number) => {
        try {
          const inboxItem = await queryClient.fetchQuery<InboxItem>({
-           queryKey: ["inboxItem", user?.id, id],
+           queryKey: ['inboxItem', { user: user?.id, id: id }],
            queryFn: () => getInboxItem(id),
          });
    
@@ -94,15 +94,15 @@ export const PendingRequestsProvider: React.FC<PendingRequestsProviderProps> = (
     isSuccess: isPendingRequestsSuccess,
     isError: isPendingRequestsError,
   }: UseQueryResult<PendingRequestsResponse, Error> = useQuery({
-    queryKey: ["pendingRequests", user?.id],
+    queryKey: ['pendingRequests', { user: user?.id }],
     queryFn: getUserPendingRequests,
     enabled: !!(isAuthenticated && !settingsAreLoading && user && user.id),
   });
   
   
   const triggerRequestsAndInboxRefetch = () => {
-    queryClient.invalidateQueries({ queryKey: ["pendingRequests", user?.id] }); 
-    queryClient.invalidateQueries({ queryKey: ["inboxItems", user?.id] });  
+    queryClient.invalidateQueries({ queryKey: ['pendingRequests', { user: user?.id }] }); 
+    queryClient.invalidateQueries({ queryKey: ['inboxItems', { user: user?.id }] });  
   };
  
   return (

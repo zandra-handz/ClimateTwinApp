@@ -36,7 +36,7 @@ const index = () => {
     if (id) {
       handleGetTreasure(id);
       router.push({
-        pathname: "(treasures)/[id]",
+        pathname: "/(drawer)/(treasures)/[id]",
         params: { id: id, descriptor: descriptor },
       });
     }
