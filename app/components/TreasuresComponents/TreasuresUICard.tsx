@@ -3,10 +3,7 @@ import React, { useState } from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import useDateTimeFunctions from "../../../src/hooks/useDateTimeFunctions";
 import CuteDetailBox from "../CuteDetailBox";
-import GoToItemButton from "../GoToItemButton";
-import SendButton from "../Scaffolding/SendButton";
-import ReturnItemButton from "../Scaffolding/ReturnItemButton";
-import DoubleChecker from "../Scaffolding/DoubleChecker"; 
+import GoToItemButton from "../GoToItemButton"; 
 import { useTreasures } from "@/src/context/TreasuresContext";
  
 import { useFriends } from "@/src/context/FriendsContext";

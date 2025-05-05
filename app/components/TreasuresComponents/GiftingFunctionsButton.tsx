@@ -110,8 +110,8 @@ const GiftingFunctionsButton = ({
   const handleAccept = () => {
     if (messageId) {
       handleAcceptTreasureGift(messageId);
-      triggerTreasuresRefetch();
-      triggerRequestsAndInboxRefetch();
+      // triggerTreasuresRefetch();
+      // triggerRequestsAndInboxRefetch();
     }
     //  else {
     // console.log('no message id');
@@ -121,8 +121,8 @@ const GiftingFunctionsButton = ({
   const handleDecline = () => {
     if (messageId) {
       handleDeclineTreasureGift(messageId);
-      triggerTreasuresRefetch();
-      triggerRequestsAndInboxRefetch();
+      // triggerTreasuresRefetch();
+      // triggerRequestsAndInboxRefetch();
     }
   };
  
