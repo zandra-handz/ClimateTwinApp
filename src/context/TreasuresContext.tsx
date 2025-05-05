@@ -352,7 +352,7 @@ const giftTreasureBackToFinderMutation = useMutation({
 
 
 const triggerTreasuresRefetch = () => {  
-// queryClient.invalidateQueries({ queryKey: ['treasures' ] });
+queryClient.invalidateQueries({ queryKey: ['treasures' ] });
  queryClient.refetchQueries({ queryKey: ['treasures' ] });  
 };
 

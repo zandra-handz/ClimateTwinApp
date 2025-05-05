@@ -73,14 +73,14 @@ const isFriend = checkForExistingFriendship(friends, cTUserId);
   const handleAccept = () => {
     if (messageId) {
       handleAcceptFriendship(messageId);
-      //triggerRequestsAndInboxRefetch(); doing this in the Friend context
+      triggerRequestsAndInboxRefetch(); // doing this in the Friend context
     }
   };
 
   const handleDecline = () => {
     if (messageId) {
       handleDeclineFriendship(messageId);
-     // triggerRequestsAndInboxRefetch(); doing this in the Friend context
+       triggerRequestsAndInboxRefetch(); // doing this in the Friend context
     }
   };
 
