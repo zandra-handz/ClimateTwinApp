@@ -8,7 +8,7 @@ import {
 } from "@tanstack/react-query";
 
 
-
+import useInlineComputations from "../hooks/useInlineComputations";
 import { useUser } from "../../src/context/UserContext";
 import { useUserSettings } from "./UserSettingsContext";
 import { useAppMessage } from "@/src/context/AppMessageContext";
@@ -57,6 +57,7 @@ export interface TreasuresContextType {
   declineTreasureGiftMutation;
   triggerTreasuresRefetch;
   testData;
+  nonPendingTreasures;
 }
 
 const TreasuresContext = createContext<TreasuresContextType | undefined>(undefined);
@@ -84,8 +85,11 @@ export const TreasuresProvider: React.FC<TreasuresProviderProps> = ({
   const [viewingTreasure, setViewingTreasure] = useState<Treasure | null>(null);
   const [viewingSearchableTreasure, setViewingSearchableTreasure] =
     useState<Treasure | null>(null);  
+const { getNonPendingTreasures } = useInlineComputations();
+  const [treasureSearchResults, setTreasureSearchResults] = useState([]);
 
-  const [treasureSearchResults, setTreasureSearchResults] = useState(null);
+ 
+  const [nonPendingTreasures, setNonPendingTreasures ] = useState(null);
  
 
   const queryClient = useQueryClient();
@@ -101,6 +105,15 @@ export const TreasuresProvider: React.FC<TreasuresProviderProps> = ({
     queryFn: getTreasures,
     enabled: !!(isAuthenticated && !settingsAreLoading),
   });
+
+
+  useEffect(() => {
+    showAppMessage(true, null, 'treasures successfully refetched');
+    if (isSuccess && treasures && treasures.length > 0) {
+      setNonPendingTreasures(getNonPendingTreasures(treasures));
+    }
+
+  }, [isSuccess, treasures]);
  
   const handleGetTreasure = async (id: number) => {
     const cacheKey = ["treasure", user?.id, id];
@@ -282,15 +295,15 @@ const handleGiftTreasure = (treasureId: number, recipientId: number, message: st
 
 const giftTreasureMutation = useMutation({
   mutationFn: (data: GiftTreasureRequest) => requestToGiftTreasure(data),
-  onSuccess: async () => { 
+  onSuccess:   () => { 
 
-    await queryClient.refetchQueries({ queryKey: ['pendingRequests', { user: user?.id } ] }); 
-    await queryClient.refetchQueries({ queryKey: ['inboxItems', { user: user?.id } ] });  
-    await queryClient.refetchQueries({ queryKey: ['treasures', { user: user?.id}]}); 
+    // await queryClient.refetchQueries({ queryKey: ['pendingRequests', { user: user?.id } ] }); 
+    // await queryClient.refetchQueries({ queryKey: ['inboxItems', { user: user?.id } ] });  
+    // await queryClient.refetchQueries({ queryKey: ['treasures', { user: user?.id}]}); 
   
    
     // triggerRequestsAndInboxRefetch();
-    // triggerTreasuresRefetch();
+     triggerTreasuresRefetch();
 
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -372,42 +385,42 @@ const giftTreasureBackToFinderMutation = useMutation({
 //  queryClient.refetchQueries({ queryKey: ['treasures', { user: user?.id} ] });  
 // };
 
-const triggerTreasuresRefetch = async () => {
-  const oldData = queryClient.getQueryData(['treasures']) || [];
+const triggerTreasuresRefetch = () => {
+  // const oldData = queryClient.getQueryData(['treasures']) || [];
 
-  // Show old data
-  const oldDataMessage = oldData.length 
-    ? `Old Treasures data:\n\n${JSON.stringify(oldData, null, 2)}\n` 
-    : 'No old treasures data available.';
+  // // Show old data
+  // const oldDataMessage = oldData.length 
+  //   ? `Old Treasures data:\n\n${JSON.stringify(oldData, null, 2)}\n` 
+  //   : 'No old treasures data available.';
   
-  showAppMessage(true, null, [oldDataMessage]);
+  // showAppMessage(true, null, [oldDataMessage]);
 
   // Invalidate and refetch
-  await queryClient.invalidateQueries({ queryKey: ['treasures'] });
-  await queryClient.refetchQueries({ queryKey: ['treasures'] });
+   queryClient.invalidateQueries({ queryKey: ['treasures'] });
+   queryClient.refetchQueries({ queryKey: ['treasures'] });
 
   const newData = queryClient.getQueryData(['treasures']) || [];
 
   // Show new data
-  const newDataMessage = newData.length 
-    ? `New Treasures data:\n\n${JSON.stringify(newData, null, 2)}\n` 
-    : 'No new treasures data available.';
+  // const newDataMessage = newData.length 
+  //   ? `New Treasures data:\n\n${JSON.stringify(newData, null, 2)}\n` 
+  //   : 'No new treasures data available.';
   
-  showAppMessage(true, null, [newDataMessage]);
+  // showAppMessage(true, null, [newDataMessage]);
 
   // Compare using JSON.stringify (can be replaced with custom ID-based logic)
-  const oldSet = new Set(oldData.map(d => JSON.stringify(d)));
-  const newSet = new Set(newData.map(d => JSON.stringify(d)));
+  // const oldSet = new Set(oldData.map(d => JSON.stringify(d)));
+  // const newSet = new Set(newData.map(d => JSON.stringify(d)));
 
-  const differences = [
-    ...[...oldSet].filter(x => !newSet.has(x)),  // removed
-    ...[...newSet].filter(x => !oldSet.has(x))   // added
-  ];
+  // const differences = [
+  //   ...[...oldSet].filter(x => !newSet.has(x)),  // removed
+  //   ...[...newSet].filter(x => !oldSet.has(x))   // added
+  // ];
 
-  const differenceMessage = `✨ Treasures data changed:\n${differences.length ? differences.join('\n\n') : 'No differences detected.'}`;
+  // const differenceMessage = `✨ Treasures data changed:\n${differences.length ? differences.join('\n\n') : 'No differences detected.'}`;
 
-  // Show differences in data
-  showAppMessage(true, null, [differenceMessage]);
+  // // Show differences in data
+  // showAppMessage(true, null, [differenceMessage]);
 };
 
 
@@ -425,13 +438,13 @@ const handleAcceptTreasureGift = (itemViewId : number) => {
 
 const acceptTreasureGiftMutation = useMutation({
 mutationFn: (itemViewId : number) => acceptTreasureGift(itemViewId),
-onSuccess: async () => { 
+onSuccess:  () => { 
 
 
-  await triggerTreasuresRefetch();
+   triggerTreasuresRefetch();
 
-  await queryClient.refetchQueries({ queryKey: ['pendingRequests', { user: user?.id } ] }); 
-  await queryClient.refetchQueries({ queryKey: ['inboxItems', { user: user?.id } ] });  
+   queryClient.refetchQueries({ queryKey: ['pendingRequests', { user: user?.id } ] }); 
+   queryClient.refetchQueries({ queryKey: ['inboxItems', { user: user?.id } ] });  
 //  await queryClient.refetchQueries({ queryKey: ['treasures', { user: user?.id}]});
 
 
@@ -578,6 +591,7 @@ onError: () => {
         declineTreasureGiftMutation,
         triggerTreasuresRefetch,
         testData,
+        nonPendingTreasures,
       }}
     >
       {children}

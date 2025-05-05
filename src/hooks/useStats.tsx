@@ -1,7 +1,6 @@
 //THIS IS FOR MY OWN OBSERVATION WHILE TESTING/PLAYING AROUND
-
-import React, { useMemo, useRef } from "react";
-import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
+ 
+import { useQuery  } from "@tanstack/react-query";
 
 import { useUser } from "../context/UserContext";
 import { getStats } from "../calls/apicalls";
@@ -19,7 +18,7 @@ const useStats = () => {
     queryKey: ["stats"],
     queryFn: () => getStats(),
     enabled: !!isAuthenticated && !isInitializing, //initializing may not be necessary
-    onSuccess: (data) => {},
+ 
   });
 
   return {

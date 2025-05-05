@@ -12,7 +12,7 @@ import { useUser } from "@/src/context/UserContext";
 
 const index = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { treasures, handleGetTreasure  } = useTreasures();
+  const { treasures, nonPendingTreasures, handleGetTreasure  } = useTreasures();
   const { user } = useUser();
 
   const { pendingRequests } = usePendingRequests();
@@ -24,7 +24,7 @@ const index = () => {
     allGiftRequests,
     user?.id
   );
-  const nonPendingTreasures = getNonPendingTreasures(treasures);
+ // const nonPendingTreasures = getNonPendingTreasures(treasures);
 
   const router = useRouter();
 

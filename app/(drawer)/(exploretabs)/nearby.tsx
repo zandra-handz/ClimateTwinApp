@@ -14,7 +14,7 @@ import NothingHere from "@/app/components/Scaffolding/NothingHere";
 const nearby = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const { lastLocationId } = useSurroundingsWS();
-  const { triggerRefetch, nearbyLocations } = useNearbyLocations();
+  const { nearbyLocations } = useNearbyLocations();
   const { getNearbyLocationsData } = useInlineComputations();
  const centeredNearbyLocations = getNearbyLocationsData(nearbyLocations, lastLocationId);
  

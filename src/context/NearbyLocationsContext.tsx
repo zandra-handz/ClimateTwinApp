@@ -27,7 +27,7 @@ interface NearbyLocation {
 
 interface NearbyLocationsContextType {
   nearbyLocations: NearbyLocation[] | undefined;
-  triggerRefetch: () => void;
+ 
 }
 
 const NearbyLocationsContext = createContext<
@@ -78,17 +78,11 @@ export const NearbyLocationsProvider: React.FC<
     //staleTime: 0,
   });
  
- 
-
-  const triggerRefetch = () => {
-    queryClient.invalidateQueries({
-      queryKey: ["nearbyLocations"],
-    });
-  };
+  
 
   return (
     <NearbyLocationsContext.Provider
-      value={{ nearbyLocations, triggerRefetch }}
+      value={{ nearbyLocations }}
     >
       {children}
     </NearbyLocationsContext.Provider>

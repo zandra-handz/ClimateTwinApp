@@ -7,17 +7,13 @@ import { useRouter } from "expo-router";
 import SignInButton from "./components/SignInButton"; 
 import { LinearGradient } from "expo-linear-gradient";
 import CustomStatusBar from "./components/CustomStatusBar";
-import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
-import useProtectedRoute from "../src/hooks/useProtectedRoute";
-import useExploreRoute from "../src/hooks/useExploreRoute";
-
+ 
 const index = () => {
-  const { themeStyles, manualGradientColors, constantColorsStyles } =
+  const { themeStyles,  constantColorsStyles } =
     useGlobalStyles(); 
   const { isAuthenticated  } = useUser();
 
-  const { settingsAreLoading } = useUserSettings();
-    const { lastState } = useSurroundingsWS();
+  const { settingsAreLoading } = useUserSettings(); 
 
     //WHERE WAS USING BEFORE MAY 3
    // useProtectedRoute(isAuthenticated, isInitializing);

@@ -15,14 +15,10 @@ import { useAppMessage } from "../src/context/AppMessageContext";
 import { useFonts } from "expo-font";
 import { LinearGradient } from "expo-linear-gradient";
 import ComponentSpinner from "./components/Scaffolding/ComponentSpinner";
-import SafeView from "./components/SafeView";
-import * as SecureStore from "expo-secure-store";
+import SafeView from "./components/SafeView"; 
 
-import { useRouter, Link } from "expo-router";
- 
-import { signup } from "../src/calls/apicalls";
-
-import { StatusBar } from "react-native";
+import { useRouter } from "expo-router";
+  
 import SimpleBottomButton from "./components/SimpleBottomButton";
 
 //a frienddate assistant for overwhelmed adults, and for people who just have a lot to talk about

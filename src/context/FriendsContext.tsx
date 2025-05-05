@@ -95,16 +95,13 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
   const queryClient = useQueryClient();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-
-  const normalizedUserId = String(user?.id);
-
   const {
     data: friends,
     isPending,
     isSuccess,
     isError,
   }: UseQueryResult<Friend[], Error> = useQuery({
-    queryKey: ["friends", normalizedUserId],
+    queryKey: ["friends", user?.id],
     queryFn: getFriends,
     enabled: !!(isAuthenticated && !settingsAreLoading && user && user.id),
   });
@@ -119,7 +116,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
   //   }, [isError]);
 
   const handleGetFriend = async (id: number) => {
-    const cacheKey = ["friend", normalizedUserId, id];
+    const cacheKey = ["friend", user?.id, id];
     const cachedFriend = queryClient.getQueryData<Friend>(cacheKey);
   
     if (cachedFriend) {
@@ -133,7 +130,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
     mutationFn: (friendId: number) => getFriend(friendId),
     onSuccess: (data, friendId) => {
       setViewingFriend(data);
-      queryClient.setQueryData(["friend", normalizedUserId, friendId], data); // correctly uses friendId
+      queryClient.setQueryData(["friend", user?.id, friendId], data); // correctly uses friendId
       if (timeoutRef.current) clearTimeout(timeoutRef.current);
       timeoutRef.current = setTimeout(() => {
         getFriendMutation.reset();
@@ -196,7 +193,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
   };
 
   const handleGetPublicProfile = async (userId: number) => {
-    const cacheKey = ["publicProfile", normalizedUserId, userId];
+    const cacheKey = ["publicProfile", user?.id, userId];
     const cachedProfile = queryClient.getQueryData<PublicProfile>(cacheKey);
   
     if (cachedProfile) {
@@ -210,7 +207,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
     mutationFn: (userId: number) => getPublicProfile(userId),
     onSuccess: (data, userId) => {
       setViewingPublicProfile(data);
-      queryClient.setQueryData(["publicProfile", normalizedUserId, userId], data); // Cache the public profile
+      queryClient.setQueryData(["publicProfile", user?.id, userId], data); // Cache the public profile
   
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
@@ -233,7 +230,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
 
 
   const handleSendFriendRequest = (recipientId: number, message: string) => {
-    if (!recipientId || !normalizedUserId) {
+    if (!recipientId || !user?.id) {
       console.error("User ID or recipient ID is missing.");
       return;
     }
@@ -274,35 +271,12 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
   });
 
 
-  const triggerFriendsRefetch = async () => {
-    const oldData = queryClient.getQueryData(['friends', normalizedUserId]) || [];
-    
-    await queryClient.invalidateQueries({ queryKey: ['friends'] });
-    await queryClient.refetchQueries({ queryKey: ['friends',  normalizedUserId] });
   
-    const newData = queryClient.getQueryData(['friends',  normalizedUserId]) || [];
-  
-    // Convert to strings for comparison (adjust as needed for uniqueness)
-    const oldSet = new Set(oldData.map(d => JSON.stringify(d)));
-    const newSet = new Set(newData.map(d => JSON.stringify(d)));
-  
-    const differences = [
-      ...[...oldSet].filter(x => !newSet.has(x)),  // removed
-      ...[...newSet].filter(x => !oldSet.has(x))   // added
-    ];
-  
-    const message = `
-  🧠 Friends data changed:
-  ${differences.length ? differences.join('\n\n') : 'No differences detected.'}
-    `;
-  
-    showAppMessage(true, null, [message]);
+
+  const triggerFriendsRefetch = () => { 
+    queryClient.invalidateQueries({ queryKey: ['friends'] });
+    queryClient.refetchQueries({ queryKey: ['friends', user?.id] });
   };
-  
-  // const triggerFriendsRefetch = () => { 
-  //   queryClient.invalidateQueries({ queryKey: ['friends'] });
-  //   queryClient.refetchQueries({ queryKey: ['friends',  normalizedUserId] });
-  // };
  
 
   const handleAcceptFriendship = (itemViewId: number) => {
