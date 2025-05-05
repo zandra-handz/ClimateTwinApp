@@ -101,8 +101,11 @@ export const PendingRequestsProvider: React.FC<PendingRequestsProviderProps> = (
   
   
   const triggerRequestsAndInboxRefetch = () => {
-    queryClient.invalidateQueries({ queryKey: ['pendingRequests', { user: user?.id }] }); 
-    queryClient.invalidateQueries({ queryKey: ['inboxItems', { user: user?.id }] });  
+    queryClient.invalidateQueries({ queryKey: ['pendingRequests' ] }); 
+    queryClient.invalidateQueries({ queryKey: ['inboxItems' ] });  
+
+    queryClient.refetchQueries({ queryKey: ['pendingRequests' ] }); 
+    queryClient.refetchQueries({ queryKey: ['inboxItems' ] });  
   };
  
   return (

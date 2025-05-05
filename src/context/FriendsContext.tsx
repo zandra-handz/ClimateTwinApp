@@ -271,8 +271,8 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
   });
 
   const triggerFriendsRefetch = () => { 
-    queryClient.invalidateQueries({ queryKey: ['friends'] });
-   // queryClient.refetchQueries({ queryKey: ['friends'] });
+   // queryClient.invalidateQueries({ queryKey: ['friends'] });
+    queryClient.refetchQueries({ queryKey: ['friends'] });
   };
  
 
