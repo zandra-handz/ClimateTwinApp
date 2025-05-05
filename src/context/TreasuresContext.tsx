@@ -374,11 +374,25 @@ const giftTreasureBackToFinderMutation = useMutation({
 const triggerTreasuresRefetch = async () => {
   const oldData = queryClient.getQueryData(['treasures', { user: user?.id }]) || [];
 
+  // Show old data
+  const oldDataMessage = oldData.length 
+    ? `Old Treasures data:\n\n${JSON.stringify(oldData, null, 2)}\n` 
+    : 'No old treasures data available.';
+  
+  showAppMessage(true, null, [oldDataMessage]);
+
   // Invalidate and refetch
   await queryClient.invalidateQueries({ queryKey: ['treasures'] });
-  await queryClient.refetchQueries({ queryKey: ['treasures', { user: user?.id } ] });
+  await queryClient.refetchQueries({ queryKey: ['treasures', { user: user?.id }] });
 
   const newData = queryClient.getQueryData(['treasures', { user: user?.id }]) || [];
+
+  // Show new data
+  const newDataMessage = newData.length 
+    ? `New Treasures data:\n\n${JSON.stringify(newData, null, 2)}\n` 
+    : 'No new treasures data available.';
+  
+  showAppMessage(true, null, [newDataMessage]);
 
   // Compare using JSON.stringify (can be replaced with custom ID-based logic)
   const oldSet = new Set(oldData.map(d => JSON.stringify(d)));
@@ -389,14 +403,11 @@ const triggerTreasuresRefetch = async () => {
     ...[...newSet].filter(x => !oldSet.has(x))   // added
   ];
 
-  const message = `
-✨ Treasures data changed:
-${differences.length ? differences.join('\n\n') : 'No differences detected.'}
-  `;
+  const differenceMessage = `✨ Treasures data changed:\n${differences.length ? differences.join('\n\n') : 'No differences detected.'}`;
 
-  showAppMessage(true, null, [message]);
+  // Show differences in data
+  showAppMessage(true, null, [differenceMessage]);
 };
-
 
 
 
