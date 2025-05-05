@@ -99,7 +99,7 @@ export const TreasuresProvider: React.FC<TreasuresProviderProps> = ({
   }: UseQueryResult<Treasure[], Error> = useQuery({
     queryKey: ['treasures'],
     queryFn: getTreasures,
-    enabled: !!(isAuthenticated && user && user.id),
+    enabled: !!(isAuthenticated && !settingsAreLoading),
   });
  
   const handleGetTreasure = async (id: number) => {
