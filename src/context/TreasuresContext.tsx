@@ -97,7 +97,7 @@ export const TreasuresProvider: React.FC<TreasuresProviderProps> = ({
     isSuccess,
     isError,
   }: UseQueryResult<Treasure[], Error> = useQuery({
-    queryKey: ["treasures", user?.id],
+    queryKey: ['treasures', { user: user?.id }],
     queryFn: getTreasures,
     enabled: !!(isAuthenticated && user && user.id),
   });
@@ -352,8 +352,8 @@ const giftTreasureBackToFinderMutation = useMutation({
 
 
 const triggerTreasuresRefetch = () => {  
-  queryClient.invalidateQueries({ queryKey: ['treasures', user?.id] });
-//  queryClient.refetchQueries({ queryKey: ["treasures", user?.id] });  
+ // queryClient.invalidateQueries({ queryKey: ['treasures', { user: user?.id }] });
+ queryClient.refetchQueries({ queryKey: ['treasures', { user: user?.id }] });  
 };
 
 
