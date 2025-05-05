@@ -122,11 +122,13 @@ const { appState } = useAppState();
         } else {
           showAppMessage(true, null, "Oh no :( Could not initialize user.");
           setAuthenticated(false); 
+          queryClient.clear();
         }
       } else {
         showAppMessage(true, null, "Not signed in.");
         setUser(null);
         setAuthenticated(false); 
+        queryClient.clear();
       }
     } finally {
       isReinitializing = false;

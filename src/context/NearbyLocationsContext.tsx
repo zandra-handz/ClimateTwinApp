@@ -82,7 +82,7 @@ export const NearbyLocationsProvider: React.FC<
 
   const triggerRefetch = () => {
     queryClient.invalidateQueries({
-      queryKey: ["nearbyLocations", baseLocationId, user?.id],
+      queryKey: ["nearbyLocations"],
     });
   };
 

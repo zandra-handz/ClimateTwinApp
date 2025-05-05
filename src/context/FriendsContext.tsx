@@ -270,10 +270,36 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
     },
   });
 
-  const triggerFriendsRefetch = () => { 
-    queryClient.invalidateQueries({ queryKey: ['friends'] });
-    queryClient.refetchQueries({ queryKey: ['friends'] });
+
+  const triggerFriendsRefetch = async () => {
+    const oldData = queryClient.getQueryData(['friends', user?.id]) || [];
+    
+    await queryClient.invalidateQueries({ queryKey: ['friends'] });
+    await queryClient.refetchQueries({ queryKey: ['friends', user?.id] });
+  
+    const newData = queryClient.getQueryData(['friends', user?.id]) || [];
+  
+    // Convert to strings for comparison (adjust as needed for uniqueness)
+    const oldSet = new Set(oldData.map(d => JSON.stringify(d)));
+    const newSet = new Set(newData.map(d => JSON.stringify(d)));
+  
+    const differences = [
+      ...[...oldSet].filter(x => !newSet.has(x)),  // removed
+      ...[...newSet].filter(x => !oldSet.has(x))   // added
+    ];
+  
+    const message = `
+  🧠 Friends data changed:
+  ${differences.length ? differences.join('\n\n') : 'No differences detected.'}
+    `;
+  
+    showAppMessage(true, null, [message]);
   };
+  
+  // const triggerFriendsRefetch = () => { 
+  //   queryClient.invalidateQueries({ queryKey: ['friends'] });
+  //   queryClient.refetchQueries({ queryKey: ['friends', user?.id] });
+  // };
  
 
   const handleAcceptFriendship = (itemViewId: number) => {

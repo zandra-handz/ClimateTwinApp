@@ -174,7 +174,7 @@ export const CurrentSurroundingsProvider: React.FC<
 
   const triggerSurroundingsRefetch = () => {
     queryClient.invalidateQueries({
-      queryKey: ["currentSurroundings", lastLocationId, user?.id],
+      queryKey: ["currentSurroundings"],
     });
     // queryClient.refetchQueries({
     //   queryKey: ["currentSurroundings", lastLocationId, user?.id],

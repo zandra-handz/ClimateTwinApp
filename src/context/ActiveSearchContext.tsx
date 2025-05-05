@@ -103,7 +103,7 @@ export const ActiveSearchProvider: React.FC<ActiveSearchProviderProps> = ({
   // }, [remainingGoes]);
 
   const refetchRemainingGoes = () => {
-    queryClient.invalidateQueries({ queryKey: ["remainingGoes", user?.id] });
+    queryClient.invalidateQueries({ queryKey: ["remainingGoes"] });
    // queryClient.refetchQueries({ queryKey: ["remainingGoes", user?.id] });
   };
 

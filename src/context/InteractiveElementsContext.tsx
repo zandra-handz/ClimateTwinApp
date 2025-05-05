@@ -120,7 +120,7 @@ export const InteractiveElementsProvider: React.FC<
 
   const triggerItemChoicesRefetch = () => { 
     queryClient.invalidateQueries({
-      queryKey: ["itemChoices", lastLocationId, user?.id],
+      queryKey: ["itemChoices"],
  
     }); 
     // queryClient.refetchQueries({

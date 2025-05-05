@@ -5,7 +5,7 @@ import { useAppMessage } from '../../src/context/AppMessageContext';
 
 const AppMessage = ({
   delay = 0,
-  resultsDisplayDuration = 1600, // Duration to show results message (default 3 seconds)
+  resultsDisplayDuration = 4600, // Duration to show results message (default 3 seconds)
   messageDelay = 0, // Delay before the message appears (2 seconds)
   onPress=null,
   onPressLabel='',
