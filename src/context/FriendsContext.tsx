@@ -251,6 +251,8 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
       triggerRequestsAndInboxRefetch();
       triggerFriendsRefetch(); 
 
+      showAppMessage(true, null, `Friend request sent!`);
+
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -274,7 +276,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
   
 
   const triggerFriendsRefetch = () => { 
-    queryClient.invalidateQueries({ queryKey: ['friends'] });
+   // queryClient.invalidateQueries({ queryKey: ['friends'] });
     queryClient.refetchQueries({ queryKey: ['friends', user?.id] });
   };
  
@@ -290,9 +292,12 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
   const acceptFriendshipMutation = useMutation({
     mutationFn: (itemViewId: number) => acceptFriendship(itemViewId),
     onSuccess: () => {
-      showAppMessage(true, null, "Friendship accepted!");
+
       triggerRequestsAndInboxRefetch(); 
-     triggerFriendsRefetch(); 
+      triggerFriendsRefetch(); 
+
+      showAppMessage(true, null, "Friendship accepted!");
+   
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -322,8 +327,12 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
   const declineFriendshipMutation = useMutation({
     mutationFn: (itemViewId: number) => declineFriendship(itemViewId),
     onSuccess: () => { 
+
+      triggerRequestsAndInboxRefetch(); 
+      triggerFriendsRefetch(); 
+
      showAppMessage(true, null, "Friendship declined");
-     triggerRequestsAndInboxRefetch();
+ 
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
       }
@@ -349,8 +358,8 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
      
       triggerRequestsAndInboxRefetch(); 
       triggerFriendsRefetch();
-      // moved to friend ui card
-      // router.replace('/(friends)');
+
+      // showAppMessage(true, null, `Friend unfriended`);
 
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useRef, useEffect, useState } from "react";
+import React, { createContext, useContext, useRef, useState } from "react";
 import {
   UseMutationResult,
   useQuery,
@@ -7,8 +7,7 @@ import {
   useMutation,
 } from "@tanstack/react-query";
 
-
-import useInlineComputations from "../hooks/useInlineComputations";
+ 
 import { useUser } from "../../src/context/UserContext";
 import { useUserSettings } from "./UserSettingsContext";
 import { useAppMessage } from "@/src/context/AppMessageContext";
@@ -56,8 +55,7 @@ export interface TreasuresContextType {
   acceptTreasureGiftMutation;
   declineTreasureGiftMutation;
   triggerTreasuresRefetch;
-  testData;
-  nonPendingTreasures;
+  testData; 
 }
 
 const TreasuresContext = createContext<TreasuresContextType | undefined>(undefined);
@@ -84,12 +82,10 @@ export const TreasuresProvider: React.FC<TreasuresProviderProps> = ({
   const [testData, setTestData] = useState(null); 
   const [viewingTreasure, setViewingTreasure] = useState<Treasure | null>(null);
   const [viewingSearchableTreasure, setViewingSearchableTreasure] =
-    useState<Treasure | null>(null);  
-const { getNonPendingTreasures } = useInlineComputations();
+    useState<Treasure | null>(null);   
   const [treasureSearchResults, setTreasureSearchResults] = useState([]);
 
- 
-  const [nonPendingTreasures, setNonPendingTreasures ] = useState(null);
+  
  
 
   const queryClient = useQueryClient();
@@ -101,20 +97,13 @@ const { getNonPendingTreasures } = useInlineComputations();
     isSuccess,
     isError,
   }: UseQueryResult<Treasure[], Error> = useQuery({
-    queryKey: ['treasures'],
+    queryKey: ['treasures', { user: user?.id }],
     queryFn: getTreasures,
-    enabled: true,
-   // enabled: !!(isAuthenticated && !settingsAreLoading),
+ 
+     enabled: !!(isAuthenticated && !settingsAreLoading && user && user.id),
   });
 
-
-  useEffect(() => {
-    showAppMessage(true, null, 'treasures successfully refetched');
-    if (isSuccess && treasures && treasures.length > 0) {
-      setNonPendingTreasures(getNonPendingTreasures(treasures));
-    }
-
-  }, [isSuccess, treasures]);
+ 
  
   const handleGetTreasure = async (id: number) => {
     const cacheKey = ["treasure", user?.id, id];
@@ -130,6 +119,7 @@ const { getNonPendingTreasures } = useInlineComputations();
   const getTreasureMutation = useMutation<Treasure, Error, number>({
     mutationFn: (id: number) => getTreasure(id),
     onSuccess: (data, id) => {
+
       setViewingTreasure(data);
       queryClient.setQueryData(["treasure", user?.id, id], data);
   
@@ -156,6 +146,7 @@ const { getNonPendingTreasures } = useInlineComputations();
   const searchTreasuresMutation = useMutation({
     mutationFn: (query: string) => searchTreasures(query),
     onSuccess: (data) => {
+
       setTreasureSearchResults(data);
 
       if (timeoutRef.current) {
@@ -195,6 +186,7 @@ const { getNonPendingTreasures } = useInlineComputations();
   const searchableTreasureMutation = useMutation<Treasure, Error, number>({
     mutationFn: (treasureId: number) => getSearchableTreasure(treasureId),
     onSuccess: (data, treasureId) => {
+
       setViewingSearchableTreasure(data);
       queryClient.setQueryData(["searchableTreasure", user?.id, treasureId], data);
   
@@ -240,17 +232,13 @@ const { getNonPendingTreasures } = useInlineComputations();
 
 const collectTreasureMutation = useMutation({
   mutationFn: (data: CollectTreasureRequest) => collectTreasure(data),
-  onSuccess: async () => { 
+  onSuccess: () => { 
+
+    triggerRequestsAndInboxRefetch();
+    triggerTreasuresRefetch(); 
+
     showAppMessage(true, null, `Treasure collected!`);
-
-     triggerTreasuresRefetch();
-    await queryClient.refetchQueries({ queryKey: ['pendingRequests', { user: user?.id } ] }); 
-    await queryClient.refetchQueries({ queryKey: ['inboxItems', { user: user?.id } ] });  
-    //await queryClient.refetchQueries({ queryKey: ['treasures', { user: user?.id}]});
-  
-    // triggerTreasuresRefetch();
-    // triggerRequestsAndInboxRefetch();
-
+ 
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
@@ -260,7 +248,7 @@ const collectTreasureMutation = useMutation({
     }, 2000); 
   },
   onError: (error) => {
-    showAppMessage(true, null, `Oops! Treasure not collected.`);
+     showAppMessage(true, null, `Oops! Treasure not collected.`);
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
@@ -298,12 +286,11 @@ const giftTreasureMutation = useMutation({
   mutationFn: (data: GiftTreasureRequest) => requestToGiftTreasure(data),
   onSuccess:   () => { 
 
-    queryClient.refetchQueries({ queryKey: ['pendingRequests', { user: user?.id } ] }); 
-   queryClient.refetchQueries({ queryKey: ['inboxItems', { user: user?.id } ] });  
-   
-   
-    // triggerRequestsAndInboxRefetch();
-     triggerTreasuresRefetch();
+    triggerRequestsAndInboxRefetch();
+    triggerTreasuresRefetch();
+    
+    showAppMessage(true, null, 'Treasure sent!');
+  
 
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -345,14 +332,13 @@ const handleGiftTreasureBackToFinder = (treasureId: number, message: string | 'N
 
 const giftTreasureBackToFinderMutation = useMutation({
   mutationFn: (data: GiftTreasureBackToFinderRequest) => requestToGiftTreasureBackToFinder(data),
-  onSuccess: async () => { 
+  onSuccess:  () => { 
+ 
+    triggerRequestsAndInboxRefetch();
+    triggerTreasuresRefetch(); 
 
-    await queryClient.refetchQueries({ queryKey: ['pendingRequests', { user: user?.id } ] }); 
-    await queryClient.refetchQueries({ queryKey: ['inboxItems', { user: user?.id } ] });  
-    await queryClient.refetchQueries({ queryKey: ['treasures', { user: user?.id}]}); 
-  
-    // triggerTreasuresRefetch();
-    // triggerRequestsAndInboxRefetch();
+    showAppMessage(true, null, 'Treasure sent!');
+    
 
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -378,49 +364,12 @@ const giftTreasureBackToFinderMutation = useMutation({
 
 
 
+ 
 
+const triggerTreasuresRefetch = () => { 
+  queryClient.refetchQueries({ queryKey: ['treasures', { user: user?.id} ] });  
 
-// const triggerTreasuresRefetch = () => {  
-// queryClient.invalidateQueries({ queryKey: ['treasures' ] });
-//  queryClient.refetchQueries({ queryKey: ['treasures', { user: user?.id} ] });  
-// };
-
-const triggerTreasuresRefetch = () => {
-  // const oldData = queryClient.getQueryData(['treasures']) || [];
-
-  // // Show old data
-  // const oldDataMessage = oldData.length 
-  //   ? `Old Treasures data:\n\n${JSON.stringify(oldData, null, 2)}\n` 
-  //   : 'No old treasures data available.';
   
-  // showAppMessage(true, null, [oldDataMessage]);
-
-  // Invalidate and refetch
-   queryClient.invalidateQueries({ queryKey: ['treasures'] });
-   queryClient.refetchQueries({ queryKey: ['treasures'] });
-
-  const newData = queryClient.getQueryData(['treasures']) || [];
-
-  // Show new data
-  // const newDataMessage = newData.length 
-  //   ? `New Treasures data:\n\n${JSON.stringify(newData, null, 2)}\n` 
-  //   : 'No new treasures data available.';
-  
-  // showAppMessage(true, null, [newDataMessage]);
-
-  // Compare using JSON.stringify (can be replaced with custom ID-based logic)
-  // const oldSet = new Set(oldData.map(d => JSON.stringify(d)));
-  // const newSet = new Set(newData.map(d => JSON.stringify(d)));
-
-  // const differences = [
-  //   ...[...oldSet].filter(x => !newSet.has(x)),  // removed
-  //   ...[...newSet].filter(x => !oldSet.has(x))   // added
-  // ];
-
-  // const differenceMessage = `✨ Treasures data changed:\n${differences.length ? differences.join('\n\n') : 'No differences detected.'}`;
-
-  // // Show differences in data
-  // showAppMessage(true, null, [differenceMessage]);
 };
 
 
@@ -440,17 +389,11 @@ const acceptTreasureGiftMutation = useMutation({
 mutationFn: (itemViewId : number) => acceptTreasureGift(itemViewId),
 onSuccess:  () => { 
 
-showAppMessage(true, null, "onSuccess for acceptTreasureGiftMutation successfully triggered!");
-   triggerTreasuresRefetch();
+  triggerRequestsAndInboxRefetch();
+  triggerTreasuresRefetch(); 
 
-   queryClient.refetchQueries({ queryKey: ['pendingRequests', { user: user?.id } ] }); 
-   queryClient.refetchQueries({ queryKey: ['inboxItems', { user: user?.id } ] });  
-//  await queryClient.refetchQueries({ queryKey: ['treasures', { user: user?.id}]});
+  showAppMessage(true, null, 'Treasure accepted!');
 
-
-
-  // triggerTreasuresRefetch();
-  // triggerRequestsAndInboxRefetch();
 
   if (timeoutRef.current) {
     clearTimeout(timeoutRef.current);
@@ -488,15 +431,12 @@ declineTreasureGiftMutation.mutate(itemViewId);
 const declineTreasureGiftMutation = useMutation({
 mutationFn: (itemViewId : number) => declineTreasureGift(itemViewId),
 onSuccess: () => { 
-  showAppMessage(true, null, "onSuccess for declineTreasureGiftMutation successfully triggered!");
-   triggerTreasuresRefetch();
 
-  queryClient.refetchQueries({ queryKey: ['pendingRequests', { user: user?.id } ] }); 
-  queryClient.refetchQueries({ queryKey: ['inboxItems', { user: user?.id } ] });  
-  // await queryClient.refetchQueries({ queryKey: ['treasures', { user: user?.id}]});
+  triggerRequestsAndInboxRefetch();
+  triggerTreasuresRefetch(); 
 
-// triggerTreasuresRefetch();
-//triggerRequestsAndInboxRefetch();
+  showAppMessage(true, null, 'Treasure declined');
+  
 
 if (timeoutRef.current) {
   clearTimeout(timeoutRef.current);
@@ -590,8 +530,7 @@ onError: () => {
         acceptTreasureGiftMutation,
         declineTreasureGiftMutation,
         triggerTreasuresRefetch,
-        testData,
-        nonPendingTreasures,
+        testData, 
       }}
     >
       {children}
