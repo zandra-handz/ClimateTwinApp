@@ -103,7 +103,8 @@ const { getNonPendingTreasures } = useInlineComputations();
   }: UseQueryResult<Treasure[], Error> = useQuery({
     queryKey: ['treasures'],
     queryFn: getTreasures,
-    enabled: !!(isAuthenticated && !settingsAreLoading),
+    enabled: true,
+   // enabled: !!(isAuthenticated && !settingsAreLoading),
   });
 
 
@@ -242,7 +243,7 @@ const collectTreasureMutation = useMutation({
   onSuccess: async () => { 
     showAppMessage(true, null, `Treasure collected!`);
 
-    await triggerTreasuresRefetch();
+     triggerTreasuresRefetch();
     await queryClient.refetchQueries({ queryKey: ['pendingRequests', { user: user?.id } ] }); 
     await queryClient.refetchQueries({ queryKey: ['inboxItems', { user: user?.id } ] });  
     //await queryClient.refetchQueries({ queryKey: ['treasures', { user: user?.id}]});
