@@ -298,10 +298,9 @@ const giftTreasureMutation = useMutation({
   mutationFn: (data: GiftTreasureRequest) => requestToGiftTreasure(data),
   onSuccess:   () => { 
 
-    // await queryClient.refetchQueries({ queryKey: ['pendingRequests', { user: user?.id } ] }); 
-    // await queryClient.refetchQueries({ queryKey: ['inboxItems', { user: user?.id } ] });  
-    // await queryClient.refetchQueries({ queryKey: ['treasures', { user: user?.id}]}); 
-  
+    queryClient.refetchQueries({ queryKey: ['pendingRequests', { user: user?.id } ] }); 
+   queryClient.refetchQueries({ queryKey: ['inboxItems', { user: user?.id } ] });  
+   
    
     // triggerRequestsAndInboxRefetch();
      triggerTreasuresRefetch();
@@ -441,7 +440,7 @@ const acceptTreasureGiftMutation = useMutation({
 mutationFn: (itemViewId : number) => acceptTreasureGift(itemViewId),
 onSuccess:  () => { 
 
-
+showAppMessage(true, null, "onSuccess for acceptTreasureGiftMutation successfully triggered!");
    triggerTreasuresRefetch();
 
    queryClient.refetchQueries({ queryKey: ['pendingRequests', { user: user?.id } ] }); 
