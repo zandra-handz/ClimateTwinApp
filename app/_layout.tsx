@@ -57,8 +57,8 @@ Sentry.init({
 });
 
 export default Sentry.wrap(function AppLayout() {
-  const queryClient = new QueryClient();
- 
+ // const queryClient = new QueryClient();
+  const [queryClient] = useState(() => new QueryClient())
   const appState = useRef(AppState.currentState);
   //const [appStateVisible, setAppStateVisible] = useState(appState.current);
 
@@ -106,38 +106,7 @@ export default Sentry.wrap(function AppLayout() {
     return null;
   }
 
-  // useEffect(() => {
-  //   // hellofriendh had load fonts here
-
-  //   const notificationSubscription =
-  //     Notifications.addNotificationReceivedListener((notification) => {
-  //       console.log("Notification received in foreground:", notification);
-  //       Alert.alert(
-  //         notification.request.content.title,
-  //         notification.request.content.body
-  //       );
-  //     });
-  //   return () => notificationSubscription.remove();
-  // }, []);
-
-  // useEffect(() => {
-  //   const subscription = AppState.addEventListener("change", (nextAppState) => {
-  //     if (
-  //       appState.current.match(/inactive|background/) &&
-  //       nextAppState === "active"
-  //     )
-
-  //     appState.current = nextAppState;
-  //     setAppStateVisible(appState.current);
-  //     console.log("AppState", appState.current);
-  //     //showAppMessage(true, null, 'Reinitializing user!');
-
-  //   });
-
-  //   return () => {
-  //     subscription.remove();
-  //   };
-  // }, []);
+ 
 
 
 
@@ -168,46 +137,7 @@ export default Sentry.wrap(function AppLayout() {
                                 <NearbyLocationsProvider>
                                   <InteractiveElementsProvider>
                                     <AppRoutes />
-                                    {/* <Stack
-                                      screenOptions={{ headerShown: false }}
-                                      initialRouteName="index"
-                                    > 
-                                        <Stack.Protected guard={isAuthenticated && !isInitializing}>
-
-                                          <Stack.Screen
-                                            name="(drawer)"
-                                            options={{
-                                              headerShown: false,
-                                              gestureEnabled: false,
-                                            }}
-                                          />
-                                       
-                                       </Stack.Protected>
- 
-                                        <Stack.Screen
-                                          name="index"
-                                          options={{
-                                            headerShown: false,
-                                            headerTitle: "Welcome",
-                                            headerStyle: {
-                                              backgroundColor: "teal",
-                                            },
-                                            gestureEnabled: false,
-                                          }}
-                                        /> 
- 
-                                        <Stack.Screen
-                                          name="signin"
-                                          options={{
-                                            headerShown: false,
-                                            headerTitle: "Sign in",
-                                            headerStyle: {
-                                              backgroundColor: "teal",
-                                            },
-                                            gestureEnabled: false,
-                                          }}
-                                        /> 
-                                    </Stack> */}
+                               
                                   </InteractiveElementsProvider>
                                 </NearbyLocationsProvider>
                               </CurrentSurroundingsProvider>

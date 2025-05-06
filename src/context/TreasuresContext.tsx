@@ -487,12 +487,12 @@ declineTreasureGiftMutation.mutate(itemViewId);
 
 const declineTreasureGiftMutation = useMutation({
 mutationFn: (itemViewId : number) => declineTreasureGift(itemViewId),
-onSuccess: async () => { 
+onSuccess: () => { 
+  showAppMessage(true, null, "onSuccess for declineTreasureGiftMutation successfully triggered!");
+   triggerTreasuresRefetch();
 
-  await triggerTreasuresRefetch();
-
-  await queryClient.refetchQueries({ queryKey: ['pendingRequests', { user: user?.id } ] }); 
-  await queryClient.refetchQueries({ queryKey: ['inboxItems', { user: user?.id } ] });  
+  queryClient.refetchQueries({ queryKey: ['pendingRequests', { user: user?.id } ] }); 
+  queryClient.refetchQueries({ queryKey: ['inboxItems', { user: user?.id } ] });  
   // await queryClient.refetchQueries({ queryKey: ['treasures', { user: user?.id}]});
 
 // triggerTreasuresRefetch();
