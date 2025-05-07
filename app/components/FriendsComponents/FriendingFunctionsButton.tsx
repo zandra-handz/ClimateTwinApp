@@ -39,6 +39,7 @@ const FriendingFunctionsButton = ({
     declineFriendshipMutation,
     deleteFriendshipMutation,
     friendsIsPending,
+    viewingFriendOrUserId,
   } = useFriends();
 
   // const { pendingRequests } = usePendingRequests();
@@ -87,15 +88,15 @@ const FriendingFunctionsButton = ({
   };
 
   const handleAccept = () => {
-    if (messageId) {
-      handleAcceptFriendship(messageId);
+    if (messageId && cTUserId) {
+      handleAcceptFriendship(messageId, cTUserId);
       //  triggerRequestsAndInboxRefetch(); // doing this in the Friend context
     }
   };
 
   const handleDecline = () => {
-    if (messageId) {
-      handleDeclineFriendship(messageId);
+    if (messageId && cTUserId) {
+      handleDeclineFriendship(messageId, cTUserId);
       //  triggerRequestsAndInboxRefetch(); // doing this in the Friend context
     }
   };
@@ -120,20 +121,25 @@ const FriendingFunctionsButton = ({
           justifyContent: "center",
           zIndex: 10,
         }}
-      >
-        {(friendRequestMutation.isPending ||
+      > 
+
+
+{viewingFriendOrUserId && (viewingFriendOrUserId === cTUserId) && (
           acceptFriendshipMutation.isPending ||
           declineFriendshipMutation.isPending ||
-          deleteFriendshipMutation.isPending) && (
-            <ComponentSpinner showSpinner={true} backgroundColor='orange' />
-            )}
+          friendRequestMutation.isPending ||
+          friendsIsPending ||
+          requestsIsPending) && (
 
-{friendsIsPending && (
-            <ComponentSpinner showSpinner={true} backgroundColor='pink' />
-            )}
-            {requestsIsPending && (
-            <ComponentSpinner showSpinner={true} backgroundColor='blue' />
-            )}
+          <ComponentSpinner
+          showSpinner={true}
+          spinnerType={"circle"}
+          spinnerSize={22}
+          backgroundColor={themeStyles.darkerBackground.backgroundColor}
+        />
+
+          )}
+ 
         {!isFriend && sentFriendRequest && (
           <View
             style={{

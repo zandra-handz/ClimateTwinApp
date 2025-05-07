@@ -75,7 +75,7 @@ const index = () => {
           )}
         </View>
         <ActionsFooter
-          onPressLeft={() => router.replace('/(exploretabs)')}
+          onPressLeft={() => router.back()}
           labelLeft={"Back"}
           onPressRight={() => router.push("/search")}
           labelRight={"Search treasures"}

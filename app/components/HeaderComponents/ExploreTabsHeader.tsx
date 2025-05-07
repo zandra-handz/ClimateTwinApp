@@ -31,7 +31,7 @@ const ExploreTabsHeader = () => {
     <> 
     {!isOnInteractOrCollectScreen && (
 
-      <SafeView style={[themeStyles.primaryBackground, { flex: 1 }]}>
+      <SafeView style={[themeStyles.primaryBackground, { flex: 1, height: 80, position: 'absolute', top: 0 }]}>
         <View
           style={[
             appContainerStyles.headerContainer,

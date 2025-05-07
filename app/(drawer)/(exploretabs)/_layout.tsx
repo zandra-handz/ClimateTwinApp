@@ -4,6 +4,7 @@ import ExploreTabBar from "../../components/ExploreTabsComponents/ExploreTabBar"
  
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
 import SafeView from "@/app/components/SafeView";
+import ToplessSafeView from "@/app/components/ToplessSafeView";
 import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
 import { useSegments } from "expo-router";
 

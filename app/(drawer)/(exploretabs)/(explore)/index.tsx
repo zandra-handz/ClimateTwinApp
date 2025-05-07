@@ -240,7 +240,7 @@ const index = () => {
         style={[
           appContainerStyles.screenContainer,
           themeStyles.primaryBackground,
-          {zIndex: 10}
+          {zIndex: 10, paddingTop: 50}
         ]}
       >
         <NotificationNotifier />
@@ -253,7 +253,7 @@ const index = () => {
                 width: "100%",
                 left: 0,
                 right: 0,
-                top: 0,
+                top: 40,
                 elevation: 100000,
                 zIndex: 100000, 
               }}

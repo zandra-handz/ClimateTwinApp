@@ -1644,6 +1644,8 @@ const lightThemeStyles = StyleSheet.create({
     backgroundColor: "white",
     borderBottomWidth: 0.4,
     borderColor: "transparent",
+    // position: 'absolute',
+    // top: 0,
   },
   headerContainerNoBorder: {
     backgroundColor: "white",

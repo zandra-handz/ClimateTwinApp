@@ -84,6 +84,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
   const { settingsAreLoading } = useUserSettings();
   const {  triggerRequestsAndInboxRefetch } = usePendingRequests();
   const [viewingFriend, setViewingFriend] = useState<Friend | null>(null);  
+  const [viewingFriendOrUserId, setViewingFriendOrUserId] = useState(null); 
   const [viewingPublicProfile, setViewingPublicProfile] =
     useState<PublicProfile | null>(null); //is this correct or do i need the friendship?
 
@@ -235,6 +236,8 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
       return;
     }
 
+    setViewingFriendOrUserId(recipientId);
+
     const friendRequestData: AddFriendRequest = {
       message: message || "None",
       sender: user.id,
@@ -281,11 +284,16 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
   };
  
 
-  const handleAcceptFriendship = (itemViewId: number) => {
+  const handleAcceptFriendship = (itemViewId: number, newFriendId: number | null) => {
     if (!itemViewId) {
       console.error("Item view id is missing.");
       return;
     }
+
+    if (newFriendId) {
+      setViewingFriendOrUserId(newFriendId);
+    };
+
     acceptFriendshipMutation.mutate(itemViewId);
   };
 
@@ -316,11 +324,15 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
     },
   });
 
-  const handleDeclineFriendship = (itemViewId: number) => {
+  const handleDeclineFriendship = (itemViewId: number, rejectedUserId: number | null) => {
     if (!itemViewId) {
       console.error("Item view id is missing.");
       return;
     }
+
+    if (rejectedUserId) {
+      setViewingFriendOrUserId(rejectedUserId);
+    };
     declineFriendshipMutation.mutate(itemViewId);
   };
 
@@ -422,6 +434,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
         getPublicProfileMutation,
         viewingPublicProfile, 
         setViewingPublicProfile, // using to clear screen
+        viewingFriendOrUserId,
       }}
     >
       {children}
