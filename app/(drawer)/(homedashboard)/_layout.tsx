@@ -1,6 +1,7 @@
 import { Tabs } from "expo-router";
 import ExploreTabBar from "../../components/ExploreTabsComponents/ExploreTabBar";
- import SafeView from "@/app/components/SafeView";
+import HomeDashboardTabBar from "@/app/components/ExploreTabsComponents/HomeDashboardTabBar";
+import SafeView from "@/app/components/SafeView";
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
 import { useUserSettings } from "@/src/context/UserSettingsContext";
  import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
@@ -24,7 +25,7 @@ export default () => {
           headerShown: false,
           header: () => null,
         }}
-        tabBar={(props) => <ExploreTabBar {...props} />}
+        tabBar={(props) => <HomeDashboardTabBar {...props} />}
       >
         <Tabs.Screen name="index" />
       </Tabs>

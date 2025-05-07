@@ -35,7 +35,7 @@ const index = () => {
   return (
     <>
       {/* moved to layout
-      
+
        <ComponentSpinner
         backgroundColor={themeStyles.primaryBackground.backgroundColor}
         spinnerType={"pulse"}
@@ -101,7 +101,7 @@ const index = () => {
                       }
                     />
                   </View>
-                  <View style={{ height: 100, marginTop: 200 }}>
+                  <View style={{ height: 100, marginTop: 100 }}>
                     <Temperatures />
                   </View>
                 </>

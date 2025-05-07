@@ -3,8 +3,7 @@ import React, { useState } from "react";
 import ExploreTabBar from "../../components/ExploreTabsComponents/ExploreTabBar";
  
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
-import SafeView from "@/app/components/SafeView";
-import ToplessSafeView from "@/app/components/ToplessSafeView";
+import SafeView from "@/app/components/SafeView"; 
 import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
 import { useSegments } from "expo-router";
 
@@ -15,12 +14,11 @@ const segments = useSegments();
   const openDoubleChecker = () => {
     setDoubleCheckerVisible(true);
   };
-
-  const currentScreen = segments[segments.length - 1];
+ 
 
   const isOnInteractOrCollectScreen = ((segments[segments.length - 1] === 'interact') || (segments[segments.length - 1] === 'collect'));
 
-  console.log(`current screen: `, currentScreen, isOnInteractOrCollectScreen);
+  
 
   return (
     <>
