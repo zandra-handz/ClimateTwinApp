@@ -1,12 +1,9 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from "react-native";
-import { AntDesign, Feather, MaterialIcons } from "@expo/vector-icons";
-import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
+import { TouchableOpacity } from "react-native";
 import { useSurroundingsWS } from "../../../src/context/SurroundingsWSContext";
 
 const RefreshSocketButton = () => {
-  const { themeStyles, appContainerStyles, appFontStyles, constantColorsStyles } = useGlobalStyles();
-  const { handleRefreshDataFromSocket, isLocationSocketOpen, locationSocketColor } =
+  const { handleRefreshDataFromSocket, locationSocketColor } =
     useSurroundingsWS();
   return (
     <TouchableOpacity
@@ -17,23 +14,11 @@ const RefreshSocketButton = () => {
         width: "auto",
         height: 10,
         width: 10,
-        // backgroundColor: isLocationSocketOpen ? constantColorsStyles.v1LogoColor.backgroundColor : locationSocketColor,
         backgroundColor: locationSocketColor,
-        // paddingHorizontal: 8,
-        // paddingVertical: 2,
         justifyContent: "center",
         borderRadius: 10 / 2,
       }}
-    >
-      {/* <Text style={[themeStyles.primaryText, { fontWeight: "bold" }]}> */}
-      {/* <MaterialIcons
-        name="refresh"
-        size={appFontStyles.tinyIcon.width}
-        color={constantColorsStyles.v1LogoColor.color}
-      
-      />  */}
-      {/* </Text> */}
-    </TouchableOpacity>
+    ></TouchableOpacity>
   );
 };
 

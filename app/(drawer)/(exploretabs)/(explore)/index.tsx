@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import { Animated, View } from "react-native";
-import { useFocusEffect } from "expo-router"; 
-import SafeView from "@/app/components/SafeView";
-import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
-import { useSurroundings } from "../../../src/context/CurrentSurroundingsContext";
+import { useFocusEffect } from "expo-router";  
+import { useGlobalStyles } from "../../../../src/context/GlobalStylesContext";
+import { useSurroundings } from "../../../../src/context/CurrentSurroundingsContext";
 import useInlineComputations from "@/src/hooks/useInlineComputations";
 import CurrentSurroundingsView from "@/app/components/SurroundingsComponents/CurrentSurroundingsView";
 import PortalSurroundingsView from "@/app/components/SurroundingsComponents/PortalSurroundingsView";
@@ -19,7 +18,7 @@ import GroqHistory from "@/app/components/GroqComponents/GroqHistory";
 
 import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
 
- 
+import { useRouter } from "expo-router";
 
 const index = () => {
   const { user } = useUser();
@@ -43,6 +42,15 @@ const index = () => {
   } = getSurroundingsData(currentSurroundings);
 
   const [surroundingsData, setSurroundingsData] = useState(null);
+
+  const router = useRouter();
+
+
+  // NAVIGATIONS FROM THIS SCREEN
+  // I just want to put all my pathing in one place, the actual functions and data passing are happening locally in components
+  const pathPushToInteractScreen = `(explore)/interact`;
+
+
 
   useEffect(() => {
     if (currentSurroundings) {
@@ -92,7 +100,7 @@ const index = () => {
           },
           {
             id: "3",
-            component: <CurrentSurroundingsView height={ITEM_HEIGHT} />,
+            component: <CurrentSurroundingsView height={ITEM_HEIGHT} pathPushToInteractScreen={pathPushToInteractScreen} />,
           },
         ];
       } else if (portalSurroundings?.id) {
@@ -111,14 +119,14 @@ const index = () => {
           },
           {
             id: "3",
-            component: <CurrentSurroundingsView height={ITEM_HEIGHT} />,
+            component: <CurrentSurroundingsView height={ITEM_HEIGHT} pathPushToInteractScreen={pathPushToInteractScreen}/>,
           },
         ];
       } else {
         return [
           {
             id: "3",
-            component: <CurrentSurroundingsView height={ITEM_HEIGHT} />,
+            component: <CurrentSurroundingsView height={ITEM_HEIGHT} pathPushToInteractScreen={pathPushToInteractScreen} />,
           },
         ];
       }
@@ -135,12 +143,10 @@ const index = () => {
 
   const handleAutoScroll = () => {
     if (flatListRef.current && surroundingsViews.length > 0) {
-      if (ruinsSurroundings?.id) {
-        console.log("yes ruins");
+      if (ruinsSurroundings?.id) { 
         scrollToIndex(1);
         setGroqVisible(true);
-      } else {
-        console.log("no ruins");
+      } else { 
         scrollToIndex(0);
         //scrollToIndex(0);
         setGroqVisible(true);
@@ -228,9 +234,7 @@ const index = () => {
         backgroundColor={themeStyles.primaryBackground.backgroundColor}
         spinnerType={"pulse"}
         isSocketSpinner={true}
-      />
-       <SafeView style={{flex: 1, backgroundColor: themeStyles.primaryBackground.backgroundColor}}>
-
+      /> 
 
       <View
         style={[
@@ -301,8 +305,7 @@ const index = () => {
             </>
           )}
         </View>
-      </View>
-      </SafeView>
+      </View> 
     </>
   );
 };

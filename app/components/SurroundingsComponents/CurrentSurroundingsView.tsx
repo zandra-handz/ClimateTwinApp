@@ -10,11 +10,12 @@ import WindyMap from "../WindyMap";
 import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
 import useInlineComputations from "@/src/hooks/useInlineComputations";
 
-const CurrentSurroundingsView = ({ height }) => {
+const CurrentSurroundingsView = ({ height, pathPushToInteractScreen }) => {
   const { groqHistory } = useGroqContext();
   const { iNaturalist } = useINaturalist();
   const { lastLatAndLong } = useSurroundingsWS();
   const [latitude, longitude] = Array.isArray(lastLatAndLong)
+
     ? lastLatAndLong
     : [null, null];
 
@@ -27,7 +28,7 @@ const CurrentSurroundingsView = ({ height }) => {
     const  itemChoicesAsObjectExplore = getItemChoicesAsObjectExplore(itemChoicesResponse);
 
     const  itemChoices  = getItemChoices(itemChoicesResponse);
-
+ 
 
   return (
     <>
@@ -41,13 +42,13 @@ const CurrentSurroundingsView = ({ height }) => {
 
             {Object.keys(itemChoicesAsObjectExplore).length > 0 && (
 
-              <RuinsUnmappedTreasuresView itemChoices={itemChoices} />
+              <RuinsUnmappedTreasuresView itemChoices={itemChoices} pathPushToInteractScreen={pathPushToInteractScreen} />
 
             )} 
  
             {Object.keys(itemChoicesAsObjectTwin).length > 0 && (
 
-              <PortalUnmappedTreasuresView itemChoices={itemChoices}/>
+              <PortalUnmappedTreasuresView itemChoices={itemChoices} pathPushToInteractScreen={pathPushToInteractScreen} />
 
             )} 
           </>

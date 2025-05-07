@@ -1,20 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Component } from "react";
 import { useRouter } from "expo-router";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-
-} from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
- import { useAppMessage } from "@/src/context/AppMessageContext";
-import { Feather } from "@expo/vector-icons";  
+import { useAppMessage } from "@/src/context/AppMessageContext";
+import { Feather } from "@expo/vector-icons";
 import { usePendingRequests } from "@/src/context/PendingRequestsContext";
-import useInlineComputations from "@/src/hooks/useInlineComputations"; 
+import useInlineComputations from "@/src/hooks/useInlineComputations";
 import { useTreasures } from "@/src/context/TreasuresContext";
- 
+import ComponentSpinner from "../Scaffolding/ComponentSpinner";
 import DoubleCheckerWithMessageAndPicker from "../Scaffolding/DoubleCheckerWithMessageAndPicker";
- 
 
 const GiftingFunctionsButton = ({
   cTUserId,
@@ -24,31 +18,33 @@ const GiftingFunctionsButton = ({
   size,
   recGiftRequests,
   sentGiftRequests,
-}) => { 
-  const { themeStyles  } = useGlobalStyles();
+}) => {
+  const { themeStyles } = useGlobalStyles();
   const { showAppMessage } = useAppMessage();
   const router = useRouter();
   const [isDoubleCheckerVisible, setDoubleCheckerVisible] = useState(false);
- 
+
   const {
-    handleAcceptTreasureGift, 
+    handleAcceptTreasureGift,
     handleDeclineTreasureGift,
     triggerTreasuresRefetch,
     treasures,
     handleGiftTreasure,
     giftTreasureMutation,
+    acceptTreasureGiftMutation,
+    declineTreasureGiftMutation,
+    viewingTreasureId,
+    treasuresIsPending,
   } = useTreasures();
-  
 
-  const { 
+  const {
     checkForTreasureOwnership,
     otherUserRecGiftRequest,
     otherUserSentGiftRequest,
   } = useInlineComputations();
- 
 
   const isOwner = checkForTreasureOwnership(treasureId, treasures, cTUserId);
- 
+
   const recGiftRequestItem = otherUserRecGiftRequest(
     treasureId,
     recGiftRequests,
@@ -56,17 +52,17 @@ const GiftingFunctionsButton = ({
   );
 
   const recGiftRequest = !!recGiftRequestItem;
- 
-  const  sentGiftRequestItem  = otherUserSentGiftRequest(
+
+  const sentGiftRequestItem = otherUserSentGiftRequest(
     treasureId,
     sentGiftRequests,
     cTUserId
-  ); 
+  );
   const messageId = recGiftRequestItem?.id || null;
- 
+
   const sentGiftRequest = !!sentGiftRequestItem;
- 
-  const { triggerRequestsAndInboxRefetch } = usePendingRequests();
+
+  const { requestsIsPending } = usePendingRequests();
 
   const handleToggleDoubleChecker = () => {
     // console.log("add friend pressed");
@@ -84,10 +80,9 @@ const GiftingFunctionsButton = ({
     if (!message || !friendId || !treasureId) {
       return "Oops! Message, friendId, or treasureId is missing";
     }
-   // console.log('data to send gift with: ', message, friendId, treasureId);
+    // console.log('data to send gift with: ', message, friendId, treasureId);
     handleGiftTreasure(treasureId, friendId, message);
     setDoubleCheckerVisible((prev) => !prev);
-
   };
 
   // useEffect(() => {
@@ -96,20 +91,19 @@ const GiftingFunctionsButton = ({
   //      // router.replace('/(treasures)');
   //       router.back();
   //     }
-  
+
   //   }, [giftTreasureMutation.isSuccess]);
-  
-  
+
   //   useEffect(() => {
   //     if (giftTreasureMutation.isError) {
   //       showAppMessage(true, null, `Oops! ${treasureName} not sent.`);
   //     }
-  
+
   //   }, [giftTreasureMutation.isError]);
 
   const handleAccept = () => {
-    if (messageId) {
-      handleAcceptTreasureGift(messageId);
+    if (messageId && treasureId) {
+      handleAcceptTreasureGift(messageId, treasureId);
       // triggerTreasuresRefetch();
       // triggerRequestsAndInboxRefetch();
     }
@@ -119,13 +113,12 @@ const GiftingFunctionsButton = ({
   };
 
   const handleDecline = () => {
-    if (messageId) {
-      handleDeclineTreasureGift(messageId);
+    if (messageId && treasureId) {
+      handleDeclineTreasureGift(messageId, treasureId);
       // triggerTreasuresRefetch();
       // triggerRequestsAndInboxRefetch();
     }
   };
- 
 
   return (
     <>
@@ -145,8 +138,25 @@ const GiftingFunctionsButton = ({
           width: "100%",
           alignContent: "center",
           justifyContent: "center",
+          zIndex: 10,
         }}
       >
+        {viewingTreasureId && (viewingTreasureId === treasureId) && (
+          acceptTreasureGiftMutation.isPending ||
+          declineTreasureGiftMutation.isPending ||
+          giftTreasureMutation.isPending ||
+          treasuresIsPending ||
+          requestsIsPending) && (
+
+ 
+        <ComponentSpinner
+          showSpinner={true}
+          spinnerType={"circle"}
+          spinnerSize={22}
+          backgroundColor={themeStyles.darkerBackground.backgroundColor}
+        />
+        
+      )}
         {!isOwner && recGiftRequest && (
           <View
             style={{
@@ -242,7 +252,7 @@ const GiftingFunctionsButton = ({
           >
             <Text style={[themeStyles.primaryText]}>Request sent</Text>
           </View>
-        )} 
+        )}
       </View>
     </>
   );

@@ -24,7 +24,7 @@ const ScrollDetailPanel = ({ label, value, opacity, isLoading = false }) => {
           height: ruinsSurroundings?.id
             ? ruinsSurroundings?.streetViewImage
               ? 357
-              : 606 // height if there are no images
+              : 357 //606 // height if there are no images
             : 450,
         },
       ]}

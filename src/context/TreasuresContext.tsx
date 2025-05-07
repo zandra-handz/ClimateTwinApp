@@ -81,6 +81,7 @@ export const TreasuresProvider: React.FC<TreasuresProviderProps> = ({
   const { triggerRequestsAndInboxRefetch } = usePendingRequests();
   const [testData, setTestData] = useState(null); 
   const [viewingTreasure, setViewingTreasure] = useState<Treasure | null>(null);
+  const [viewingTreasureId, setViewingTreasureId] = useState(null);
   const [viewingSearchableTreasure, setViewingSearchableTreasure] =
     useState<Treasure | null>(null);   
   const [treasureSearchResults, setTreasureSearchResults] = useState([]);
@@ -93,7 +94,7 @@ export const TreasuresProvider: React.FC<TreasuresProviderProps> = ({
 
   const {
     data: treasures,
-    isPending,
+    isPending: treasuresIsPending,
     isSuccess,
     isError,
   }: UseQueryResult<Treasure[], Error> = useQuery({
@@ -111,6 +112,7 @@ export const TreasuresProvider: React.FC<TreasuresProviderProps> = ({
   
     if (cachedTreasure) {
       setViewingTreasure(cachedTreasure);
+      setViewingTreasureId(cachedTreasure?.id);
     } else {
       await getTreasureMutation.mutateAsync(id);
     }
@@ -121,6 +123,7 @@ export const TreasuresProvider: React.FC<TreasuresProviderProps> = ({
     onSuccess: (data, id) => {
 
       setViewingTreasure(data);
+      setViewingTreasureId(data?.id);
       queryClient.setQueryData(["treasure", user?.id, id], data);
   
       if (timeoutRef.current) {
@@ -131,7 +134,7 @@ export const TreasuresProvider: React.FC<TreasuresProviderProps> = ({
       }, 2000);
     },
     onError: () => {
-      setViewingTreasure(null);
+      setViewingTreasure(null); 
   
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
@@ -271,12 +274,15 @@ const handleGiftTreasure = (treasureId: number, recipientId: number, message: st
     return;
   }
 
+  setViewingTreasureId(treasureId);
+
   const giftData: GiftTreasureRequest = {
     treasure: treasureId,
     message: message || 'None',
     sender: user.id,
     recipient: recipientId,  
   };
+ 
 
   giftTreasureMutation.mutate(giftData);
 };
@@ -288,6 +294,7 @@ const giftTreasureMutation = useMutation({
 
     triggerRequestsAndInboxRefetch();
     triggerTreasuresRefetch();
+ 
     
     showAppMessage(true, null, 'Treasure sent!');
   
@@ -374,13 +381,17 @@ const triggerTreasuresRefetch = () => {
 
 
 
-const handleAcceptTreasureGift = (itemViewId : number) => {
+const handleAcceptTreasureGift = (itemViewId : number, treasureId: number | null) => {
     
   if (!itemViewId) {
     console.error("Item view id is missing.");
     return;
   }
 
+  if (treasureId) {
+    setViewingTreasureId(treasureId);
+
+  } 
 
   acceptTreasureGiftMutation.mutate(itemViewId);
 };
@@ -391,6 +402,7 @@ onSuccess:  () => {
 
   triggerRequestsAndInboxRefetch();
   triggerTreasuresRefetch(); 
+ 
 
   showAppMessage(true, null, 'Treasure accepted!');
 
@@ -418,13 +430,17 @@ onError: () => {
 
 
 
-const handleDeclineTreasureGift = (itemViewId : number) => {
+const handleDeclineTreasureGift = (itemViewId : number, treasureId : number | null) => {
     
-if (!itemViewId) {
-  console.error("Item view id is missing.");
-  return;
-}
+  if (!itemViewId) {
+    console.error("Item view id is missing.");
+    return;
+  }
 
+  if (treasureId) {
+    setViewingTreasureId(treasureId);
+
+  } 
 declineTreasureGiftMutation.mutate(itemViewId);
 };
 
@@ -434,6 +450,7 @@ onSuccess: () => {
 
   triggerRequestsAndInboxRefetch();
   triggerTreasuresRefetch(); 
+ 
 
   showAppMessage(true, null, 'Treasure declined');
   
@@ -503,8 +520,7 @@ onError: () => {
   return (
     <TreasuresContext.Provider
       value={{
-        treasures,
-        isPending,
+        treasures, 
         isSuccess,
         isError, 
         handleGetTreasure,
@@ -531,6 +547,11 @@ onError: () => {
         declineTreasureGiftMutation,
         triggerTreasuresRefetch,
         testData, 
+
+
+        //for matching list item to current treasure being acted on
+        viewingTreasureId,
+        treasuresIsPending,
       }}
     >
       {children}

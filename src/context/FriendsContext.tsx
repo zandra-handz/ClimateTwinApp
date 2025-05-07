@@ -97,7 +97,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
 
   const {
     data: friends,
-    isPending,
+    isPending: friendsIsPending,
     isSuccess,
     isError,
   }: UseQueryResult<Friend[], Error> = useQuery({
@@ -401,6 +401,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
     <FriendsContext.Provider
       value={{
         friends,
+        friendsIsPending,
         handleGetFriend,
         getFriendMutation,
         replaceUserIdWithFriendName,

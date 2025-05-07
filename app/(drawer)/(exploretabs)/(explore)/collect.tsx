@@ -1,19 +1,19 @@
 import { View, Text, Keyboard, Dimensions, FlatList,   Animated } from "react-native";
 import React, {
-  useEffect,
-  useLayoutEffect,
+  useEffect, 
 
   useRef,
   useState,
   useCallback,
 } from "react";
 import ActionsFooter from "@/app/components/ActionsFooter";
-import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
+import { useGlobalStyles } from "../../../../src/context/GlobalStylesContext";
 import { useTreasures } from "@/src/context/TreasuresContext";
-import { useAppMessage } from "../../../src/context/AppMessageContext";
+import { useAppMessage } from "../../../../src/context/AppMessageContext";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import TextInputLine from "@/app/components/TextInputLine";
 import TextInputBlock from "@/app/components/TextInputBlock"; 
+import TextInputBlockForModal from "@/app/components/TextInputBlockForModal";
 import { useFocusEffect } from "expo-router"; 
   
 
@@ -30,6 +30,8 @@ const collect = () => {
 
   const placeSaver = placeSaverString ? Number(placeSaverString) : 0;  
   
+
+  const pathToSendDataBackToInteract = `(explore)/interact`;
 
 // useEffect(() => {
 
@@ -160,7 +162,7 @@ const collect = () => {
 
   const handleBack = () => {
     router.replace({
-      pathname: "(treasures)/interact", // Go back to the previous screen
+      pathname: pathToSendDataBackToInteract, // Go back to the previous screen
       params: {
         name,
         topic,
@@ -362,7 +364,7 @@ const collect = () => {
       ]}
     > 
      
-      <View style={appContainerStyles.innerFlexStartContainer}>
+      <View style={[appContainerStyles.innerFlexStartContainer, {paddingHorizontal: 4 }]}>
      
         <FlatList
           ref={flatListRef}
@@ -376,7 +378,7 @@ const collect = () => {
           decelerationRate="fast"
           onViewableItemsChanged={onViewableItemsChanged}
           viewabilityConfig={{ viewAreaCoveragePercentThreshold: 60 }}
-          ListFooterComponent={<View style={{ height: 700 }}></View>}
+          ListFooterComponent={<View style={{ height: 700  }}></View>}
           getItemLayout={(data, index) => ({
             length: ITEM_HEIGHT + SPACER,
             offset: snapOffsets[index],

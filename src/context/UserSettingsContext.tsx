@@ -9,6 +9,9 @@ import { useAppState } from "./AppStateContext";
 import * as Notifications from "expo-notifications";
 import * as SecureStore from "expo-secure-store";
 
+
+import { useGlobalStyles } from "./GlobalStylesContext";
+
 interface UserSettings {
   id: number | null;
   user: number | null;
@@ -173,6 +176,7 @@ export const UserSettingsProvider: React.FC<UserSettingsProviderProps> = ({
         importance: Notifications.AndroidImportance.MAX,
         vibrationPattern: [0, 250, 250, 250],
         lightColor: "#FF231F7C",
+        sound: "default",
       });
     }
 

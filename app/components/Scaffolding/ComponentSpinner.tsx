@@ -17,6 +17,7 @@ import { useUserSettings } from "@/src/context/UserSettingsContext";
 import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
 import { LinearGradient } from "expo-linear-gradient";
+import { useSurroundings } from "@/src/context/CurrentSurroundingsContext";
 
 const spinners = {
   circle: Circle,
@@ -39,12 +40,14 @@ const ComponentSpinner = ({
   useGradientBackground = false,
   isInitializerSpinner = false,
   isSocketSpinner = false,
+  isInitAndSocketSpinner = false,
   offsetStatusBarHeight = false,
 }) => {
   const {  constantColorsStyles } = useGlobalStyles();
   const { isAuthenticated } = useUser();
   const { settingsAreLoading } = useUserSettings();
   const { isLocationSocketOpen, lastState } = useSurroundingsWS();
+  const { pickNewSurroundingsMutation } = useSurroundings();
 
   // if (!showSpinner) return null;
 
@@ -54,6 +57,27 @@ const ComponentSpinner = ({
 
   return (
     <>
+
+{isInitAndSocketSpinner &&
+      (settingsAreLoading || (!isLocationSocketOpen &&
+        isAuthenticated) || (pickNewSurroundingsMutation.isPending && isAuthenticated) ) && (
+          <View
+            style={[
+              styles.container,
+              {
+                backgroundColor: backgroundColor,
+                top: offsetStatusBarHeight ? offset : 0,
+              }, //themeStyles.darkerBackground
+            ]}
+          > 
+              <Spinner
+                size={spinnerSize}
+                color={'red'}
+              //  color={constantColorsStyles.v1LogoColor.backgroundColor}
+              /> 
+          </View>
+        )}
+
       {isInitializerSpinner &&
       (settingsAreLoading) && (
       //  ((isInitializing) || (!lastState && isAuthenticated)) && (
@@ -105,7 +129,7 @@ const ComponentSpinner = ({
           </View>
         )}
 
-      {!isInitializerSpinner && !isSocketSpinner && (
+      {!isInitializerSpinner && !isSocketSpinner && !isInitAndSocketSpinner && (
         <View
           style={[
             styles.container,

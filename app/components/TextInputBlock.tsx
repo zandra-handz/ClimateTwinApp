@@ -17,15 +17,14 @@ const TextInputBlock = forwardRef(
       mountingText = "",
       onTextChange,
       helperText,
-      autoFocus = true,
-      width = "90%",
-      height = "60%",
+      height = '60%',
+      autoFocus = true, 
       multiline = true,
       onSubmitEditing,
     },
     ref
   ) => {
-    const { themeStyles } = useGlobalStyles();
+    const { themeStyles, appContainerStyles } = useGlobalStyles();
     const [editedMessage, setEditedMessage] = useState(mountingText); // Use the starting text passed as prop
     const textInputRef = useRef();
 
@@ -72,9 +71,9 @@ const TextInputBlock = forwardRef(
     return (
       <View
         style={[
-          styles.container,
-          themeStyles.darkerBackground,
-          { width: width, height: height },
+          appContainerStyles.textInputAndTextBlockContainer,
+          themeStyles.primaryBackground,
+          { width: '100%', height: height, borderColor: themeStyles.primaryText.color },
         ]}
       >
         <View
@@ -106,8 +105,7 @@ const TextInputBlock = forwardRef(
             autoFocus={autoFocus}
             style={[
               styles.textInput,
-              themeStyles.primaryText,
-              themeStyles.darkerBackground,
+              themeStyles.primaryText, 
             ]}
             value={editedMessage}
             onChangeText={handleTextInputChange} // Update local state
@@ -132,9 +130,10 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   title: {
-    fontSize: 15,
-    lineHeight: 21,
-    textTransform: "uppercase",
+    fontSize: 16,
+    lineHeight: 34,
+    fontWeight: 'bold',
+  //  textTransform: "uppercase",
   },
   helperText: {
     fontSize: 16,
@@ -148,6 +147,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingVertical: 10,
     flex: 1,
+    lineHeight: 26,
+    fontSize: 15,
   },
 });
 

@@ -7,14 +7,15 @@ import { AntDesign } from "@expo/vector-icons";
 import NearbyButton from "./NearbyButton";
 import NowButton from "./NowButton"; 
 import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
-import SafeView from "../SafeView";
-function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled }) {
+
+function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled, backButtonMode} ) {
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
   const { buildHref } = useLinkBuilder(); 
   const { lastState } = useSurroundingsWS();
+ 
 
   const icons = {
-    index: (props) => <NowButton color={props.color} lastState={lastState}  />,
+    explore: (props) => <NowButton color={props.color} lastState={lastState}  />,
     home: (props) => (
       <AntDesign
         name="home"
@@ -26,15 +27,21 @@ function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled }) {
     nearby: (props) => <NearbyButton color={props.color} lastState={lastState} />,
   };
 
-  return (
+  return ( 
+
+  
     <>
-      <SafeView
+  
+      {!backButtonMode && (
+        
+      <View
         style={[
           themeStyles.darkerBackground,
           appContainerStyles.exploreTabBarContainer,
-          { borderColor: "teal", flex: 1, height: 46 },
+          { borderColor: "teal",  height: 80 },
         ]}
       >
+        
         {state.routes.map((route, index) => {
           const { options } = descriptors[route.key];
           const label =
@@ -88,8 +95,8 @@ function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled }) {
               onLongPress={onLongPress}
               disabled={disabled} // Disable touch event if the tab is disabled
             >
-              {icons[route.name]
-                ? icons[route.name]({
+           {icons[route.name.replace(/[()]/g, '')]
+                ? icons[route.name.replace(/[()]/g, '')]({
                     color: isFocused
                       ? themeStyles.exploreTabBarHighlightedText.color
                       : themeStyles.exploreTabBarText.color,
@@ -107,7 +114,7 @@ function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled }) {
                   (route.name === "nearby" || route.name === "home") && {
                     opacity: lastState !== "searching for ruins" ? 1 : 0,
                   },
-                  route.name === "index" && {
+                  route.name === "(explore)" && {
                     opacity: lastState !== "searching for twin" ? 1 : 0,
                   },
                   disabled && {
@@ -116,13 +123,16 @@ function ExploreTabBar({ state, descriptors, navigation, isNearbyDisabled }) {
                   },  
                 ]}
               >
-                {label === "index" ? "now" : label}
+                {label === "(explore)" ? "now" : label}
               </Text>
             </TouchableOpacity>
           );
         })}
-      </SafeView>
-    </>
+      </View>
+      
+    )}
+    </> 
+     
   );
 }
 

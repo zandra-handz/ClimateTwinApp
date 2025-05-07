@@ -39,7 +39,7 @@ const SearchResultsView = ({
             </View>
           )}
           contentContainerStyle={{ paddingBottom: 60 }}
-          ListFooterComponent={<View style={{ height: 100 }} />}
+          ListFooterComponent={<View style={{ height: 800 }} />}
         />
       )}
 

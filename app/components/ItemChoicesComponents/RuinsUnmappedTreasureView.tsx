@@ -9,7 +9,7 @@ import useINaturalist from "@/src/hooks/useINaturalist";
 //Unmapped = image results are arbitrarily assigned to base
 //used for iNaturalist -- iNaturalist returns much more revelant results
 //than Pexel with just the location coords
-const RuinsUnmappedTreasuresView = ({itemChoices}) => {
+const RuinsUnmappedTreasuresView = ({itemChoices, pathPushToInteractScreen}) => {
   const { iNaturalist } = useINaturalist();
   const router = useRouter(); 
   const { lastLocationName } = useSurroundingsWS();
@@ -20,7 +20,7 @@ const RuinsUnmappedTreasuresView = ({itemChoices}) => {
    // console.log('interact with item', topic, base, query, index);
     if (topic) {
       router.push({
-        pathname: "(treasures)/interact",
+        pathname: pathPushToInteractScreen,
         params: {
           name: lastLocationName, // Pass `name` directly, not wrapped in locationData
           topic,

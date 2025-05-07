@@ -17,14 +17,13 @@ import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
         mountingText = "Start typing",
         onTextChange,
         helperText,
-        autoFocus = true,
-        width = "90%",
+        autoFocus = true, 
         height = "60%",
         onSubmitEditing,
       },
       ref
     ) => {
-      const { themeStyles } = useGlobalStyles();
+      const { themeStyles, appContainerStyles } = useGlobalStyles();
       const [editedMessage, setEditedMessage] = useState(mountingText); // Use the starting text passed as prop
       const textInputRef = useRef();
   
@@ -69,13 +68,13 @@ import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
       };
   
       return (
-        <View
-          style={[
-            styles.container,
-            themeStyles.darkerBackground,
-            { width: width, height: height },
-          ]}
-        >
+      <View
+        style={[
+          appContainerStyles.textInputAndTextBlockContainer,
+          themeStyles.primaryBackground,
+          { width: '100%', height: height, borderColor: themeStyles.primaryText.color },
+        ]}
+      >
           <View
             style={{
               flexDirection: "row",
@@ -105,8 +104,7 @@ import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
               autoFocus={autoFocus}
               style={[
                 styles.textInput,
-                themeStyles.primaryText,
-                themeStyles.darkerBackground,
+                themeStyles.primaryText, 
               ]}
               value={editedMessage}
               onChangeText={handleTextInputChange} // Update local state
@@ -129,9 +127,10 @@ import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
       paddingVertical: 20,
     },
     title: {
-      fontSize: 15,
-      lineHeight: 21,
-      textTransform: "uppercase",
+      fontSize: 16,
+      lineHeight: 34,
+      fontWeight: 'bold',
+    //  textTransform: "uppercase",
     },
     helperText: {
       fontSize: 16,
@@ -145,6 +144,7 @@ import { useGlobalStyles } from "../../src/context/GlobalStylesContext";
       borderRadius: 20,
       paddingVertical: 0,
       flex: 1,
+      fontSize: 15,
     },
   });
   

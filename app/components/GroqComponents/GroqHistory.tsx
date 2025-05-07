@@ -9,21 +9,7 @@ const GroqHistory = ({ title, cacheKey='history', userId, opacity }) => {
   const { groqHistory, isPending } = useGroqContext();
 
  
- 
-
-    const [ showSpinner, setShowSpinner ] = useState(true);
-    
   
-
-
-  useEffect(() => {
-    if (isPending) {
-      setShowSpinner(true)
-    } else {
-      setShowSpinner(false);
-    }
-
-  }, [isPending]);
   
  
   
@@ -31,7 +17,7 @@ const GroqHistory = ({ title, cacheKey='history', userId, opacity }) => {
   return (
 <> 
   
-  <ScrollDetailPanel label={title} value={groqHistory} opacity={opacity} isLoading={showSpinner} />
+  <ScrollDetailPanel label={title} value={groqHistory} opacity={opacity} isLoading={isPending} />
   
 </>
   )

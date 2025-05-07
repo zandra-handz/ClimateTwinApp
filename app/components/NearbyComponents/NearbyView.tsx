@@ -14,7 +14,7 @@ const NearbyView = ({ centeredNearbyLocations }) => {
 
   return (
     <>
-      {pickNewSurroundingsMutation.isPending && (
+      {/* {pickNewSurroundingsMutation.isPending && (
         <ComponentSpinner
           offsetStatusBarHeight={true}
           showSpinner={true}
@@ -22,7 +22,7 @@ const NearbyView = ({ centeredNearbyLocations }) => {
           spinnerType={"circleFade"}
           backgroundColor={themeStyles.primaryBackground.backgroundColor}
         />
-      )}
+      )} */}
 
       <View style={[appContainerStyles.dataListContainer]}>
         <FlatList

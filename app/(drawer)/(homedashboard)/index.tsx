@@ -34,11 +34,13 @@ const index = () => {
 
   return (
     <>
-      <ComponentSpinner
+      {/* moved to layout
+      
+       <ComponentSpinner
         backgroundColor={themeStyles.primaryBackground.backgroundColor}
         spinnerType={"pulse"}
         isSocketSpinner={true}
-      />
+      /> */}
       <NotificationNotifier />
       <View
         style={[

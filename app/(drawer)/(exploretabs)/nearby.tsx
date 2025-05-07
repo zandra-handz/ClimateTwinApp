@@ -33,9 +33,7 @@ const nearby = () => {
 
   
 
-  return ( 
-      <SafeView style={{flex: 1, backgroundColor: themeStyles.primaryBackground.backgroundColor}}>
-    
+  return (  
       <View
         style={[
           appContainerStyles.screenContainer,
@@ -55,8 +53,7 @@ const nearby = () => {
              
     
         </View>
-      </View> 
-      </SafeView>
+      </View>  
   );
 };
 

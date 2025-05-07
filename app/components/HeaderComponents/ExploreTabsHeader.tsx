@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { View } from "react-native"; 
 import SafeView from "../SafeView";
 import { DrawerToggleButton } from "@react-navigation/drawer";
@@ -7,7 +7,7 @@ import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { useSurroundingsWS } from "../../../src/context/SurroundingsWSContext";
 
 import RefreshSocketButton from "../Scaffolding/RefreshSocketButton";
- 
+ import { useSegments } from "expo-router";
 
 //IMPORTANT: these both depend on SurroundingsWSContext to render appropriately
 import WebSocketCurrentLocation from "./WebSocketCurrentLocation";
@@ -18,17 +18,19 @@ import CountDowner from "./CountDowner"; //needs: lastLocationName
 //This is on homedashboard tabs as well as explore tabs
 const ExploreTabsHeader = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { sendMessage, lastLocationName, lastLocationAccessTime } =
+  const segments = useSegments();
+  const { sendMessage } =
     useSurroundingsWS(); 
 
  
-  const handleRefreshDataFromSocket = () => {
-    console.log("sending refresh message to socket");
-    sendMessage({ action: "refresh" });
-  };
+
+    const isOnInteractOrCollectScreen = ((segments[segments.length - 1] === 'interact') || (segments[segments.length - 1] === 'collect'));
+  
 
   return (
     <> 
+    {!isOnInteractOrCollectScreen && (
+
       <SafeView style={[themeStyles.primaryBackground, { flex: 1 }]}>
         <View
           style={[
@@ -54,6 +56,8 @@ const ExploreTabsHeader = () => {
           </View> 
         </View>
       </SafeView>
+      
+    )}
     </>
   );
 };

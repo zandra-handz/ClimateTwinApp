@@ -639,9 +639,9 @@ const containerStyles = StyleSheet.create({
     gap: 4,
   },
   exploreTabBarContainer: {
-  // height: 60, // 66  // managed in component
+   height: 60, // 66  // managed in component
    width: '100%',
-    position: "absolute",
+   // position: "absolute",
     bottom: 0,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -684,8 +684,7 @@ const containerStyles = StyleSheet.create({
     width: "100%", 
    // paddingHorizontal: "2%",
     flexDirection: "column", 
-    flex: 1,
-  //  backgroundColor: 'teal',
+    flex: 1, 
   },
   inScreenHeaderContainer: {
     width: "100%",
@@ -1226,6 +1225,20 @@ const containerStyles = StyleSheet.create({
     borderWidth: StyleSheet.hairlineWidth,
 
   },
+  textInputAndTextBlockContainer: {
+    padding: 20,  
+    width: '100%',  
+   // alignItems: 'center',
+   // justifyContent: 'center',  
+    height: "auto", 
+    alignSelf: 'center',
+    borderRadius: 20, 
+    flexDirection: "column",
+    flex: 1,
+    borderWidth: 1,
+
+
+  },
   twoButtonFooterContainer: { 
    position: 'absolute',
     zIndex: 10000,
@@ -1271,6 +1284,10 @@ const containerStyles = StyleSheet.create({
 
   },
 });
+
+const isBetaUser = { 
+
+};
 
 const fontStyles = StyleSheet.create({
   headerText: {

@@ -48,6 +48,16 @@ import AppMessage from "./components/AppMessage";
 import CustomStatusBar from "./components/CustomStatusBar";
 
 import * as Sentry from "@sentry/react-native";
+ 
+ 
+// Permission for notifications is being requested in UserSettingsContext
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: false,  
+    shouldPlaySound: true,
+    shouldSetBadge: false,
+  }),
+});
 
 Sentry.init({
   dsn: "https://b003b07ef14d51d700aac9ce83006d95@o4509079411752960.ingest.us.sentry.io/4509079412801536",
@@ -64,6 +74,8 @@ export default Sentry.wrap(function AppLayout() {
 
   const { hasShareIntent, shareIntent, resetShareIntent, error } =
     useShareIntentContext();
+
+    
 
   useEffect(() => {
     let permissionsGranted = false;

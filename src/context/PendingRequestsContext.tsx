@@ -90,7 +90,7 @@ export const PendingRequestsProvider: React.FC<PendingRequestsProviderProps> = (
   // shouldn't depend on friends data because you need to send /get a request to friend
   const {
     data: pendingRequests,
-    isPending: isPendingRequests,
+    isPending: requestsIsPending,
     isSuccess: isPendingRequestsSuccess,
     isError: isPendingRequestsError,
   }: UseQueryResult<PendingRequestsResponse, Error> = useQuery({
@@ -119,6 +119,7 @@ export const PendingRequestsProvider: React.FC<PendingRequestsProviderProps> = (
         viewingMessage, 
         triggerRequestsAndInboxRefetch,  
         pendingRequests, 
+        requestsIsPending,
       }}
     >
       {children}

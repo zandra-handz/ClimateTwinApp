@@ -1,7 +1,7 @@
 import { View, Animated } from "react-native";
 import React, { useEffect, useRef, useState } from "react";
 import ActionsFooter from "@/app/components/ActionsFooter";
-import { useGlobalStyles } from "../../../src/context/GlobalStylesContext"; 
+import { useGlobalStyles } from "../../../../src/context/GlobalStylesContext"; 
 import { useLocalSearchParams, useRouter } from "expo-router";
 import GroqItem from "@/app/components/GroqComponents/GroqItem";
 import { useFocusEffect } from "expo-router";
@@ -74,7 +74,7 @@ const interact = () => {
   const handleCollectATreasure = () => {
     if (topic) {
       router.push({
-        pathname: "(treasures)/collect",
+        pathname: "(explore)/collect",
         params: {
           name, // Pass `name` directly, not wrapped in locationData
           topic,
@@ -139,10 +139,10 @@ const interact = () => {
           />
         </View>
         <ActionsFooter
-          onPressLeft={() => router.replace("/(exploretabs)")}
+          onPressLeft={() => router.back()}
           labelLeft={"Back"}
-          onPressRight={handleCollectATreasure}
-          labelRight={"Collect"}
+        //   onPressRight={handleCollectATreasure}
+        //   labelRight={"Collect"}
         />
       </Animated.View>
     </>
