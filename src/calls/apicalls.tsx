@@ -652,6 +652,24 @@ export const collectTreasure = async (data) => {
 };
 
 
+export const getTreasuresWithRequests = async () => {
+    try {
+      //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.get('/users/treasures-with-requests/');
+        console.log('API GET Call getTreauresWithRequests', response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/treasures/:', error.response.data);
+        } else if (error.request) {
+            console.error('Error request for /users/treasures/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /users/treasures/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
 
 
 export const getTreasures = async () => {

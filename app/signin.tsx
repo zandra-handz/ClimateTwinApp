@@ -542,6 +542,7 @@ const styles = StyleSheet.create({
   },
   input: {
     fontFamily: "Poppins-Regular",
+    color: "black",
     //fontWeight: 'bold',
     placeholderTextColor: "black",
     height: "auto",

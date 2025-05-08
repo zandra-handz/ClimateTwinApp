@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useRef, useState } from "react";
+import React, { useEffect, createContext, useContext, useRef, useState } from "react";
 import {
   UseMutationResult,
   useQuery,
@@ -20,6 +20,7 @@ import {
 
 import {
   getTreasures,
+  getTreasuresWithRequests,
   getTreasure,
   getOwnerChangeRecords,
   searchTreasures,
@@ -104,6 +105,26 @@ export const TreasuresProvider: React.FC<TreasuresProviderProps> = ({
      enabled: !!(isAuthenticated && !settingsAreLoading && user && user.id),
   });
 
+
+  const {
+    data: treasuresWithRequests,
+    isPending: treasuresWithRequestsIsPending,
+    isSuccess: treasuresWithRequestsIsSuccess,
+    isError: treasuresWithRequestsIsError,
+  } = useQuery({
+    queryKey: ['treasuresWithRequests', { user: user?.id }],
+    queryFn: getTreasuresWithRequests,
+ 
+     enabled: !!(isAuthenticated && !settingsAreLoading && user && user.id),
+  });
+
+// FOR DEBUGGING ONLY
+  // useEffect(() => {
+  //   if (treasuresWithRequestsIsSuccess) {
+  //     console.log(`Treasures with requests data: `, treasuresWithRequests);
+  //   }
+
+  // }, [treasuresWithRequestsIsSuccess]);
  
  
   const handleGetTreasure = async (id: number) => {
@@ -547,6 +568,8 @@ onError: () => {
         declineTreasureGiftMutation,
         triggerTreasuresRefetch,
         testData, 
+
+        treasuresWithRequests,
 
 
         //for matching list item to current treasure being acted on

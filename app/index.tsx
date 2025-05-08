@@ -78,7 +78,7 @@ const index = () => {
                   position: "absolute",
                 }}
               >
-                {!isAuthenticated && !settingsAreLoading && (
+                {!settingsAreLoading && (
                   <SignInButton
                     onPress={() => handleNavigateToSignIn()}
                     title={"Sign in"}

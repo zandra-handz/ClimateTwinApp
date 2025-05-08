@@ -17,6 +17,7 @@ const WebSocketCurrentLocation: React.FC = () => {
          (
           <>
             <Text
+            numberOfLines={1}
               style={[
                 appFontStyles.subHeaderMessageText,
                 themeStyles.primaryText,
@@ -26,7 +27,7 @@ const WebSocketCurrentLocation: React.FC = () => {
                 ? `you are in: `
                 : ``}
             </Text>
-            <Text
+            <Text numberOfLines={1}
               style={[appFontStyles.emphasizedText, themeStyles.primaryText]}
             >
               {lastLocationName}

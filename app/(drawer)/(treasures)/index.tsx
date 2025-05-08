@@ -12,19 +12,19 @@ import { useUser } from "@/src/context/UserContext";
 
 const index = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { treasures,   handleGetTreasure  } = useTreasures();
+  const { treasures, treasuresWithRequests,  handleGetTreasure  } = useTreasures();
   const { user } = useUser();
 
   const { pendingRequests } = usePendingRequests();
   const { sortPendingGiftRequests, getNonPendingTreasures } =
     useInlineComputations();
-  const allGiftRequests = pendingRequests?.pending_gift_requests;
+  const allGiftRequests = treasuresWithRequests?.pending_gift_requests;
 
   const { recGiftRequests, sentGiftRequests } = sortPendingGiftRequests(
     allGiftRequests,
     user?.id
   );
-  const nonPendingTreasures = getNonPendingTreasures(treasures);
+  const nonPendingTreasures = getNonPendingTreasures(treasuresWithRequests?.treasures_data);
 
   const router = useRouter();
 

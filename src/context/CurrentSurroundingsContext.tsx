@@ -150,13 +150,11 @@ export const CurrentSurroundingsProvider: React.FC<
       setLastAccessed(null);
     },
     onSuccess: () => {
-      logGroqState();
+      // logGroqState();
       extendGroqStaleTime(); // reset staleTime for portal location history script
-      logGroqState();
-      const isOnNearbyScreen = segments[2] === "nearby";
-      if (isOnNearbyScreen) {
-        //router.replace("(drawer)/(exploretabs)");  // TS complained
-        router.replace("/(exploretabs)");
+      // logGroqState(); 
+      if (segments[segments.length - 1] === "nearby") { 
+        router.replace("/(drawer)/(exploretabs)/(explore)");
       }
     },
     onError: (error) => {

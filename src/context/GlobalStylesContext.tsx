@@ -42,6 +42,7 @@ interface GlobalStylesContextType extends Styles {
   appFontStyles: Record<string, any>;
   appContainerStyles: Record<string, any>;
   constantColorsStyles: Record<string, any>;
+  appMiscStyles: Record<string, any>;
   themeStyleSpinners: Record<string, string>;
   nonCustomHeaderPage: boolean;
   avgPhotoColor: string | null;
@@ -169,6 +170,7 @@ export const GlobalStylesProvider: React.FC<GlobalStylesProviderProps> = ({
   const constantColorsStyles = constantColors;
   const appFontStyles = fontStyles;
   const appContainerStyles = containerStyles;
+  const appMiscStyles = miscStyles;
 
   const [avgPhotoColor, setAvgPhotoColor] = useState<string | null>(null);
 
@@ -197,6 +199,7 @@ export const GlobalStylesProvider: React.FC<GlobalStylesProviderProps> = ({
         lightOrDark,
         appFontStyles,
         constantColorsStyles,
+        appMiscStyles,
         appContainerStyles,
         themeStyleSpinners,
         nonCustomHeaderPage,
@@ -720,7 +723,7 @@ const containerStyles = StyleSheet.create({
   },
   defaultElementRow: {
     flexDirection: "row",
-    width: "100%",
+    width: "40%",
     height: "auto",
     flexWrap: "wrap",
     flex: 1,
@@ -1284,6 +1287,15 @@ const containerStyles = StyleSheet.create({
 
   },
 });
+
+
+const miscStyles = StyleSheet.create({
+  exploreTabScreen: {
+    paddingTop: 50,
+  }
+
+})
+ 
 
 const isBetaUser = { 
 

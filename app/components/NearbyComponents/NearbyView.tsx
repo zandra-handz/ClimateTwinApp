@@ -3,26 +3,20 @@ import React from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext"; 
 import { useSurroundings } from "@/src/context/CurrentSurroundingsContext"; 
 import NearbyRuinUICard from "./NearbyRuinUICard";
-import NearbyPortalUICard from "./NearbyPortalUICard";
+import NearbyPortalUICard from "./NearbyPortalUICard"; 
+import { useRouter } from "expo-router";
 
-import ComponentSpinner from "../Scaffolding/ComponentSpinner";
-
-const NearbyView = ({ centeredNearbyLocations }) => {
-  const { themeStyles, appContainerStyles } = useGlobalStyles(); 
-  const { handlePickNewSurroundings, pickNewSurroundingsMutation } =
+//Routing is in context mutation onSuccess
+const NearbyView = ({ centeredNearbyLocations  }) => {
+  const {  appContainerStyles } = useGlobalStyles(); 
+  const { handlePickNewSurroundings  } =
     useSurroundings();
 
+    const router = useRouter();
+ 
+
   return (
-    <>
-      {/* {pickNewSurroundingsMutation.isPending && (
-        <ComponentSpinner
-          offsetStatusBarHeight={true}
-          showSpinner={true}
-          spinnerSize={50}
-          spinnerType={"circleFade"}
-          backgroundColor={themeStyles.primaryBackground.backgroundColor}
-        />
-      )} */}
+    <> 
 
       <View style={[appContainerStyles.dataListContainer]}>
         <FlatList

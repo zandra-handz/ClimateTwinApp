@@ -6,23 +6,19 @@ import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { useNearbyLocations } from "../../../src/context/NearbyLocationsContext";
 import { useSurroundingsWS } from "@/src/context/SurroundingsWSContext";
  import useInlineComputations from "@/src/hooks/useInlineComputations";
-import { useRouter } from "expo-router";  
+ 
 import NearbyView from "../../components/NearbyComponents/NearbyView";
-import SafeView from "@/app/components/SafeView";
+ 
 import NothingHere from "@/app/components/Scaffolding/NothingHere";
 
 const nearby = () => {
-  const { themeStyles, appContainerStyles } = useGlobalStyles();
+  const { themeStyles, appContainerStyles, appMiscStyles } = useGlobalStyles();
   const { lastLocationId } = useSurroundingsWS();
   const { nearbyLocations } = useNearbyLocations();
   const { getNearbyLocationsData } = useInlineComputations();
  const centeredNearbyLocations = getNearbyLocationsData(nearbyLocations, lastLocationId);
  
-  const router = useRouter();
  
- 
- 
-
   // backend is so confused on this lol, you need to submit {'explore_location' : [location id]} if data.explore_type is discovery_location
   // else you need to submit {'twin_location' : [the same id]}
   // WHY DID PAST ME DO THIS
@@ -38,13 +34,14 @@ const nearby = () => {
         style={[
           appContainerStyles.screenContainer,
           themeStyles.primaryBackground,
+          appMiscStyles.exploreTabScreen, // ( = paddingTop: 50)
        
         ]}
       >
         <View style={appContainerStyles.innerFlexStartContainer}>
         {centeredNearbyLocations.length > 0 && (
           
-            <NearbyView centeredNearbyLocations={centeredNearbyLocations} />
+            <NearbyView centeredNearbyLocations={centeredNearbyLocations}  />
         )}
 
         {centeredNearbyLocations.length < 1 && (

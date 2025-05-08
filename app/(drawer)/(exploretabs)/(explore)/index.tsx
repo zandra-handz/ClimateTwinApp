@@ -59,7 +59,7 @@ const index = () => {
     }
   }, [currentSurroundings]);
 
-  const { themeStyles, appContainerStyles } = useGlobalStyles();
+  const { themeStyles, appContainerStyles, appMiscStyles } = useGlobalStyles();
   // const [surroundingsViews, setSurroundingsViews] = useState({});
 
   const [portalBannerVisible, setPortalBannerVisible] = useState(true);
@@ -240,7 +240,8 @@ const index = () => {
         style={[
           appContainerStyles.screenContainer,
           themeStyles.primaryBackground,
-          {zIndex: 10, paddingTop: 50}
+          appMiscStyles.exploreTabScreen, //( = paddingTop: 50)
+         
         ]}
       >
         <NotificationNotifier />
