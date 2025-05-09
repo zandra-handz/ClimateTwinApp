@@ -26,10 +26,8 @@ const read = () => {
     declineTreasureGiftMutation,
   } = useTreasures();
   const {
-    handleAcceptFriendship,
-    acceptFriendshipMutation,
-    handleDeclineFriendship,
-    declineFriendshipMutation,
+    handleAcceptFriendship, 
+    handleDeclineFriendship, 
   } = useFriends();
   const { showAppMessage } = useAppMessage();
   const {

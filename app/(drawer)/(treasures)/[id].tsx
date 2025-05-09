@@ -14,8 +14,7 @@ import HistoryButton from "@/app/components/Scaffolding/HistoryButton";
 import DoubleChecker from "@/app/components/Scaffolding/DoubleChecker";
 import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
 
-import useInlineComputations from "@/src/hooks/useInlineComputations";
-import { usePendingRequests } from "@/src/context/PendingRequestsContext";
+import useInlineComputations from "@/src/hooks/useInlineComputations"; 
 import { useUser } from "@/src/context/UserContext";
 import GiftingFunctionsButton from "@/app/components/TreasuresComponents/GiftingFunctionsButton";
 
@@ -29,7 +28,7 @@ const details = () => {
   const { descriptor } = useLocalSearchParams<{ descriptor: string | null }>();
   const { user } = useUser();
   const router = useRouter();
-  const { friends } = useFriends();
+  const {   friendsAndRequests } = useFriends();
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const [isListVisible, setIsListVisible] = useState<boolean>(false);
   const {
@@ -39,11 +38,10 @@ const details = () => {
     getTreasureMutation,
   } = useTreasures();
   const [isDoubleCheckerVisible, setDoubleCheckerVisible] = useState(false);
-
-  const { pendingRequests } = usePendingRequests();
+ 
   const { sortPendingGiftRequests, getNonPendingTreasures } =
     useInlineComputations();
-  const allGiftRequests = pendingRequests?.pending_gift_requests;
+  const allGiftRequests = friendsAndRequests?.pending_gift_requests;
 
   const { recGiftRequests, sentGiftRequests } = sortPendingGiftRequests(
     allGiftRequests,
@@ -190,7 +188,7 @@ const details = () => {
             />
           </ScrollView>
           <FriendPicker
-            items={friends}
+            items={friendsAndRequests?.friends}
             onSelect={handleFriendSelect}
             isVisible={isListVisible}
             open={openFriendPicker}

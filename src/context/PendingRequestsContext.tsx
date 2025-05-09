@@ -88,16 +88,17 @@ export const PendingRequestsProvider: React.FC<PendingRequestsProviderProps> = (
     
 
   // shouldn't depend on friends data because you need to send /get a request to friend
-  const {
-    data: pendingRequests,
-    isPending: requestsIsPending,
-    isSuccess: isPendingRequestsSuccess,
-    isError: isPendingRequestsError,
-  }: UseQueryResult<PendingRequestsResponse, Error> = useQuery({
-    queryKey: ['pendingRequests', { user: user?.id }],
-    queryFn: getUserPendingRequests,
-    enabled: !!(isAuthenticated && !settingsAreLoading && user && user.id),
-  });
+  // NOT USING, MOVED THIS DATA INTO COMBINED VIEW WITH FRIENDS ON BACKEND
+  // const {
+  //   data: pendingRequests,
+  //   isPending: requestsIsPending,
+  //   isSuccess: isPendingRequestsSuccess,
+  //   isError: isPendingRequestsError,
+  // }: UseQueryResult<PendingRequestsResponse, Error> = useQuery({
+  //   queryKey: ['pendingRequests', { user: user?.id }],
+  //   queryFn: getUserPendingRequests,
+  //   enabled: !!(isAuthenticated && !settingsAreLoading && user && user.id),
+  // });
   
   
   const triggerRequestsAndInboxRefetch =  () => {
@@ -105,7 +106,7 @@ export const PendingRequestsProvider: React.FC<PendingRequestsProviderProps> = (
     // queryClient.invalidateQueries({ queryKey: ['pendingRequests' ] }); 
     // queryClient.invalidateQueries({ queryKey: ['inboxItems' ] });  
 
-   queryClient.refetchQueries({ queryKey: ['pendingRequests', { user: user?.id } ] }); 
+  //  queryClient.refetchQueries({ queryKey: ['pendingRequests', { user: user?.id } ] }); 
    queryClient.refetchQueries({ queryKey: ['inboxItems', { user: user?.id } ] });  
  
   };
@@ -118,8 +119,8 @@ export const PendingRequestsProvider: React.FC<PendingRequestsProviderProps> = (
         handleGetInboxItem,
         viewingMessage, 
         triggerRequestsAndInboxRefetch,  
-        pendingRequests, 
-        requestsIsPending,
+        // pendingRequests, 
+        // requestsIsPending,
       }}
     >
       {children}

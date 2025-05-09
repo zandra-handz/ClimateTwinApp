@@ -652,19 +652,19 @@ export const collectTreasure = async (data) => {
 };
 
 
-export const getTreasuresWithRequests = async () => {
+export const getTreasuresAndRequests = async () => {
     try {
       //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
-        const response = await axios.get('/users/treasures-with-requests/');
-        console.log('API GET Call getTreauresWithRequests', response.data);
+        const response = await axios.get('/users/treasures-and-requests/');
+        console.log('API GET Call getTreauresWithRequests'); //, response.data);
         return response.data;
     } catch (error) {
         if (error.response) {
-            console.error('Error response for /users/treasures/:', error.response.data);
+            console.error('Error response for /users/treasures-and-requests/:', error.response.data);
         } else if (error.request) {
-            console.error('Error request for /users/treasures/, add console logging in api file for more details');
+            console.error('Error request for /users/treasures-and-requests/, add console logging in api file for more details');
         } else {
-            console.error('Error message for /users/treasures/, add console logging in api file for more details');
+            console.error('Error message for /users/treasures-and-requests/, add console logging in api file for more details');
         }
         throw error;
     }
@@ -994,6 +994,27 @@ export const getFriends = async () => {
         throw error;
     }
 };
+
+export const getFriendsAndRequests = async () => {
+    try {
+      //  console.log('Request Headers:', axios.defaults.headers.common); // Log the headers before the request
+        const response = await axios.get('/users/friends-and-requests/');
+        console.log('API GET Call getFriendsAndRequests');//, response.data);
+        return response.data;
+    } catch (error) {
+        if (error.response) {
+            console.error('Error response for /users/friends-and-requests/:', error.response.data);
+        } else if (error.request) {
+            console.error('Error request for /users/friends-and-requests/, add console logging in api file for more details');
+        } else {
+            console.error('Error message for /users/friends-and-requests/, add console logging in api file for more details');
+        }
+        throw error;
+    }
+};
+
+
+
 
 export const getFriend = async (friendId) => {
     try {

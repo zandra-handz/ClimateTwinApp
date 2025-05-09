@@ -26,13 +26,13 @@ const searchable = () => {
 
   useLayoutEffect(() => {
     if (id) {
-      console.log("moved this to the navigation button");
+   //   console.log("moved this to the navigation button");
       //  handleGetFriend(id);
     }
 
     // Cleanup the data when leaving the screen
     return () => {
-      console.log("setting viewingsearchabletreasure to null");
+    //  console.log("setting viewingsearchabletreasure to null");
       setViewingSearchableTreasure(null); // Reset viewingFriend when navigating away
     };
   }, [id]);

@@ -19,7 +19,7 @@ const FriendPickerEmbedded = forwardRef((props: PickerProps, ref) => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const [selectedValue, setSelectedValue] = useState<string | null>(null);
   const [selectedName, setSelectedName] = useState<string | null>(null);
-  const { friends } = useFriends();
+  const { friendsAndRequests } = useFriends();
 
   useImperativeHandle(ref, () => ({
     getSelectedValue: () => selectedValue,
@@ -60,7 +60,7 @@ const FriendPickerEmbedded = forwardRef((props: PickerProps, ref) => {
           }}
         >
           <FlatList
-            data={friends}
+            data={friendsAndRequests?.friends}
             fadingEdgeLength={30}
             keyExtractor={(item) => item.id}
             keyboardShouldPersistTaps="handled"

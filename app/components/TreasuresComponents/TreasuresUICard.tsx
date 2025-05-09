@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from "react-native";
+import { View, Text  } from "react-native";
 import React, { useState } from "react";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import useDateTimeFunctions from "../../../src/hooks/useDateTimeFunctions";
@@ -7,14 +7,13 @@ import GoToItemButton from "../GoToItemButton";
 import { useTreasures } from "@/src/context/TreasuresContext";
  
 import { useFriends } from "@/src/context/FriendsContext";
-import { router } from "expo-router";
-import GiftingFunctionsButton from "./GiftingFunctionsButton";
+import { router } from "expo-router"; 
  
 
 const TreasuresUICard = ({ data, onOpenTreasurePress, isFullView, recGiftRequests, sentGiftRequests  }) => {
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
   const { formatUTCToMonthDayYear } = useDateTimeFunctions();
-  const { friends } = useFriends();
+  const { friendsAndRequests } = useFriends();
   const [isDoubleCheckerVisible, setDoubleCheckerVisible] = useState(false);
   const { handleGiftTreasureBackToFinder } = useTreasures();
 
@@ -35,8 +34,8 @@ const TreasuresUICard = ({ data, onOpenTreasurePress, isFullView, recGiftRequest
   };
 
   const renderFriendName = (id) => {
-    if (friends) {
-      const friend = friends.find((friend) => friend.id === id);
+    if (friendsAndRequests?.friends) {
+      const friend = friendsAndRequests?.friends?.find((friend) => friend.id === id);
       return friend?.username || null;
     } else {
       return null;

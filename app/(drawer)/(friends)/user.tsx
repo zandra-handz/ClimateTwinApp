@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { View, ScrollView } from "react-native";
+import { View } from "react-native";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 
@@ -8,8 +8,7 @@ import UsersUICard from "@/app/components/FriendsComponents/UsersUICard";
 import { useAppMessage } from "../../../src/context/AppMessageContext";
 import ActionsFooter from "@/app/components/ActionsFooter";
 
-import DoubleChecker from "@/app/components/Scaffolding/DoubleChecker";
-import { usePendingRequests } from "@/src/context/PendingRequestsContext";
+import DoubleChecker from "@/app/components/Scaffolding/DoubleChecker"; 
 import useInlineComputations from "@/src/hooks/useInlineComputations";
 import { useUser } from "@/src/context/UserContext";
 import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
@@ -24,22 +23,20 @@ const userdetails = () => {
   const router = useRouter();
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const {
+    friendsAndRequests,
     handleGetPublicProfile,
     getPublicProfileMutation,
     viewingPublicProfile,
     setViewingPublicProfile,
   } = useFriends();
-  const {
-    friends,
+  const { 
     handleSendFriendRequest,
-    friendRequestMutation,
-    searchUsersMutation,
+    friendRequestMutation, 
   } = useFriends();
-
-  const { pendingRequests } = usePendingRequests();
+ 
   const { sortPendingFriendRequests } = useInlineComputations();
 
-  const allFriendRequests = pendingRequests?.pending_friend_requests;
+  const allFriendRequests = friendsAndRequests?.pending_friend_requests;
   const { recFriendRequests, sentFriendRequests } = sortPendingFriendRequests(
     allFriendRequests,
     user?.id

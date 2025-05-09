@@ -7,8 +7,7 @@ import { AntDesign, Feather } from "@expo/vector-icons";
 
 import { useRouter } from "expo-router";
 import { useAppMessage } from "@/src/context/AppMessageContext";
-
-import { usePendingRequests } from "@/src/context/PendingRequestsContext";
+ 
 import { useUser } from "@/src/context/UserContext";
  import ComponentSpinner from "../Scaffolding/ComponentSpinner";
 import useInlineComputations from "@/src/hooks/useInlineComputations";
@@ -29,16 +28,16 @@ const FriendingFunctionsButton = ({
   const [isDoubleCheckerVisible, setDoubleCheckerVisible] = useState(false);
   // const [isFriend, setIsFriend] = useState<boolean>(false);
   const { showAppMessage } = useAppMessage();
-  const {
-    friends,
+  const { 
+    friendsAndRequests,
+    friendsAndRequestsIsPending, 
+    
     handleSendFriendRequest,
     friendRequestMutation,
     handleAcceptFriendship,
     acceptFriendshipMutation,
     handleDeclineFriendship,
-    declineFriendshipMutation,
-    deleteFriendshipMutation,
-    friendsIsPending,
+    declineFriendshipMutation, 
     viewingFriendOrUserId,
   } = useFriends();
 
@@ -53,7 +52,7 @@ const FriendingFunctionsButton = ({
   // const allFriendRequests = pendingRequests?.pending_friend_requests;
   // const { recFriendRequests, sentFriendRequests } = sortPendingFriendRequests(allFriendRequests, user?.id);
 
-  const isFriend = checkForExistingFriendship(friends, cTUserId);
+  const isFriend = checkForExistingFriendship(friendsAndRequests?.friends, cTUserId);
   //  console.log(`FRIEND REQS`, sentFriendRequests, cTUserId);
   //  console.log(isFriend);
   const recFriendRequest = otherUserRecFriendRequest(
@@ -71,8 +70,7 @@ const FriendingFunctionsButton = ({
 
   const sentFriendRequest = !!sentFriendRequestItem;
   //  console.log(sentFriendRequest);
-  //  console.log(recFriendRequest);
-  const { requestsIsPending } = usePendingRequests();
+  //  console.log(recFriendRequest); 
 
   const handleToggleDoubleChecker = () => {
     setDoubleCheckerVisible((prev) => !prev);
@@ -128,8 +126,10 @@ const FriendingFunctionsButton = ({
           acceptFriendshipMutation.isPending ||
           declineFriendshipMutation.isPending ||
           friendRequestMutation.isPending ||
-          friendsIsPending ||
-          requestsIsPending) && (
+          friendsAndRequestsIsPending ||
+          acceptFriendshipMutation.isSuccess ||
+          declineFriendshipMutation.isSuccess ||
+          friendRequestMutation.isSuccess) && (
 
           <ComponentSpinner
           showSpinner={true}

@@ -10,16 +10,15 @@ import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
 import DebouncedSearch from "@/app/components/DebouncedSearch";
  
 import SearchResultsView from "@/app/components/FriendsComponents/SearchResultsView";
-import DoubleChecker from "@/app/components/Scaffolding/DoubleChecker";
-import { usePendingRequests } from "@/src/context/PendingRequestsContext";
+ 
 import useInlineComputations from "@/src/hooks/useInlineComputations";
 
 const search = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
   const router = useRouter();
   const { user } = useUser();
-  const {
-    friends,
+  const { 
+    friendsAndRequests,
     userSearchResults,
     handleSearchUsers,
     handleSendFriendRequest,
@@ -27,13 +26,12 @@ const search = () => {
     handleGetPublicProfile,
     
   } = useFriends();
-
-  const { pendingRequests } = usePendingRequests();
+ 
   const {
     sortPendingFriendRequests, 
   } = useInlineComputations();
 
-  const allFriendRequests = pendingRequests?.pending_friend_requests;
+  const allFriendRequests = friendsAndRequests?.pending_friend_requests;
   const { recFriendRequests, sentFriendRequests } = sortPendingFriendRequests(
     allFriendRequests,
     user?.id

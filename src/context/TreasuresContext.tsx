@@ -1,4 +1,4 @@
-import React, { useEffect, createContext, useContext, useRef, useState } from "react";
+import React, { createContext, useContext, useRef, useState } from "react";
 import {
   UseMutationResult,
   useQuery,
@@ -20,7 +20,7 @@ import {
 
 import {
   getTreasures,
-  getTreasuresWithRequests,
+  getTreasuresAndRequests,
   getTreasure,
   getOwnerChangeRecords,
   searchTreasures,
@@ -56,6 +56,7 @@ export interface TreasuresContextType {
   acceptTreasureGiftMutation;
   declineTreasureGiftMutation;
   triggerTreasuresRefetch;
+  triggerTreasuresAndRequestsRefetch;
   testData; 
 }
 
@@ -107,13 +108,13 @@ export const TreasuresProvider: React.FC<TreasuresProviderProps> = ({
 
 
   const {
-    data: treasuresWithRequests,
-    isPending: treasuresWithRequestsIsPending,
-    isSuccess: treasuresWithRequestsIsSuccess,
-    isError: treasuresWithRequestsIsError,
+    data: treasuresAndRequests,
+    isPending: treasuresAndRequestsIsPending,
+    isSuccess: treasuresAndRequestsIsSuccess,
+    isError: treasuresAndRequestsIsError,
   } = useQuery({
-    queryKey: ['treasuresWithRequests', { user: user?.id }],
-    queryFn: getTreasuresWithRequests,
+    queryKey: ['treasuresAndRequests', { user: user?.id }],
+    queryFn: getTreasuresAndRequests,
  
      enabled: !!(isAuthenticated && !settingsAreLoading && user && user.id),
   });
@@ -259,7 +260,7 @@ const collectTreasureMutation = useMutation({
   onSuccess: () => { 
 
     triggerRequestsAndInboxRefetch();
-    triggerTreasuresRefetch(); 
+    triggerTreasuresAndRequestsRefetch(); 
 
     showAppMessage(true, null, `Treasure collected!`);
  
@@ -313,11 +314,12 @@ const giftTreasureMutation = useMutation({
   mutationFn: (data: GiftTreasureRequest) => requestToGiftTreasure(data),
   onSuccess:   () => { 
 
+  
+    triggerTreasuresAndRequestsRefetch();
     triggerRequestsAndInboxRefetch();
-    triggerTreasuresRefetch();
  
     
-    showAppMessage(true, null, 'Treasure sent!');
+   // showAppMessage(true, null, 'Treasure sent!');
   
 
     if (timeoutRef.current) {
@@ -362,10 +364,11 @@ const giftTreasureBackToFinderMutation = useMutation({
   mutationFn: (data: GiftTreasureBackToFinderRequest) => requestToGiftTreasureBackToFinder(data),
   onSuccess:  () => { 
  
-    triggerRequestsAndInboxRefetch();
-    triggerTreasuresRefetch(); 
+  
+    triggerTreasuresAndRequestsRefetch(); 
 
-    showAppMessage(true, null, 'Treasure sent!');
+   triggerRequestsAndInboxRefetch();
+   // showAppMessage(true, null, 'Treasure sent!');
     
 
     if (timeoutRef.current) {
@@ -388,16 +391,14 @@ const giftTreasureBackToFinderMutation = useMutation({
 });
 
 
-
-
-
+const triggerTreasuresAndRequestsRefetch = () => { 
+  queryClient.refetchQueries({ queryKey: ['treasuresAndRequests', { user: user?.id} ] });  
+};
 
  
 
 const triggerTreasuresRefetch = () => { 
   queryClient.refetchQueries({ queryKey: ['treasures', { user: user?.id} ] });  
-
-  
 };
 
 
@@ -421,11 +422,11 @@ const acceptTreasureGiftMutation = useMutation({
 mutationFn: (itemViewId : number) => acceptTreasureGift(itemViewId),
 onSuccess:  () => { 
 
-  triggerRequestsAndInboxRefetch();
-  triggerTreasuresRefetch(); 
+ triggerRequestsAndInboxRefetch();
+  triggerTreasuresAndRequestsRefetch(); 
  
 
-  showAppMessage(true, null, 'Treasure accepted!');
+ // showAppMessage(true, null, 'Treasure accepted!');
 
 
   if (timeoutRef.current) {
@@ -470,7 +471,7 @@ mutationFn: (itemViewId : number) => declineTreasureGift(itemViewId),
 onSuccess: () => { 
 
   triggerRequestsAndInboxRefetch();
-  triggerTreasuresRefetch(); 
+  triggerTreasuresAndRequestsRefetch(); 
  
 
   showAppMessage(true, null, 'Treasure declined');
@@ -567,14 +568,17 @@ onError: () => {
         acceptTreasureGiftMutation,
         declineTreasureGiftMutation,
         triggerTreasuresRefetch,
+        triggerTreasuresAndRequestsRefetch,
         testData, 
 
-        treasuresWithRequests,
+        treasuresAndRequests,
 
 
         //for matching list item to current treasure being acted on
         viewingTreasureId,
         treasuresIsPending,
+        treasuresAndRequestsIsPending,
+        treasuresAndRequestsIsSuccess,
       }}
     >
       {children}

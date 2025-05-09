@@ -1,10 +1,8 @@
-import React, { useState, useEffect, Component } from "react";
-import { useRouter } from "expo-router";
+import React, { useState } from "react"; 
 import { View, Text, TouchableOpacity } from "react-native";
 import { useGlobalStyles } from "@/src/context/GlobalStylesContext";
 import { useAppMessage } from "@/src/context/AppMessageContext";
-import { Feather } from "@expo/vector-icons";
-import { usePendingRequests } from "@/src/context/PendingRequestsContext";
+import { Feather } from "@expo/vector-icons"; 
 import useInlineComputations from "@/src/hooks/useInlineComputations";
 import { useTreasures } from "@/src/context/TreasuresContext";
 import ComponentSpinner from "../Scaffolding/ComponentSpinner";
@@ -20,21 +18,20 @@ const GiftingFunctionsButton = ({
   sentGiftRequests,
 }) => {
   const { themeStyles } = useGlobalStyles();
-  const { showAppMessage } = useAppMessage();
-  const router = useRouter();
+  const { showAppMessage } = useAppMessage(); 
   const [isDoubleCheckerVisible, setDoubleCheckerVisible] = useState(false);
 
   const {
     handleAcceptTreasureGift,
-    handleDeclineTreasureGift,
-    triggerTreasuresRefetch,
-    treasures,
+    handleDeclineTreasureGift, 
+   
+    treasuresAndRequests,
     handleGiftTreasure,
     giftTreasureMutation,
     acceptTreasureGiftMutation,
     declineTreasureGiftMutation,
-    viewingTreasureId,
-    treasuresIsPending,
+    viewingTreasureId, 
+    treasuresAndRequestsIsPending, 
   } = useTreasures();
 
   const {
@@ -43,7 +40,7 @@ const GiftingFunctionsButton = ({
     otherUserSentGiftRequest,
   } = useInlineComputations();
 
-  const isOwner = checkForTreasureOwnership(treasureId, treasures, cTUserId);
+  const isOwner = checkForTreasureOwnership(treasureId, treasuresAndRequests?.treasures, cTUserId);
 
   const recGiftRequestItem = otherUserRecGiftRequest(
     treasureId,
@@ -61,8 +58,7 @@ const GiftingFunctionsButton = ({
   const messageId = recGiftRequestItem?.id || null;
 
   const sentGiftRequest = !!sentGiftRequestItem;
-
-  const { requestsIsPending } = usePendingRequests();
+ 
 
   const handleToggleDoubleChecker = () => {
     // console.log("add friend pressed");
@@ -141,12 +137,15 @@ const GiftingFunctionsButton = ({
           zIndex: 10,
         }}
       >
-        {viewingTreasureId && (viewingTreasureId === treasureId) && (
+        {
+        viewingTreasureId && (viewingTreasureId === treasureId) && (
           acceptTreasureGiftMutation.isPending ||
           declineTreasureGiftMutation.isPending ||
           giftTreasureMutation.isPending ||
-          treasuresIsPending ||
-          requestsIsPending) && (
+          treasuresAndRequestsIsPending || 
+          acceptTreasureGiftMutation.isSuccess ||
+          declineTreasureGiftMutation.isSuccess ||
+          giftTreasureMutation.isSuccess) && (
 
  
         <ComponentSpinner

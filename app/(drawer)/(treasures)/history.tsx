@@ -17,11 +17,11 @@ const treasure_history = () => {
   useFocusEffect(
     useCallback(() => {
       handleGetOwnerChangeRecords(id);
-      console.log("Screen is focused");
+     // console.log("Screen is focused");
 
       return () => {
         // Cleanup code here runs when the screen is unfocused
-        console.log("Screen is unfocused");
+       // console.log("Screen is unfocused");
       };
     }, [])
   );

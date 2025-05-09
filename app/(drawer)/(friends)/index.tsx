@@ -1,14 +1,10 @@
 import React from "react";
-import { View, TouchableOpacity, Text } from "react-native";
+import { View } from "react-native";
 
 import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
-import { useRouter } from "expo-router";
-import { useAppMessage } from "../../../src/context/AppMessageContext";
- 
+import { useRouter } from "expo-router"; 
 import { useFriends } from "@/src/context/FriendsContext";
-import FriendsView from "@/app/components/FriendsComponents/FriendsView";
-
-import { usePendingRequests } from "@/src/context/PendingRequestsContext";
+import FriendsView from "@/app/components/FriendsComponents/FriendsView"; 
 import useInlineComputations from "@/src/hooks/useInlineComputations";
 
 // MOVED INSIDE FRIENDSVIEW TO INCLUDE IN THE SAME FLATLIST
@@ -24,16 +20,15 @@ import { useUser } from "@/src/context/UserContext";
 const index = () => {
   const { themeStyles,  appContainerStyles } = useGlobalStyles();
  
-  const { friends, handleGetFriend, handleGetPublicProfile } =
+  const {  friendsAndRequests, handleGetFriend, handleGetPublicProfile } =
     useFriends();
 
     const { user } = useUser();
-
-    const { pendingRequests } = usePendingRequests();
+ 
     const { sortPendingFriendRequests, checkForExistingFriendship, otherUserRecFriendRequest, otherUserSentFriendRequest } = useInlineComputations();
    
    
-    const allFriendRequests = pendingRequests?.pending_friend_requests;
+    const allFriendRequests = friendsAndRequests?.pending_friend_requests;
     const { recFriendRequests, sentFriendRequests } = sortPendingFriendRequests(allFriendRequests, user?.id);
    
 
@@ -72,12 +67,12 @@ const index = () => {
       
         <View style={appContainerStyles.innerFlexStartContainer}>
 
-        {((friends && friends?.length > 0) || (allFriendRequests && allFriendRequests?.length > 0)) && (
+        {((friendsAndRequests?.friends && friendsAndRequests?.friends?.length > 0) || (allFriendRequests && allFriendRequests?.length > 0)) && (
             <FriendsView
             listData={[
               ...(recFriendRequests ?? []),
               ...(sentFriendRequests ?? []),
-              ...(friends ?? [])
+              ...(friendsAndRequests?.friends ?? [])
             ]}
               onViewFriendPress={handleViewFriend}
               onViewUserPress={handleViewUser}
@@ -85,7 +80,7 @@ const index = () => {
             sentFriendRequests={sentFriendRequests}
             />
           )}
-          {friends && !friends.length && !allFriendRequests?.length && (
+          {friendsAndRequests?.friends && !friendsAndRequests?.friends.length && !allFriendRequests?.length && (
             <NothingHere message={'No friends yet!'} subMessage={'search users to find friends!'} offsetStatusBarHeight={true} />
           ) }
         </View>

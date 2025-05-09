@@ -5,26 +5,23 @@ import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { useTreasures } from "@/src/context/TreasuresContext";
 import TreasuresView from "../../components/TreasuresComponents/TreasuresView";
 import ActionsFooter from "@/app/components/ActionsFooter";
-import NothingHere from "@/app/components/Scaffolding/NothingHere";
-import { usePendingRequests } from "@/src/context/PendingRequestsContext";
+import NothingHere from "@/app/components/Scaffolding/NothingHere"; 
 import useInlineComputations from "@/src/hooks/useInlineComputations";
 import { useUser } from "@/src/context/UserContext";
 
 const index = () => {
   const { themeStyles, appContainerStyles } = useGlobalStyles();
-  const { treasures, treasuresWithRequests,  handleGetTreasure  } = useTreasures();
-  const { user } = useUser();
-
-  const { pendingRequests } = usePendingRequests();
+  const { treasuresAndRequests,  handleGetTreasure  } = useTreasures();
+  const { user } = useUser(); 
   const { sortPendingGiftRequests, getNonPendingTreasures } =
     useInlineComputations();
-  const allGiftRequests = treasuresWithRequests?.pending_gift_requests;
+  const allGiftRequests = treasuresAndRequests?.pending_gift_requests;
 
   const { recGiftRequests, sentGiftRequests } = sortPendingGiftRequests(
     allGiftRequests,
     user?.id
   );
-  const nonPendingTreasures = getNonPendingTreasures(treasuresWithRequests?.treasures_data);
+  const nonPendingTreasures = getNonPendingTreasures(treasuresAndRequests?.treasures);
 
   const router = useRouter();
 
@@ -66,10 +63,10 @@ const index = () => {
               sentGiftRequests={sentGiftRequests}
             />
           )}
-          {treasures && !treasures.length && !allGiftRequests?.length && (
+          {treasuresAndRequests?.treasures && !treasuresAndRequests?.treasures?.length && !allGiftRequests?.length && (
             <NothingHere
-              message={"No friends yet!"}
-              subMessage={"search users to find friends!"}
+              message={"No treasures yet!"}
+              subMessage={"Start opening portals and exploring to collect treasures!"}
               offsetStatusBarHeight={true}
             />
           )}

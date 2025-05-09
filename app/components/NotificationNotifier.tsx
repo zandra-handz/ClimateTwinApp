@@ -26,10 +26,8 @@ const NotificationNotifier = () => {
   const { settingsAreLoading } = useUserSettings();
   const { showAppMessage } = useAppMessage();
   const {
-    handleAcceptTreasureGift,
-    acceptTreasureGiftMutation,
-    handleDeclineTreasureGift,
-    declineTreasureGiftMutation,
+    handleAcceptTreasureGift, 
+    handleDeclineTreasureGift, 
     handleGetTreasure,
 
   } = useTreasures();

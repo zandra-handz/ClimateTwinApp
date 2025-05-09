@@ -17,6 +17,7 @@ import { useUserSettings } from "./UserSettingsContext";
 import { useAppMessage } from "@/src/context/AppMessageContext";
 import {
   getFriends,
+  getFriendsAndRequests,
   getFriend,
   searchUsers,
   requestToAddFriend,
@@ -108,6 +109,16 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
   });
   
   
+  const {
+    data: friendsAndRequests,
+    isPending: friendsAndRequestsIsPending,
+    isSuccess: friendsAndRequestsIsSuccess,
+    isError: friendsAndRequestsIsError,
+  } = useQuery({
+    queryKey: ["friendsAndRequests", user?.id],
+    queryFn: getFriendsAndRequests,
+    enabled: !!(isAuthenticated && !settingsAreLoading && user && user.id),
+  });
 
   // FOR DEBUGGING
   //   useEffect(() => {
@@ -252,7 +263,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
     onSuccess: () => {
       //Do we need?
       triggerRequestsAndInboxRefetch();
-      triggerFriendsRefetch(); 
+      triggerFriendsAndRequestsRefetch(); 
 
       showAppMessage(true, null, `Friend request sent!`);
 
@@ -283,6 +294,10 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
     queryClient.refetchQueries({ queryKey: ['friends', user?.id] });
   };
  
+  const triggerFriendsAndRequestsRefetch = () => { 
+    // queryClient.invalidateQueries({ queryKey: ['friends'] });
+     queryClient.refetchQueries({ queryKey: ['friendsAndRequests', user?.id] });
+   };
 
   const handleAcceptFriendship = (itemViewId: number, newFriendId: number | null) => {
     if (!itemViewId) {
@@ -302,7 +317,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
     onSuccess: () => {
 
       triggerRequestsAndInboxRefetch(); 
-      triggerFriendsRefetch(); 
+      triggerFriendsAndRequestsRefetch(); 
 
       showAppMessage(true, null, "Friendship accepted!");
    
@@ -341,7 +356,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
     onSuccess: () => { 
 
       triggerRequestsAndInboxRefetch(); 
-      triggerFriendsRefetch(); 
+      triggerFriendsAndRequestsRefetch(); 
 
      showAppMessage(true, null, "Friendship declined");
  
@@ -369,7 +384,7 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
     onSuccess: () => {
      
       triggerRequestsAndInboxRefetch(); 
-      triggerFriendsRefetch();
+      triggerFriendsAndRequestsRefetch();
 
       // showAppMessage(true, null, `Friend unfriended`);
 
@@ -413,7 +428,10 @@ export const FriendsProvider: React.FC<FriendsProviderProps> = ({
     <FriendsContext.Provider
       value={{
         friends,
+        friendsAndRequests,
         friendsIsPending,
+        friendsAndRequestsIsPending,
+        friendsAndRequestsIsSuccess,
         handleGetFriend,
         getFriendMutation,
         replaceUserIdWithFriendName,

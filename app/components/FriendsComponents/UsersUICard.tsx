@@ -4,15 +4,9 @@ import { useGlobalStyles } from "../../../src/context/GlobalStylesContext";
 import { useAppMessage } from "@/src/context/AppMessageContext";
 import { useRouter } from "expo-router";
 import useDateTimeFunctions from "../../../src/hooks/useDateTimeFunctions";
-import CuteDetailBox from "../CuteDetailBox"; 
-import GoToItemButton from "../GoToItemButton";  
-import UnfriendButton from "../Scaffolding/UnfriendButton";
-import AddFriendButton from "../Scaffolding/AddFriendButton";
+import CuteDetailBox from "../CuteDetailBox";  
 import DoubleChecker from "../Scaffolding/DoubleChecker";
-import Avatar from "./Avatar"; 
-import { Feather } from "@expo/vector-icons";
-
-import ActionsFooter from "../ActionsFooter";
+import Avatar from "./Avatar";  
 import ComponentSpinner from "../Scaffolding/ComponentSpinner";
  
 import { useFriends } from "@/src/context/FriendsContext";
@@ -27,9 +21,8 @@ const UsersUICard = ({ data, onViewUserPress, recFriendRequests,
   const router = useRouter();
   const { themeStyles, appContainerStyles, appFontStyles } = useGlobalStyles();
   const { formatUTCToMonthDayYear } = useDateTimeFunctions();
-  const { friends, friendRequestMutation, getPublicProfileMutation } = useFriends();
-  const [ isAlreadyFriend, setIsAlreadyFriend ] = useState(false);
-
+  const {  friendRequestMutation, getPublicProfileMutation } = useFriends();
+ 
   const [ isDoubleCheckerVisible, setDoubleCheckerVisible ] = useState(false);
 
   const profile = data;
@@ -37,15 +30,7 @@ const UsersUICard = ({ data, onViewUserPress, recFriendRequests,
   const bio = data?.bio || null;
 
 
-  useEffect(() => {
-    if (data && friends) {
-      const checkForFriendship = friends?.find((friend) => (friend.friend === data.id));
  
-      setIsAlreadyFriend(!!checkForFriendship);
-    }
-
-  }, [data, friends]); 
-
 const handleToggleDoubleChecker = () => {
   setDoubleCheckerVisible(prev => !prev);
 

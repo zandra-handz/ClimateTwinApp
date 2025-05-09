@@ -10,8 +10,7 @@ import ComponentSpinner from "@/app/components/Scaffolding/ComponentSpinner";
 import DebouncedSearch from "@/app/components/DebouncedSearch";
 
 import SearchResultsView from "@/app/components/FriendsComponents/SearchResultsView";
-
-import { usePendingRequests } from "@/src/context/PendingRequestsContext";
+ 
 import useInlineComputations from "@/src/hooks/useInlineComputations";
 
 const search = () => {
@@ -19,25 +18,24 @@ const search = () => {
   const router = useRouter();
   const { user } = useUser();
 
-  const {
-    treasures,
+  const { 
+    treasuresAndRequests,
     treasureSearchResults,
     handleSearchTreasures,
     handleGiftTreasure,
     searchTreasuresMutation,
     handleGetSearchableTreasure,
   } = useTreasures();
-
-  const { pendingRequests } = usePendingRequests();
+ 
   const { sortPendingGiftRequests, getNonPendingTreasures } =
     useInlineComputations();
-  const allGiftRequests = pendingRequests?.pending_gift_requests;
+  const allGiftRequests = treasuresAndRequests?.pending_gift_requests;
 
   const { recGiftRequests, sentGiftRequests } = sortPendingGiftRequests(
     allGiftRequests,
     user?.id
   );
-  const nonPendingTreasures = getNonPendingTreasures(treasures);
+  const nonPendingTreasures = getNonPendingTreasures(treasuresAndRequests.treasures);
 
   //   const handleFriendRequest = (friendObject) => {
   //     if (friendObject) {
