@@ -337,16 +337,18 @@ console.log('setting signin to false');
                   </Text>
                 </View>
               </>
-              {!loading &&
+              {
+              //!loading &&
                 username &&
                 password &&
                 !isSignInScreen &&
-                !isKeyboardVisible && (
+                //!isKeyboardVisible &&
+                 (
                   <View
                     style={{
                       width: "100%",
                       position: "absolute",
-                      bottom: 0,
+                           bottom: 100,
                       paddingBottom: 60,
                       right: 0,
                     }}
@@ -375,13 +377,13 @@ console.log('setting signin to false');
 
 
 
-              {!loading && username && password && isSignInScreen && (
+              { username && password && isSignInScreen && (
                 <>
                   <View
                     style={{
                       width: "100%",
                       position: "absolute",
-                      bottom: 0,
+                      bottom: 100,
                       paddingBottom: 60,
                       right: 0,
                     }}

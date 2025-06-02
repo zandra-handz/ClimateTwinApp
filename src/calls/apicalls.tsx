@@ -148,10 +148,12 @@ export const signinWithoutRefresh = async ({ username, password }) => {
     try {
         const response = await axios.post('/users/token/', { username, password });
         const newAccessToken = response.data.access;
-        const newRefreshToken = response.data.refresh;
 
-        await SecureStore.setItemAsync('accessToken',  newAccessToken);
-        await SecureStore.setItemAsync('refreshToken', newRefreshToken);
+        // moved to onSuccess signin mutation 5/15 to ensure store set before reinit in onSuccess runs
+        // const newRefreshToken = response.data.refresh;
+
+        // await SecureStore.setItemAsync('accessToken',  newAccessToken);
+        // await SecureStore.setItemAsync('refreshToken', newRefreshToken);
             
             
         setAuthHeader(newAccessToken); 

@@ -177,8 +177,15 @@ function usePrevious<T>(value: T): T | undefined {
  
   const signinMutation = useMutation({
     mutationFn: signinWithoutRefresh,
-    onSuccess: () => {
-      reInitialize();
+    onSuccess: async (result) => {
+      const { access, refresh } = result.data;
+
+      // store tokens before reinitializing
+      await SecureStore.setItemAsync("accessToken", access);
+      await SecureStore.setItemAsync("refreshToken", refresh);
+
+      // safely reinitialize
+      await reInitialize();
 
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current);
