@@ -5,7 +5,11 @@ import Constants from "expo-constants";
 import * as SecureStore from 'expo-secure-store';  
 export const API_URL = 'https://api.groq.com/openai/v1/chat/completions';
 
-export const API_KEY = Constants.expoConfig?.extra?.GROQ_API_KEY;
+//import { EXPO_PUBLIC_GROQ_API_KEY } from "@.env";
+
+// export const API_KEY = Constants.expoConfig?.extra?.GROQ_API_KEY;
+
+export const API_KEY = process.env.EXPO_PUBLIC_GROQ_API_KEY;
 
 //axios.defaults.baseURL = API_URL;
 //axios.defaults.headers.common['Authorization'] = `Bearer ${API_KEY}`;

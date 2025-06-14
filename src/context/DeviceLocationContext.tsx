@@ -6,7 +6,9 @@ import React, {
 } from "react";
 import { Alert } from 'react-native';
 import { useQueryClient } from "@tanstack/react-query";
+
 import * as Location from "expo-location"; 
+
 import Geocoder from "react-native-geocoding";
 import Constants from "expo-constants";
 import { useUser } from "./UserContext";
@@ -60,7 +62,6 @@ export const DeviceLocationProvider: React.FC = ({ children }) => {
           const watchId = await Location.watchPositionAsync(
             {
               accuracy: Location.Accuracy.High,
-
               // SET LATER
               // Below is an exmple: only trigger if user moves 10 meters or 5 seconds have passed
               timeInterval: 5000,      // in ms
