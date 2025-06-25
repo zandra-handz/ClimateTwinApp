@@ -62,25 +62,36 @@ export const talkToGroq = async ({ model = modelOptionOne, role, prompt }) => {
     }
 
     try {
-        const response = await fetch(
-            "https://api.groq.com/openai/v1/chat/completions",
-            {
-                method: "POST",
-                headers: {
-                    Authorization: `Bearer ${API_KEY}`,
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(requestBody),
-            }
-        );
-
-        const data = await response.json();
+        const response = await axios.post('/climatevisitor/groq/', { 'model': model, 'role': role, 'prompt' : prompt });
+    //console.log(response.data.response); 
        // console.log( JSON.stringify(requestBody))
-        return data.choices[0]?.message?.content || ""; // Ensure string return
-    } catch (error) {
-        
-        console.error("Error calling Groq API:", error.response?.data || error.message);
-       // console.log( JSON.stringify(requestBody))
-        return ""; // Return empty string instead of an object
+        return response.data.response || ""; 
+    } catch (e) {
+        console.log('error checking reset code:', e);
+        return { error: true, msg: e.response.data.msg };
     }
+
+
+    // try {
+    //     const response = await fetch(
+    //         "https://api.groq.com/openai/v1/chat/completions",
+    //         {
+    //             method: "POST",
+    //             headers: {
+    //                 Authorization: `Bearer ${API_KEY}`,
+    //                 "Content-Type": "application/json",
+    //             },
+    //             body: JSON.stringify(requestBody),
+    //         }
+    //     );
+
+    //     const data = await response.json();
+    //    // console.log( JSON.stringify(requestBody))
+    //     return data.choices[0]?.message?.content || ""; // Ensure string return
+    // } catch (error) {
+        
+    //     console.error("Error calling Groq API:", error.response?.data || error.message);
+    //    // console.log( JSON.stringify(requestBody))
+    //     return ""; // Return empty string instead of an object
+    // }
 };

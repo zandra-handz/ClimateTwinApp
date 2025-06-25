@@ -144,6 +144,8 @@ axios.interceptors.response.use(
 );
 
 
+
+
 export const signinWithoutRefresh = async ({ username, password }) => {
     try {
         const response = await axios.post('/users/token/', { username, password });
@@ -192,7 +194,7 @@ export const verifyResetCodeEmail = async ({email, resetCode}) => {
     
   
     try {
-        response = await axios.post('/users/verify-reset-code/', { 'email': email, 'reset_code': resetCode });
+        const response = await axios.post('/users/verify-reset-code/', { 'email': email, 'reset_code': resetCode });
     
         return response;
     } catch (e) {
@@ -204,7 +206,7 @@ export const verifyResetCodeEmail = async ({email, resetCode}) => {
 export const resetPassword = async ({email, resetCode, newPassword }) => {
  
     try {
-        response = await axios.post('/users/reset-password/', { 'email': email, 'reset_code': resetCode, 'new_password' : newPassword});
+        const response = await axios.post('/users/reset-password/', { 'email': email, 'reset_code': resetCode, 'new_password' : newPassword});
         return response;
     } catch (e) {
         console.log('error resetting password:', e);
